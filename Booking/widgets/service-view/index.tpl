@@ -88,7 +88,7 @@
           <div class="sesapmt_review_listing_item_body"><b><?php echo $this->translate("Description:");?></b>&nbsp;<?php echo $item->description; ?></div>
         <?php } ?>
         <?php if(Engine_Api::_()->getApi('settings', 'core')->getSetting('booking.show.recommended', 1)) { ?>
-        <div class="sesapmt_review_listing_item_body"><b>Recommended:</b>&nbsp;
+        <div class="sesapmt_review_listing_item_body"><b><?php echo $this->translate('Recommended:'); ?></b>&nbsp;
           <?php if($item->recommended) { ?>
           <i class="fa fa-check"></i>
           <?php } else { ?>

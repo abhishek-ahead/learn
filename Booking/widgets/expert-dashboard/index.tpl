@@ -179,8 +179,8 @@ if($this->isAjax){
     </div>
 
     <div id="holidays" class="sesapmt_db_holidays tab-content">
-      <div class="sesapmt_dashboard_header">	<h3>Holidays</h3></div>
-      <p>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.</p>
+      <div class="sesapmt_dashboard_header">	<h3><?php echo $this->translate('Holidays');?></h3></div>
+      <p><?php echo $this->translate('Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.');?></p>
       
       <div class="sesapmt_db_holidays_cont">
         <div class="sesapmt_mini_calendar sesapmt_mini_holiday_calendar">
@@ -193,13 +193,13 @@ if($this->isAjax){
             <table>
               <thead>
                 <tr>
-                  <th>Mon</th>
-                  <th>Tue</th>
-                  <th>Wed</th>
-                  <th>Thu</th>
-                  <th>Fri</th>
-                  <th>Sat</th>
-                  <th>Sun</th>
+                  <th><?php echo $this->translate('Mon');?></th>
+                  <th><?php echo $this->translate('Tue');?></th>
+                  <th><?php echo $this->translate('Wed');?></th>
+                  <th><?php echo $this->translate('Thu');?></th>
+                  <th><?php echo $this->translate('Fri');?></th>
+                  <th><?php echo $this->translate('Sat');?></th>
+                  <th><?php echo $this->translate('Sun');?></th>
                 </tr>  
               </thead>
               <tbody>
@@ -265,8 +265,8 @@ if($this->isAjax){
     </div>
     <div id="bookingslots" class="tab-content">5</div>
     <div id="samples" class="sesapmt_db_samples tab-content">
-      <div class="sesapmt_dashboard_header">	<h3>Samples</h3></div>
-      <p>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.</p>  
+      <div class="sesapmt_dashboard_header">	<h3><?php echo $this->translate('Samples');?></h3></div>
+      <p><?php echo $this->translate('Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.');?></p>  
       <div class="sesapmt_dashboard_header_btn">
           <span class="sesapmt_btn sesbasic_animation"><i class="fa fa-plus openSmoothbox"></i><span><?php echo $this->translate('Add New Sample'); ?></span></span>
       </div>

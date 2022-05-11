@@ -129,12 +129,12 @@ if(isset($this->identityForWidget) && !empty($this->identityForWidget)):?>
               </div>
 
               <div class="sesapmt_professionals_grid_buttons">
-                <?php if($this->viewprofile) { ?><a href="<?php echo $item->getHref();  ?>" class="sesapmt_btn_alt sesbasic_animation"><span>View Profile</span></a><?php } ?>
+                <?php if($this->viewprofile) { ?><a href="<?php echo $item->getHref();  ?>" class="sesapmt_btn_alt sesbasic_animation"><span><?php echo $this->translate('View Profile');?></span></a><?php } ?>
                 <?php if($this->bookbutton && $levelId!=5) { if($item->user_id!=Engine_Api::_()->user()->getViewer()->getIdentity()){ ?>
-                    <?php $viewer = Engine_Api::_()->user()->getViewer(); if (Engine_Api::_()->authorization()->getPermission($viewer, 'booking', 'bookservice')) { ?><a href="<?php echo $this->url(array("action"=>'bookservices','professional'=>$item->user_id),'booking_general',true); ?>" class="sesapmt_btn sesbasic_animation"><span>Book</span></a><?php } ?>
+                    <?php $viewer = Engine_Api::_()->user()->getViewer(); if (Engine_Api::_()->authorization()->getPermission($viewer, 'booking', 'bookservice')) { ?><a href="<?php echo $this->url(array("action"=>'bookservices','professional'=>$item->user_id),'booking_general',true); ?>" class="sesapmt_btn sesbasic_animation"><span><?php echo $this->translate('Book');?></span></a><?php } ?>
                 <?php } else { ?>
                 <?php $viewer = Engine_Api::_()->user()->getViewer(); if (Engine_Api::_()->authorization()->getPermission($viewer, 'booking', 'bookservice')) { ?>
-                    <a href="<?php echo $this->url(array("action"=>'bookservices','professional'=>$item->user_id),'booking_general',true); ?>" class="sesapmt_btn sesbasic_animation"><span>Book</span></a>
+                    <a href="<?php echo $this->url(array("action"=>'bookservices','professional'=>$item->user_id),'booking_general',true); ?>" class="sesapmt_btn sesbasic_animation"><span><?php echo $this->translate('Book');?></span></a>
                 <?php } ?>
               <?php } } ?>
               </div>
@@ -143,7 +143,7 @@ if(isset($this->identityForWidget) && !empty($this->identityForWidget)):?>
         </div>
     	<?php endforeach; ?>
     <?php } else { ?>
-      <div class="tip"><span>There are currently no professionals.</span></div>
+      <div class="tip"><span><?php echo $this->translate('There are currently no professionals.');?></span></div>
     <?php } ?>
 	</div>
 	</div>
@@ -209,10 +209,10 @@ if(isset($this->identityForWidget) && !empty($this->identityForWidget)):?>
                 <?php } ?>
             	</div>
                 <div class="sesapmt_professionals_list_item_btn floatR">
-                    <a href="<?php echo $item->getHref();  ?>" target="_blank" class="sesapmt_btn_alt sesbasic_animation"><span>View Profile</span></a>
+                    <a href="<?php echo $item->getHref();  ?>" target="_blank" class="sesapmt_btn_alt sesbasic_animation"><span><?php echo $this->translate('View Profile');?></span></a>
                 <?php if($item->user_id!=Engine_Api::_()->user()->getViewer()->getIdentity()){ ?>
-                    <a href="<?php echo $this->url(array("action"=>'compose','professional'=>$item->name,'id'=>$item->user_id),'booking_general',true); ?>" class="sesapmt_btn_alt sesbasic_animation openSmoothbox"><span>Message</span></a>
-                    <a href="<?php echo $this->url(array("action"=>'bookservices','professional'=>$item->user_id),'booking_general',true); ?>" class="sesapmt_btn sesbasic_animation"><span>Book</span></a>
+                    <a href="<?php echo $this->url(array("action"=>'compose','professional'=>$item->name,'id'=>$item->user_id),'booking_general',true); ?>" class="sesapmt_btn_alt sesbasic_animation openSmoothbox"><span><?php echo $this->translate('Message');?></span></a>
+                    <a href="<?php echo $this->url(array("action"=>'bookservices','professional'=>$item->user_id),'booking_general',true); ?>" class="sesapmt_btn sesbasic_animation"><span><?php echo $this->translate('Book');?></span></a>
                 <?php } ?>
                 </div>
             </div>
@@ -221,7 +221,7 @@ if(isset($this->identityForWidget) && !empty($this->identityForWidget)):?>
          </div>
         <?php endforeach; ?>
       <?php } else { ?>
-      	<div class="tip"><span>There are currently no professionals.</span></div>
+      	<div class="tip"><span><?php echo $this->translate('There are currently no professionals.');?></span></div>
     	<?php } ?>
   	</div>
 	</div>  
@@ -288,10 +288,10 @@ if(isset($this->identityForWidget) && !empty($this->identityForWidget)):?>
                         <span title="<?php echo $item->follow_count; ?> favorite"><i class="fa fa-heart"></i><?php echo $item->follow_count; ?></span>
                     </div>
                     <p class="sesapmt_professionals_portfolio_item_btns">
-                        <a href="<?php echo $item->getHref();  ?>" class="sesapmt_btn_alt sesbasic_animation"><span>View Profile</span></a>
+                        <a href="<?php echo $item->getHref();  ?>" class="sesapmt_btn_alt sesbasic_animation"><span><?php echo $this->translate('View Profile');?></span></a>
                     <?php if($item->user_id!=Engine_Api::_()->user()->getViewer()->getIdentity()){ ?>
-                        <a href="<?php echo $this->url(array("action"=>'compose','professional'=>$item->name,'id'=>$item->user_id),'booking_general',true); ?>" class="sesapmt_btn_alt sesbasic_animation openSmoothbox"><span>Message</span></a>
-                        <a href="<?php echo $this->url(array("action"=>'bookservices','professional'=>$item->user_id),'booking_general',true); ?>" class="sesapmt_btn sesbasic_animation"><span>Book</span></a>
+                        <a href="<?php echo $this->url(array("action"=>'compose','professional'=>$item->name,'id'=>$item->user_id),'booking_general',true); ?>" class="sesapmt_btn_alt sesbasic_animation openSmoothbox"><span><?php echo $this->translate('Message');?></span></a>
+                        <a href="<?php echo $this->url(array("action"=>'bookservices','professional'=>$item->user_id),'booking_general',true); ?>" class="sesapmt_btn sesbasic_animation"><span><?php echo $this->translate('Book');?></span></a>
                     <?php } ?>
                     </p>
                   </div>
@@ -300,7 +300,7 @@ if(isset($this->identityForWidget) && !empty($this->identityForWidget)):?>
         </div>
         <?php endforeach; ?>
         <?php } else { ?>
-          <div class="tip"><span>There are currently no professionals.</span></div>
+          <div class="tip"><span><?php echo $this->translate('There are currently no professionals.');?></span></div>
         <?php } ?>
   </div>
 </div>  

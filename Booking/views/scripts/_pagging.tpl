@@ -26,7 +26,7 @@
 <div class="sesbasic_loading_cont_overlay overlay_<?php echo $this->identityWidget; ?>" style="display:none"></div>
 <div class="sesbasic_paging clear sesbasic_clearfix sesbasic_bxs" id="ses_pagging">
     <ul class="sesbasic_clearfix">
-        <li style="display:none;"><span><?php echo $this->current; ?> of <?php echo $this->pageCount; ?></span></li>
+        <li style="display:none;"><span><?php echo $this->current; ?><?php echo $this->translate(' of ');?><?php echo $this->pageCount; ?></span></li>
         <?php if (isset($this->previous)): ?>
         <li><a href="javascript:;" onclick="<?php echo $idFunction ?>('<?php echo $this->previous; ?>')"  title="<?php echo $this->translate('Previous'); ?>"> <?php echo $this->translate('Previous') ?></a></li>
         <?php else: ?>

@@ -97,7 +97,7 @@
                 <span class="sesapmt_status_pending"><?php echo $this->translate("Pending") ?></span>
               </p>
               <p class="sesapmt_myappointments_list_item_btns floatR">
-                <a href="">Reject</a>&nbsp;|&nbsp;<a href=""><?php echo $this->translate('Block'); ?></a>	
+                <a href=""><?php echo $this->translate('Reject'); ?></a>&nbsp;|&nbsp;<a href=""><?php echo $this->translate('Block'); ?></a>	
               </p>
             </div>
           </article>
@@ -123,7 +123,7 @@
                 <span class="sesapmt_status_cancelled"><?php echo $this->translate("Cancelled") ?></span>
               </p>
               <p class="sesapmt_myappointments_list_item_btns floatR">
-                <a href="">Reject</a>&nbsp;|&nbsp;<a href=""><?php echo $this->translate('Block'); ?></a>	
+                <a href=""><?php echo $this->translate('Reject'); ?></a>&nbsp;|&nbsp;<a href=""><?php echo $this->translate('Block'); ?></a>	
               </p>
             </div>
           </article>  
@@ -149,7 +149,7 @@
                 <span class="sesapmt_status_completed"><?php echo $this->translate("Completed") ?></span>
               </p>
               <p class="sesapmt_myappointments_list_item_btns floatR">
-                <a href="">Reject</a>&nbsp;|&nbsp;<a href=""><?php echo $this->translate('Block'); ?></a>	
+                <a href=""><?php echo $this->translate('Reject'); ?></a>&nbsp;|&nbsp;<a href=""><?php echo $this->translate('Block'); ?></a>	
               </p>
             </div>
           </article>

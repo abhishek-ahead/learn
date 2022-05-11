@@ -67,7 +67,7 @@
       </div>
     <?php endforeach; ?>
     <?php } else { ?>
-      <?php if($this->ifNoProfessioanl) { ?><div class="tip"><span>There are currently no services to show.</span></div><?php } ?>
+      <?php if($this->ifNoProfessioanl) { ?><div class="tip"><span><?php echo $this->translate('There are currently no services to show.');?></span></div><?php } ?>
     <?php } ?>
     <?php if($this->loadOptionData == 'pagging' && (empty($this->show_limited_data) || $this->show_limited_data  == 'no')){ ?>
       <div style="width: 100%;">

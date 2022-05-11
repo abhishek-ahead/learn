@@ -40,29 +40,29 @@
                  <?php echo $userSelected->displayname;?>
                </p>
                <p class="sesapmt_myappointments_list_item_det">
-                <span class="sesbasic_text_light">Timing :</span>
+                <span class="sesbasic_text_light"><?php echo $this->translate('Timing :');?></span>
                 <span><?php echo date("d F Y (D)",strtotime($item->date))." ".date("h:i A",strtotime($item->professionaltime))." - ".date("h:i A",strtotime($item->serviceendtime)); ?></span>
               </p>
               <p class="sesapmt_myappointments_list_item_det">
-               <span class="sesbasic_text_light">Service :</span>
+               <span class="sesbasic_text_light"><?php echo $this->translate('Service :');?></span>
                <span><?php $serviceName=Engine_Api::_()->getDbTable('services', 'booking')->getServices(array('service_id'=>$item->service_id));
                echo $serviceName->name;?></span>
              </p>
              <?php if( $this->defaultOpenTab!="cancelled" && $this->defaultOpenTab!="completed" && $this->defaultOpenTab!="reject"){ ?>
                <p class="sesapmt_myappointments_list_item_det floatL">
-                <span class="sesbasic_text_light">Status :</span>
+                <span class="sesbasic_text_light"><?php echo $this->translate('Status :');?></span>
                 <span><?php echo((!$item->action=="completed") ? "Pending" : ""); ?></span>
               </p>
               <p class="sesapmt_myappointments_list_item_btns floatR">
                 <?php if($item->professional_id==$item->given) { ?>
-                	<span><a href="<?php echo $this->url(array("action"=>'appointment',"cancel"=>$item->appointment_id),'booking_general',true); ?>" class="openSmoothbox">Cancel</a></span>
+                	<span><a href="<?php echo $this->url(array("action"=>'appointment',"cancel"=>$item->appointment_id),'booking_general',true); ?>" class="openSmoothbox"><?php echo $this->translate('Cancel');?></a></span>
                 <?php } else { ?>
                   <?php if($item->saveas==0){ ?>
-                   <span><a href="<?php echo $this->url(array("action"=>'appointment',"accept"=>$item->appointment_id),'booking_general',true); ?>" class="openSmoothbox">Accept</a></span>
+                   <span><a href="<?php echo $this->url(array("action"=>'appointment',"accept"=>$item->appointment_id),'booking_general',true); ?>" class="openSmoothbox"><?php echo $this->translate('Accept');?></a></span>
                  <?php } else { ?>
-                   <span><a href="<?php echo $this->url(array("action"=>'appointment',"completed"=>$item->appointment_id),'booking_general',true); ?>" class="openSmoothbox">Mark as Completed</a></span>
+                   <span><a href="<?php echo $this->url(array("action"=>'appointment',"completed"=>$item->appointment_id),'booking_general',true); ?>" class="openSmoothbox"><?php echo $this->translate('Mark as Completed');?></a></span>
                  <?php } ?>
-                 <span><a href="<?php echo $this->url(array("action"=>'appointment',"reject"=>$item->appointment_id),'booking_general',true); ?>" class="openSmoothbox">Reject</a></span>
+                 <span><a href="<?php echo $this->url(array("action"=>'appointment',"reject"=>$item->appointment_id),'booking_general',true); ?>" class="openSmoothbox"><?php echo $this->translate('Reject');?></a></span>
                <?php } ?>
              </p>
            <?php } ?> 
@@ -82,7 +82,7 @@
              <?php echo $userSelected->displayname;?>
            </p>
            <p class="sesapmt_myappointments_list_item_det">
-            <span class="sesbasic_text_light">Timing :</span>
+            <span class="sesbasic_text_light"><?php echo $this->translate('Timing :');?></span>
             <span>
              <?php 
              /* getting my time zone */
@@ -101,33 +101,33 @@
            </span>
          </p>
          <p class="sesapmt_myappointments_list_item_det">
-          <span class="sesbasic_text_light">Service :</span>
+          <span class="sesbasic_text_light"><?php echo $this->translate('Service :');?></span>
           <span><?php $serviceName=Engine_Api::_()->getDbTable('services', 'booking')->getServices(array('service_id'=>$item->service_id));
           echo $serviceName->name;?></span>
         </p>
         <?php  if( $this->defaultOpenTab!="cancelled" && $this->defaultOpenTab!="completed" && $this->defaultOpenTab!="reject"){ ?>
           <p class="sesapmt_myappointments_list_item_det floatL">
-            <span class="sesbasic_text_light">Status :</span>
+            <span class="sesbasic_text_light"><?php echo $this->translate('Status :');?></span>
             <span><?php echo(($item->saveas==1) ? "Your service request accepted by professional." : "Pending"); ?></span>
           </p>
           <p class="sesapmt_myappointments_list_item_btns floatR">
            <?php if($item->professional_id!=$item->given) { ?>
-             <span><a href="<?php echo $this->url(array("action"=>'appointment',"cancel"=>$item->appointment_id),'booking_general',true); ?>" class="openSmoothbox">Cancel</a></span>
+             <span><a href="<?php echo $this->url(array("action"=>'appointment',"cancel"=>$item->appointment_id),'booking_general',true); ?>" class="openSmoothbox"><?php echo $this->translate('Cancel');?></a></span>
            <?php } else { ?>
              <?php if($item->saveas==0){ ?> 
               <span>
                 <?php //if member level have enable online payment. ?>
                 <?php $settings = Engine_Api::_()->getApi('settings', 'core'); ?>
                 <?php if($settings->getSetting('booking.paymode')){ ?>
-                  <a href="<?php echo $this->url(array("action"=>'appointment',"accept"=>$item->appointment_id,"professional_id" => $item->professional_id, "order_id" => $item->order_id),'booking_general',true); ?>" class="openSmoothbox">Accept and Pay</a>
+                  <a href="<?php echo $this->url(array("action"=>'appointment',"accept"=>$item->appointment_id,"professional_id" => $item->professional_id, "order_id" => $item->order_id),'booking_general',true); ?>" class="openSmoothbox"><?php echo $this->translate('Accept and Pay');?></a>
                 <?php }else{ ?>
-                  <a href="<?php echo $this->url(array("action"=>'appointment',"accept"=>$item->appointment_id),'booking_general',true); ?>" class="openSmoothbox">Accept</a>
+                  <a href="<?php echo $this->url(array("action"=>'appointment',"accept"=>$item->appointment_id),'booking_general',true); ?>" class="openSmoothbox"><?php echo $this->translate('Accept');?></a>
                 <?php } ?>
               </span>
             <?php } else { ?>
-              <span><a href="<?php echo $this->url(array("action"=>'appointment',"completed"=>$item->appointment_id),'booking_general',true); ?>" class="openSmoothbox">Mark as Completed</a></span>
+              <span><a href="<?php echo $this->url(array("action"=>'appointment',"completed"=>$item->appointment_id),'booking_general',true); ?>" class="openSmoothbox"><?php echo $this->translate('Mark as Completed');?></a></span>
             <?php } ?>
-            <span><a href="<?php echo $this->url(array("action"=>'appointment',"reject"=>$item->appointment_id),'booking_general',true); ?>" class="openSmoothbox">Reject</a></span>
+            <span><a href="<?php echo $this->url(array("action"=>'appointment',"reject"=>$item->appointment_id),'booking_general',true); ?>" class="openSmoothbox"><?php echo $this->translate('Reject');?></a></span>
           <?php } ?>
         </p>
       <?php } ?>
