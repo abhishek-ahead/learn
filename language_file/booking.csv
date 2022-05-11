@@ -1,0 +1,312 @@
+"SES - Booking & Appointments Plugin";"Booking & Appointments Plugin"
+"ACTIVITY_TYPE_BOOKING_ADMINPROFAPL";"When a Professional is being registered and waiting for approval."
+"ACTIVITY_TYPE_BOOKING_ADMINPROFAPD";"When Professional gets approved."
+"ACTIVITY_TYPE_BOOKING_ADMINPROFDAPD";"When Professional gets disapproved."
+"ACTIVITY_TYPE_BOOKING_ADMINSERAPL";"When service is created and waiting for admin approval."
+"ACTIVITY_TYPE_BOOKING_ADMINSERAPD";"When Service gets approved."
+"ACTIVITY_TYPE_BOOKING_ADMINSERDAPD";"When Service gets disapproved."
+"ACTIVITY_TYPE_BOOKING_USERFOLLOWPRO";"When someone follow a Professional."
+"ACTIVITY_TYPE_BOOKING_USERLIKEPRO";"When someone likes a Professional."
+"ACTIVITY_TYPE_BOOKING_USERFAVPRO";"When someone mark a Professional as favourite."
+"ACTIVITY_TYPE_BOOKING_USERBOOKSERV";"When user request to professional for a service."
+"ACTIVITY_TYPE_BOOKING_PROFBOOKSERVFORUSER";"When professional self book service for user."
+"ACTIVITY_TYPE_BOOKING_PROFACCEPTUSERREQ";"When Professional accept your appointment request."
+"ACTIVITY_TYPE_BOOKING_PROFREJECTUSERREQ";"When Professional rejects your appointment request."
+"ACTIVITY_TYPE_BOOKING_PROFCANCELUSERREQ";"When Professional cancel your appointment."
+"ACTIVITY_TYPE_BOOKING_USERACCEPTPROFREQ";"When user accepts the appointment request."
+"ACTIVITY_TYPE_BOOKING_USERREJECTPROFREQ";"When user reject the appointment request."
+"ACTIVITY_TYPE_BOOKING_USERCANCELPROFREQ";"When user cancels the appointment."
+"ACTIVITY_TYPE_BOOKING_PROFPAYMENTREQUEST";"When payment is requested."
+"ACTIVITY_TYPE_BOOKING_PROFAUTOAPL";"When Professional is auto-approved."
+"ACTIVITY_TYPE_BOOKING_PROFPAYMENT_APPROVE";"When site admin approves the payment of Professional."
+"ACTIVITY_TYPE_BOOKING_PROFPAYMENT_REJECT";"When site admin rejects the payment of Professional."
+"ACTIVITY_TYPE_BOOKING_PROFPAYMENT_REQUEST";"When Professional requests for the payment."
+"ACTIVITY_TYPE_BOOKING_SERVAUTOAPL";"When Service is auto-approved."
+"ACTIVITY_TYPE_BOOKING_USERFAVSERV";"When someone mark a Service as favourite."
+"ACTIVITY_TYPE_BOOKING_USERLIKESERV";"When someone likes a Service."
+
+"_ACTIVITY_ACTIONTYPE_BOOKING_PRO_SERV_CRE";"When I create a service."
+"_ACTIVITY_ACTIONTYPE_BOOKING_USERFAVPRO";"When I mark a professional as favourite."
+"_ACTIVITY_ACTIONTYPE_BOOKING_USERFOLLOWPRO";"When I follow a Professional"
+"_ACTIVITY_ACTIONTYPE_BOOKING_USERLIKEPRO";"When I like a Professional"
+"_ACTIVITY_ACTIONTYPE_BOOKING_USERLIKESER";"When I like a service."
+"_ACTIVITY_ACTIONTYPE_BOOKING_USERFAVSER";"When I mark a service as favourite"
+
+"ADMIN_ACTIVITY_TYPE_BOOKING_PRO_SERV_CRE";"When a Professional (subject) creates a new service (object)."
+"ADMIN_ACTIVITY_TYPE_BOOKING_USERFAVPRO";"When a user (subject) marks a Professional (object) as favourite."
+"ADMIN_ACTIVITY_TYPE_BOOKING_USERFAVSER";"When a user (subject) mark a service (object) as favourite."
+"ADMIN_ACTIVITY_TYPE_BOOKING_USERFOLLOWPRO";"When a user (subject) follow a Professional(object)."
+"ADMIN_ACTIVITY_TYPE_BOOKING_USERLIKEPRO";"When a user (subject) likes a Professional(object)."
+"ADMIN_ACTIVITY_TYPE_BOOKING_USERLIKESER";"When a user (subject) likes a service (object)."
+
+"PROFESSIONAL_CREATE_MSG";"your professional profile saved successfully"
+
+# notify_booking_adminprofapl
+"_EMAIL_BOOKING_ADMINPROFAPL_TITLE";"Booking - Professional has registered and waiting for approval."
+"_EMAIL_BOOKING_ADMINPROFAPL_DESCRIPTION";"This email will be sent to the admin for approving the Professional when someone registers as a professional."
+"_EMAIL_BOOKING_ADMINPROFAPL_SUBJECT";"New Professional is waiting for Admin Approval."
+"_EMAIL_BOOKING_ADMINPROFAPL_BODY";"[header]
+
+Someone has registered as a Professional [professional_name] on your website, please take action to approve or disapprove that Professional.
+Click on the link below to visit the Page:
+
+http://[host][object_link]
+
+[footer]"
+
+# notify_booking_profautoapl
+"_EMAIL_BOOKING_PROFAUTOAPL_TITLE";"Booking - Professional has registered."
+"_EMAIL_BOOKING_PROFAUTOAPL_DESCRIPTION";"This email will be sent to the admin. When someone registers as a professional."
+"_EMAIL_BOOKING_PROFAUTOAPL_SUBJECT";"New Professional is register on your site."
+"_EMAIL_BOOKING_PROFAUTOAPL_BODY";"[header]
+
+Someone has registered as a Professional [professional_name] on your website.
+Click on the link below to visit the Page:
+
+http://[host][object_link]
+
+[footer]"
+
+# notify_booking_adminprofapd
+"_EMAIL_BOOKING_ADMINPROFAPD_TITLE";"Booking - Professional Approved."
+"_EMAIL_BOOKING_ADMINPROFAPD_DESCRIPTION";"This email will be sent to member who gets approved as a professional."
+"_EMAIL_BOOKING_ADMINPROFAPD_SUBJECT";"You have been approved as a Professional."
+"_EMAIL_BOOKING_ADMINPROFAPD_BODY";"[header]
+
+Congratulations [professional_name]!!! Your profile has been approved by the admin. Click on the following link to view your professional profile: 
+
+http://[host][object_link]
+
+[footer]"
+
+# notify_booking_adminprofdapd
+"_EMAIL_BOOKING_ADMINPROFDAPD_TITLE";"Booking - Professional gets Disapproved."
+"_EMAIL_BOOKING_ADMINPROFDAPD_DESCRIPTION";"This email will be sent to the member who gets disapproved as a Professional."
+"_EMAIL_BOOKING_ADMINPROFDAPD_SUBJECT";"Your have been disapproved."
+"_EMAIL_BOOKING_ADMINPROFDAPD_BODY";"[header]
+
+Sorry [professional_name]!!! Your profile has been disapproved by the admin.
+
+http://[host][object_link]
+
+[footer]"
+
+# notify_booking_adminserapl
+"_EMAIL_BOOKING_ADMINSERAPL_TITLE";"Booking - Service - Service Created and waiting for approval."
+"_EMAIL_BOOKING_ADMINSERAPL_DESCRIPTION";"This email will be sent to the admin for approving the Service when someone creates a new Service."
+"_EMAIL_BOOKING_ADMINSERAPL_SUBJECT";"New Service is waiting for Admin Approval."
+"_EMAIL_BOOKING_ADMINSERAPL_BODY";"[header]
+
+Someone has created a new Service [service_name] on your website, please take action to approve or disapprove that Service.
+
+http://[host][object_link]
+
+[footer]"
+
+# notify_booking_adminserapd
+"_EMAIL_BOOKING_ADMINSERAPD_TITLE";"Booking - Service Approved."
+"_EMAIL_BOOKING_ADMINSERAPD_DESCRIPTION";"This email will be sent to professional whose service gets approved."
+"_EMAIL_BOOKING_ADMINSERAPD_SUBJECT";"Your Service has been approved."
+"_EMAIL_BOOKING_ADMINSERAPD_BODY";"[header]
+
+Congratulations Your Service [service_name]!!! has been approved by the admin. Click on the following link to view your Service: 
+
+
+http://[host][object_link]
+
+[footer]"
+
+# notify_booking_adminserdapd
+"_EMAIL_BOOKING_ADMINSERDAPD_TITLE";"Booking - Service gets Disapproved."
+"_EMAIL_BOOKING_ADMINSERDAPD_DESCRIPTION";"This email will be sent to the professional who service gets disapproved."
+"_EMAIL_BOOKING_ADMINSERDAPD_SUBJECT";"Your Service gets Disapproved "
+"_EMAIL_BOOKING_ADMINSERDAPD_BODY";"[header]
+
+Sorry Your Service [service_name] has been disapproved.
+
+http://[host][object_link]
+
+[footer]"
+
+# notify_booking_servautoapl
+"_EMAIL_BOOKING_SERVAUTOAPL_TITLE";"Booking - Professional create new service."
+"_EMAIL_BOOKING_SERVAUTOAPL_DESCRIPTION";"This email will be sent to professional when a new service will be created."
+"_EMAIL_BOOKING_SERVAUTOAPL_SUBJECT";"You created a new Service"
+"_EMAIL_BOOKING_SERVAUTOAPL_BODY";"[header]
+
+Professional [professional_name] created a new service [service_name].
+
+http://[host][object_link]
+
+[footer]"
+
+# notify_booking_userbookserv
+"_EMAIL_BOOKING_USERBOOKSERV_TITLE";"Booking - Someone request to book a appointment."
+"_EMAIL_BOOKING_USERBOOKSERV_DESCRIPTION";"This email will be sent to the professional whose service user wants to book."
+"_EMAIL_BOOKING_USERBOOKSERV_SUBJECT";"Member has requested to book your service appointment [service_name]"
+"_EMAIL_BOOKING_USERBOOKSERV_BODY";"[header]
+
+Someone has requested to book your service appointment [service_name] on your website, please take action.
+
+http://[host][object_link]
+
+[footer]"
+
+# notify_booking_profacceptuserreq
+"_EMAIL_BOOKING_PROFACCEPTUSERREQ_TITLE";"Booking - Professional accept your appointment request."
+"_EMAIL_BOOKING_PROFACCEPTUSERREQ_DESCRIPTION";"This email will be sent to member whose appointment request has been accepted by the Professional."
+"_EMAIL_BOOKING_PROFACCEPTUSERREQ_SUBJECT";"Your appointment request has been accepted."
+"_EMAIL_BOOKING_PROFACCEPTUSERREQ_BODY";"[header]
+
+[professional_name] has accepted your appointment request. Click on the following link to view your Service: 
+
+http://[host][object_link]
+
+[footer]"
+
+# notify_booking_profrejectuserreq
+"_EMAIL_BOOKING_PROFREJECTUSERREQ_TITLE";"Booking - Professional rejects your appointment request."
+"_EMAIL_BOOKING_PROFREJECTUSERREQ_DESCRIPTION";"This email will be sent to member whose appointment request has been rejected by Professional."
+"_EMAIL_BOOKING_PROFREJECTUSERREQ_SUBJECT";"Your appointment has been rejected."
+"_EMAIL_BOOKING_PROFREJECTUSERREQ_BODY";"[header]
+
+[professional_name] has rejected your appointment request.
+
+http://[host][object_link]
+
+[footer]"
+
+# notify_booking_profcanceluserreq
+"_EMAIL_BOOKING_PROFCANCELUSERREQ_TITLE";"Booking - Professional cancel your appointment."
+"_EMAIL_BOOKING_PROFCANCELUSERREQ_DESCRIPTION";"This email will be sent to member whose appointment request has been canceled by Professional."
+"_EMAIL_BOOKING_PROFCANCELUSERREQ_SUBJECT";"Your appointment has canceled by Professional."
+"_EMAIL_BOOKING_PROFCANCELUSERREQ_BODY";"[header]
+
+[professional_name] has canceled your appointment.
+
+http://[host][object_link]
+
+[footer]"
+
+# notify_booking_profbookservforuser
+"_EMAIL_BOOKING_PROFBOOKSERVFORUSER_TITLE";"Booking - Professional book a service appointment for member."
+"_EMAIL_BOOKING_PROFBOOKSERVFORUSER_DESCRIPTION";"This email will be sent to the user for whom professional has booked a service appointment."
+"_EMAIL_BOOKING_PROFBOOKSERVFORUSER_SUBJECT";"Professional [professional_name] has booked a service appointment [service_name]."
+"_EMAIL_BOOKING_PROFBOOKSERVFORUSER_BODY";"[header]
+
+Professional has booked a service appointment [service_name] for you, please take action.
+
+http://[host][object_link]
+
+[footer]"
+
+# notify_booking_useracceptprofreq
+"_EMAIL_BOOKING_USERACCEPTPROFREQ_TITLE";"Booking - Member accept appointment request."
+"_EMAIL_BOOKING_USERACCEPTPROFREQ_DESCRIPTION";"This email will be sent to professional whose appointment request has been accepted by the member."
+"_EMAIL_BOOKING_USERACCEPTPROFREQ_SUBJECT";"Your appointment request has been accepted."
+"_EMAIL_BOOKING_USERACCEPTPROFREQ_BODY";"[header]
+
+[member_name]  has accepted your appointment request. Click on the following link to view your Service:
+
+http://[host][object_link]
+
+[footer]"
+
+# notify_booking_userrejectprofreq
+"_EMAIL_BOOKING_USERREJECTPROFREQ_TITLE";"Booking - Member rejects your appointment request."
+"_EMAIL_BOOKING_USERREJECTPROFREQ_DESCRIPTION";"This email will be sent to Professional whose appointment request has been rejected by member."
+"_EMAIL_BOOKING_USERREJECTPROFREQ_SUBJECT";"Your appointment request has been rejected."
+"_EMAIL_BOOKING_USERREJECTPROFREQ_BODY";"[header]
+
+[member_name] has rejected your appointment request.
+
+http://[host][object_link]
+
+[footer]"
+
+# notify_booking_usercancelprofreq
+"_EMAIL_BOOKING_USERCANCELPROFREQ_TITLE";"Booking - Member cancel your appointment."
+"_EMAIL_BOOKING_USERCANCELPROFREQ_DESCRIPTION";"This email will be sent to member whose appointment request has been canceled by Professional."
+"_EMAIL_BOOKING_USERCANCELPROFREQ_SUBJECT";"Your appointment has canceled by Member."
+"_EMAIL_BOOKING_USERCANCELPROFREQ_BODY";"[header]
+
+[member_name] has canceled your appointment.
+
+http://[host][object_link]
+
+[footer]"
+
+# booking_profpaymentrequest
+"_EMAIL_BOOKING_PROFPAYMENTREQUEST_TITLE";"Services Payment Request By Professional"
+"_EMAIL_BOOKING_PROFPAYMENTREQUEST_DESCRIPTION";"This is the email that gets sent to a site admin when professional send a request for service payment."
+"_EMAIL_BOOKING_PROFPAYMENTREQUEST_SUBJECT";"Payment Request by professional [professional_name]"
+"_EMAIL_BOOKING_PROFPAYMENTREQUEST_BODY";"[header]
+
+[professional_name] has been send you payment request for his services
+
+professional Link: http://[host][object_link]
+
+[footer]"
+
+# booking_profpayment_adminrequestcancel
+"_EMAIL_BOOKING_PROFPAYMENT_ADMINREQUESTCANCEL_TITLE";"Payment Request Cancel By Admin"
+"_EMAIL_BOOKING_PROFPAYMENT_ADMINREQUESTCANCEL_DESCRIPTION";"This is the email that gets sent to a professional when admin cancel payment request."
+"_EMAIL_BOOKING_PROFPAYMENT_ADMINREQUESTCANCEL_SUBJECT";"Admin cancel last payment request"
+"_EMAIL_BOOKING_PROFPAYMENT_ADMINREQUESTCANCEL_BODY";"[header]
+
+Site Admin has been cancelled your last payment request for services
+
+Event Link: http://[host][object_link]
+
+[footer]"
+
+# booking_profpayment_request
+"_EMAIL_BOOKING_PROFPAYMENT_REQUEST_TITLE";"Booking - Payment request to site admin"
+"_EMAIL_BOOKING_PROFPAYMENT_REQUEST_DESCRIPTION";"This is the email that sent to a site admin when professional send a request for service payment."
+"_EMAIL_BOOKING_PROFPAYMENT_REQUEST_SUBJECT";"Payment Request by professional [professional_name]"
+"_EMAIL_BOOKING_PROFPAYMENT_REQUEST_BODY";"[header]
+
+[professional_name] has send you payment request for the services.
+
+http://[host][object_link]
+
+[footer]"
+
+# booking_profpayment_approve
+"_EMAIL_BOOKING_PROFPAYMENT_APPROVE_TITLE";"Booking - Payment approved by admin"
+"_EMAIL_BOOKING_PROFPAYMENT_APPROVE_DESCRIPTION";"This email will be sent to professional when Payment requested has been approved by Admin"
+"_EMAIL_BOOKING_PROFPAYMENT_APPROVE_SUBJECT";"Payment Approved."
+"_EMAIL_BOOKING_PROFPAYMENT_APPROVE_BODY";"[header]
+
+Admin has been approved your service payment.
+
+http://[host][object_link]
+
+[footer]"
+
+# booking_profpayment_reject
+"_EMAIL_BOOKING_PROFPAYMENT_REJECT_TITLE";"Booking - Payment rejected by admin"
+"_EMAIL_BOOKING_PROFPAYMENT_REJECT_DESCRIPTION";"This email will be sent to Professional when Payment requested has been rejected by Admin"
+"_EMAIL_BOOKING_PROFPAYMENT_REJECT_SUBJECT";"Payment Rejected."
+"_EMAIL_BOOKING_PROFPAYMENT_REJECT_BODY";"[header]
+
+Site Admin has been rejected your last payment request for services.
+
+http://[host][object_link]
+
+[footer]"
+
+# booking_userpayment_done
+"_EMAIL_BOOKING_USERPAYMENT_DONE_TITLE";"Booking - Payment done by user."
+"_EMAIL_BOOKING_USERPAYMENT_DONE_DESCRIPTION";"Booking - Payment done by user."
+"_EMAIL_BOOKING_USERPAYMENT_DONE_SUBJECT";"Payment Done By User"
+"_EMAIL_BOOKING_USERPAYMENT_DONE_BODY";"[header]
+
+Payment has been made by user for [service_name]
+
+http://[host][object_link]
+
+[footer]"
+
+"This service is currently unavailable.";"This service is currently unavailable."
+"SNS - Booking & Appointments Plugin";"Booking & Appointments Plugin"
