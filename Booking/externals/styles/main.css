@@ -1,0 +1,211 @@
+
+[class*='notification_type_booking_']:before,
+[class*='activity_icon_booking_']:before{
+	font-family:'Font Awesome 5 Free';
+	font-weight:900;
+}
+.notification_type_booking_userbookserv:before,
+.notification_type_booking_profbookservforuser:before{
+	content:"\\f271";
+	font-weight:400 !important;
+}
+.notification_type_booking_useracceptprofreq:before,
+.notification_type_booking_profacceptuserreq:before{
+	content:"\\f274";
+	font-weight:400 !important;
+}
+.notification_type_booking_profpaymentrequest:before{
+	content:"\\f0d6";
+}
+.notification_type_booking_userrejectprofreq:before,
+.notification_type_booking_profrejectuserreq:before{
+	content:"\\f273";
+	font-weight:400 !important;
+}
+.notification_type_booking_usercancelprofreq:before,
+.notification_type_booking_profcanceluserreq:before{
+	content:"\\f272";
+	font-weight:400 !important;
+}
+.notification_type_booking_servautoapl:before,
+.activity_icon_booking_pro_serv_cre:before{
+	content:"\\f085";
+	font-weight:900;
+}
+.notification_type_booking_profautoapl:before{
+	content:"\\f058";
+	font-weight:900;
+}
+.notification_type_booking_userfavpro:before,
+.notification_type_booking_userfavserv:before,
+.activity_icon_booking_userfavpro:before,
+.activity_icon_booking_userfavser:before{
+	content:"\\f004";
+	font-weight:400 !important
+}
+.notification_type_booking_userlikepro:before,
+.notification_type_booking_userlikeserv:before,
+.activity_icon_booking_userlikepro:before,
+.activity_icon_booking_userlikeser:before{
+	content:"\\f164";
+	font-weight:400 !important;
+}
+.notification_type_booking_userfollowpro:before,
+.activity_icon_booking_userfollowpro:before{
+	content:"\\f00c";
+	font-weight:900;
+}
+.sesapmt_myappointments_filters ._left a.selected{
+	color:$theme_font_color !important;
+	pointer-events:none;
+}
+.sesapmt_btn{
+	+rounded;
+	background-color:$theme_button_background_color;
+	border-color:$theme_button_background_color;
+	color:$theme_button_font_color !important;
+	display:block;
+	padding:10px;
+	text-align:center;
+}
+.sesapmt_btn_alt{
+	+rounded;
+	border:2px solid $theme_button_background_color;
+	color:$theme_button_background_color !important;
+	display:block;
+	padding:10px;
+	text-align:center;
+}
+.sesapmt_btn i + span,
+.sesapmt_btn_alt + span{
+	margin-left:5px;
+}
+.sesapmt_btn:hover,
+.sesapmt_btn_alt:hover{
+	background-color:$theme_button_background_color_hover !important;
+	color:$theme_button_font_color !important;	
+	text-decoration:none;
+}
+.sesapmt_professionals_grid article:hover{
+	border-color:$theme_button_background_color;
+}
+.sesapmt_profile_portfolio_item_cont{
+	background-color:$theme_button_background_color;
+}
+.sesapmt_profile_portfolio_item_cont *{
+	color:$theme_button_font_color;
+}
+.sesapmt_db_services_list_item_title,
+.sesapmt_db_services_list_item_options a.edit{
+	color:$theme_button_background_color !important;
+}
+/*Calendar*/
+.sesapmt_mini_calendar{
+	background-color:$theme_list_background_color;
+}
+.sesapmt_mini_booking_calendar{
+	background-color:$theme_button_background_color;
+}
+.sesapmt_mini_booking_calendar *{
+	color:$theme_button_font_color !important;
+}
+.sesapmt_mini_calendar_main table td.disabled,
+.sesapmt_mini_calendar_main table td.holiday,
+.sesapmt_mini_calendar_main table td.booked{
+	opacity:.3;
+}
+.sesapmt_myappointments_calendar table th,
+.sesapmt_myappointments_calendar table td.isbooked{
+	background-color:$theme_button_background_color;
+	color:$theme_button_font_color;
+}
+.sesapmt_myappointments_calendar table td.isbooked a{
+	color:$theme_button_font_color !important;
+}
+.sesapmt_mini_holiday_calendar table td.ismarked a{
+	background-color:$theme_button_background_color;
+	color:$theme_button_font_color;
+}
+/*Booking Popup*/
+.sesapmt_booking_popup,
+.sesapmt_booking_popup_slot_item a{
+	background-color:$theme_list_background_color;
+}
+.sesapmt_booking_popup_cont_left > p,
+.sesapmt_booking_popup_cont_right > p{
+	color:$theme_button_background_color;
+}
+.sesapmt_booking_popup_slot_item._isavailable a:hover{
+	border-color:$theme_button_background_color;
+	color:$theme_button_background_color;
+}
+/*Tabs*/
+.sesapmt_tabs li:hover a,
+.sesapmt_tabs li.selected a,
+.sesapmt_panel_tabs li:hover a,
+.sesapmt_panel_tabs li.selected a{
+	background-color:$theme_button_background_color;
+	color:$theme_button_font_color;
+}
+.calander_days #timeslots-element label{
+  border: 2px solid $theme_button_background_color !important;
+}
+.sesapmt_duration label{
+	color:$theme_button_background_color;
+	background:$theme_button_font_color;
+}
+.stp-duration input[type="radio"]:checked + label:before,
+.calander_days input[type="checkbox"]:checked + label:before{
+	color:$theme_button_background_color;
+}
+.sesapmt_dashboard_sub_tabs li._active,
+.sesapmt_professional_form{
+	background-color:$theme_list_background_color;
+}
+.sesapmt_dashboard_sub_tabs li._active a{
+	color:$theme_button_background_color;
+}
+/* Browse Services */
+.sesapmt_service_list_item .info ._price{
+	color:$theme_button_background_color;
+}
+.sesapmt_service_list_item .info ._book a{
+	background-color:$theme_button_background_color;
+	color:$theme_button_font_color;
+}
+/*Book Service*/
+.sesapmt_booking_step_choose_service .form-options-wrapper{
+	background-color:$theme_list_background_color;
+}
+.sesapmt_booking_step_choose_service #totalestimate > div{
+	border-color:$theme_button_background_color;
+}
+
+/*Activity Item*/
+.feed_attachment_booking_service > div{
+  border-width:1px;
+  margin-bottom:5px;
+  overflow:hidden;
+}
+.feed_attachment_booking_service > div > a{
+  display:block;
+}
+.feed_attachment_booking_service > div > a > img{
+	height:300px;
+	margin:0;
+	width:100%;
+	max-height:inherit !important;
+	max-width:inherit !important;
+	object-fit:cover;
+	object-position:top;
+}
+.feed_attachment_booking_service > div > div{
+  clear:both;
+  padding:10px 15px;
+}
+.feed_attachment_booking_service .feed_item_link_title{
+  font-size:14px !important;
+}
+.feed_attachment_booking_service .feed_item_link_desc{
+  font-size:13px !important;
+}

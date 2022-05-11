@@ -1,0 +1,20 @@
+
+
+.booking_professional_list .booking_profile{
+	white-space:nowrap;
+}
+.booking_professional_list .booking_profile img{
+	margin-right:5px;
+	vertical-align:top;
+}
+.booking_professional_list .booking_profile span{
+	font-weight:bold;
+}
+.booking_professional_list .professional_info > a{
+	vertical-align:top;
+	margin-right:5px;
+}
+.booking_professional_list .professional_info > a img{
+	height:40px;
+	width:40px;
+}
