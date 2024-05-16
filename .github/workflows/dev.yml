@@ -35,7 +35,7 @@ jobs:
       - name: Use .env file for demo.sns
         env:
           ENV_FILE: ${{ secrets.ENV_FILE_TEST1 }}
-        run: cd ${{ github.workspace }}/chat/ && echo "$ENV_FILE" > .env
+        run: cd ${{ github.workspace }}/chat/ && echo "$ENV_FILE" > ${{ github.workspace }}/chat/.env
 
       # - name: Print Secret
       #   run: echo ${{ secrets.ENV_FILE }}
@@ -106,7 +106,7 @@ jobs:
       - name: Use second .env file
         env:
           ENV_FILE_NEW: ${{ secrets.ENV_FILE_TEST2 }}
-        run: cd ${{ github.workspace }}/chat/ && echo "$ENV_FILE_NEW" > .env
+        run: cd ${{ github.workspace }}/chat/ && echo "$ENV_FILE_NEW" > ${{ github.workspace }}/chat/.env
 
       # - name: Print Secret Second file
       #   run: echo ${{ secrets.ENV_FILE_DEMO_SE }}
