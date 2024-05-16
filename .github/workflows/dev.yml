@@ -117,8 +117,9 @@ jobs:
       # - name: Print ENV Second file without workspace
       #   run: cat .env
 
-      - name: List build directory contents
-        run: ls ${{ github.workspace }}/chat/dist
+      # - name: List build directory contents
+      #   run: ls ${{ github.workspace }}/chat/dist
+
 
       # - name: remove local files first
       #   run: rm -rf ${{ github.workspace }}/dist
