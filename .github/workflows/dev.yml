@@ -35,7 +35,7 @@ jobs:
       - name: Use .env file for demo.sns
         env:
           ENV_FILE: ${{ secrets.ENV_FILE_TEST1 }}
-        run: echo "$ENV_FILE" > .env
+        run: cd ${{ github.workspace }}/chat/ && echo "$ENV_FILE" > .env
 
       # - name: Print Secret
       #   run: echo ${{ secrets.ENV_FILE }}
@@ -47,7 +47,7 @@ jobs:
       #   run: echo "files are :" cd $PWD && ls
 
       - name: Build web
-        run: npm run build:web
+        run: cd ${{ github.workspace }}/chat/ && npm run build:web
 
       # - name: List build directory contents
       #   run: ls ${{ github.workspace }}
@@ -90,7 +90,7 @@ jobs:
           # AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           # AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           # AWS_REGION: "us-east-1"
-          SOURCE_DIR: ${{ github.workspace }}/dist
+          SOURCE_DIR: ${{ github.workspace }}/chat/dist
 
         #second build for the demo.se Server
 
@@ -106,7 +106,7 @@ jobs:
       - name: Use second .env file
         env:
           ENV_FILE_NEW: ${{ secrets.ENV_FILE_TEST2 }}
-        run: echo "$ENV_FILE_NEW" > .env
+        run: cd ${{ github.workspace }}/chat/ && echo "$ENV_FILE_NEW" > .env
 
       # - name: Print Secret Second file
       #   run: echo ${{ secrets.ENV_FILE_DEMO_SE }}
@@ -124,7 +124,7 @@ jobs:
       #   run: rm -rf ${{ github.workspace }}/dist
 
       - name: Rebuild web with second .env
-        run: npm run build:web
+        run: cd ${{ github.workspace }}/chat/ && npm run build:web
 
       # - name: Print secret value of env file
       #   run: echo ${{ github.workspace }}/.env | sed 's/./& /g'
@@ -143,7 +143,7 @@ jobs:
       #   run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DIST_ID_DEMO_SE }} --paths '/*'
 
       - name: List build directory contents
-        run: ls ${{ github.workspace }}/dist
+        run: ls ${{ github.workspace }}/chat/dist
 
       - name: Upload to second S3 bucket
         uses: jakejarvis/s3-sync-action@master
