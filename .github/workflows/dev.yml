@@ -31,6 +31,13 @@ jobs:
         env:
           ENV_FILE: ${{ secrets.ENV_FILE_TEST1 }}
         run: echo "$ENV_FILE" > .env
+      
+      
+      - name: check env file path
+        run: find . -name '.env' -exec ls {} \;
+
+      - name: check env file content
+        run: find . -name '.env' -exec cat {} \;
 
       # - name: Print Secret
       #   run: echo ${{ secrets.ENV_FILE }}
@@ -92,8 +99,15 @@ jobs:
       - name: Print Enviornment Variable
         run: echo $EXPO_PUBLIC_SERVER_URL
 
-      - name: Remove earlier env
-        run: rm -rf ${{ github.workspace }}/.env
+      # - name: Remove earlier env
+      #   run: rm -rf ${{ github.workspace }}/.env
+      
+      
+      # - name: Remove earlier env
+      #   run: find . -name '.env' -exec rm -rf {} \;
+
+      - name: check env file content
+        run: find . -name '.env' -exec cat {} \;
 
       - name: Print Enviornment Variable
         run: echo $EXPO_PUBLIC_SERVER_URL
@@ -105,6 +119,12 @@ jobs:
         env:
           ENV_FILE_NEW: ${{ secrets.ENV_FILE_TEST2 }}
         run: echo "$ENV_FILE_NEW" > .env
+
+      - name: check env file path
+        run: find . -name '.env' -exec ls {} \;
+
+      - name: check env file content
+        run: find . -name '.env' -exec cat {} \;
 
       # - name: Print Secret Second file
       #   run: echo ${{ secrets.ENV_FILE_DEMO_SE }}
