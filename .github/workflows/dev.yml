@@ -20,8 +20,8 @@ jobs:
           node-version: 20.11.0
           registry-url: "https://registry.npmjs.org"
 
-      - name: Build web
-        run: cd ${{ github.workspace }}/chat/
+      # - name: Build web
+      #   run: cd ${{ github.workspace }}/chat/
 
       - name: Node Version
         run: node -v
@@ -30,7 +30,7 @@ jobs:
         run: npm -v
 
       - name: Install dependencies
-        run: npm install
+        run: cd ${{ github.workspace }}/chat/ && npm install
 
       - name: Use .env file for demo.sns
         env:
