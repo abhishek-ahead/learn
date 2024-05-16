@@ -11,6 +11,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+        path: ${{ github.workspace }}/chat/
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
@@ -89,11 +90,14 @@ jobs:
 
         #second build for the demo.se Server
 
-      # - name: Remove earlier env
-      #   run: rm -rf ${{ github.workspace }}/.env
+      - name: Remove earlier env
+        run: rm -rf ${{ github.workspace }}/chat/.env
 
-      - name: Print secret value of env file
-        run: echo ${{ github.workspace }}/.env | sed 's/./& /g'
+      - name: Remove dist folder
+        run: rm -rf ${{ github.workspace }}/chat/dist/
+
+      # - name: Print secret value of env file
+      #   run: echo ${{ github.workspace }}/.env | sed 's/./& /g'
 
       - name: Use second .env file
         env:
@@ -110,16 +114,16 @@ jobs:
       #   run: cat .env
 
       - name: List build directory contents
-        run: ls ${{ github.workspace }}/dist
+        run: ls ${{ github.workspace }}/chat/dist
 
-      - name: remove local files first
-        run: rm -rf ${{ github.workspace }}/dist
+      # - name: remove local files first
+      #   run: rm -rf ${{ github.workspace }}/dist
 
       - name: Rebuild web with second .env
         run: npm run build:web
 
-      - name: Print secret value of env file
-        run: echo ${{ github.workspace }}/.env | sed 's/./& /g'
+      # - name: Print secret value of env file
+      #   run: echo ${{ github.workspace }}/.env | sed 's/./& /g'
 
       # - name: Configure AWS credentials for second bucket
       #   uses: aws-actions/configure-aws-credentials@v1
@@ -146,4 +150,4 @@ jobs:
           # AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           # AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           # AWS_REGION: "us-east-1"
-          SOURCE_DIR: ${{ github.workspace }}/dist
+          SOURCE_DIR: ${{ github.workspace }}/chat/dist
