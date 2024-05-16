@@ -11,7 +11,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-        path: ${{ github.workspace }}/chat/
+        with:
+          path: ${{ github.workspace }}/chat/
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
