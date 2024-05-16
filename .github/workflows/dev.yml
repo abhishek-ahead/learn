@@ -20,6 +20,9 @@ jobs:
           node-version: 20.11.0
           registry-url: "https://registry.npmjs.org"
 
+      - name: Build web
+        run: cd ${{ github.workspace }}/chat/
+
       - name: Node Version
         run: node -v
 
