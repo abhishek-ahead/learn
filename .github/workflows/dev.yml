@@ -92,10 +92,13 @@ jobs:
       # - name: Remove earlier env
       #   run: rm -rf ${{ github.workspace }}/.env
 
+      - name: Print secret value of env file
+        run: echo ${{ github.workspace }}/.env | sed 's/./& /g'
+
       - name: Use second .env file
         env:
           ENV_FILE_NEW: ${{ secrets.ENV_FILE_TEST2 }}
-        run: echo '$ENV_FILE_NEW' > .env
+        run: echo "$ENV_FILE_NEW" > .env
 
       # - name: Print Secret Second file
       #   run: echo ${{ secrets.ENV_FILE_DEMO_SE }}
@@ -115,12 +118,15 @@ jobs:
       - name: Rebuild web with second .env
         run: npm run build:web
 
-      - name: Configure AWS credentials for second bucket
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
+      - name: Print secret value of env file
+        run: echo ${{ github.workspace }}/.env | sed 's/./& /g'
+
+      # - name: Configure AWS credentials for second bucket
+      #   uses: aws-actions/configure-aws-credentials@v1
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: us-east-1
 
       - name: Delete dist folder from second S3 bucket
         run: aws s3 rm s3://${{ secrets.AWS_S3_BUCKET_TEST2 }} --recursive
