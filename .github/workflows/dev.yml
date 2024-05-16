@@ -88,9 +88,15 @@ jobs:
           SOURCE_DIR: ${{ github.workspace }}/dist
 
         #second build for the demo.se Server
+      
+      - name: Print Enviornment Variable
+        run: echo $EXPO_PUBLIC_SERVER_URL
 
-      # - name: Remove earlier env
-      #   run: rm -rf ${{ github.workspace }}/.env
+      - name: Remove earlier env
+        run: rm -rf ${{ github.workspace }}/.env
+
+      - name: Print Enviornment Variable
+        run: echo $EXPO_PUBLIC_SERVER_URL
 
       - name: Print secret value of env file
         run: echo ${{ github.workspace }}/.env | sed 's/./& /g'
@@ -117,6 +123,9 @@ jobs:
 
       - name: Rebuild web with second .env
         run: npm run build:web
+
+      - name: Print Enviornment Variable
+        run: echo $EXPO_PUBLIC_SERVER_URL
 
       - name: Print secret value of env file
         run: echo ${{ github.workspace }}/.env | sed 's/./& /g'
