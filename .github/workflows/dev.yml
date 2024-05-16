@@ -125,8 +125,8 @@ jobs:
       - name: Delete dist folder from second S3 bucket
         run: aws s3 rm s3://${{ secrets.AWS_S3_BUCKET_TEST2 }} --recursive
 
-      - name: Invalidate CloudFront cache for second bucket
-        run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DIST_ID_DEMO_SE }} --paths '/*'
+      # - name: Invalidate CloudFront cache for second bucket
+      #   run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DIST_ID_DEMO_SE }} --paths '/*'
 
       - name: List build directory contents
         run: ls ${{ github.workspace }}/dist
