@@ -33,11 +33,11 @@ jobs:
         run: echo "$ENV_FILE" > .env
       
       
-      - name: check env file path
-        run: find . -name '.env' -exec ls {} \;
+      # - name: check env file path
+      #   run: find . -name '.env' -exec ls {} \;
 
-      - name: check env file content
-        run: find . -name '.env' -exec cat {} \;
+      # - name: check env file content
+      #   run: find . -name '.env' -exec cat {} \;
 
       # - name: Print Secret
       #   run: echo ${{ secrets.ENV_FILE }}
@@ -112,19 +112,19 @@ jobs:
       - name: Print Enviornment Variable
         run: echo $EXPO_PUBLIC_SERVER_URL
 
-      - name: Print secret value of env file
-        run: echo ${{ github.workspace }}/.env | sed 's/./& /g'
+      # - name: Print secret value of env file
+      #   run: echo ${{ github.workspace }}/.env | sed 's/./& /g'
 
       - name: Use second .env file
         env:
           ENV_FILE_NEW: ${{ secrets.ENV_FILE_TEST2 }}
         run: echo "$ENV_FILE_NEW" > .env
 
-      - name: check env file path
-        run: find . -name '.env' -exec ls {} \;
+      # - name: check env file path
+      #   run: find . -name '.env' -exec ls {} \;
 
-      - name: check env file content
-        run: find . -name '.env' -exec cat {} \;
+      # - name: check env file content
+      #   run: find . -name '.env' -exec cat {} \;
 
       # - name: Print Secret Second file
       #   run: echo ${{ secrets.ENV_FILE_DEMO_SE }}
@@ -144,11 +144,11 @@ jobs:
       - name: Rebuild web with second .env
         run: npm run build:web
 
-      - name: Print Enviornment Variable
-        run: echo $EXPO_PUBLIC_SERVER_URL
+      # - name: Print Enviornment Variable
+      #   run: echo $EXPO_PUBLIC_SERVER_URL
 
-      - name: Print secret value of env file
-        run: echo ${{ github.workspace }}/.env | sed 's/./& /g'
+      # - name: Print secret value of env file
+      #   run: echo ${{ github.workspace }}/.env | sed 's/./& /g'
 
       # - name: Configure AWS credentials for second bucket
       #   uses: aws-actions/configure-aws-credentials@v1
@@ -163,8 +163,8 @@ jobs:
       # - name: Invalidate CloudFront cache for second bucket
       #   run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DIST_ID_DEMO_SE }} --paths '/*'
 
-      - name: List build directory contents
-        run: ls ${{ github.workspace }}/dist
+      # - name: List build directory contents
+      #   run: ls ${{ github.workspace }}/dist
 
       - name: Upload to second S3 bucket
         uses: jakejarvis/s3-sync-action@master
