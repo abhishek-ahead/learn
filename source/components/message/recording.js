@@ -1,11 +1,12 @@
 import { Audio } from "expo-av";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
-import Styles from "../../styles";
 import { pauseIcon, playIcon } from "../../constant/icons";
+import { AppContext } from "../../context/app";
 
 const Recording = ({ enableRecording, setRecording }) => {
   const onRecord = useRef();
+  const { Styles } = useContext(AppContext)
   const [permissionResponse, setPermissionResponse] = useState();
   const [duration, setDuration] = useState(0);
   const [recordingStarted, setRecordingStarted] = useState(false);
@@ -77,7 +78,7 @@ const Recording = ({ enableRecording, setRecording }) => {
           style={{ ...Styles.composermainoption, ...Styles.itemCenter }}
         >
           <View style={Styles.icon24}>
-            {recordingStarted ? pauseIcon : playIcon}
+            {recordingStarted ? pauseIcon({ ...Styles.icondefault }) : playIcon(Styles.icondefault)}
           </View>
         </Pressable>
         <View style={{ ...Styles.audiorecordmain, gap: 5 }}>

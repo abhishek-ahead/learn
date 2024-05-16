@@ -1,11 +1,10 @@
 import { default as React, useContext } from "react";
 import { Modal, Platform, Pressable, Text, View } from "react-native";
-import { closeIcon, lockIconWhite } from "../constant/icons";
+import { closeIcon } from "../constant/icons";
 import { AppContext } from "../context/app";
-import Styles from "../styles";
 
 const ConfirmationDialog = () => {
-  const { confirmationDialog, setConfimationDialog } = useContext(AppContext);
+  const { confirmationDialog, setConfimationDialog, Styles } = useContext(AppContext);
   const onClose = () => setConfimationDialog(null);
 
   return confirmationDialog ? (
@@ -77,7 +76,7 @@ const ConfirmationDialog = () => {
                     ...Styles.itemCenter,
                   }}
                 >
-                  <View style={Styles.icon18}>{closeIcon}</View>
+                  <View style={Styles.icon18}>{closeIcon(Styles.icondefault)}</View>
                 </Pressable>
               </View>
             </View>

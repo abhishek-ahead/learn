@@ -7,19 +7,18 @@ import {
   deleteIcon,
   forwardIcon,
   replyIcon,
-  starIcon,
-  unstarredMessage,
+  starredIcon,
+  unstarredIcon
 } from "../../constant/icons";
 import { AppContext } from "../../context/app";
 import { AuthContext } from "../../context/auth";
 import { MessageContext } from "../../context/message";
 import { markStarred, markUnstarred } from "../../services/message";
-import Styles from "../../styles";
 import MessageContentType from "../messageContentType";
 
 const Options = ({ onClose }) => {
   const { USER_ID } = useContext(AuthContext);
-  const { setForwardOpen, setDeleteOpen, translation, permissions } =
+  const { setForwardOpen, setDeleteOpen, translation, Styles, permissions } =
     useContext(AppContext);
   const {
     selectedMessage: message,
@@ -66,6 +65,7 @@ const Options = ({ onClose }) => {
               height: 40,
               width: 40,
               borderRadius: 5,
+              ...Styles.bgdark
             }}
             source={{ uri: message.media }}
             useNativeControls={false}
@@ -76,73 +76,77 @@ const Options = ({ onClose }) => {
         ) : null}
       </View>
       <View style={Styles.optionsmodaloptions}>
-        <MenuOption
-          onSelect={() => {
-            setForwardOpen([message._id]);
-            setClose();
-          }}
-          style={Styles.optionsmodalitem}
-        >
-          <View style={Styles.optionsmodalitemicon}>{forwardIcon}</View>
-          <Text style={Styles.optionsmodalitemtext}>{translation.forward}</Text>
-        </MenuOption>
-        <MenuOption
-          onSelect={() => {
-            setReply(message);
-            setClose();
-          }}
-          style={Styles.optionsmodalitem}
-        >
-          <View style={Styles.optionsmodalitemicon}>{replyIcon}</View>
-          <Text style={Styles.optionsmodalitemtext}>{translation.reply}</Text>
-        </MenuOption>
-        {permissions.includes(PERMISSION.enable_disable_star_messages) ? (
-          message.starred ? (
+        {!message.deleted ?
+          <>
             <MenuOption
               onSelect={() => {
-                markUnstarred({
-                  chat:
-                    message.receiverType == CHAT_TYPE.group
-                      ? message.receiver
-                      : message.sender == USER_ID
-                        ? message.receiver
-                        : message.sender,
-                  messages: [message._id],
-                });
+                setForwardOpen([message._id]);
                 setClose();
               }}
               style={Styles.optionsmodalitem}
             >
-              <View style={Styles.optionsmodalitemicon}>
-                {unstarredMessage}
-              </View>
-              <Text style={Styles.optionsmodalitemtext}>
-                {translation.unstarred}
-              </Text>
+              <View style={Styles.optionsmodalitemicon}>{forwardIcon(Styles.icondefault)}</View>
+              <Text style={Styles.optionsmodalitemtext}>{translation.forward}</Text>
             </MenuOption>
-          ) : (
             <MenuOption
               onSelect={() => {
-                markStarred({
-                  chat:
-                    message.receiverType == CHAT_TYPE.group
-                      ? message.receiver
-                      : message.sender == USER_ID
-                        ? message.receiver
-                        : message.sender,
-                  messages: [message._id],
-                });
+                setReply(message);
                 setClose();
               }}
               style={Styles.optionsmodalitem}
             >
-              <View style={Styles.optionsmodalitemicon}>{starIcon}</View>
-              <Text style={Styles.optionsmodalitemtext}>
-                {translation.starred}
-              </Text>
+              <View style={Styles.optionsmodalitemicon}>{replyIcon(Styles.icondefault)}</View>
+              <Text style={Styles.optionsmodalitemtext}>{translation.reply}</Text>
             </MenuOption>
-          )
-        ) : null}
+            {permissions.includes(PERMISSION.enable_disable_star_messages) ? (
+              message.starred ? (
+                <MenuOption
+                  onSelect={() => {
+                    markUnstarred({
+                      chat:
+                        message.receiverType == CHAT_TYPE.group
+                          ? message.receiver
+                          : message.sender == USER_ID
+                            ? message.receiver
+                            : message.sender,
+                      messages: [message._id],
+                    });
+                    setClose();
+                  }}
+                  style={Styles.optionsmodalitem}
+                >
+                  <View style={Styles.optionsmodalitemicon}>
+                    {unstarredIcon(Styles.icon20)}
+                  </View>
+                  <Text style={Styles.optionsmodalitemtext}>
+                    {translation.unstarred}
+                  </Text>
+                </MenuOption>
+              ) : (
+                <MenuOption
+                  onSelect={() => {
+                    markStarred({
+                      chat:
+                        message.receiverType == CHAT_TYPE.group
+                          ? message.receiver
+                          : message.sender == USER_ID
+                            ? message.receiver
+                            : message.sender,
+                      messages: [message._id],
+                    });
+                    setClose();
+                  }}
+                  style={Styles.optionsmodalitem}
+                >
+                  <View style={Styles.optionsmodalitemicon}>{starredIcon({ ...Styles.icondefault, ...Styles.icon18 })}</View>
+                  <Text style={Styles.optionsmodalitemtext}>
+                    {translation.starred}
+                  </Text>
+                </MenuOption>
+              )
+            ) : null}
+          </> : null
+        }
         {permissions.includes(PERMISSION.allow_delete_message) ? (
           <MenuOption
             onSelect={() => {
@@ -151,7 +155,7 @@ const Options = ({ onClose }) => {
             }}
             style={Styles.optionsmodalitem}
           >
-            <View style={Styles.optionsmodalitemicon}>{deleteIcon}</View>
+            <View style={Styles.optionsmodalitemicon}>{deleteIcon({ ...Styles.icondanger, ...Styles.icon16 })}</View>
             <Text style={[Styles.optionsmodalitemtext, Styles.fontdanger]}>
               {translation.delete}
             </Text>
@@ -173,6 +177,7 @@ const Options = ({ onClose }) => {
 export const MessagePopupOptions = () => {
   const { selectedMessage: message, setSelectedMessage } =
     useContext(MessageContext);
+  const { Styles } = useContext(AppContext)
   const onClose = () => setSelectedMessage(null);
   if (message) {
     if (Platform.OS == "web")

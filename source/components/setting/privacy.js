@@ -1,15 +1,16 @@
 import { useContext, useEffect, useState } from "react";
 import { ActivityIndicator, Platform, Pressable, ScrollView, Switch, Text, View } from "react-native";
-import { PRIVACY_KEYS, PRIVACY_STATUS, SCREEN } from "../../constant";
-import { backIcon, rightArrow } from "../../constant/icons";
+import { ONLINE_PRIVACY, PRIVACY_KEYS, PRIVACY_STATUS, SCREEN } from "../../constant";
+import { backIcon, rightArrowIcon } from "../../constant/icons";
+import { AppContext } from "../../context/app";
 import { SettingContext } from "../../context/setting";
-import { getPrivacySetting } from "../../services/setting";
-import Styles, { appStyle } from "../../styles";
+import { getPrivacySetting, updatePrivacySetting } from "../../services/setting";
+import { appStyle } from "../../styles";
 import PrivacySettingOption from "./privacyOptions";
 
 const PrivacySetting = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState({});
+  const { translation, privacy, setPrivacy , Styles} = useContext(AppContext);
   const settingContext = useContext(SettingContext);
 
   const handleBackNavigation = () =>
@@ -24,7 +25,10 @@ const PrivacySetting = ({ navigation }) => {
   }
 
   useEffect(() => {
-    getPrivacySetting().then(response => setData(response.data)).finally(() => setLoading(false))
+    getPrivacySetting().then(response => {
+      if (response.success)
+        setPrivacy((prev) => ({ ...prev, ...response.data.privacy }))
+    }).finally(() => setLoading(false))
   }, [])
 
   return (
@@ -37,11 +41,11 @@ const PrivacySetting = ({ navigation }) => {
             style={Styles.chatBubbleHeaderOption}
           >
             <View style={Styles.chatBubbleHeaderOptionIcon}>
-              <View style={{ ...Styles.icon, ...Styles.icon24 }}>{backIcon}</View>
+              <View style={{ ...Styles.icon, ...Styles.icon24 }}>{backIcon(Styles.icondefault)}</View>
             </View>
           </Pressable>
           <View style={Styles.chatBubbleHeaderInfo}>
-            <Text style={{ ...Styles.chatBubbleHeaderTitle }}>Privacy</Text>
+            <Text style={{ ...Styles.chatBubbleHeaderTitle }}>{translation.privacy}</Text>
           </View>
         </View>
         {loading ? (
@@ -49,51 +53,51 @@ const PrivacySetting = ({ navigation }) => {
         ) : <ScrollView style={{ width: "100%" }}>
           <View style={{ flex: 1, ...appStyle, ...Styles.userinfowrap }}>
             <View style={{ ...Styles.userinfolinks, ...Styles.block }}>
-              <Pressable onPress={() => handleNavigate({ privacy: PRIVACY_KEYS.lastSeenOnline, value: { lastSeen: data.privacy.lastSeen, online: data.privacy.online } })} style={{ ...Styles.userinfolinkitem, borderTopWidth: 0, ...Styles.cursor }}>
+              <Pressable onPress={() => handleNavigate({ privacy: PRIVACY_KEYS.lastSeenOnline })} style={{ ...Styles.userinfolinkitem, borderTopWidth: 0, ...Styles.cursor }}>
                 <Text style={{ ...Styles.userinfolinktext }}>
-                  Last Seen & Online
+                  {translation.lastSeenOnline}
                 </Text>
                 <Text style={{ ...Styles.userinfolinkcount, ...Styles.fontlight }} numberOfLines={1}>
-                  {`${PRIVACY_STATUS[data.privacy.lastSeen]}, ${PRIVACY_STATUS[data.privacy.online]}`}
+                  {privacy.online == 1 || privacy.lastSeen == 3 && privacy.online == 0 ? `${PRIVACY_STATUS[privacy.lastSeen]}` : `${PRIVACY_STATUS[privacy.lastSeen]}, ${ONLINE_PRIVACY[privacy.online]}`}
                 </Text>
                 <View style={{ ...Styles.userinfolinkiconright }}>
-                  {rightArrow}
+                  {rightArrowIcon({ ...Styles.icondefault, ...Styles.icon20 })}
                 </View>
               </Pressable>
-              <Pressable onPress={() => handleNavigate({ privacy: PRIVACY_KEYS.profilePhoto, value: data.privacy.profilePhoto })} style={{ ...Styles.userinfolinkitem, ...Styles.cursor }}>
-                <Text style={{ ...Styles.userinfolinktext }}>Profile Photo</Text>
+              <Pressable onPress={() => handleNavigate({ privacy: PRIVACY_KEYS.profilePhoto })} style={{ ...Styles.userinfolinkitem, ...Styles.cursor }}>
+                <Text style={{ ...Styles.userinfolinktext }}>{translation.prfilePhoto}</Text>
                 <Text style={{ ...Styles.userinfolinkcount, ...Styles.fontlight }} numberOfLines={1}>
-                  {PRIVACY_STATUS[data.privacy.profilePhoto]}
+                  {PRIVACY_STATUS[privacy.profilePhoto]}
                 </Text>
                 <View style={{ ...Styles.userinfolinkiconright }}>
-                  {rightArrow}
+                  {rightArrowIcon({ ...Styles.icondefault, ...Styles.icon20 })}
                 </View>
               </Pressable>
-              <Pressable onPress={() => handleNavigate({ privacy: PRIVACY_KEYS.about, value: data.privacy.about })} style={{ ...Styles.userinfolinkitem, ...Styles.cursor }}>
-                <Text style={{ ...Styles.userinfolinktext }}>About</Text>
+              <Pressable onPress={() => handleNavigate({ privacy: PRIVACY_KEYS.about })} style={{ ...Styles.userinfolinkitem, ...Styles.cursor }}>
+                <Text style={{ ...Styles.userinfolinktext }}>{translation.about}</Text>
                 <Text style={{ ...Styles.userinfolinkcount, ...Styles.fontlight }} numberOfLines={1}>
-                  {PRIVACY_STATUS[data.privacy.about]}
+                  {PRIVACY_STATUS[privacy.about]}
                 </Text>
                 <View style={{ ...Styles.userinfolinkiconright }}>
-                  {rightArrow}
+                  {rightArrowIcon({ ...Styles.icondefault, ...Styles.icon20 })}
                 </View>
               </Pressable>
-              <Pressable onPress={() => handleNavigate({ privacy: PRIVACY_KEYS.group, value: data.privacy.group })} style={{ ...Styles.userinfolinkitem, ...Styles.cursor }}>
-                <Text style={{ ...Styles.userinfolinktext }}>Groups</Text>
+              <Pressable onPress={() => handleNavigate({ privacy: PRIVACY_KEYS.group })} style={{ ...Styles.userinfolinkitem, ...Styles.cursor }}>
+                <Text style={{ ...Styles.userinfolinktext }}>{translation.group}</Text>
                 <Text style={{ ...Styles.userinfolinkcount, ...Styles.fontlight }} numberOfLines={1}>
-                  {PRIVACY_STATUS[data.privacy.group]}
+                  {PRIVACY_STATUS[privacy.group]}
                 </Text>
                 <View style={{ ...Styles.userinfolinkiconright }}>
-                  {rightArrow}
+                  {rightArrowIcon({ ...Styles.icondefault, ...Styles.icon20 })}
                 </View>
               </Pressable>
-              {/* <Pressable onPress={() => handleNavigate({ privacy: PRIVACY_KEYS.status, value: data.privacy.status })} style={{ ...Styles.userinfolinkitem, ...Styles.cursor }}>
+              {/* <Pressable onPress={() => handleNavigate({ privacy: PRIVACY_KEYS.status, value: privacy.status })} style={{ ...Styles.userinfolinkitem, ...Styles.cursor }}>
                 <Text style={{ ...Styles.userinfolinktext }}>Status</Text>
                 <Text style={{ ...Styles.userinfolinkcount, ...Styles.fontlight }} numberOfLines={1}>
-                  {PRIVACY_STATUS[data.privacy.status]}
+                  {PRIVACY_STATUS[privacy.status]}
                 </Text>
                 <View style={{ ...Styles.userinfolinkiconright }}>
-                  {rightArrow}
+                  {rightArrowIcon({ ...Styles.icondefault, ...Styles.icon20 })}
                 </View>
               </Pressable> */}
             </View>
@@ -106,7 +110,7 @@ const PrivacySetting = ({ navigation }) => {
                 None
               </Text>
               <View style={{ ...Styles.userinfolinkiconright }}>
-                {rightArrow}
+                {rightArrowIcon({ ...Styles.icondefault, ...Styles.icon20 })}
               </View>
             </View>
           </View>
@@ -121,11 +125,11 @@ const PrivacySetting = ({ navigation }) => {
                 Calls
               </Text>
               <View style={{ ...Styles.userinfolinkiconright }}>
-                {rightArrow}
+                {rightArrowIcon({ ...Styles.icondefault, ...Styles.icon20 })}
               </View>
             </View>
           </View> */}
-            <View style={{ ...Styles.userinfolinks, ...Styles.block, marginBottom: 0, }}>
+            {/* <View style={{ ...Styles.userinfolinks, ...Styles.block, marginBottom: 0, }}>
               <View style={{ ...Styles.userinfolinkitem, borderTopWidth: 0, ...Styles.cursor }}>
                 <Text style={{ ...Styles.userinfolinktext }}>
                   Block
@@ -134,7 +138,7 @@ const PrivacySetting = ({ navigation }) => {
                   None
                 </Text>
                 <View style={{ ...Styles.userinfolinkiconright }}>
-                  {rightArrow}
+                  {rightArrowIcon({ ...Styles.icondefault, ...Styles.icon20 })}
                 </View>
               </View>
             </View>
@@ -142,11 +146,11 @@ const PrivacySetting = ({ navigation }) => {
               <Text style={{ ...Styles.fontlight, ...Styles.fontsizesmall }}>
                 List of contacts you have blocked.
               </Text>
-            </View>
-            <View style={{ ...Styles.userinfolinks, ...Styles.block, marginTop: 15, }}>
-              <View style={{ ...Styles.userinfolinkitem, borderTopWidth: 0, ...Styles.cursor }}>
+            </View> */}
+            <View style={{ ...Styles.userinfolinks, ...Styles.block}}>
+              <View style={{ ...Styles.userinfolinkitem, borderTopWidth: 0, ...Styles.cursor, ...Styles.userinfolinkitemtoggle }}>
                 <Text style={{ ...Styles.userinfolinktext }}>
-                  Read Receipts
+                  {translation.readRecipt}
                 </Text>
                 <View style={{ ...Styles.userinfolinkiconright }}>
                   <Switch
@@ -157,14 +161,11 @@ const PrivacySetting = ({ navigation }) => {
                     //     : "#f4f3f4"
                     // }
                     ios_backgroundColor="#3e3e3e"
-                    onValueChange={(value) =>
-                      handleToggle({
-                        setting: "group",
-                        notification: "showNotification",
-                        value,
-                      })
-                    }
-                    value={data.privacy.readRecipts}
+                    onValueChange={(value) => {
+                      setPrivacy(prev => ({ ...prev, readRecipts: value }))
+                      updatePrivacySetting({ readRecipts: value })
+                    }}
+                    value={privacy.readRecipts}
                   />
                 </View>
               </View>
@@ -178,7 +179,7 @@ const PrivacySetting = ({ navigation }) => {
                 None
               </Text>
               <View style={{ ...Styles.userinfolinkiconright }}>
-                {rightArrow}
+                {rightArrowIcon({ ...Styles.icondefault, ...Styles.icon20 })}
               </View>
             </View>
           </View>

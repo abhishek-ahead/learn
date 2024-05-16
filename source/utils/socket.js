@@ -184,10 +184,6 @@ const Socket = ({ children }) => {
     data.chats.forEach((chat) => {
       const chatData = chats.data[chat];
       if (chatData) {
-        if (chatData.chat.type == CHAT_TYPE.group) {
-          const group = groups[chat];
-          if (group) dispatch(chatDeleted({ chat, group }));
-        }
         dispatch(chatDeleted({ chat }));
       }
       Platform.OS == "web" &&

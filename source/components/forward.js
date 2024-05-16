@@ -18,16 +18,16 @@ import { CHAT_TYPE } from "../constant";
 import {
   checkcircleIcon,
   closeIcon,
-  searchdefault,
+  search,
   sendWhite,
 } from "../constant/icons";
 import { AppContext } from "../context/app";
 import { forwardMessage } from "../services/message";
-import Styles, { webStyle } from "../styles";
+import { webStyle } from "../styles";
 import LoadingShimmer from "./chat/loadingShimmer";
 
 const ForwardModel = () => {
-  const { chats, getNewChat, forwardOpen, setForwardOpen, translation } =
+  const { chats, getNewChat, forwardOpen, setForwardOpen, translation, Styles } =
     useContext(AppContext);
   const users = useSelector((state) => state.chats.users);
   const chatData = useSelector((state) => state.chats.data);
@@ -116,7 +116,7 @@ const ForwardModel = () => {
             <Pressable onPress={onClose} style={Styles.modalheaderOption}>
               <View style={Styles.modalheaderOptionicon}>
                 <View style={{ ...Styles.icon, ...Styles.icon24 }}>
-                  {closeIcon}
+                  {closeIcon(Styles.icondefault)}
                 </View>
               </View>
             </Pressable>
@@ -132,13 +132,13 @@ const ForwardModel = () => {
           {/* Search */}
           <View style={{ ...Styles.modalsearch }}>
             <View style={{ ...Styles.icon, ...Styles.icon24 }}>
-              {searchdefault}
+              {search(Styles.icondefault)}
             </View>
             <View style={{ ...Styles.searchboxtextbox }}>
               <View style={{ ...Styles.searchboxtext }} />
               <TextInput
                 autoFocus={Platform.OS == "web"}
-                style={{ ...Styles.searchboxtext, ...webStyle, width: "100%" }}
+                style={{ ...Styles.forminputText, ...webStyle }}
                 onChangeText={(text) => setText(text)}
                 value={text}
                 placeholder="Search"
@@ -150,7 +150,7 @@ const ForwardModel = () => {
                 onPress={() => setText("")}
                 style={{ ...Styles.icon, ...Styles.icon24 }}
               >
-                {closeIcon}
+                {closeIcon(Styles.icondefault)}
               </Pressable>
             ) : null}
           </View>
@@ -170,7 +170,7 @@ const ForwardModel = () => {
                     onPress={() => handleRemove(item._id)}
                     style={{ ...Styles.onlineUserItemClose, ...Styles.icon20 }}
                   >
-                    {closeIcon}
+                    {closeIcon(Styles.icondefault)}
                   </Pressable>
                 </View>
                 <Text style={Styles.onlineUserItemName} numberOfLines={1}>
@@ -188,6 +188,7 @@ const ForwardModel = () => {
           >
             {frequentlyContacted.length ? (
               <>
+                <View style={{ ...Styles.searchresultsep }}></View>
                 <View style={{ ...Styles.searchresultcontainer }}>
                   <View style={{ ...Styles.searchresulthead }}>
                     <Text style={{ ...Styles.fontBold, ...Styles.fontlight }}>
@@ -242,7 +243,7 @@ const ForwardModel = () => {
                               ...Styles.itemCenter,
                             }}
                           >
-                            {checkcircleIcon}
+                            {checkcircleIcon({ fill: "#fff", ...Styles.icon16 })}
                           </View>
                         </View>
                       ) : (
@@ -284,7 +285,7 @@ const ForwardModel = () => {
                     style={Styles.chatListItem}
                   >
                     <View
-                      style={{ ...Styles.chatListItemInner, borderTopWidth: 0 }}
+                      style={{ ...Styles.chatListItemInner }}
                     >
                       <View style={Styles.chatListItemthumb}>
                         <Image
@@ -324,7 +325,7 @@ const ForwardModel = () => {
                               ...Styles.itemCenter,
                             }}
                           >
-                            {checkcircleIcon}
+                            {checkcircleIcon({ fill: "#fff", ...Styles.icon16 })}
                           </View>
                         </View>
                       ) : (
@@ -357,7 +358,7 @@ const ForwardModel = () => {
                   {/* <Text style={Styles.forwardMsgbtn}>{translation.forward}</Text> */}
                   <View style={{ ...Styles.btnrounded, ...Styles.btnPrimary }}>
                     <View style={{ ...Styles.icon16, ...Styles.mr_3 }}>
-                      {sendWhite}
+                      {sendWhite({ ...Styles.iconwhite })}
                     </View>
                   </View>
                 </Pressable>

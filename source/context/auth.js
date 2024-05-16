@@ -41,7 +41,7 @@ export const AuthProvider = ({ children, clientToken, client }) => {
       SET_USER_ID(client?._id || "6596334199121a2a10df8777");
       setToken(
         clientToken ||
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTk2MzM0MTk5MTIxYTJhMTBkZjg3NzciLCJpYXQiOjE3MTAxMzM3MjN9.XAp6xS_TAxF4VtrGfoN3C88fqia9r6Nw8cJ4pYrQ8lY"
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTk2MzM0MTk5MTIxYTJhMTBkZjg3NzciLCJpYXQiOjE3MTAxMzM3MjN9.XAp6xS_TAxF4VtrGfoN3C88fqia9r6Nw8cJ4pYrQ8lY"
       );
       setUser(
         client || {
@@ -50,6 +50,7 @@ export const AuthProvider = ({ children, clientToken, client }) => {
           uid: 23,
           name: "Vashist Mani",
           status: 1,
+          about: "Available",
           language: "en",
           verified: false,
           avatar:
@@ -72,7 +73,7 @@ export const AuthProvider = ({ children, clientToken, client }) => {
   if (USER_ID && token && user) {
     axiosInstance.defaults.headers.common["Authorization"] = "Bearer " + token;
     return (
-      <AuthContext.Provider value={{ USER_ID, token, user }}>
+      <AuthContext.Provider value={{ USER_ID, token, user, setUser }}>
         {children}
       </AuthContext.Provider>
     );

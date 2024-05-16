@@ -4,7 +4,6 @@ import { closeIcon } from "../constant/icons";
 import { AppContext } from "../context/app";
 import { MessageContext } from "../context/message";
 import { deleteMessage, deleteMessageEveryone } from "../services/message";
-import Styles from "../styles";
 
 const DeleteDialog = () => {
   const { chat } = useContext(MessageContext);
@@ -12,6 +11,7 @@ const DeleteDialog = () => {
     deleteOpen: message,
     setDeleteOpen,
     translation,
+    Styles
   } = useContext(AppContext);
   const onClose = () => setDeleteOpen(null);
   return (
@@ -107,7 +107,7 @@ const DeleteDialog = () => {
                     ...Styles.itemCenter,
                   }}
                 >
-                  <View style={Styles.icon18}>{closeIcon}</View>
+                  <View style={Styles.icon18}>{closeIcon(Styles.icondefault)}</View>
                 </Pressable>
               </View>
             </View>

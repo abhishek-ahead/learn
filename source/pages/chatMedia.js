@@ -18,18 +18,18 @@ import { CONTENT_TYPE, MEDIA_TYPE, SCREEN } from "../constant";
 import {
   backIcon,
   checkcircleIcon,
-  playIconWhite,
   fileIcon,
+  playIcon
 } from "../constant/icons";
 import { AppContext } from "../context/app";
 import { deleteMessage, markStarred, messageMedia } from "../services/message";
 import { chatNavigation, chatOption } from "../store/reducer";
-import Styles, { appStyle, mainStyle } from "../styles";
+import { appStyle, mainStyle } from "../styles";
 
 const ChatMedia = ({ navigation, route, id }) => {
   const dispatch = useDispatch();
   id = route?.params?.id || id;
-  const { setForwardOpen, setConfimationDialog, setShowImage, translation, fetchChatDetails } = useContext(AppContext);
+  const { setForwardOpen, setConfimationDialog, setShowImage, translation, fetchChatDetails, Styles } = useContext(AppContext);
   const [mediaData, setMediaData] = useState({
     [MEDIA_TYPE.media]: { data: [], more: true },
     [MEDIA_TYPE.link]: { data: [], more: true },
@@ -147,6 +147,7 @@ const ChatMedia = ({ navigation, route, id }) => {
                       style={Styles.mediacontaineritemvideo}
                       videoStyle={{
                         ...Styles.messageitemattachmentvideoplayer,
+                        ...Styles.bgdark
                       }}
                       source={{ uri: message.media }}
                       useNativeControls={false}
@@ -160,7 +161,7 @@ const ChatMedia = ({ navigation, route, id }) => {
                         ...Styles.itemCenter,
                       }}
                     >
-                      {playIconWhite}
+                      {playIcon({ fill: "#fff", height: 30, width: 30 })}
                     </View>
                   </View>
                 )}
@@ -178,7 +179,7 @@ const ChatMedia = ({ navigation, route, id }) => {
                       ...Styles.itemCenter,
                     }}
                   >
-                    {checkcircleIcon}
+                    {checkcircleIcon({ fill: "#fff", ...Styles.icon16 })}
                   </View>
                 ) : null}
               </Pressable>
@@ -197,7 +198,7 @@ const ChatMedia = ({ navigation, route, id }) => {
             style={{ ...Styles.mediafileitem }}
           >
             <View style={{ ...Styles.mediafileitemimg, ...Styles.itemCenter }}>
-              {fileIcon}
+              {fileIcon(Styles.iconwhite)}
             </View>
             <View style={{ ...Styles.mediafileiteminfo }}>
               <Text
@@ -226,7 +227,7 @@ const ChatMedia = ({ navigation, route, id }) => {
             {selected.includes(message._id) ? (
               <View style={Styles.mediafileitemoption}>
                 <View style={{ ...Styles.radioactive, ...Styles.itemCenter }}>
-                  {checkcircleIcon}
+                  {checkcircleIcon({ fill: "#fff", ...Styles.icon16 })}
                 </View>
               </View>
             ) : null}
@@ -283,7 +284,7 @@ const ChatMedia = ({ navigation, route, id }) => {
               {selected.includes(message._id) ? (
                 <View style={Styles.medialinkitemoption}>
                   <View style={{ ...Styles.radioactive, ...Styles.itemCenter }}>
-                    {checkcircleIcon}
+                    {checkcircleIcon({ fill: "#fff", ...Styles.icon16 })}
                   </View>
                 </View>
               ) : null}
@@ -326,7 +327,7 @@ const ChatMedia = ({ navigation, route, id }) => {
           >
             <View style={Styles.chatBubbleHeaderOptionIcon}>
               <View style={{ ...Styles.icon, ...Styles.icon24 }}>
-                {backIcon}
+                {backIcon(Styles.icondefault)}
               </View>
             </View>
           </Pressable>
@@ -523,7 +524,7 @@ export default ChatMedia;
                     <Pressable onPress={handleBackNavigation} style={Styles.chatBubbleHeaderOption}>
                         <View style={Styles.chatBubbleHeaderOptionIcon}>
                             <View style={{ ...Styles.icon, ...Styles.icon24 }}>
-                                {backIcon}
+                                {backIcon(Styles.icondefault)}
                             </View>
                         </View>
                     </Pressable>
@@ -555,19 +556,19 @@ export default ChatMedia;
                             <View style={{ ...Styles.mediacontaineritem }}>
                                 <Image style={Styles.mediacontaineritemimg} source={{ uri: "https://www.mecgale.com/wp-content/uploads/2017/08/dummy-profile.png" }} />
                                 <View style={{ ...Styles.checkcircle, ...Styles.itemCenter }}>
-                                    {checkcircleIcon}
+                                    {checkcircleIcon({ fill: "#fff", ...Styles.icon16 })}
                                 </View>
                             </View>
                             <View style={{ ...Styles.mediacontaineritem }}>
                                 <Image style={Styles.mediacontaineritemimg} source={{ uri: "https://www.mecgale.com/wp-content/uploads/2017/08/dummy-profile.png" }} />
                                 <View style={{ ...Styles.checkcircle, ...Styles.itemCenter }}>
-                                    {checkcircleIcon}
+                                    {checkcircleIcon({ fill: "#fff", ...Styles.icon16 })}
                                 </View>
                             </View>
                             <View style={{ ...Styles.mediacontaineritem }}>
                                 <Image style={Styles.mediacontaineritemimg} source={{ uri: "https://www.mecgale.com/wp-content/uploads/2017/08/dummy-profile.png" }} />
                                 <View style={{ ...Styles.checkcircle, ...Styles.itemCenter }}>
-                                    {checkcircleIcon}
+                                    {checkcircleIcon({ fill: "#fff", ...Styles.icon16 })}
                                 </View>
                             </View>
                             <View style={{ ...Styles.mediacontaineritem }}>
@@ -685,7 +686,7 @@ export default ChatMedia;
                                     <Text style={{ ...Styles.fontsizesmall, ...Styles.fontlight, ...Styles.mtop2 }} numberOfLines={1} ellipsizeMode="tail">www.youtube.com</Text>
                                 </View>
                                 <View style={{ ...Styles.medialinkitemoption }}>
-                                    <View style={{ ...Styles.radioactive, ...Styles.itemCenter }}>{checkcircleIcon}</View>
+                                    <View style={{ ...Styles.radioactive, ...Styles.itemCenter }}>{checkcircleIcon({ fill: "#fff", ...Styles.icon16 })}</View>
                                 </View>
                             </View>
                             <View style={{ ...Styles.medialinkitemmsg }}>
@@ -731,7 +732,7 @@ export default ChatMedia;
                                 <Text style={{ ...Styles.fontsizesmall, ...Styles.fontlight, ...Styles.mtop5 }}>09 Page &#x2022; 104 Kb Page &#x2022; Pdf  </Text>
                             </View>
                             <View style={{ ...Styles.mediafileitemoption }}>
-                                <View style={{ ...Styles.radioactive, ...Styles.itemCenter }}>{checkcircleIcon}</View>
+                                <View style={{ ...Styles.radioactive, ...Styles.itemCenter }}>{checkcircleIcon({ fill: "#fff", ...Styles.icon16 })}</View>
                             </View>
                         </View>
                     </View>

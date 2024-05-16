@@ -63,7 +63,7 @@ export const chatArchive = async (chat) => {
 
 export const chatUnarchive = async (chat) => {
   try {
-    await axiosInstance.post("/chat/unarchive", { chat: chat });
+    await axiosInstance.post("/chat/unarchiveIcon", { chat: chat });
     return { success: true };
   } catch (error) {
     console.log("error while pin chat", error);
@@ -112,7 +112,6 @@ export const chatMute = async (data) => {
 };
 
 export const chatSearch = async (params) => {
-  console.log("params", params);
   try {
     const config = {
       method: "GET",

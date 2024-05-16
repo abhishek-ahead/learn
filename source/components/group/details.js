@@ -2,21 +2,20 @@ import { useContext, useEffect, useState } from "react";
 import { ActivityIndicator, Image, Pressable, Text, View } from "react-native";
 import { MEMBER_GROUP_ROLE, SCREEN } from "../../constant";
 import {
-  addIconPrimary,
-  linkoutlineprimary,
-  optionButton,
-  rightArrow,
-  settingIconprimary,
-  userpendingIconprimary,
+  addIcon,
+  linkIcon,
+  optionButtonIcon,
+  rightArrowIcon,
+  settingIcon,
+  userPendingIcon
 } from "../../constant/icons";
 import { AppContext } from "../../context/app";
 import { GroupContext } from "../../context/group";
 import { groupMembers } from "../../services/group";
-import Styles from "../../styles";
 
 export default ({ group, handleNavigate }) => {
-  const { translation, setAddMemberGroup } = useContext(AppContext);
-  const { selectedMember, setSelectedMember } = useContext(GroupContext);
+  const { translation, setAddMemberGroup, Styles } = useContext(AppContext);
+  const { setSelectedMember } = useContext(GroupContext);
   const [members, setMembers] = useState([]);
   const [loading, setloading] = useState(true);
 
@@ -40,18 +39,18 @@ export default ({ group, handleNavigate }) => {
             }}
           >
             <View style={{ ...Styles.userinfolinkicon }}>
-              <View style={{ ...Styles.icon24 }}>{settingIconprimary}</View>
+              <View style={{ ...Styles.icon24 }}>{settingIcon(Styles.iconprimary)}</View>
             </View>
             <Text style={{ ...Styles.userinfolinktext }}>
               {translation.groupSettings}
             </Text>
             <View style={{ ...Styles.userinfolinkiconright }}>
-              {rightArrow}
+              {rightArrowIcon({ ...Styles.icondefault, ...Styles.icon20 })}
             </View>
           </Pressable>
         </View>
       ) : null}
-      <View style={Styles.mbot5}>
+      <View>
         <Text style={{ ...Styles.fontsizetitle, ...Styles.fontBold, ...Styles.fontdefault }}>
           {`${group.totalMembers}  ${translation.members}`}
         </Text>
@@ -63,7 +62,7 @@ export default ({ group, handleNavigate }) => {
             style={{ ...Styles.userinfolinkitem, borderTopWidth: 0 }}
           >
             <View style={{ ...Styles.userinfolinkicon }}>
-              <View style={{ ...Styles.icon24 }}>{addIconPrimary}</View>
+              <View style={{ ...Styles.icon24 }}>{addIcon(Styles.iconprimary)}</View>
             </View>
             <Text
               style={{
@@ -74,7 +73,7 @@ export default ({ group, handleNavigate }) => {
               {translation.addMembers}
             </Text>
             <View style={{ ...Styles.userinfolinkiconright }}>
-              {rightArrow}
+              {rightArrowIcon({ ...Styles.icondefault, ...Styles.icon20 })}
             </View>
           </Pressable>
         ) : null}
@@ -88,7 +87,7 @@ export default ({ group, handleNavigate }) => {
             >
               <View style={{ ...Styles.userinfolinkicon }}>
                 <View style={{ ...Styles.icon18 }}>
-                  {userpendingIconprimary}
+                  {userPendingIcon(Styles.iconprimary)}
                 </View>
               </View>
               <Text
@@ -108,7 +107,7 @@ export default ({ group, handleNavigate }) => {
               style={{ ...Styles.userinfolinkitem, borderTopWidth: 0 }}
             >
               <View style={{ ...Styles.userinfolinkicon }}>
-                <View style={{ ...Styles.icon18 }}>{linkoutlineprimary}</View>
+                <View style={{ ...Styles.icon18 }}>{linkIcon(Styles.iconprimary)}</View>
               </View>
               <Text
                 style={{
@@ -119,11 +118,32 @@ export default ({ group, handleNavigate }) => {
                 {translation.inviteLink}
               </Text>
               <View style={{ ...Styles.userinfolinkiconright }}>
-                {rightArrow}
+                {rightArrowIcon({ ...Styles.icondefault, ...Styles.icon20 })}
               </View>
             </Pressable>
           </>
         ) : null}
+
+        {/* For invite user to group for member */}
+        {group.superAdmin || group.admin ? <Pressable
+          onPress={() => handleNavigate(group._id, SCREEN.groupInvite)}
+          style={{ ...Styles.userinfolinkitem, borderTopWidth: 0 }}
+        >
+          <View style={{ ...Styles.userinfolinkicon }}>
+            <View style={{ ...Styles.icon18 }}>{linkIcon(Styles.iconprimary)}</View>
+          </View>
+          <Text
+            style={{
+              ...Styles.userinfolinktext,
+              ...Styles.fontlink,
+            }}
+          >
+            {translation.inviteLink}
+          </Text>
+          <View style={{ ...Styles.userinfolinkiconright }}>
+            {rightArrowIcon({ ...Styles.icondefault, ...Styles.icon20 })}
+          </View>
+        </Pressable> : null}
 
         {loading ? (
           <View style={{ ...Styles.itemCenter, height: 100 }}>
@@ -179,7 +199,7 @@ export default ({ group, handleNavigate }) => {
                   onPress={() => setSelectedMember(member)}
                   style={{ ...Styles.icon, ...Styles.icon18 }}
                 >
-                  {optionButton}
+                  {optionButtonIcon(Styles.icondefault)}
                 </Pressable>
               ) : null}
             </View>
@@ -251,7 +271,7 @@ export default ({ group, handleNavigate }) => {
                 </Text>
               </View>
               <View style={{ ...Styles.userinfolinkiconright }}>
-                {rightArrow}
+                {rightArrowIcon({ ...Styles.icondefault, ...Styles.icon20 })}
               </View>
             </Pressable> */}
         {group.totalMembers > 2 ? (

@@ -2,32 +2,29 @@ import { useContext } from "react";
 import { Pressable, Text, View } from "react-native";
 import People from "../components/people";
 import { NAV_TABS } from "../constant";
-import { upArrow } from "../constant/icons";
+import { upArrowIcon } from "../constant/icons";
 import { AppContext } from "../context/app";
 import Setting from "../pages/setting";
-import Styles, { appStyle, mainStyle } from "../styles";
+import { appStyle, mainStyle } from "../styles";
 import SettingStarred from "./../components/setting/starred";
 import Chat from "./chat";
 import ChatMedia from "./chatMedia";
 import ChatOpens from "./chatOpen";
 import ChatProfile from "./chatProfile";
 import ChatStarred from "./chatStarred";
-import Message from "./message";
-import GroupSetting from "./groupSetting";
 import GroupMembers from "./groupMembers";
 import GroupPendingRequest from "./groupPendingRequest";
+import GroupSetting from "./groupSetting";
+import Message from "./message";
 
 export {
   Chat,
   ChatMedia,
   ChatOpens,
   ChatProfile,
-  ChatStarred,
-  Message,
-  SettingStarred,
-  GroupSetting,
-  GroupMembers,
-  GroupPendingRequest,
+  ChatStarred, GroupMembers,
+  GroupPendingRequest, GroupSetting, Message,
+  SettingStarred
 };
 
 const Body = ({ params }) => {
@@ -43,7 +40,7 @@ const Body = ({ params }) => {
 };
 
 export default ({ navigation, route }) => {
-  const { tabNav, minimize, handleMinimize, translation } =
+  const { tabNav, minimize, handleMinimize, translation, Styles } =
     useContext(AppContext);
   return (
     <View style={{ ...mainStyle, marginLeft: 0 }}>
@@ -68,7 +65,7 @@ export default ({ navigation, route }) => {
             <View style={Styles.chatBubbleHeaderOption}>
               <View style={Styles.chatBubbleHeaderOptionIcon}>
                 <View style={{ ...Styles.icon, ...Styles.icon24 }}>
-                  {upArrow}
+                  {upArrowIcon(Styles.icondefault)}
                 </View>
               </View>
             </View>

@@ -1,29 +1,31 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import {
   Image,
   Platform,
   Pressable,
   ScrollView,
+  Switch,
   Text,
   View
 } from "react-native";
-import { SCREEN } from "../../constant";
+import { MODE, SCREEN } from "../../constant";
 import {
+  editIcon,
   notificationsIcon,
   privacyIcon,
-  rightArrow,
-  staroutlineactive
+  rightArrowIcon,
+  starredIcon
 } from "../../constant/icons";
 import { AppContext } from "../../context/app";
 import { AuthContext } from "../../context/auth";
 import { SettingContext } from "../../context/setting";
-import Styles, { appStyle } from "../../styles";
+import { appStyle } from "../../styles";
 
 
 const SettingBody = () => {
   const { user } = useContext(AuthContext);
   const { handlePageNav } = useContext(SettingContext);
-  const { setShowImage, translation } = useContext(AppContext);
+  const { setShowImage, translation, setMode, mode, Styles } = useContext(AppContext);
 
   const navigateProfile = () => {
     if (Platform.OS == "web") {
@@ -36,6 +38,8 @@ const SettingBody = () => {
       );
     }
   };
+
+  const [isEnabled, setIsEnabled] = useState(false);
 
   return (
     <View style={{ ...Styles.userinfo, flex: 1 }}>
@@ -61,27 +65,26 @@ const SettingBody = () => {
                   {user.name}
                 </Text>
               </Pressable>
-              <>
-                {user.about ? (
-                  <Text
-                    style={{ ...Styles.userinfostatus, ...Styles.fontlight }}
-                    numberOfLines={1}
-                  >
-                    {user.about}
-                  </Text>
-                ) : null}
-              </>
+              <Text
+                style={{ ...Styles.userinfostatus, ...Styles.fontlight }}
+                numberOfLines={1}
+              >
+                {user.about}
+              </Text>
             </View>
+            <Pressable onPress={() => handlePageNav(SCREEN.about)} style={{ ...Styles.userselfinfotopIcon, ...Styles.itemCenter }}>
+              <View style={Styles.icon16}>{editIcon(Styles.icondefault)}</View>
+            </Pressable>
           </View>
 
           <View style={{ ...Styles.userinfolinks, ...Styles.block }}>
             <Pressable onPress={() => handlePageNav(SCREEN.settingStarred)} style={{ ...Styles.userinfolinkitem, borderTopWidth: 0 }}>
               <View style={{ ...Styles.userinfolinkicon }}>
-                <View style={{ ...Styles.icon20 }}>{staroutlineactive}</View>
+                <View style={{ ...Styles.icon20 }}>{starredIcon(Styles.iconprimary)}</View>
               </View>
               <Text style={{ ...Styles.userinfolinktext }}>{translation.starredMessage}</Text>
               <View style={{ ...Styles.userinfolinkiconright }}>
-                {rightArrow}
+                {rightArrowIcon({ ...Styles.icondefault, ...Styles.icon20 })}
               </View>
             </Pressable>
             {/* <Pressable onPress={() => handlePageNav(SCREEN.account)} style={{ ...Styles.userinfolinkitem }}>
@@ -90,57 +93,77 @@ const SettingBody = () => {
                             </View>
                             <Text style={{ ...Styles.userinfolinktext }}>Account Setting</Text>
                             <View style={{ ...Styles.userinfolinkiconright }}>
-                                {rightArrow}
+                                {rightArrowIcon({ ...Styles.icondefault, ...Styles.icon20 })}
                             </View>
                         </Pressable> */}
-            {/* <Pressable onPress={() => handlePageNav(SCREEN.privacy)} style={{ ...Styles.userinfolinkitem }}>
+            <Pressable onPress={() => handlePageNav(SCREEN.privacy)} style={{ ...Styles.userinfolinkitem }}>
               <View style={{ ...Styles.userinfolinkicon }}>
-                <View style={{ ...Styles.icon24 }}>{privacyIcon}</View>
+                <View style={{ ...Styles.icon24 }}>{privacyIcon(Styles.iconprimary)}</View>
               </View>
               <Text style={{ ...Styles.userinfolinktext }}>Privacy Settings</Text>
               <View style={{ ...Styles.userinfolinkiconright }}>
-                {rightArrow}
+                {rightArrowIcon({ ...Styles.icondefault, ...Styles.icon20 })}
               </View>
-            </Pressable> */}
+            </Pressable>
             <Pressable
               onPress={() => handlePageNav(SCREEN.notification)}
               style={{ ...Styles.userinfolinkitem }}
             >
               <View style={{ ...Styles.userinfolinkicon }}>
-                <View style={{ ...Styles.icon20 }}>{notificationsIcon}</View>
+                <View style={{ ...Styles.icon20 }}>{notificationsIcon(Styles.iconprimary)}</View>
               </View>
               <Text style={{ ...Styles.userinfolinktext }}>{translation.notification}</Text>
               <View style={{ ...Styles.userinfolinkiconright }}>
-                {rightArrow}
+                {rightArrowIcon({ ...Styles.icondefault, ...Styles.icon20 })}
               </View>
             </Pressable>
             {/* <View style={{ ...Styles.userinfolinkitem }}>
                     <View style={{ ...Styles.userinfolinkicon }}>
-                        <View style={{ ...Styles.icon20 }}>{infoIcon}</View>
+                        <View style={{ ...Styles.icon20 }}>{infoIcon(Styles.iconprimary)}</View>
                     </View>
                     <Text style={{ ...Styles.userinfolinktext }}>About</Text>
                     <View style={{ ...Styles.userinfolinkiconright }}>
-                        {rightArrow}
+                        {rightArrowIcon({ ...Styles.icondefault, ...Styles.icon20 })}
                     </View>
                 </View> */}
             {/* <View style={{ ...Styles.userinfolinkitem }}>
                     <View style={{ ...Styles.userinfolinkicon }}>
-                        <View style={{ ...Styles.icon18 }}>{shareIconactive}</View>
+                        <View style={{ ...Styles.icon18 }}>{shareIcon(Styles.iconprimary)}</View>
                     </View>
                     <Text style={{ ...Styles.userinfolinktext }}>Share</Text>
                     <View style={{ ...Styles.userinfolinkiconright }}>
-                        {rightArrow}
+                        {rightArrowIcon({ ...Styles.icondefault, ...Styles.icon20 })}
                     </View>
                 </View>
                 <View style={{ ...Styles.userinfolinkitem }}>
                     <View style={{ ...Styles.userinfolinkicon }}>
-                        <View style={{ ...Styles.icon18 }}>{rateIcon}</View>
+                        <View style={{ ...Styles.icon18 }}>{rateIcon(Styles.icondefault)}</View>
                     </View>
                     <Text style={{ ...Styles.userinfolinktext }}>Rate Us</Text>
                     <View style={{ ...Styles.userinfolinkiconright }}>
-                        {rightArrow}
+                        {rightArrowIcon({ ...Styles.icondefault, ...Styles.icon20 })}
                     </View>
                 </View> */}
+          </View>
+          <View style={{ ...Styles.userinfolinks, ...Styles.block, marginTop: 0, }}>
+            <View style={{ ...Styles.userinfolinkitem, borderTopWidth: 0, ...Styles.cursor, ...Styles.userinfolinkitemtoggle }}>
+              <Text style={{ ...Styles.userinfolinktext }}>
+                Dark Mode
+              </Text>
+              {/* <Text style={{ ...Styles.userinfolinkcount, ...Styles.fontlight }}>ON</Text> */}
+              <View style={{ ...Styles.userinfolinkiconright }}>
+                <Switch
+                  trackColor={{ false: '#767577', true: '#81b0ff' }}
+                  thumbColor={isEnabled ? '#057EFC' : '#f4f3f4'}
+                  ios_backgroundColor="#3e3e3e"
+                  onValueChange={(value) => {
+                    if (value) setMode(MODE.dark)
+                    else setMode(MODE.light)
+                  }}
+                  value={mode == MODE.dark ? true : false}
+                />
+              </View>
+            </View>
           </View>
         </View>
       </ScrollView>

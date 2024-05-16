@@ -1,15 +1,14 @@
 
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext } from "react";
-import { Image, Pressable, Text, View } from "react-native";
+import { Image, Text, View } from "react-native";
 import { MenuOption } from "react-native-popup-menu";
 import { AppContext } from "../../context/app";
 import { AuthContext } from "../../context/auth";
-import Styles from "../../styles";
 import { removeReaction } from "../../services/message";
 
 const MessageReactionPreview = ({ chat, messageReactions }) => {
-    const { reactions, translation } = useContext(AppContext);
+    const { reactions, translation, Styles } = useContext(AppContext);
     const { user } = useContext(AuthContext);
 
     return (
@@ -55,7 +54,7 @@ export default MessageReactionPreview
 //                 <Pressable onPress={onClose} style={Styles.modalheaderOption}>
 //                     {Platform.OS !== "web" ? <View style={Styles.modalheaderOptionicon}>
 //                         <View style={{ ...Styles.icon, ...Styles.icon24 }}>
-//                             {backIcon}
+//                             {backIcon(Styles.icondefault)}
 //                         </View>
 //                     </View> : null}
 //                 </Pressable>
@@ -66,7 +65,7 @@ export default MessageReactionPreview
 //                     {Platform.OS == "web" ?
 //                         <View style={Styles.modalheaderOptionicon}>
 //                             <View style={{ ...Styles.icon, ...Styles.icon24 }}>
-//                                 {closeIcon}
+//                                 {closeIcon(Styles.icondefault)}
 //                             </View>
 //                         </View> : null
 //                     }

@@ -19,11 +19,14 @@ import {
   blockIcon,
   closeIcon,
   deleteIcon,
+  groupleaveIcon,
   media,
-  reportFlag,
-  rightArrow,
-  starredMessage,
-  unmuteWhite,
+  mute,
+  reportFlagIcon,
+  rightArrowIcon,
+  starredIcon,
+  unblockIcon,
+  unmute
 } from "../constant/icons";
 import { AppContext } from "../context/app";
 import { GroupContext, GroupProvider } from "../context/group";
@@ -32,7 +35,7 @@ import { blockFriend, unblockFriend } from "../services/friend";
 import { exitGroup } from "../services/group";
 import { report } from "../services/user";
 import { chatClose, chatNavigation } from "../store/reducer";
-import Styles, { appStyle, mainStyle, variables } from "../styles";
+import { appStyle, mainStyle } from "../styles";
 
 const ChatProfile = ({ navigation, route, id }) => {
   const dispatch = useDispatch();
@@ -50,6 +53,7 @@ const ChatProfile = ({ navigation, route, id }) => {
     getGroupDetails,
     addMemberGroup,
     fetchChatDetails,
+    Styles
   } = useContext(AppContext);
   const { selectedMember } = useContext(GroupContext);
 
@@ -110,7 +114,7 @@ const ChatProfile = ({ navigation, route, id }) => {
                 >
                   <View style={Styles.chatBubbleHeaderOptionIcon}>
                     <View style={{ ...Styles.icon, ...Styles.icon24 }}>
-                      {backIcon}
+                      {backIcon(Styles.icondefault)}
                     </View>
                   </View>
                 </Pressable>
@@ -122,7 +126,7 @@ const ChatProfile = ({ navigation, route, id }) => {
                       style={Styles.chatBubbleHeaderOptionIcon}
                     >
                       <View style={{ ...Styles.icon, ...Styles.icon24 }}>
-                        {closeIcon}
+                        {closeIcon(Styles.icondefault)}
                       </View>
                     </Pressable>
                   ) : null}
@@ -158,12 +162,22 @@ const ChatProfile = ({ navigation, route, id }) => {
                       </Text>
                     </View>
                     }
+                    {chatData.chat.about ? <Text
+                      style={{
+                        ...Styles.userinfostatus,
+                        ...Styles.fontlight,
+                        ...Styles.textcenter,
+                        marginTop: 5,
+                      }}
+                    >
+                      {chatData.chat.about}
+                    </Text> : null}
                     <Text
                       style={{
                         ...Styles.userinfostatus,
                         ...Styles.fontlight,
                         ...Styles.textcenter,
-                        color: user?.active ? "rgb(14, 208, 14)" : variables["font-color"],
+                        color: user?.active ? "rgb(14, 208, 14)" : Styles.fontdefault.color,
                         marginTop: 5,
                       }}
                     >
@@ -202,14 +216,14 @@ const ChatProfile = ({ navigation, route, id }) => {
                           backgroundColor: "#057EFC",
                         }}
                       >
-                        {media}
+                        {media({ fill: "#fff", ...Styles.icon20 })}
                       </View>
                       <Text style={{ ...Styles.userinfolinktext }}>
                         {translation.mediaLinkDoc}
                       </Text>
                       {/* <Text style={{ ...Styles.userinfolinkcount, ...Styles.fontprimary }}>50</Text> */}
                       <View style={{ ...Styles.userinfolinkiconright }}>
-                        {rightArrow}
+                        {rightArrowIcon({ ...Styles.icondefault, ...Styles.icon20 })}
                       </View>
                     </Pressable>
                     <Pressable
@@ -222,14 +236,14 @@ const ChatProfile = ({ navigation, route, id }) => {
                           backgroundColor: "#FF9900",
                         }}
                       >
-                        {starredMessage}
+                        {starredIcon({ fill: "#fff", ...Styles.icon20 })}
                       </View>
                       <Text style={{ ...Styles.userinfolinktext }}>
                         {translation.starredMessage}
                       </Text>
                       {/* <Text style={{ ...Styles.userinfolinkcount, ...Styles.fontprimary }}>15</Text> */}
                       <View style={{ ...Styles.userinfolinkiconright }}>
-                        {rightArrow}
+                        {rightArrowIcon({ ...Styles.icondefault, ...Styles.icon20 })}
                       </View>
                     </Pressable>
                   </View>
@@ -255,10 +269,10 @@ const ChatProfile = ({ navigation, route, id }) => {
                             backgroundColor: "#057EFC",
                           }}
                         >
-                          <View style={Styles.icon24}>{unmuteWhite}</View>
+                          <View style={Styles.icon24}>{unmute(Styles.iconwhite)}</View>
                         </View>
                         <Text style={{ ...Styles.userinfolinktext }}>
-                          {translation.mute}
+                          {translation.unmute}
                         </Text>
                         <Text
                           style={{
@@ -269,7 +283,7 @@ const ChatProfile = ({ navigation, route, id }) => {
                           {translation.yes}
                         </Text>
                         <View style={{ ...Styles.userinfolinkiconright }}>
-                          {rightArrow}
+                          {rightArrowIcon({ ...Styles.icondefault, ...Styles.icon20 })}
                         </View>
                       </Pressable>
                     ) : (
@@ -286,7 +300,7 @@ const ChatProfile = ({ navigation, route, id }) => {
                             backgroundColor: "#057EFC",
                           }}
                         >
-                          <View style={Styles.icon24}>{unmuteWhite}</View>
+                          <View style={Styles.icon24}>{mute(Styles.iconwhite)}</View>
                         </View>
                         <Text style={{ ...Styles.userinfolinktext }}>
                           {translation.mute}
@@ -300,7 +314,7 @@ const ChatProfile = ({ navigation, route, id }) => {
                           {translation.no}
                         </Text>
                         <View style={{ ...Styles.userinfolinkiconright }}>
-                          {rightArrow}
+                          {rightArrowIcon({ ...Styles.icondefault, ...Styles.icon20 })}
                         </View>
                       </Pressable>
                     )}
@@ -310,7 +324,7 @@ const ChatProfile = ({ navigation, route, id }) => {
                                 </View>
                                 <Text style={{ ...Styles.userinfolinktext }}>Wallpaper & Sound</Text>
                                 <View style={{ ...Styles.userinfolinkiconright }}>
-                                    {rightArrow}
+                                    {rightArrowIcon({ ...Styles.icondefault, ...Styles.icon20 })}
                                 </View>
                             </View>
                             <View style={{ ...Styles.userinfolinkitem }}>
@@ -319,7 +333,7 @@ const ChatProfile = ({ navigation, route, id }) => {
                                 </View>
                                 <Text style={{ ...Styles.userinfolinktext }}>Change Theme</Text>
                                 <View style={{ ...Styles.userinfolinkiconright }}>
-                                    {rightArrow}
+                                    {rightArrowIcon({ ...Styles.icondefault, ...Styles.icon20 })}
                                 </View>
                             </View> */}
                   </View>
@@ -343,7 +357,7 @@ const ChatProfile = ({ navigation, route, id }) => {
                       style={{ ...Styles.userinfolinkitem, borderTopWidth: 0 }}
                     >
                       <View style={{ ...Styles.userinfolinkicon }}>
-                        {deleteIcon}
+                        {deleteIcon({ ...Styles.icondanger, ...Styles.icon16 })}
                       </View>
                       <Text
                         style={{
@@ -369,7 +383,7 @@ const ChatProfile = ({ navigation, route, id }) => {
                         style={{ ...Styles.userinfolinkitem }}
                       >
                         <View style={{ ...Styles.userinfolinkicon }}>
-                          {blockIcon}
+                          <View style={Styles.icon20}>{groupleaveIcon(Styles.icondanger)}</View>
                         </View>
                         <Text
                           style={{
@@ -393,12 +407,12 @@ const ChatProfile = ({ navigation, route, id }) => {
                           style={{ ...Styles.userinfolinkitem }}
                         >
                           <View style={{ ...Styles.userinfolinkicon }}>
-                            {blockIcon}
+                            <View style={Styles.icon24}>{unblockIcon(Styles.icondefault)}</View>
                           </View>
                           <Text
                             style={{
                               ...Styles.userinfolinktext,
-                              ...Styles.fontdanger,
+                              ...Styles.fontdefault,
                             }}
                           >{`${translation.unblock} ${chatData.chat.name}`}</Text>
                         </Pressable>
@@ -415,7 +429,7 @@ const ChatProfile = ({ navigation, route, id }) => {
                           style={{ ...Styles.userinfolinkitem }}
                         >
                           <View style={{ ...Styles.userinfolinkicon }}>
-                            {blockIcon}
+                            <View style={Styles.icon24}>{blockIcon(Styles.icondanger)}</View>
                           </View>
                           <Text
                             style={{
@@ -440,7 +454,7 @@ const ChatProfile = ({ navigation, route, id }) => {
                       style={{ ...Styles.userinfolinkitem }}
                     >
                       <View style={{ ...Styles.userinfolinkicon }}>
-                        {reportFlag}
+                        <View style={Styles.icon24}>{reportFlagIcon(Styles.icondanger)}</View>
                       </View>
                       <Text
                         style={{

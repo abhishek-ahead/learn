@@ -22,17 +22,17 @@ import {
   closeIcon,
   eyeIcon,
   eyeIconcrossed,
-  rightArrow,
-  searchdefault,
+  rightArrowIcon,
+  search,
 } from "../../constant/icons";
 import { AppContext } from "../../context/app";
 import { createGroup } from "../../services/group";
-import Styles, { webStyle } from "../../styles/index";
+import { webStyle } from "../../styles/index";
 import NoResult from "../noResult";
 const statusBarHeight = Constants.statusBarHeight;
 
 const CreateNewGroup = ({ visible, onClose }) => {
-  const { chats, translation } = useContext(AppContext);
+  const { chats, translation, Styles } = useContext(AppContext);
   const users = useSelector((state) => state.chats.users);
   const [selected, setSelected] = useState({});
   const [text, setText] = useState("");
@@ -145,7 +145,7 @@ const CreateNewGroup = ({ visible, onClose }) => {
             <Pressable onPress={onClose} style={Styles.modalheaderOption}>
               <View style={Styles.modalheaderOptionicon}>
                 <View style={{ ...Styles.icon, ...Styles.icon24 }}>
-                  {closeIcon}
+                  {closeIcon(Styles.icondefault)}
                 </View>
               </View>
             </Pressable>
@@ -187,16 +187,15 @@ const CreateNewGroup = ({ visible, onClose }) => {
               {/* Search */}
               <View style={{ ...Styles.modalsearch }}>
                 <View style={{ ...Styles.icon, ...Styles.icon24 }}>
-                  {searchdefault}
+                  {search(Styles.icondefault)}
                 </View>
                 <View style={{ ...Styles.searchboxtextbox }}>
                   <View style={{ ...Styles.searchboxtext }} />
                   <TextInput
                     autoFocus={Platform.OS == "web"}
                     style={{
-                      ...Styles.searchboxtext,
+                      ...Styles.forminputText,
                       ...webStyle,
-                      width: "100%",
                     }}
                     onChangeText={(text) => setText(text)}
                     value={text}
@@ -209,7 +208,7 @@ const CreateNewGroup = ({ visible, onClose }) => {
                     onPress={() => setText("")}
                     style={{ ...Styles.icon, ...Styles.icon24 }}
                   >
-                    {closeIcon}
+                    {closeIcon(Styles.icondefault)}
                   </Pressable>
                 ) : null}
               </View>
@@ -292,7 +291,7 @@ const CreateNewGroup = ({ visible, onClose }) => {
                                   ...Styles.itemCenter,
                                 }}
                               >
-                                {checkcircleIcon}
+                                {checkcircleIcon({ fill: "#fff", ...Styles.icon16 })}
                               </View>
                             </View>
                           ) : (
@@ -341,7 +340,7 @@ const CreateNewGroup = ({ visible, onClose }) => {
                             ...Styles.icon20,
                           }}
                         >
-                          {closeIcon}
+                          {closeIcon(Styles.icondefault)}
                         </Pressable>
                       </View>
                       <Text style={Styles.onlineUserItemName} numberOfLines={1}>
@@ -498,7 +497,7 @@ const CreateNewGroup = ({ visible, onClose }) => {
                             >
                               {selectedItem?.title || translation.public}
                             </Text>
-                            {rightArrow}
+                            {rightArrowIcon({ ...Styles.icondefault, ...Styles.icon20 })}
                           </View>
                         );
                       }}
@@ -554,7 +553,7 @@ const CreateNewGroup = ({ visible, onClose }) => {
                         value={inputData?.password}
                       />
                       <Pressable onPress={() => setShowPassword(prev => !prev)} style={{ ...Styles.forminputIcon, ...Styles.icon18, }}>
-                        {!showPassword ? eyeIcon : eyeIconcrossed}
+                        {!showPassword ? eyeIcon(Styles.iconlight) : eyeIconcrossed(Styles.iconlight)}
                       </Pressable>
                     </View>
                   ) : null}
@@ -594,7 +593,7 @@ const CreateNewGroup = ({ visible, onClose }) => {
                               ...Styles.icon20,
                             }}
                           >
-                            {closeIcon}
+                            {closeIcon(Styles.icondefault)}
                           </Pressable>
                         ) : null}
                       </View>

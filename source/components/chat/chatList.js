@@ -7,27 +7,26 @@ import {
   View,
 } from "react-native";
 import { SCREEN } from "../../constant";
+import { archiveIcon } from "../../constant/icons";
 import { AppContext } from "../../context/app";
 import { ChatContext } from "../../context/chat";
-import Styles from "../../styles";
 import NoResult from "../noResult";
 import ChatItem from "./chatItem";
 import LoadingShimmer from "./loadingShimmer";
-import { archiveIcon } from "../../constant/icons";
 
 const ArchiveItem = () => {
   const { archive, handlePageNav } = useContext(ChatContext);
-  const { translation } = useContext(AppContext);
+  const { translation, Styles } = useContext(AppContext);
   return (
     !archive && (
       <Pressable
         onPress={() => handlePageNav(SCREEN.archive, { archive: true })}
         style={Styles.chatListItem}
       >
-        <View style={{...Styles.chatListItemInner, paddingVertical:5,}}>
-          <View style={{ ...Styles.chatListItemthumb, ...Styles.itemCenter, height:35 }}>
+        <View style={{ ...Styles.chatListItemInner, paddingVertical: 5, }}>
+          <View style={{ ...Styles.chatListItemthumb, ...Styles.itemCenter, height: 35 }}>
             <View style={{ ...Styles.icon, ...Styles.icon24 }}>
-              {archiveIcon}
+              {archiveIcon({ ...Styles.icondefault })}
             </View>
           </View>
           <Text style={Styles.chatListIteminfoTitle}>
@@ -72,15 +71,15 @@ const ChatList = () => {
         onEndReachedThreshold={2}
         ListFooterComponent={
           chatsLoading ? (
-            <View style={{marginVertical:10,}}><ActivityIndicator size="small" color="#6a6f75" /></View>
+            <View style={{ marginVertical: 10, }}><ActivityIndicator size="small" color="#6a6f75" /></View>
           ) : null
         }
         ListEmptyComponent={
           !chatsLoading && !chatsData.length
             ? NoResult
             : chatsLoading
-            ? LoadingShimmer
-            : null
+              ? LoadingShimmer
+              : null
         }
       />
     ),

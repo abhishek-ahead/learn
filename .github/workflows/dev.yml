@@ -11,17 +11,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-        with:
-          path: ${{ github.workspace }}/chat/
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
           node-version: 20.11.0
           registry-url: "https://registry.npmjs.org"
-
-      # - name: Build web
-      #   run: cd ${{ github.workspace }}/chat/
 
       - name: Node Version
         run: node -v
@@ -30,12 +25,12 @@ jobs:
         run: npm -v
 
       - name: Install dependencies
-        run: cd ${{ github.workspace }}/chat/ && npm install
+        run: npm install
 
       - name: Use .env file for demo.sns
         env:
           ENV_FILE: ${{ secrets.ENV_FILE_TEST1 }}
-        run: cd ${{ github.workspace }}/chat/ && echo "$ENV_FILE" > ${{ github.workspace }}/chat/.env
+        run: echo "$ENV_FILE" > .env
 
       # - name: Print Secret
       #   run: echo ${{ secrets.ENV_FILE }}
@@ -47,7 +42,7 @@ jobs:
       #   run: echo "files are :" cd $PWD && ls
 
       - name: Build web
-        run: cd ${{ github.workspace }}/chat/ && npm run build:web
+        run: npm run build:web
 
       # - name: List build directory contents
       #   run: ls ${{ github.workspace }}
@@ -90,23 +85,20 @@ jobs:
           # AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           # AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           # AWS_REGION: "us-east-1"
-          SOURCE_DIR: ${{ github.workspace }}/chat/dist
+          SOURCE_DIR: ${{ github.workspace }}/dist
 
         #second build for the demo.se Server
 
-      - name: Remove earlier env
-        run: rm -rf ${{ github.workspace }}/chat/.env
+      # - name: Remove earlier env
+      #   run: rm -rf ${{ github.workspace }}/.env
 
-      - name: Remove dist folder
-        run: rm -rf ${{ github.workspace }}/chat/dist/
-
-      # - name: Print secret value of env file
-      #   run: echo ${{ github.workspace }}/.env | sed 's/./& /g'
+      - name: Print secret value of env file
+        run: echo ${{ github.workspace }}/.env | sed 's/./& /g'
 
       - name: Use second .env file
         env:
           ENV_FILE_NEW: ${{ secrets.ENV_FILE_TEST2 }}
-        run: cd ${{ github.workspace }}/chat/ && echo "$ENV_FILE_NEW" > ${{ github.workspace }}/chat/.env
+        run: echo "$ENV_FILE_NEW" > .env
 
       # - name: Print Secret Second file
       #   run: echo ${{ secrets.ENV_FILE_DEMO_SE }}
@@ -117,18 +109,17 @@ jobs:
       # - name: Print ENV Second file without workspace
       #   run: cat .env
 
-      # - name: List build directory contents
-      #   run: ls ${{ github.workspace }}/chat/dist
+      - name: List build directory contents
+        run: ls ${{ github.workspace }}/dist
 
-
-      # - name: remove local files first
-      #   run: rm -rf ${{ github.workspace }}/dist
+      - name: remove local files first
+        run: rm -rf ${{ github.workspace }}/dist
 
       - name: Rebuild web with second .env
-        run: cd ${{ github.workspace }}/chat/ && npm run build:web
+        run: npm run build:web
 
-      # - name: Print secret value of env file
-      #   run: echo ${{ github.workspace }}/.env | sed 's/./& /g'
+      - name: Print secret value of env file
+        run: echo ${{ github.workspace }}/.env | sed 's/./& /g'
 
       # - name: Configure AWS credentials for second bucket
       #   uses: aws-actions/configure-aws-credentials@v1
@@ -144,7 +135,7 @@ jobs:
       #   run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DIST_ID_DEMO_SE }} --paths '/*'
 
       - name: List build directory contents
-        run: ls ${{ github.workspace }}/chat/dist
+        run: ls ${{ github.workspace }}/dist
 
       - name: Upload to second S3 bucket
         uses: jakejarvis/s3-sync-action@master
@@ -155,4 +146,4 @@ jobs:
           # AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           # AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           # AWS_REGION: "us-east-1"
-          SOURCE_DIR: ${{ github.workspace }}/chat/dist
+          SOURCE_DIR: ${{ github.workspace }}/dist

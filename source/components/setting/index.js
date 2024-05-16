@@ -3,9 +3,10 @@ import { View } from "react-native";
 import { SCREEN } from "../../constant";
 import { AppContext } from "../../context/app";
 import { SettingContext } from "../../context/setting";
-import Styles, { appStyle, mainStyle } from "../../styles";
+import { appStyle, mainStyle } from "../../styles";
 import Header from "../header";
 import NavBar from "../navbar";
+import About from "./about";
 import AccountSetting from "./account";
 import SettingBody from "./body";
 import NotificationSetting from "./notification";
@@ -19,6 +20,8 @@ const SettingScreen = () => {
       return <AccountSetting />;
     case SCREEN.privacy:
       return <PrivacySetting />;
+    case SCREEN.about:
+      return <About />;
     case SCREEN.notification:
       return <NotificationSetting />;
     case SCREEN.settingStarred:
@@ -30,7 +33,7 @@ const SettingScreen = () => {
 
 export default () => {
   const { optionPage } = useContext(SettingContext);
-  const { tabNav, translation } = useContext(AppContext);
+  const { tabNav, translation, Styles } = useContext(AppContext);
   return (
     <View style={{ ...mainStyle, marginRight: 10 }}>
       <View style={{ ...Styles.chatBubble, ...appStyle }}>

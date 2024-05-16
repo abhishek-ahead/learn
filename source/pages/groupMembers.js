@@ -15,19 +15,19 @@ import { MEMBER_GROUP_ROLE, SCREEN } from "../constant";
 import {
   backIcon,
   closeIcon,
-  optionButton,
-  searchdefault,
+  optionButtonIcon,
+  search,
 } from "../constant/icons";
 import { AppContext } from "../context/app";
 import { GroupContext, GroupProvider } from "../context/group";
 import { groupMembers } from "../services/group";
 import { chatNavigation } from "../store/reducer";
-import Styles, { appStyle, mainStyle, webStyle } from "../styles";
+import { appStyle, mainStyle, webStyle } from "../styles";
 
 const GroupMembers = ({ navigation, route, id }) => {
   const dispatch = useDispatch();
   id = route?.params?.id || id;
-  const { translation, getGroupDetails } = useContext(AppContext);
+  const { translation, getGroupDetails, Styles } = useContext(AppContext);
   const { selectedMember, setSelectedMember } = useContext(GroupContext);
   const group = useSelector((state) => state.group.groups[id]);
   const [members, setMembers] = useState([]);
@@ -72,15 +72,14 @@ const GroupMembers = ({ navigation, route, id }) => {
                   ...Styles.icon24,
                 }}
               >
-                {backIcon}
+                {backIcon(Styles.icondefault)}
               </Pressable>
 
               <View style={{ ...Styles.searchboxtextbox }}>
                 <TextInput
                   style={{
-                    ...Styles.searchboxtext,
+                    ...Styles.forminputText,
                     ...webStyle,
-                    width: "100%",
                   }}
                   autoFocus
                   onChangeText={(text) => setText(text)}
@@ -94,7 +93,7 @@ const GroupMembers = ({ navigation, route, id }) => {
                   onPress={() => setText("")}
                   style={{ ...Styles.icon, ...Styles.icon24 }}
                 >
-                  {closeIcon}
+                  {closeIcon(Styles.icondefault)}
                 </Pressable>
               ) : null}
             </View>
@@ -106,7 +105,7 @@ const GroupMembers = ({ navigation, route, id }) => {
               >
                 <View style={Styles.chatBubbleHeaderOptionIcon}>
                   <View style={{ ...Styles.icon, ...Styles.icon24 }}>
-                    {backIcon}
+                    {backIcon(Styles.icondefault)}
                   </View>
                 </View>
               </Pressable>
@@ -125,7 +124,7 @@ const GroupMembers = ({ navigation, route, id }) => {
                 style={Styles.chatBubbleHeaderOptionIcon}
               >
                 <View style={{ ...Styles.icon, ...Styles.icon24 }}>
-                  {searchdefault}
+                  {search(Styles.icondefault)}
                 </View>
               </Pressable>
             </>
@@ -133,9 +132,7 @@ const GroupMembers = ({ navigation, route, id }) => {
         </View>
         <View style={{ flex: 1, ...appStyle }}>
           {loading ? (
-            <View style={{ marginTop: 100 }}>
-              <ActivityIndicator size={"large"} color="#6a6f75" />
-            </View>
+            <View style={{ ...Styles.itemCenter, flex: 1 }}><ActivityIndicator size={"large"} color="#6a6f75" /></View>
           ) : (
             <ScrollView>
               {filterChat.map((member) => (
@@ -195,7 +192,7 @@ const GroupMembers = ({ navigation, route, id }) => {
                         onPress={() => setSelectedMember(member)}
                         style={{ ...Styles.icon, ...Styles.icon18 }}
                       >
-                        {optionButton}
+                        {optionButtonIcon(Styles.icondefault)}
                       </Pressable>
                     ) : null}
                   </View>

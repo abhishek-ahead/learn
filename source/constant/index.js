@@ -1,10 +1,9 @@
-export const BASE_URL = process.env.SERVER_URL;
+export const BASE_URL = process.env.EXPO_PUBLIC_SERVER_URL;
 export const url = BASE_URL + "/api";
-export const clientId = process.env.CLIENT_ID;
-export const clientSecret = process.env.CLIENT_SECRET;
+export const clientId = process.env.EXPO_PUBLIC_CLIENT_ID;
+export const clientSecret = process.env.EXPO_PUBLIC_CLIENT_SECRET;
 
-
-export const LIMIT = 10;
+export const LIMIT = 25;
 
 export const MESSAGE_STATUS = Object.freeze({
   pending: 0,
@@ -78,7 +77,9 @@ export const SCREEN = Object.freeze({
   groupMembers: "GroupMembers",
   groupPendingRequest: "GroupPendingRequest",
   privacy: "Privacy",
-  privacyOption: "Privacy Option"
+  privacyOption: "Privacy Option",
+  about: "About",
+  groupInvite: "GroupInvite"
 });
 
 export const ATTACHMENT_TYPES = Object.freeze({
@@ -199,8 +200,8 @@ export const PRIVACY_STATUS = Object.freeze({
 });
 
 export const ONLINE_PRIVACY = Object.freeze({
-  0: "everyone",
-  1: "sameAs",
+  0: "Everyone",
+  1: "Same as last seen",
 });
 
 export const regexMentionSuggestion = /@(\w+)$|@$/;
@@ -218,4 +219,9 @@ export const TOAST_TYPE = Object.freeze({
   success: "success",
   error: "error",
   warning: "warning"
+})
+
+export const MODE = Object.freeze({
+  light: "light",
+  dark: "dark"
 })

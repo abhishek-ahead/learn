@@ -3,14 +3,13 @@ import { Image, Pressable, ScrollView, Text, View } from "react-native";
 import { SCREEN } from "../../constant";
 import { AppContext } from "../../context/app";
 import { ChatContext } from "../../context/chat";
-import Styles, { appStyle, mainStyle } from "../../styles";
+import { appStyle, mainStyle } from "../../styles";
 import Header from "../header";
 import NavBar from "../navbar";
 import Options from "../options";
 import ChatList from "./chatList";
 import SearchChat from "./searchChat";
 import SearchChatList from "./searchChatView";
-import { checkcircleSuccess, crosscircleDanger } from "../../constant/icons";
 
 const ChatMain = () => {
   const {
@@ -22,7 +21,7 @@ const ChatMain = () => {
     openOption,
     setOpenOption,
   } = useContext(ChatContext);
-  const { tabNav, enableSearch, translation } = useContext(AppContext);
+  const { tabNav, enableSearch, translation, Styles } = useContext(AppContext);
   return (
     <View style={{ ...mainStyle, marginRight: 10 }}>
       <View style={{ ...Styles.chatBubble, ...appStyle }}>

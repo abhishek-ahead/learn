@@ -12,6 +12,7 @@ const Message = lazy(() => import("./message"));
 const GroupSetting = lazy(() => import("./groupSetting"));
 const GroupMembers = lazy(() => import("./groupMembers"));
 const GroupPendingRequest = lazy(() => import("./groupPendingRequest"));
+const GroupInvite = lazy(() => import("./groupInvite"));
 
 const ChatOpens = () => {
   const {
@@ -156,17 +157,18 @@ const ChatOpens = () => {
             case SCREEN.groupSetting:
               return <GroupSetting key={`chat_tab_${id}_${screen}`} id={id} />;
             case SCREEN.groupMembers:
-              return (
-                <GroupMembers
-                  key={`chat_tab_${id}_${screen}`}
-                  id={id}
-                  add={add}
-                />
-              );
+              return <GroupMembers
+                key={`chat_tab_${id}_${screen}`}
+                id={id}
+                add={add}
+              />
+                ;
             case SCREEN.groupPendingRequest:
               return (
                 <GroupPendingRequest key={`chat_tab_${id}_${screen}`} id={id} />
               );
+            case SCREEN.groupInvite:
+              return <GroupInvite key={`chat_tab_${id}_${screen}`} id={id} />
             default:
               return <View key={`chat_tab_${id}_${screen}`}></View>;
           }

@@ -13,8 +13,7 @@ import {
   chatNavigation,
   chatOption,
   messageSeenEventUpdate,
-  newChatOpen,
-  newMessage,
+  newMessage
 } from "../store/reducer";
 import { AuthContext } from "./auth";
 import { useSocket } from "./socket";

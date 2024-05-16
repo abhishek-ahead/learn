@@ -44,3 +44,12 @@ export const getPrivacySetting = async () => {
     return { success: false };
   }
 }
+
+export const updatePrivacySetting = async (data) => {
+  try {
+    const response = await axiosInstance.post("/setting/privacy", data);
+    return { success: true, data: response.data }
+  } catch (error) {
+    return { success: false }
+  }
+}

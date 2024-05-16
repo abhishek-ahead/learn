@@ -12,11 +12,11 @@ import {
   View,
 } from "react-native";
 import NoResult from "../../components/noResult";
-import { backIcon, closeIcon, optionButton } from "../../constant/icons";
+import { backIcon, closeIcon, optionButtonIcon, usercheck } from "../../constant/icons";
 import { CHAT_TYPE, SCREEN, USER_STATUS } from "../../constant/index";
 import { AppContext } from "../../context/app";
 import { MessageContext } from "../../context/message";
-import Styles, { appStyle, mainStyle } from "../../styles";
+import { appStyle, mainStyle } from "../../styles";
 import DeleteDialog from "../deleteDialog";
 import Options from "../options";
 import ChatComposer from "./composer";
@@ -65,6 +65,7 @@ const MessageMain = () => {
     minimize,
     setMinimize,
     mobileView,
+    Styles
   } = useContext(AppContext);
   const componentRef = useRef();
   const { translation } = useContext(AppContext);
@@ -217,7 +218,7 @@ const MessageMain = () => {
                 }}
               >
                 <View style={{ ...Styles.icon, ...Styles.icon24 }}>
-                  {backIcon}
+                  {backIcon(Styles.icondefault)}
                 </View>
               </Pressable>
             ) : null}
@@ -289,7 +290,7 @@ const MessageMain = () => {
                     }
                     style={{ ...Styles.icon, ...Styles.icon24 }}
                   >
-                    {optionButton}
+                    {optionButtonIcon(Styles.icondefault)}
                   </Pressable>
                   {/* <MenuOptions style={Styles.dropdownMenu}>
                       <PopupOption
@@ -307,7 +308,7 @@ const MessageMain = () => {
                   style={Styles.chatBubbleHeaderOptionIcon}
                 >
                   <View style={{ ...Styles.icon, ...Styles.icon24 }}>
-                    {closeIcon}
+                    {closeIcon(Styles.icondefault)}
                   </View>
                 </Pressable>
               ) : null}
@@ -321,6 +322,15 @@ const MessageMain = () => {
               }
               behavior="padding"
             >
+              {chat.chatType == CHAT_TYPE.group && group && group.pendingMembers ? <View style={{ ...Styles.tip, ...Styles.borderbottom }}>
+                <View style={{ ...Styles.tipicon, ...Styles.itemCenter }}>
+                  {usercheck({ ...Styles.icondefault, ...Styles.icon20 })}
+                </View>
+                <Text style={{ ...Styles.tiptext }}>1 Request to join</Text>
+                <Text style={{ ...Styles.tipbtn, ...Styles.btnPrimary, ...Styles.fontwhite }}>Review</Text>
+                {closeIcon({ ...Styles.icondefault, ...Styles.icon20 })}
+              </View> : null}
+
               <FlatList
                 ref={messageFlatlist}
                 data={messages}
@@ -334,6 +344,9 @@ const MessageMain = () => {
                   openReactionOption && setOpenReactionOption(null);
                   openReaction && setOpenReaction(null);
                 }}
+                initialNumToRender={25}
+                maxToRenderPerBatch={20}
+                updateCellsBatchingPeriod={50}
                 onEndReachedThreshold={1}
                 removeClippedSubviews
                 ListFooterComponent={

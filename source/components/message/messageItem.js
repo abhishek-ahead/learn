@@ -13,19 +13,18 @@ import MessageContent from "../../components/message/content";
 import MessageStatus from "../../components/messageStatus";
 import { CHAT_TYPE, CONTENT_TYPE, MESSAGE_STATUS } from "../../constant";
 import {
-  forwardlightIcon,
-  optionButton,
+  forwardIcon,
+  optionButtonIcon,
   reactionIcon,
-  starIconfill,
+  starIcon
 } from "../../constant/icons";
 import { AppContext } from "../../context/app";
 import { AuthContext } from "../../context/auth";
 import { MessageContext } from "../../context/message";
-import Styles, { variables } from "../../styles";
 import MessageReactionPreview from "./reactionPreview";
 
 export const MessageView = ({ message, chat }) => {
-  const { translation } = useContext(AppContext);
+  const { translation, Styles } = useContext(AppContext);
   return (
     <View
       style={
@@ -48,7 +47,7 @@ export const MessageView = ({ message, chat }) => {
               ...Styles.msgforwardedicon,
             }}
           >
-            {forwardlightIcon}
+            {forwardIcon(Styles.iconlight)}
           </View>
           <Text
             style={{
@@ -69,7 +68,7 @@ export const MessageView = ({ message, chat }) => {
       ) : null}
       <MessageContent
         message={message}
-        color={message.fromMe ? variables["font-color"] : variables["font-color"]}
+        color={Styles.fontdefault.color}
         chat={chat}
       />
       <View
@@ -86,7 +85,7 @@ export const MessageView = ({ message, chat }) => {
               marginTop: 1,
             }}
           >
-            {starIconfill}
+            {starIcon(Styles.iconlight)}
           </View>
         ) : null}
         <Text
@@ -117,7 +116,7 @@ export const MessageView = ({ message, chat }) => {
 export const GroupAction = ({ message }) => {
   const group = useSelector((state) => state.group.groups[message.receiver]);
   const { USER_ID } = useContext(AuthContext);
-  const { translation } = useContext(AppContext);
+  const { translation, Styles } = useContext(AppContext);
   if (group)
     return (
       <>
@@ -128,17 +127,17 @@ export const GroupAction = ({ message }) => {
         </Text>
         <Text style={Styles.fontlight}>
           {` ${message.action} ${message.actionUsers
-              ? message.actionUsers.length > 1
-                ? `${group.members
-                  .find(
-                    (member) => member.user._id == message.actionUsers[0]
-                  )
-                  ?.user.name.split(" ")[0]
-                } & ${message.actionUsers.length - 1} others`
-                : group.members
-                  .find((member) => member.user._id == message.actionUsers[0])
-                  ?.user.name.split(" ")[0]
-              : ""
+            ? message.actionUsers.length > 1
+              ? `${group.members
+                .find(
+                  (member) => member.user._id == message.actionUsers[0]
+                )
+                ?.user.name.split(" ")[0]
+              } & ${message.actionUsers.length - 1} others`
+              : group.members
+                .find((member) => member.user._id == message.actionUsers[0])
+                ?.user.name.split(" ")[0]
+            : ""
             }`}
         </Text>
       </>
@@ -146,7 +145,7 @@ export const GroupAction = ({ message }) => {
 };
 
 export const MessageReaction = ({ handleMessageReaction, message }) => {
-  const { reactions } = useContext(AppContext);
+  const { reactions, Styles } = useContext(AppContext);
   return (
     <>
       {Object.values(reactions).map((reaction) => (
@@ -168,7 +167,7 @@ export const MessageReaction = ({ handleMessageReaction, message }) => {
       ))}
       {/* <View style={{ ...Styles.messageitemreactionsitem, ...Styles.messageitemreactionsitemadd, ...Styles.itemCenter }}>
                 <View style={Styles.icon24}>
-                    {addIcon}
+                    {addIcon(Styles.icondefault)}
                 </View>
             </View> */}
     </>
@@ -192,6 +191,7 @@ const MessageItem = ({ message }) => {
     setOpenReactionOption,
     setOpenReaction,
     translation,
+    Styles
   } = useContext(AppContext);
   const diff =
     index == 0
@@ -219,7 +219,7 @@ const MessageItem = ({ message }) => {
       {message.contentType == CONTENT_TYPE.notification ? (
         <View style={Styles.messagenotification}>
           <View style={Styles.messagenotificationInner}>
-            {message.receiverType == CHAT_TYPE.user ? (
+            {chat.chatType == CHAT_TYPE.user ? (
               <>
                 <Text style={Styles.messagenotificationsub}>
                   {message.sender == USER_ID
@@ -247,7 +247,7 @@ const MessageItem = ({ message }) => {
           key={`message_item_${message._id}`}
           style={{
             ...Styles.messageitem,
-            backgroundColor: message._id == scrollId ? variables["primary-color-soft"] : variables["background-color"],
+            backgroundColor: message._id == scrollId ? Styles.bgprimarySoft.backgroundColor : Styles.bg.backgroundColor,
             alignItems: message.fromMe ? "flex-end" : "flex-start",
           }}
         >
@@ -427,54 +427,54 @@ const MessageItem = ({ message }) => {
                     )
                   ) : null}
                 </View>
-                {!message.deleted ? (
-                  <View
-                    style={
-                      message.fromMe
-                        ? {
-                          ...Styles.messageitemOptions,
-                          ...Styles.messageitemOptionsout,
-                        }
-                        : {
-                          ...Styles.messageitemOptions,
-                          ...Styles.messageitemOptionsin,
-                        }
-                    }
-                  >
-                    {message.message_status != MESSAGE_STATUS.pending ? (
-                      <Pressable
-                        onPress={() => setSelectedMessage(message)}
-                        style={{
-                          ...Styles.messageitemOptionicon,
-                          ...Styles.icon,
-                          ...Styles.icon18,
-                        }}
-                      >
-                        {optionButton}
-                      </Pressable>
-                    ) : null}
-                    {Platform.OS == "web" && !message.fromMe ? (
-                      <a
-                        className="reaction-menu-optn"
-                        style={{
-                          ...Styles.messageitemOptionicon,
-                          ...Styles.icon,
-                          ...Styles.icon18,
-                          cursor: "pointer",
-                        }}
-                        href="#"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          setOpenReactionOption({ e, chat, message });
-                        }}
-                      >
-                        {(hoverOpen && Object.keys(reactions).length) ||
-                          openReactionOption?.message?._id == message._id
-                          ? reactionIcon
-                          : null}
-                      </a>
-                    ) : null}
-                    {/* <Menu>
+                {/* {!message.deleted ? ( */}
+                <View
+                  style={
+                    message.fromMe
+                      ? {
+                        ...Styles.messageitemOptions,
+                        ...Styles.messageitemOptionsout,
+                      }
+                      : {
+                        ...Styles.messageitemOptions,
+                        ...Styles.messageitemOptionsin,
+                      }
+                  }
+                >
+                  {message.message_status != MESSAGE_STATUS.pending ? (
+                    <Pressable
+                      onPress={() => setSelectedMessage(message)}
+                      style={{
+                        ...Styles.messageitemOptionicon,
+                        ...Styles.icon,
+                        ...Styles.icon18,
+                      }}
+                    >
+                      {optionButtonIcon(Styles.icondefault)}
+                    </Pressable>
+                  ) : null}
+                  {Platform.OS == "web" && !message.fromMe ? (
+                    <a
+                      className="reaction-menu-optn"
+                      style={{
+                        ...Styles.messageitemOptionicon,
+                        ...Styles.icon,
+                        ...Styles.icon18,
+                        cursor: "pointer",
+                      }}
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setOpenReactionOption({ e, chat, message });
+                      }}
+                    >
+                      {(hoverOpen && Object.keys(reactions).length) ||
+                        openReactionOption?.message?._id == message._id
+                        ? reactionIcon({ ...Styles.icon18, fill: "#6a6f75" })
+                        : null}
+                    </a>
+                  ) : null}
+                  {/* <Menu>
                                                 <MenuTrigger>
                                                     <View
                                                         style={{ ...Styles.messageitemOptionicon, ...Styles.icon, ...Styles.icon18 }}>
@@ -492,13 +492,13 @@ const MessageItem = ({ message }) => {
                                                     <MessageReaction handleMessageReaction={handleMessageReaction} />
                                                 </MenuOptions>
                                             </Menu> */}
-                    {/* <Pressable
+                  {/* <Pressable
                                             onPress={() => setOpenReaction(prev => !prev ? message._id : null)}
                                             style={{ ...Styles.messageitemOptionicon, ...Styles.icon, ...Styles.icon18 }}>
                                             {hoverOpen ? emoji : null}
                                         </Pressable> */}
-                  </View>
-                ) : null}
+                </View>
+                {/* ) : null} */}
               </View>
             </View>
           </View>

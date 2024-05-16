@@ -1,12 +1,11 @@
 import { useContext, useEffect } from "react";
 import { Platform, Text, View } from "react-native";
-import { checkcircleSuccess, crosscircleDanger } from "../constant/icons";
-import { AppContext } from "../context/app";
-import Styles from "../styles";
 import { TOAST_TYPE } from "../constant";
+import { checkcircleSuccessIcon, crosscircleDangerIcon } from "../constant/icons";
+import { AppContext } from "../context/app";
 
 const ToastNotification = () => {
-    const { toastNotification, setToastNotification } = useContext(AppContext);
+    const { toastNotification, setToastNotification, Styles } = useContext(AppContext);
 
     useEffect(() => {
         if (toastNotification) {
@@ -31,9 +30,9 @@ const ToastNotification = () => {
     const getIcon = () => {
         switch (toastNotification.type) {
             case TOAST_TYPE.success:
-                return checkcircleSuccess;
+                return checkcircleSuccessIcon(Styles.iconsuccess);
             case TOAST_TYPE.error:
-                return crosscircleDanger;
+                return crosscircleDangerIcon(Styles.icondanger);
         }
     }
 
@@ -44,7 +43,7 @@ const ToastNotification = () => {
                     {getIcon()}
                 </View>
                 {/* <View style={{ ...Styles.toastIcon, ...Styles.icon16 }}>
-                    {crosscircleDanger}
+                    {crosscircleDangerIcon(Styles.icondanger)}
                 </View> */}
                 <Text style={Styles.toastText}>{toastNotification.message}</Text>
             </View>

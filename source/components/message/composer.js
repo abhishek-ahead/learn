@@ -27,19 +27,16 @@ import {
 } from "../../constant";
 import {
   addIcon,
-  addcirclaicon,
+  addcircleIcon,
   closeIcon,
-  crosscirclaicon,
-  disableSend,
-  documentoutlinewhite,
+  crosscircleIcon,
+  documentIcon,
   emojiIcon,
-  emojiIconPrimary,
-  mic,
-  micprimary,
-  playIconWhite,
-  selectImagewhite,
-  send,
-  fileIcon
+  fileIcon,
+  micIcon,
+  playIcon,
+  selectImageIcon,
+  sendIcon
 } from "../../constant/icons";
 import { AppContext } from "../../context/app";
 import { AuthContext } from "../../context/auth";
@@ -47,13 +44,14 @@ import { MessageContext } from "../../context/message";
 import { useSocket } from "../../context/socket";
 import { sendMessage } from "../../services/message";
 import { deleteRefMessage } from "../../store/reducer";
-import Styles, { webStyle } from "../../styles";
+import { webStyle } from "../../styles";
 import CameraScreen from "../camera";
 import MessageContentType from "../messageContentType";
 import Recording from "./recording";
 import TrackPlayer from "./trackPlayer";
 
 const HandleAttachementType = memo(({ attach }) => {
+  const { Styles } = useContext(AppContext)
   const fileType = attach.mimeType.split("/")[0];
 
   // const [fileType, setFileType] = useState()
@@ -93,6 +91,7 @@ const HandleAttachementType = memo(({ attach }) => {
               style={{ ...Styles.composerattachmentitemimg, ...Styles.bgdark }}
               videoStyle={{
                 ...Styles.messageitemattachmentvideoplayer,
+                ...Styles.bgdark
               }}
               source={{ uri: attach.uri }}
               useNativeControls={false}
@@ -106,7 +105,7 @@ const HandleAttachementType = memo(({ attach }) => {
                 ...Styles.itemCenter,
               }}
             >
-              {playIconWhite}
+              {playIcon({ fill: "#fff", height: 30, width: 30 })}
             </View>
           </View>
         );
@@ -119,7 +118,7 @@ const HandleAttachementType = memo(({ attach }) => {
               ...Styles.bgdark
             }}
           >
-            {fileIcon}
+            {fileIcon(Styles.iconwhite)}
           </View>
         );
     }
@@ -127,6 +126,7 @@ const HandleAttachementType = memo(({ attach }) => {
 })
 
 const Attachment = ({ attach, handleRemoveAttachment, handleAttachements, type }) => {
+  const { Styles } = useContext(AppContext)
   const { reply } = useContext(MessageContext);
   return useMemo(() => <View style={{ ...Styles.composerattachmentcontainer, height: 60 }}>
     <ScrollView horizontal>
@@ -137,7 +137,7 @@ const Attachment = ({ attach, handleRemoveAttachment, handleAttachements, type }
             onPress={() => handleRemoveAttachment(index)}
             style={{ ...Styles.composerattachmentitemicon, ...Styles.icon18 }}
           >
-            {closeIcon}
+            {closeIcon(Styles.icondefault)}
           </Pressable>
         </View>
       ))}
@@ -148,7 +148,7 @@ const Attachment = ({ attach, handleRemoveAttachment, handleAttachements, type }
         <View
           style={{ ...Styles.composerattachmentitemimg, ...Styles.itemCenter }}
         >
-          <View style={{ ...Styles.icon24 }}>{addIcon}</View>
+          <View style={{ ...Styles.icon24 }}>{addIcon(Styles.icondefault)}</View>
         </View>
       </Pressable> : null}
     </ScrollView>
@@ -157,25 +157,25 @@ const Attachment = ({ attach, handleRemoveAttachment, handleAttachements, type }
 };
 
 const SelectAttachmentType = ({ handleSelectAttachType }) => {
-  const { permissions } = useContext(AppContext);
+  const { permissions, Styles } = useContext(AppContext);
   return (
     <View style={Styles.composeroptions}>
       {/* <Pressable
         onPress={() => handleSelectAttachType(ATTACHMENT_TYPES.camera)}
         style={{ ...Styles.composeroptionsitem, ...Styles.itemCenter }}
       >
-        <View style={Styles.icon18}>{cameraoutlinedefault}</View>
+        <View style={Styles.icon18}>{cameraIcon(Styles.icondefault)}</View>
       </Pressable> */}
       {permissions.includes(PERMISSION.share_photos_and_videos) ? (
         <Pressable onPress={() => handleSelectAttachType(ATTACHMENT_TYPES.image)} style={Styles.composeroptionsitem}>
-          <View 
+          <View
             style={{
               ...Styles.composeroptionsitemicon,
               ...Styles.itemCenter,
               backgroundColor: "#d64e2c",
             }}
           >
-            <View style={Styles.icon18}>{selectImagewhite}</View>
+            <View style={Styles.icon18}>{selectImageIcon(Styles.iconwhite)}</View>
           </View>
           <Text style={Styles.composeroptionsitemtext}>Photos</Text>
         </Pressable>
@@ -187,7 +187,7 @@ const SelectAttachmentType = ({ handleSelectAttachType }) => {
             ...Styles.itemCenter,
             backgroundColor: "#6084f4",
           }}>
-            <View style={Styles.icon18}>{documentoutlinewhite}</View>
+            <View style={Styles.icon18}>{documentIcon(Styles.iconwhite)}</View>
           </View>
           <Text style={Styles.composeroptionsitemtext}>Document</Text>
         </Pressable>
@@ -202,7 +202,7 @@ const SelectAttachmentType = ({ handleSelectAttachType }) => {
         onPress={() => handleSelectAttachType(ATTACHMENT_TYPES.gif)}
         style={{ ...Styles.composeroptionsitem, ...Styles.itemCenter }}
       >
-        <View style={{ width: 32 }}>{selectGif}</View>
+        <View style={{ width: 32 }}>{selectGifIcon(Styles.icondefault)}</View>
       </Pressable>
       <Pressable
         onPress={() => handleSelectAttachType(ATTACHMENT_TYPES.sticker)}
@@ -216,49 +216,51 @@ const SelectAttachmentType = ({ handleSelectAttachType }) => {
 
 const Reply = ({ message, setReply }) => {
   const { USER_ID } = useContext(AuthContext);
-  const { translation } = useContext(AppContext);
+  const { translation, Styles } = useContext(AppContext);
   return (
-    <View style={Styles.composerReply}>
-      {message.contentType == CONTENT_TYPE.image ? (
-        <View style={Styles.composerReplyimg}>
-          <Image
-            style={{ height: 45, width: 45, borderRadius: 5 }}
-            source={{ uri: message.media }}
-          />
-        </View>
-      ) : null}
-      <View style={Styles.composerReplyinfo}>
-        <View style={Styles.composerReplyinfotitle}>
-          {message.sender == USER_ID ? (
-            <Text style={Styles.fontlight}>{translation.you}</Text>
-          ) : (
-            <>
-              <Text style={Styles.fontlight}>{translation.replyingTo}</Text>
-              <Text style={Styles.composerReplyinfoname}>
-                {message.user.name}
-              </Text>
-            </>
-          )}
-        </View>
-        <View style={Styles.composerReplyinfofooter}>
-          <MessageContentType message={message} />
-          {/* <View style={Styles.icon16}>{cameraoutlinedefault}</View>
+    <View style={Styles.composerReplycontainer}>
+      <View style={Styles.composerReply}>
+        {message.contentType == CONTENT_TYPE.image ? (
+          <View style={Styles.composerReplyimg}>
+            <Image
+              style={{ height: 40, width: 40, borderRadius: 5 }}
+              source={{ uri: message.media }}
+            />
+          </View>
+        ) : null}
+        <View style={Styles.composerReplyinfo}>
+          <View style={Styles.composerReplyinfotitle}>
+            {message.sender == USER_ID ? (
+              <Text style={{ ...Styles.fontlight, ...Styles.fontsizesmall }}>{translation.you}</Text>
+            ) : (
+              <>
+                <Text style={{ ...Styles.fontlight, ...Styles.fontsizesmall }}>{translation.replyingTo}</Text>
+                <Text style={{ ...Styles.composerReplyinfoname, ...Styles.fontsizesmall }}>
+                  {message.user.name}
+                </Text>
+              </>
+            )}
+          </View>
+          <View style={Styles.composerReplyinfofooter}>
+            <MessageContentType message={message} />
+            {/* <View style={Styles.icon16}>{cameraIcon(Styles.icondefault)}</View>
           <Text
             style={{ ...Styles.fontlight, ...Styles.fontsizesmall }}
             numberOfLines={1}
           >
             {message?.text || message.contentType}
           </Text> */}
+          </View>
         </View>
+        <Pressable
+          onPress={() => setReply(null)}
+          style={Styles.modalheaderOption}
+        >
+          <View style={Styles.modalheaderOptionicon}>
+            <View style={{ ...Styles.icon, ...Styles.icon18 }}>{closeIcon(Styles.icondefault)}</View>
+          </View>
+        </Pressable>
       </View>
-      <Pressable
-        onPress={() => setReply(null)}
-        style={Styles.modalheaderOption}
-      >
-        <View style={Styles.modalheaderOptionicon}>
-          <View style={{ ...Styles.icon, ...Styles.icon18 }}>{closeIcon}</View>
-        </View>
-      </Pressable>
     </View>
   );
 };
@@ -267,6 +269,7 @@ const MentionSuggestion = ({ inputRef }) => {
   const { height, chat, inputText, setInputText, mentions } =
     useContext(MessageContext);
   const { USER_ID } = useContext(AuthContext);
+  const { Styles } = useContext(AppContext)
   const groups = useSelector((state) => state.group.groups);
   const [members, setMembers] = useState([]);
   const [current, setCurrent] = useState(0);
@@ -454,7 +457,7 @@ const ChatComposer = () => {
   const [recording, setRecording] = useState();
   const [enableRecording, setEnableRecording] = useState(false);
   const { USER_ID, user } = useContext(AuthContext);
-  const { permissions, setToastNotification } = useContext(AppContext);
+  const { permissions, setToastNotification, mobileView, Styles } = useContext(AppContext);
   const [enableMentionSuggestion, setEnableMentionSuggestion] = useState(false);
   const selectedType = useRef();
 
@@ -810,7 +813,7 @@ const ChatComposer = () => {
       {selectAttachType && (
         <SelectAttachmentType handleSelectAttachType={handleSelectAttachType} />
       )}
-      {Platform.OS == "web" && emojiPicker ? (
+      {Platform.OS == "web" && !mobileView && emojiPicker ? (
         <View style={{ padding: 10 }}>
           <EmojiPicker
             open={emojiPicker}
@@ -825,7 +828,7 @@ const ChatComposer = () => {
           />
         </View>
       ) : null}
-      <View style={{ ...Styles.composermain, height: height + 40 }}>
+      <View style={{ ...Styles.composermain, height: height + 40, alignItems: recording ? "center" : "flex-end" }}>
         {enableRecording ? (
           <Recording
             enableRecording={enableRecording}
@@ -847,7 +850,7 @@ const ChatComposer = () => {
                   ...Styles.itemCenter,
                 }}
               >
-                {selectAttachType || attach.length ? crosscirclaicon : addcirclaicon}
+                {selectAttachType || attach.length ? crosscircleIcon({ ...Styles.iconprimary, ...Styles.icon30 }) : addcircleIcon({ ...Styles.icondefault, ...Styles.icon30 })}
               </Pressable>
             ) : null}
             <View
@@ -906,7 +909,7 @@ const ChatComposer = () => {
                     return false;
                   }
                   if (
-                    Platform.OS == "web" &&
+                    Platform.OS == "web" && !mobileView &&
                     !enableMentionSuggestion &&
                     e.nativeEvent.key == "Enter" &&
                     !e.nativeEvent.shiftKey
@@ -917,11 +920,11 @@ const ChatComposer = () => {
                   }
                   return true;
                 }}
-                autoFocus={Platform.OS == "web"}
+                autoFocus={Platform.OS == "web" && !mobileView}
                 // onFocus={() => emojiPicker && setEmojiPicker(false)}
                 value={inputText}
               />
-              {Platform.OS == "web" ? (
+              {Platform.OS == "web" && !mobileView ? (
                 <Pressable
                   onPress={() => setEmojiPicker((prev) => !prev)}
                   style={{
@@ -930,7 +933,7 @@ const ChatComposer = () => {
                     ...Styles.icon24,
                   }}
                 >
-                  {emojiPicker ? emojiIconPrimary : emojiIcon}
+                  {emojiPicker ? emojiIcon({ ...Styles.icon24, fill: "#1877f2" }) : emojiIcon({ ...Styles.icon24, fill: "#6a6f75" })}
                 </Pressable>
               ) : null}
             </View>
@@ -944,13 +947,13 @@ const ChatComposer = () => {
           }}
         >
           {inputText || attach.length || recording ? (
-            <Pressable onPress={handleSendMessage}>{send}</Pressable>
+            <Pressable onPress={handleSendMessage}>{sendIcon({ ...Styles.iconprimary, ...Styles.icon20 })}</Pressable>
           ) : permissions.includes(PERMISSION.record_and_send_audio) ? (
             <Pressable onPress={() => setEnableRecording((prev) => !prev)}>
-              {enableRecording ? micprimary : mic}
+              {enableRecording ? micIcon({ ...Styles.iconprimary, ...Styles.icon30 }) : micIcon({ ...Styles.icondefault, ...Styles.icon30 })}
             </Pressable>
           ) : (
-            disableSend
+            sendIcon({ ...Styles.iconlight, ...Styles.icon24 })
           )}
         </View>
       </View>

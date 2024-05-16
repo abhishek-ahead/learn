@@ -2,7 +2,6 @@ import { useContext, useState } from "react";
 import { Modal, Pressable, Text, View } from "react-native";
 import { AppContext } from "../context/app";
 import { chatMute } from "../services/chat";
-import Styles from "../styles";
 
 const MuteDialog = () => {
   const [selectedOption, setSelectedOption] = useState(2);
@@ -11,6 +10,7 @@ const MuteDialog = () => {
     muteOpen,
     setMuteOpen,
     translation,
+    Styles
   } = useContext(AppContext);
 
   const handleOptionChange = (option) => {

@@ -4,18 +4,16 @@ import { MenuOption } from "react-native-popup-menu";
 import { MEMBER_GROUP_ROLE, SCREEN } from "../../constant";
 import {
   deleteIcon,
-  messageDefault,
-  profile,
-  userpendingIcondanger,
-  userpendingIcondefault,
+  groupAdminIcon,
+  messageIcon,
+  profile
 } from "../../constant/icons";
 import { AppContext } from "../../context/app";
 import { GroupContext } from "../../context/group";
 import { dismissAdmin, makeAdmin, removeMember } from "../../services/group";
-import Styles from "../../styles";
 
 const Options = ({ onClose }) => {
-  const { translation } = useContext(AppContext);
+  const { translation, Styles } = useContext(AppContext);
   const { selectedMember, setSelectedMember, handleNavigate, group } =
     useContext(GroupContext);
   const setClose = () => setSelectedMember(null);
@@ -55,8 +53,8 @@ const Options = ({ onClose }) => {
           }}
           style={Styles.optionsmodalitem}
         >
-          <View style={{ ...Styles.optionsmodalitemicon, ...Styles.icon24 }}>
-            {profile}
+          <View style={{ ...Styles.optionsmodalitemicon }}>
+            {profile(Styles.icondefault)}
           </View>
           <Text style={Styles.optionsmodalitemtext}>
             {translation.chatInfo}
@@ -69,10 +67,10 @@ const Options = ({ onClose }) => {
           }}
           style={Styles.optionsmodalitem}
         >
-          <View style={Styles.optionsmodalitemicon}>{messageDefault}</View>
+          <View style={Styles.optionsmodalitemicon}>{messageIcon(Styles.icondefault)}</View>
           <Text style={Styles.optionsmodalitemtext}>{translation.message}</Text>
         </MenuOption>
-        {group.admin || group.moderator ? (
+        {group.admin || group.superAdmin ? (
           <>
             <MenuOption
               onSelect={() => {
@@ -82,13 +80,13 @@ const Options = ({ onClose }) => {
                     MEMBER_GROUP_ROLE.superAdmin,
                   ].includes(selectedMember.role)
                     ? dismissAdmin({
-                        group: group._id,
-                        member: selectedMember.user._id,
-                      })
+                      group: group._id,
+                      member: selectedMember.user._id,
+                    })
                     : makeAdmin({
-                        group: group._id,
-                        member: selectedMember.user._id,
-                      });
+                      group: group._id,
+                      member: selectedMember.user._id,
+                    });
                 }
                 setClose();
               }}
@@ -99,7 +97,7 @@ const Options = ({ onClose }) => {
               ) ? (
                 <>
                   <View style={Styles.optionsmodalitemicon}>
-                    {userpendingIcondanger}
+                    {groupAdminIcon(Styles.icondanger)}
                   </View>
                   <Text
                     style={{
@@ -113,7 +111,7 @@ const Options = ({ onClose }) => {
               ) : (
                 <>
                   <View style={Styles.optionsmodalitemicon}>
-                    {userpendingIcondefault}
+                    {groupAdminIcon(Styles.icondefault)}
                   </View>
                   <Text style={Styles.optionsmodalitemtext}>
                     {translation.makeAdmin}
@@ -131,13 +129,12 @@ const Options = ({ onClose }) => {
               }}
               style={Styles.optionsmodalitem}
             >
-              <View style={Styles.optionsmodalitemicon}>{deleteIcon}</View>
+              <View style={Styles.optionsmodalitemicon}>{deleteIcon(Styles.icondanger)}</View>
               <Text
                 style={{ ...Styles.optionsmodalitemtext, ...Styles.fontdanger }}
               >
-                {`${translation.remove} ${
-                  selectedMember.user.name.split(" ")[0]
-                }`}
+                {`${translation.remove} ${selectedMember.user.name.split(" ")[0]
+                  }`}
               </Text>
             </MenuOption>
           </>
@@ -156,6 +153,7 @@ const Options = ({ onClose }) => {
 };
 
 export const GroupMemberPopupOptions = () => {
+  const { Styles } = useContext(AppContext)
   const { selectedMember, setSelectedMember } = useContext(GroupContext);
   const onClose = () => setSelectedMember(null);
   if (selectedMember)

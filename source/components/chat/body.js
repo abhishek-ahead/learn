@@ -4,13 +4,13 @@ import { NAV_TABS, SCREEN } from "../../constant";
 import { AppContext } from "../../context/app";
 import { ChatContext } from "../../context/chat";
 import UnderDevelopmentScreen from "../../pages/development";
-import Styles, { appStyle } from "../../styles";
+import { appStyle } from "../../styles";
 import SettingBody from '../setting/body';
 import ChatList from "./chatList";
 import NewChat from './newChat';
 
 export const ChatBody = () => {
-    const { tabNav } = useContext(AppContext);
+    const { tabNav , Styles} = useContext(AppContext);
     const { enableSearch, archive, activeUsers, handleNavigate } = useContext(ChatContext)
 
     switch (tabNav) {

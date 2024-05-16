@@ -4,14 +4,13 @@ import { NAV_TABS } from "../constant";
 import {
   backIcon,
   closeIcon,
-  downArrow,
-  searchdefault,
-  upArrow,
+  downArrowIcon,
+  search,
+  upArrowIcon,
 } from "../constant/icons";
 import { AppContext } from "../context/app";
 import { ChatContext } from "../context/chat";
 import { SettingContext } from "../context/setting";
-import Styles from "../styles";
 const { CircuitChat } = NativeModules;
 
 const Header = ({ name }) => {
@@ -23,6 +22,7 @@ const Header = ({ name }) => {
     appNavigation,
     tabNav,
     mobileView,
+    Styles
   } = useContext(AppContext);
   const settingContext = useContext(SettingContext);
   const handleWebBack = () => {
@@ -40,13 +40,13 @@ const Header = ({ name }) => {
   return (
     <>
       {Platform.OS !== "web" ||
-      chatContext?.archive ||
-      settingContext?.optionPage ? (
+        chatContext?.archive ||
+        settingContext?.optionPage ? (
         <Pressable
           onPress={handleBack}
           style={Styles.chatBubbleHeaderOptionIcon}
         >
-          <View style={{ ...Styles.icon, ...Styles.icon24 }}>{backIcon}</View>
+          <View style={{ ...Styles.icon, ...Styles.icon24 }}>{backIcon(Styles.icondefault)}</View>
         </Pressable>
       ) : null}
       <Pressable
@@ -73,13 +73,13 @@ const Header = ({ name }) => {
               onPress={handleSearchNav}
               style={{ ...Styles.icon, ...Styles.icon24 }}
             >
-              {searchdefault}
+              {search(Styles.icondefault)}
             </Pressable>
           </View>
         ) : null}
         {/* {(!archive && !newChat) ? <Pressable onPress={() => handlePageNav(SCREEN.newChat, { newChat: true })} style={Styles.chatBubbleHeaderOptionIcon}>
                     <View style={{ ...Styles.icon, ...Styles.icon24 }}>
-                        {addIcon}
+                        {addIcon(Styles.icondefault)}
                     </View>
                 </Pressable> : null} */}
         {Platform.OS == "web" && !mobileView ? (
@@ -88,17 +88,17 @@ const Header = ({ name }) => {
             style={Styles.chatBubbleHeaderOptionIcon}
           >
             <View style={{ ...Styles.icon, ...Styles.icon24 }}>
-              {minimize ? upArrow : downArrow}
+              {minimize ? upArrowIcon(Styles.icondefault) : downArrowIcon(Styles.icondefault)}
             </View>
           </Pressable>
         ) : null}
         {Platform.OS == "web" && mobileView ? (
           <Pressable
-            onPress={() => {}}
+            onPress={() => { }}
             style={Styles.chatBubbleHeaderOptionIcon}
           >
             <View style={{ ...Styles.icon, ...Styles.icon24 }}>
-              {closeIcon}
+              {closeIcon(Styles.icondefault)}
             </View>
           </Pressable>
         ) : null}

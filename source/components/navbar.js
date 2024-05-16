@@ -3,13 +3,12 @@ import { Pressable, Text, View } from "react-native";
 import { Path, Svg } from "react-native-svg";
 import { NAV_TABS } from "../constant";
 import { AppContext } from "../context/app";
-import Styles from "../styles";
 import { fontSize } from "../utils/helper";
 
 const iconSize = { width: fontSize(24, 20), height: fontSize(24, 20) };
 
 const NavBar = () => {
-    const { tabNav, setTabNav } = useContext(AppContext)
+    const { tabNav, setTabNav, Styles } = useContext(AppContext)
     return (
         <View style={Styles.navbar}>
             <View style={Styles.navbarInneer}>

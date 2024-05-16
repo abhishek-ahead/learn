@@ -1,18 +1,17 @@
 import { ResizeMode, Video } from "expo-av";
-import { useContext, useRef, useState } from "react";
+import { useContext, useState } from "react";
 import { ActivityIndicator, Image, Linking, Pressable, Text, View } from "react-native";
 import { Path, Svg } from "react-native-svg";
 import { CONTENT_TYPE, SCREEN } from "../../constant";
-import { contactIcon, playIconWhite, fileIcon } from "../../constant/icons";
+import { contactIcon, fileIcon, playIcon } from "../../constant/icons";
 import { AppContext } from "../../context/app";
 import { AuthContext } from "../../context/auth";
 import { MessageContext } from "../../context/message";
-import Styles from "../../styles";
 import MessageContentType from "../messageContentType";
 import TrackPlayer from "./trackPlayer";
 
 const MessageContent = ({ message, color, chat }) => {
-  const { setShowImage, translation, handleOpenNavigate } =
+  const { setShowImage, translation, handleOpenNavigate, Styles } =
     useContext(AppContext);
   const { USER_ID } = useContext(AuthContext);
   const [expanded, setExpanded] = useState(
@@ -166,7 +165,7 @@ const MessageContent = ({ message, color, chat }) => {
                       ...Styles.itemCenter,
                     }}
                   >
-                    {playIconWhite}
+                    {playIcon({ fill: "#fff", height: 30, width: 30 })}
                   </View> :
                   <View
                     style={{
@@ -202,7 +201,7 @@ const MessageContent = ({ message, color, chat }) => {
                   ...Styles.itemCenter,
                 }}
               >
-                <View style={{ ...Styles.messageitemattachmenticon }}>{fileIcon}</View>
+                <View style={{ ...Styles.messageitemattachmenticon }}>{fileIcon(Styles.iconwhite)}</View>
               </View>
               <View style={{ ...Styles.messageitemattachmentinfo }}>
                 <Text style={{ ...Styles.fontBold, color: color }} numberOfLines={1} ellipsizeMode="tail">
@@ -265,7 +264,7 @@ const MessageContent = ({ message, color, chat }) => {
                 }}
               >
                 <View style={{ ...Styles.messageitemattachmenticon }}>
-                  {contactIcon}
+                  {contactIcon(Styles.icondefault)}
                 </View>
               </View>
               <View style={{ ...Styles.messageitemattachmentinfo }}>

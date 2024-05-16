@@ -1,7 +1,8 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createContext, useEffect, useRef, useState } from "react";
 import { Alert, Platform } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { NAV_TABS, SCREEN } from "../constant";
+import { MODE, NAV_TABS, SCREEN } from "../constant";
 import {
   chatPin,
   fetchChat,
@@ -19,6 +20,7 @@ import {
   newChatOpen,
 } from "../store/reducer";
 import { actions } from "../store/reducer/group";
+import StyleSheet from "../styles"
 
 export const AppContext = createContext();
 
@@ -51,6 +53,27 @@ export const AppProvider = ({ children, mobileView }) => {
   const [addMemberGroup, setAddMemberGroup] = useState(null);
   const [passwordDialog, setPassowordDialog] = useState(null);
   const [toastNotification, setToastNotification] = useState(null);
+  const [mode, setMode] = useState();
+  const [styles, setStyles] = useState();
+
+  useEffect(() => {
+    if (!mode)
+      AsyncStorage.getItem("mode").then((value) => setMode(value || MODE.light))
+    if (mode) {
+      AsyncStorage.setItem("mode", mode);
+      setStyles(StyleSheet(mode == MODE.dark ? true : false))
+    }
+  }, [mode])
+
+  const [privacy, setPrivacy] = useState({
+    "lastSeen": 3,
+    "online": 1,
+    "story": 1,
+    "profilePhoto": 3,
+    "about": 3,
+    "group": 3,
+    "readRecipts": true
+  })
 
   const fetchTranslation = async () => {
     const response = await getTranslations();
@@ -228,7 +251,7 @@ export const AppProvider = ({ children, mobileView }) => {
     }
   }, [minimize, StoreChat, openMessages]);
 
-  if (translation)
+  if (translation && permissions.length)
     return (
       <AppContext.Provider
         value={{
@@ -287,7 +310,10 @@ export const AppProvider = ({ children, mobileView }) => {
           passwordDialog,
           setPassowordDialog,
           fetchUnreadCount,
-          toastNotification, setToastNotification
+          toastNotification, setToastNotification,
+          privacy, setPrivacy,
+          mode, setMode,
+          Styles: styles
         }}
       >
         {children}

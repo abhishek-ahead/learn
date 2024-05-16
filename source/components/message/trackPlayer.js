@@ -1,10 +1,11 @@
 import { Audio } from "expo-av";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Pressable, Text, View } from "react-native";
-import { deleteaudio, pauseIcon, playIcon } from "../../constant/icons";
-import Styles from "../../styles";
+import { deleteIcon, pauseIcon, playIcon } from "../../constant/icons";
+import { AppContext } from "../../context/app";
 
 const TrackPlayer = ({ trackUri, playerOnly, setRecording, trackDuration }) => {
+  const { Styles } = useContext(AppContext)
   const [sound, setSound] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [duration, setDuration] = useState(null);
@@ -69,7 +70,7 @@ const TrackPlayer = ({ trackUri, playerOnly, setRecording, trackDuration }) => {
         onPress={togglePlayback}
         style={{ ...Styles.composermainoption, ...Styles.itemCenter }}
       >
-        <View style={Styles.icon24}>{isPlaying ? pauseIcon : playIcon}</View>
+        <View style={Styles.icon24}>{isPlaying ? pauseIcon({ ...Styles.icondefault }) : playIcon(Styles.icondefault)}</View>
       </Pressable>
       <View style={Styles.audiorecorded}>
         <View style={Styles.audiorecordedtrack}>
@@ -96,7 +97,7 @@ const TrackPlayer = ({ trackUri, playerOnly, setRecording, trackDuration }) => {
           onPress={() => setRecording(null)}
           style={{ ...Styles.composermainoption, ...Styles.itemCenter }}
         >
-          <View style={Styles.icon24}>{deleteaudio}</View>
+          <View style={Styles.icon24}>{deleteIcon(Styles.icondanger)}</View>
         </Pressable>
       ) : null}
     </>

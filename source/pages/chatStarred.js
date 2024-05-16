@@ -4,15 +4,15 @@ import { Image, Platform, Pressable, ScrollView, Text, View } from "react-native
 import Svg, { Path } from "react-native-svg";
 import { useDispatch, useSelector } from "react-redux";
 import MessageContent from "../components/message/content";
+import LoadingShimmer from "../components/message/loadingShimmer";
+import NoResult from "../components/noResult";
 import { SCREEN } from "../constant";
-import { backIcon, checkcircleIcon, starIconfill } from "../constant/icons";
+import { backIcon, checkcircleIcon, starIcon } from "../constant/icons";
 import { AppContext } from "../context/app";
 import { AuthContext } from "../context/auth";
 import { deleteMessage, markUnstarred, starredMessage } from "../services/message";
 import { chatNavigation } from "../store/reducer";
-import Styles, { appStyle, mainStyle } from "../styles";
-import LoadingShimmer from "../components/message/loadingShimmer";
-import NoResult from "../components/noResult";
+import { appStyle, mainStyle } from "../styles";
 
 const ChatStarred = ({ navigation, route, id }) => {
     const dispatch = useDispatch()
@@ -22,7 +22,7 @@ const ChatStarred = ({ navigation, route, id }) => {
     const { USER_ID } = useContext(AuthContext);
     const [enableEdit, setEnableEdit] = useState(false);
     const [selected, setSelected] = useState([]);
-    const { setForwardOpen, setConfimationDialog, translation, fetchChatDetails } = useContext(AppContext);
+    const { setForwardOpen, setConfimationDialog, translation, fetchChatDetails, Styles } = useContext(AppContext);
     const [loading, setLoading] = useState(true);
 
     const handleSelected = (id) => setSelected(selected => {
@@ -78,7 +78,7 @@ const ChatStarred = ({ navigation, route, id }) => {
                     <Pressable onPress={handleBackNavigation} style={Styles.chatBubbleHeaderOption}>
                         <View style={Styles.chatBubbleHeaderOptionIcon}>
                             <View style={{ ...Styles.icon, ...Styles.icon24 }}>
-                                {backIcon}
+                                {backIcon(Styles.icondefault)}
                             </View>
                         </View>
                     </Pressable>
@@ -98,14 +98,14 @@ const ChatStarred = ({ navigation, route, id }) => {
                                 <View style={{ flex: 1, ...appStyle, ...Styles.starmessages }}>
                                     {
                                         messages.map(message =>
-                                            <Pressable onPress={() => enableEdit && handleSelected(message._id)} key={`starred_${message._id}`} style={Styles.starmessagesitem}>
+                                            <Pressable onPress={() => enableEdit && handleSelected(message._id)} key={`starred_${message._id}`} style={{...Styles.starmessagesitem, ...Styles.borderbottom}}>
                                                 <View style={Styles.starmessagesitemmain}>
                                                     <View style={Styles.starmessagesitemhead}>
                                                         <Image style={Styles.starmessagesitemheadimg} source={{ uri: message.user.avatar }} />
                                                         <View style={{ ...Styles.starmessagesitemheadinfo, ...Styles.fdrow }}>
-                                                            <Text style={{ ...Styles.font500 }}>{message.sender == USER_ID ? translation.you : message.user.name.split(" ")[0]}</Text>
+                                                            <Text style={{ ...Styles.font500, ...Styles.fontdefault }}>{message.sender == USER_ID ? translation.you : message.user.name.split(" ")[0]}</Text>
                                                             <Text style={{ ...Styles.fontlight }}>&#x2022;</Text>
-                                                            <Text>{message.receiver == USER_ID ? translation.you : message.chat.name.split(" ")[0]}</Text>
+                                                            <Text style={{ ...Styles.fontdefault}}>{message.receiver == USER_ID ? translation.you : message.chat.name.split(" ")[0]}</Text>
                                                         </View>
                                                         <Text style={{ ...Styles.starmessagesitemheaddate, ...Styles.fontsizesmall, ...Styles.fontlight }}>
                                                             {moment(message.createdAt).format("MMM D, YYYY")}
@@ -117,7 +117,7 @@ const ChatStarred = ({ navigation, route, id }) => {
                                                                 <View style={{ ...Styles.messageitembodyinner, ...Styles.messageitembodyin }}>
                                                                     <MessageContent
                                                                         message={message}
-                                                                        color={"#000"}
+                                                                        color={Styles.fontdefault.color}
                                                                         chat={chat}
                                                                     />
                                                                     {/* <View style={{ ...Styles.messageitembodytext }}>
@@ -128,7 +128,7 @@ const ChatStarred = ({ navigation, route, id }) => {
                                                         </View>
                                                         <View style={{ ...Styles.messageitemfooter }}>
                                                             <View style={{ ...Styles.messageitemfootericon, ...Styles.icon12 }}>
-                                                                {starIconfill}
+                                                                {starIcon(Styles.iconlight)}
                                                             </View>
                                                             <Text style={{ ...Styles.messageitemfootertime, ...Styles.fontlight, ...Styles.fontsizesmall }}>
                                                                 {moment(message.starredAt).format("MMM D, YYYY")}
@@ -140,7 +140,7 @@ const ChatStarred = ({ navigation, route, id }) => {
                                                     </View> : null}
                                                     {
                                                         selected.includes(message._id) ? <View style={{ ...Styles.checkcircle, ...Styles.checkcircleactive, ...Styles.itemCenter }}>
-                                                            {checkcircleIcon}
+                                                            {checkcircleIcon({ fill: "#fff", ...Styles.icon16 })}
                                                         </View> : null
                                                     }
                                                 </View>
@@ -186,7 +186,7 @@ const ChatStarred = ({ navigation, route, id }) => {
 
                         <View style={Styles.starmessagesitem}>
                             <View style={Styles.starmessagesitemleft}>
-                                <View style={{ ...Styles.radioactive, ...Styles.itemCenter }}>{checkcircleIcon}</View>
+                                <View style={{ ...Styles.radioactive, ...Styles.itemCenter }}>{checkcircleIcon({ fill: "#fff", ...Styles.icon16 })}</View>
                             </View>
                             <View style={Styles.starmessagesitemmain}>
                                 <View style={Styles.starmessagesitemhead}>

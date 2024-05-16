@@ -13,11 +13,11 @@ import {
 import { Path, Svg } from "react-native-svg";
 import { useSelector } from "react-redux";
 import { CONTENT_TYPE, SCREEN, VIEW_MORE } from "../../constant";
-import { playIconWhite, singleTick, fileIcon } from "../../constant/icons";
+import { fileIcon, playIcon, singleTick } from "../../constant/icons";
 import { AppContext } from "../../context/app";
 import { AuthContext } from "../../context/auth";
 import { ChatContext } from "../../context/chat";
-import Styles, { appStyle } from "../../styles";
+import { appStyle } from "../../styles";
 import TrackPlayer from "../message/trackPlayer";
 import MessageStatus from "../messageStatus";
 import NoResult from "../noResult";
@@ -25,7 +25,7 @@ import MessageContentType from "./../messageContentType";
 import LoadingShimmer from "./loadingShimmer";
 
 const MessageView = () => {
-  const { selectFilter, setShowImage } = useContext(AppContext);
+  const { selectFilter, Styles } = useContext(AppContext);
   const { USER_ID } = useContext(AuthContext);
   const { handleNavigate, searchResult, searchLoading, handleMessageNavigate } =
     useContext(ChatContext);
@@ -80,7 +80,9 @@ const MessageView = () => {
                 <View style={Styles.mediacontaineritemimg}>
                   <Video
                     style={Styles.mediacontaineritemvideo}
-                    videoStyle={{ ...Styles.messageitemattachmentvideoplayer }}
+                    videoStyle={{
+                      ...Styles.messageitemattachmentvideoplayer, ...Styles.bgdark
+                    }}
                     source={{ uri: message.media }}
                     useNativeControls={false}
                     resizeMode={ResizeMode.COVER}
@@ -93,7 +95,7 @@ const MessageView = () => {
                       ...Styles.itemCenter,
                     }}
                   >
-                    {playIconWhite}
+                    {playIcon({ fill: "#fff", height: 30, width: 30 })}
                   </View>
                 </View>
               </Pressable>
@@ -111,14 +113,14 @@ const MessageView = () => {
                 <View style={{ ...Styles.searchitemhead }}>
                   <View style={{ ...Styles.searchitemtitle }}>
                     <Text
-                      style={{ ...Styles.fontBold, ...Styles.fontsizetitle }}
+                      style={{ ...Styles.fontBold, ...Styles.fontsizetitle, ...Styles.fontdefault }}
                     >
                       {message.sender == USER_ID
                         ? translation.you
                         : message.user.name.split(" ")[0]}
                     </Text>
                     <Text style={{ ...Styles.fontlight }}>&#x2022;</Text>
-                    <Text>
+                    <Text style={Styles.fontdefault}>
                       {message.receiver == USER_ID
                         ? translation.you
                         : message.chat.name.split(" ")[0]}
@@ -141,16 +143,16 @@ const MessageView = () => {
                       message._id
                     )
                   }
-                  style={{ ...Styles.mediafileitem }}
+                  style={{ ...Styles.mediafileitem, marginBottom: 0, }}
                 >
                   <View
                     style={{ ...Styles.mediafileitemimg, ...Styles.itemCenter }}
                   >
-                    {fileIcon}
+                    {fileIcon(Styles.iconwhite)}
                   </View>
                   <View style={{ ...Styles.mediafileiteminfo }}>
                     <Text
-                      style={{ ...Styles.fontBold }}
+                      style={{ ...Styles.fontBold, ...Styles.fontdefault }}
                       numberOfLines={1}
                       ellipsizeMode="tail"
                     >
@@ -165,9 +167,8 @@ const MessageView = () => {
                     >
                       {`${Math.trunc(
                         message.mediaDetails.mediaSize / 1024
-                      )}Kb . ${
-                        message.mediaDetails.mimetype.split("/")[1]
-                      }`}{" "}
+                      )}Kb . ${message.mediaDetails.mimetype.split("/")[1]
+                        }`}{" "}
                     </Text>
                   </View>
                 </Pressable>
@@ -186,14 +187,14 @@ const MessageView = () => {
                 <View style={{ ...Styles.searchitemhead }}>
                   <View style={{ ...Styles.searchitemtitle }}>
                     <Text
-                      style={{ ...Styles.fontBold, ...Styles.fontsizetitle }}
+                      style={{ ...Styles.fontBold, ...Styles.fontsizetitle, ...Styles.fontdefault }}
                     >
                       {message.sender == USER_ID
                         ? translation.you
                         : message.user.name.split(" ")[0]}
                     </Text>
                     <Text style={{ ...Styles.fontlight }}>&#x2022;</Text>
-                    <Text>
+                    <Text style={{ ...Styles.fontdefault }}>
                       {message.receiver == USER_ID
                         ? translation.you
                         : message.chat.name.split(" ")[0]}
@@ -218,14 +219,14 @@ const MessageView = () => {
                     />
                     <View style={{ ...Styles.medialinkiteminfo }}>
                       <Text
-                        style={{ ...Styles.fontBold }}
+                        style={{ ...Styles.fontBold, ...Styles.fontdefault }}
                         numberOfLines={2}
                         ellipsizeMode="tail"
                       >
                         {message.link.title}
                       </Text>
                       <Text
-                        style={{ ...Styles.fontsizesmall, ...Styles.mtop2 }}
+                        style={{ ...Styles.fontsizesmall, ...Styles.mtop2, ...Styles.fontdefault }}
                         numberOfLines={1}
                         ellipsizeMode="tail"
                       >
@@ -285,14 +286,14 @@ const MessageView = () => {
                 <View style={{ ...Styles.searchitemhead }}>
                   <View style={{ ...Styles.searchitemtitle }}>
                     <Text
-                      style={{ ...Styles.fontBold, ...Styles.fontsizetitle }}
+                      style={{ ...Styles.fontBold, ...Styles.fontsizetitle, ...Styles.fontdefault }}
                     >
                       {message.sender == USER_ID
                         ? translation.you
                         : message.user.name.split(" ")[0]}
                     </Text>
                     <Text style={{ ...Styles.fontlight }}>&#x2022;</Text>
-                    <Text>
+                    <Text style={Styles.fontdefault}>
                       {message.receiver == USER_ID
                         ? translation.you
                         : message.chat.name.split(" ")[0]}
@@ -312,6 +313,7 @@ const MessageView = () => {
                     ...Styles.audiorecordedtrackwrap,
                     ...Styles.searchitemaudio,
                     width: "100%",
+                    marginBottom: 0,
                   }}
                 >
                   <Image
@@ -364,7 +366,7 @@ const MessageView = () => {
 
 const SearchChatList = () => {
   const { USER_ID } = useContext(AuthContext);
-  const { selectFilter, translation } = useContext(AppContext);
+  const { translation, Styles } = useContext(AppContext);
   const {
     handleNavigate,
     searchResult,
@@ -382,7 +384,7 @@ const SearchChatList = () => {
         {searchResult.chats.data.length ? (
           <>
             <View style={{ ...Styles.searchresulthead }}>
-            <Text style={{ ...Styles.fontBold, ...Styles.fontlight }}>
+              <Text style={{ ...Styles.fontBold, ...Styles.fontlight }}>
                 {translation.chats}
               </Text>
             </View>
@@ -522,13 +524,15 @@ const SearchChatList = () => {
             </View>
             <MessageView />
             {viewMore == VIEW_MORE.messages && searchLoading ? (
-              <ActivityIndicator size="small" color="#6a6f75" />
+              <View style={{ marginVertical: 10 }}><ActivityIndicator size="small" color="#6a6f75" /></View>
             ) : searchResult.messages.more ? (
               <Pressable onPress={() => setViewMore(VIEW_MORE.messages)}>
                 <Text
                   style={{
                     ...Styles.messageitembodytextmore,
                     ...Styles.fontsizesmall,
+                    ...Styles.textcenter,
+                    marginVertical: 10,
                   }}
                 >{`${translation.viewMore}...`}</Text>
               </Pressable>

@@ -3,18 +3,18 @@ import { ActivityIndicator, Image, Platform, Pressable, ScrollView, Text, View }
 import { useDispatch } from "react-redux";
 import NoResult from "../components/noResult";
 import { SCREEN } from "../constant";
-import { backIcon, checkIconprimary, crossIconprimary } from "../constant/icons";
+import { backIcon, checkIcon, crossIcon } from "../constant/icons";
+import { AppContext } from "../context/app";
 import { changePendingStatus, pendingMembers } from "../services/group";
 import { chatNavigation } from "../store/reducer";
-import Styles, { appStyle, mainStyle } from "../styles";
-import { AppContext } from "../context/app";
+import { appStyle, mainStyle } from "../styles";
 
 const GroupPendingRequest = ({ navigation, route, id }) => {
   const dispatch = useDispatch();
   id = route?.params?.id || id;
   const [loading, setLoading] = useState(true);
   const [members, setMembers] = useState([]);
-  const { translations } = useContext(AppContext)
+  const { translations, Styles } = useContext(AppContext)
 
   useEffect(() => {
     pendingMembers(id).then(res => res.success && setMembers(res.data)).finally(() => setLoading(false))
@@ -58,7 +58,7 @@ const GroupPendingRequest = ({ navigation, route, id }) => {
           >
             <View style={Styles.chatBubbleHeaderOptionIcon}>
               <View style={{ ...Styles.icon, ...Styles.icon24 }}>
-                {backIcon}
+                {backIcon(Styles.icondefault)}
               </View>
             </View>
           </Pressable>
@@ -98,10 +98,10 @@ const GroupPendingRequest = ({ navigation, route, id }) => {
                       </View>
                       <View style={{ ...Styles.chatListItemsbtns }}>
                         <Pressable onPress={() => handlePendingRequest({ user: member.user._id, accept: false })} style={{ ...Styles.btnrounded, ...Styles.btnPrimarySoft }}>
-                          <View style={{ ...Styles.icon12 }}>{crossIconprimary}</View>
+                          <View style={{ ...Styles.icon12 }}>{crossIcon(Styles.iconprimary)}</View>
                         </Pressable>
                         <Pressable onPress={() => handlePendingRequest({ user: member.user._id, accept: true })} style={{ ...Styles.btnrounded, ...Styles.btnPrimarySoft }}>
-                          <View style={{ ...Styles.icon16 }}>{checkIconprimary}</View>
+                          <View style={{ ...Styles.icon16 }}>{checkIcon(Styles.iconprimary)}</View>
                         </Pressable>
                       </View>
                     </View>

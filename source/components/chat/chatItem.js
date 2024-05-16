@@ -7,19 +7,17 @@ import {
 import { useSelector } from "react-redux";
 import { CHAT_TYPE, CONTENT_TYPE, SCREEN } from "../../constant";
 import {
-  archiveLight,
+  archiveIcon,
   lockIcon,
-  markRead,
-  markUnread,
+  markReadIcon,
+  markUnreadIcon,
   moreIcon,
   mute,
-  muteWhite,
-  optionButton,
+  optionButtonIcon,
   pin,
-  pinLight,
-  unarchiveLight,
-  unmuteWhite,
-  unpinLight,
+  unPin,
+  unarchiveIcon,
+  unmute
 } from "../../constant/icons";
 import { AppContext } from "../../context/app";
 import { AuthContext } from "../../context/auth";
@@ -32,7 +30,6 @@ import {
   chatUnmute,
   chatUnpin,
 } from "../../services/chat";
-import Styles, { variables } from "../../styles";
 import { fontSize, formatDate } from "../../utils/helper";
 import MessageContentType from "../messageContentType";
 import MessageStatus from "../messageStatus";
@@ -40,7 +37,7 @@ import MessageStatus from "../messageStatus";
 const ChatItem = React.memo(({ item, openSwipeableId, setOpenSwipeableId }) => {
   const { USER_ID } = useContext(AuthContext);
   const { handleNavigate, users, setOpenOption } = useContext(ChatContext);
-  const { handleChatPin, setMuteOpen, translation, setPassowordDialog } =
+  const { handleChatPin, setMuteOpen, translation, setPassowordDialog, Styles } =
     useContext(AppContext);
   const swipeableRef = useRef(null);
   const chatOpens = useSelector((state) => state.chats.opens);
@@ -85,7 +82,7 @@ const ChatItem = React.memo(({ item, openSwipeableId, setOpenSwipeableId }) => {
           }}
         >
           <View style={{ ...Styles.chatListItemswipoptionItemicon }}>
-            {moreIcon}
+            {moreIcon(Styles.iconwhite)}
           </View>
           <Text style={Styles.chatListItemswipoptionItemtext}>
             {translation.more}
@@ -106,7 +103,7 @@ const ChatItem = React.memo(({ item, openSwipeableId, setOpenSwipeableId }) => {
             }}
           >
             <View style={{ ...Styles.chatListItemswipoptionItemicon, ...Styles.itemCenter }}>
-              {item.pin ? unpinLight : pinLight}
+              {item.pin ? unPin({ ...Styles.icondefault, ...Styles.icon18 }) : pin({ ...Styles.icondefault, ...Styles.icon18 })}
             </View>
             <Text style={Styles.chatListItemswipoptionItemtext}>
               {item.pin ? translation.unpin : translation.pin}
@@ -127,7 +124,7 @@ const ChatItem = React.memo(({ item, openSwipeableId, setOpenSwipeableId }) => {
           }}
         >
           <View style={{ ...Styles.chatListItemswipoptionItemicon }}>
-            {item.archive ? unarchiveLight : archiveLight}
+            {item.archive ? unarchiveIcon(Styles.iconwhite) : archiveIcon(Styles.iconwhite)}
           </View>
           <Text style={Styles.chatListItemswipoptionItemtext}>
             {item.archive ? translation.unArchive : translation.archive}
@@ -157,7 +154,7 @@ const ChatItem = React.memo(({ item, openSwipeableId, setOpenSwipeableId }) => {
           }}
         >
           <View style={{ ...Styles.chatListItemswipoptionItemicon }}>
-            {item.unread !== 0 ? markRead : markUnread}
+            {item.unread !== 0 ? markReadIcon(Styles.iconwhite) : markUnreadIcon(Styles.iconwhite)}
           </View>
           <Text style={Styles.chatListItemswipoptionItemtext}>
             {item.unread !== 0 ? translation.markRead : translation.markUnread}
@@ -178,7 +175,7 @@ const ChatItem = React.memo(({ item, openSwipeableId, setOpenSwipeableId }) => {
             }}
           >
             <View style={{ ...Styles.chatListItemswipoptionItemicon }}>
-              {item.mute ? unmuteWhite : muteWhite}
+              {item.mute ? unmute(Styles.iconwhite) : mute(Styles.iconwhite)}
             </View>
             <Text style={Styles.chatListItemswipoptionItemtext}>
               {item.mute ? translation.unmute : translation.mute}
@@ -206,8 +203,8 @@ const ChatItem = React.memo(({ item, openSwipeableId, setOpenSwipeableId }) => {
             backgroundColor:
               Platform.OS == "web" &&
                 chatOpens.some((chat) => chat.split("_")[0] == item.chat._id)
-                ? variables["primary-color-soft"]
-                : variables["background-color"],
+                ? Styles.bgprimarySoft.backgroundColor
+                : Styles.bg.backgroundColor,
           }}
           onPointerDownCapture={(e) => console.log("event", e)}
         >
@@ -256,7 +253,7 @@ const ChatItem = React.memo(({ item, openSwipeableId, setOpenSwipeableId }) => {
                       }}
                       style={{ ...Styles.icon, ...Styles.icon18 }}
                     >
-                      {optionButton}
+                      {optionButtonIcon(Styles.icondefault)}
                     </Pressable>
                   )}
                 </View>
@@ -286,14 +283,14 @@ const ChatItem = React.memo(({ item, openSwipeableId, setOpenSwipeableId }) => {
                         </View>
                       ) : null}
                     {
-                      item.chat?.protected ? <><View style={{ ...Styles.icon, ...Styles.icon16 }}>{lockIcon}</View><Text style={Styles.chatListIteminfoMsg}>Protected Group</Text></> : <MessageContentType message={item.lastMessage} />
+                      item.chat?.protected ? <><View style={{ ...Styles.icon, ...Styles.icon16 }}>{lockIcon(Styles.iconlight)}</View><Text style={Styles.chatListIteminfoMsg}>Protected Group</Text></> : <MessageContentType message={item.lastMessage} />
                     }
 
                   </>
                 )}
                 {item.pin && (
                   <View style={{ ...Styles.icon, ...Styles.icon16 }}>
-                    {pin}
+                    {pin(Styles.icondefault)}
                   </View>
                 )}
                 {item.mute && (
@@ -304,7 +301,7 @@ const ChatItem = React.memo(({ item, openSwipeableId, setOpenSwipeableId }) => {
                       ...Styles.itemCenter,
                     }}
                   >
-                    {mute}
+                    {mute(Styles.iconlight)}
                   </View>
                 )}
 

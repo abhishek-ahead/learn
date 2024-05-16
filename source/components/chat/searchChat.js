@@ -2,32 +2,33 @@ import React, { useContext, useEffect } from "react";
 import { Platform, Pressable, Text, TextInput, View } from "react-native";
 import { CONTENT_TYPE, NAV_TABS, VIEW_MORE } from "../../constant";
 import {
+  audioIcon,
   backIcon,
-  cameraoutlinedefault,
+  cameraIcon,
   closeIcon,
-  documentoutlinedefault,
-  linkoutlinedefault,
-  muscioutlinedefault,
-  videooutlinedefault,
+  documentIcon,
+  linkIcon,
+  videoIcon,
 } from "../../constant/icons";
 import { AppContext } from "../../context/app";
 import { ChatContext } from "../../context/chat";
 import { chatSearch } from "../../services/chat";
-import Styles, { webStyle } from "../../styles";
+import { webStyle } from "../../styles";
 
 const OutlinePreview = () => {
+  const { Styles } = useContext(AppContext)
   const { selectFilter } = useContext(AppContext);
   switch (selectFilter) {
     case CONTENT_TYPE.image:
-      return cameraoutlinedefault;
+      return cameraIcon(Styles.icondefault);
     case CONTENT_TYPE.link:
-      return linkoutlinedefault;
+      return linkIcon({ ...Styles.icondefault, ...Styles.icon12 });
     case CONTENT_TYPE.video:
-      return videooutlinedefault;
+      return videoIcon(Styles.icondefault);
     case CONTENT_TYPE.application:
-      return documentoutlinedefault;
+      return documentIcon(Styles.icondefault);
     case CONTENT_TYPE.audio:
-      return muscioutlinedefault;
+      return audioIcon(Styles.icondefault);
   }
 };
 
@@ -41,6 +42,7 @@ const SearchChat = () => {
     translation,
     searchText,
     setText,
+    Styles
   } = useContext(AppContext);
   const initialText = "";
   if (tabNav == NAV_TABS.chat) {
@@ -155,15 +157,15 @@ const SearchChat = () => {
           onPress={handleSearchNav}
           style={{ ...Styles.searchboxback, ...Styles.icon, ...Styles.icon24 }}
         >
-          {backIcon}
+          {backIcon(Styles.icondefault)}
         </Pressable>
 
         {selectFilter ? (
           <View style={{ ...Styles.searchtype }}>
-            <View style={{ ...Styles.icon16, ...Styles.searchtypeicon }}>
+            <View style={{ ...Styles.icon16, ...Styles.searchtypeicon, ...Styles.itemCenter }}>
               <OutlinePreview />
             </View>
-            <Text style={{ ...Styles.fontsizesmall }}>
+            <Text style={{ ...Styles.fontsizesmall, ...Styles.fontdefault }}>
               {translation[selectFilter]}
             </Text>
           </View>
@@ -171,7 +173,7 @@ const SearchChat = () => {
         <View style={{ ...Styles.searchboxtextbox }}>
           <TextInput
             autoFocus={Platform.OS == "web"}
-            style={{ ...Styles.searchboxtext, ...webStyle, width: "100%" }}
+            style={{ ...Styles.forminputText, ...webStyle }}
             onChangeText={(text) => setText(text)}
             value={searchText}
             placeholder={translation.search}
@@ -183,7 +185,7 @@ const SearchChat = () => {
             onPress={handleClose}
             style={{ ...Styles.icon, ...Styles.icon24 }}
           >
-            {closeIcon}
+            {closeIcon(Styles.icondefault)}
           </Pressable>
         ) : null}
       </View>
@@ -195,7 +197,7 @@ const SearchChat = () => {
           >
             <View style={{ ...Styles.selectsearchtype }}>
               <View style={Styles.selectsearchtypeicon}>
-                {cameraoutlinedefault}
+                {cameraIcon(Styles.icondefault)}
               </View>
               <Text style={Styles.selectsearchtypetext}>
                 {translation.photos}
@@ -205,7 +207,7 @@ const SearchChat = () => {
           {/* <Pressable onPress={() => setSelectFilter(CONTENT_TYPE.gif)} style={{ ...Styles.selectsearchtypewrap }}>
                     <View style={{ ...Styles.selectsearchtype }}>
                         <View style={Styles.selectsearchtypeicon}>
-                            {gifoutlinedefault}
+                            {gifIcon(Styles.icondefault)}
                         </View>
                         <Text style={Styles.selectsearchtypetext}>GIFs</Text>
                     </View>
@@ -216,7 +218,7 @@ const SearchChat = () => {
           >
             <View style={{ ...Styles.selectsearchtype }}>
               <View style={Styles.selectsearchtypeicon}>
-                {linkoutlinedefault}
+                {linkIcon({ ...Styles.icondefault, ...Styles.icon12 })}
               </View>
               <Text style={Styles.selectsearchtypetext}>
                 {translation.links}
@@ -229,7 +231,7 @@ const SearchChat = () => {
           >
             <View style={{ ...Styles.selectsearchtype }}>
               <View style={Styles.selectsearchtypeicon}>
-                {videooutlinedefault}
+                {videoIcon(Styles.icondefault)}
               </View>
               <Text style={Styles.selectsearchtypetext}>
                 {translation.videos}
@@ -242,7 +244,7 @@ const SearchChat = () => {
           >
             <View style={{ ...Styles.selectsearchtype }}>
               <View style={Styles.selectsearchtypeicon}>
-                {documentoutlinedefault}
+                {documentIcon(Styles.icondefault)}
               </View>
               <Text style={Styles.selectsearchtypetext}>
                 {translation.documents}
@@ -255,7 +257,7 @@ const SearchChat = () => {
           >
             <View style={{ ...Styles.selectsearchtype }}>
               <View style={Styles.selectsearchtypeicon}>
-                {muscioutlinedefault}
+                {audioIcon(Styles.icondefault)}
               </View>
               <Text style={Styles.selectsearchtypetext}>
                 {translation.audio}
@@ -265,7 +267,7 @@ const SearchChat = () => {
           {/* <Pressable onPress={() => setSelectFilter(CONTENT_TYPE.poll)} style={{ ...Styles.selectsearchtypewrap }}>
                     <View style={{ ...Styles.selectsearchtype }}>
                         <View style={Styles.selectsearchtypeicon}>
-                            {polllinedefault}
+                            {poll_Icon({ ...Styles.icondefault, ...Styles.icon12 })}
                         </View>
                         <Text style={Styles.selectsearchtypetext}>Polls</Text>
                     </View>

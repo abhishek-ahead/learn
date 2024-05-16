@@ -2,14 +2,14 @@ import { useContext } from "react";
 import { View } from "react-native";
 import { NAV_TABS } from "../../constant";
 import { AppContext } from "../../context/app";
-import Styles, { appStyle, mainStyle } from "../../styles";
+import { appStyle, mainStyle } from "../../styles";
 import NewChat from "../chat/newChat";
 import SearchChat from "../chat/searchChat";
 import Header from "../header";
 import NavBar from "../navbar";
 
 const People = ({ navigation, route }) => {
-  const { appNavigation, enableSearch, translation } = useContext(AppContext);
+  const { appNavigation, enableSearch, translation, Styles } = useContext(AppContext);
   appNavigation.current = navigation;
   return (
     // <ChatProvider navigation={navigation} archivePage={route?.params?.archive || false} newChatPage={route?.params?.newChat || false}>

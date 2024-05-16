@@ -30,3 +30,30 @@ export const getPermission = async () => {
         return { success: false }
     }
 }
+
+export const about = async () => {
+    try {
+        const response = await axiosInstance.get("/user/about");
+        return { success: true, data: response.data }
+    } catch (error) {
+        return { success: false }
+    }
+}
+
+export const deleteAbout = async (data) => {
+    try {
+        const response = await axiosInstance.delete("/user/about", { data })
+        return { success: true, data: response.data }
+    } catch (error) {
+        return { success: false }
+    }
+}
+
+export const updateAbout = async (data) => {
+    try {
+        const response = await axiosInstance.post("/user/about", data)
+        return { success: true, data: response.data }
+    } catch (error) {
+        return { success: false }
+    }
+}

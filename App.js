@@ -1,31 +1,27 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useFonts } from "expo-font";
 import { lazy, useCallback } from "react";
-import { Dimensions, Platform, View } from "react-native";
+import { Dimensions, Platform } from "react-native";
 import { MenuProvider } from "react-native-popup-menu";
 import { Provider } from "react-redux";
 import ConfirmationDialog from "./source/components/confirmDialog";
 import ForwardModel from "./source/components/forward";
 import MuteDialog from "./source/components/muteDialog";
+import ToastNotification from "./source/components/toast";
 import ViewImage from "./source/components/viewImage";
 import { AppProvider } from "./source/context/app";
 import { AuthProvider } from "./source/context/auth";
 import { SocketProvider } from "./source/context/socket";
 import Screen from "./source/pages/screen";
+import WebView from "./source/pages/web";
 import store from "./source/store";
-import Styles from "./source/styles";
 import Socket from "./source/utils/socket";
-import ToastNotification from "./source/components/toast";
 
 const MainLazy = lazy(() => import("./source/pages/index"));
 const ChatOpenLazy = lazy(() => import("./source/pages/chatOpen"));
 
 const App = (props) => {
   const { token, user, chat_id } = props;
-  console.log(
-    " -------------------------------- WELCOME TO CIRCUIT CHAT --------------------------------"
-  );
-
   const mobileView =
     Platform.OS == "web" && Dimensions.get("screen").width < 767 ? true : false;
 
@@ -41,7 +37,6 @@ const App = (props) => {
   }, [fontsLoaded, fontError]);
 
   if (!fontsLoaded || fontError) {
-    console.log("Font error", fontError);
     return null;
   }
 
@@ -56,13 +51,7 @@ const App = (props) => {
                   <Screen chat_id={chat_id} />
                 ) : mobileView ? (
                   <ChatOpenLazy />
-                ) : (
-                  <View style={Styles.chatBubbleMain}>
-                    {/* <Chat /> */}
-                    <MainLazy />
-                    <ChatOpenLazy />
-                  </View>
-                )}
+                ) : <WebView />}
                 <ConfirmationDialog />
                 <MuteDialog />
                 <ViewImage />

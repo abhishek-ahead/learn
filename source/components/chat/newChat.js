@@ -10,13 +10,12 @@ import {
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { PERMISSION, SCREEN } from "../../constant";
-import { group } from "../../constant/icons";
+import { groupIcon } from "../../constant/icons";
 import { AppContext } from "../../context/app";
 import { newChatOpen } from "../../store/reducer";
-import Styles from "../../styles/index";
 import CreateNewGroup from "../group/createGroup";
-import LoadingShimmer from "./loadingShimmer";
 import NoResult from "../noResult";
+import LoadingShimmer from "./loadingShimmer";
 
 // const inputAccessoryViewID = '123';
 // const initialText = 'Stoke |';
@@ -32,6 +31,7 @@ const NewChat = () => {
     newCreateGroup,
     setNewCreateOpen,
     permissions,
+    Styles
   } = useContext(AppContext);
   const users = useSelector((state) => state.chats.users);
   const chatData = useSelector((state) => state.chats.data);
@@ -77,18 +77,18 @@ const NewChat = () => {
   return (
     <>
       <ScrollView>
-        {/* {permissions.includes(PERMISSION.create_groups) ? (
+        {permissions.includes(PERMISSION.create_groups) ? (
           <Pressable
             onPress={() => setNewCreateOpen(true)}
             style={Styles.chatListItem}
           >
             <View
-              style={{ ...Styles.chatListItemInner, ...Styles.borderbottom }}
+              style={{ ...Styles.chatListItemInner }}
             >
               <View
                 style={{ ...Styles.chatListItemicon, ...Styles.itemCenter }}
               >
-                {group}
+                {groupIcon({ ...Styles.icondefault, ...Styles.icon24 })}
               </View>
               <View style={Styles.chatListIteminfo}>
                 <View style={Styles.chatListIteminfoTop}>
@@ -99,12 +99,13 @@ const NewChat = () => {
               </View>
             </View>
           </Pressable>
-        ) : null} */}
+        ) : null}
         {!filter && frequentlyContacted.length ? (
           <>
+            <View style={{ ...Styles.searchresultsep }}></View>
             <View style={{ ...Styles.searchresultcontainer }}>
               <View style={{ ...Styles.searchresulthead }}>
-                <Text style={{ ...Styles.fontBold, ...Styles.fontlight, ...Styles.fontdefault }}>
+                <Text style={{ ...Styles.fontBold, ...Styles.fontlight }}>
                   {translation.frequentlyContacted}
                 </Text>
               </View>
@@ -132,27 +133,25 @@ const NewChat = () => {
                         {chat.name}
                       </Text>
                     </View>
-                    {chat.about ? (
-                      <View style={Styles.chatListIteminfoBtm}>
-                        <Text
-                          numberOfLines={1}
-                          ellipsizeMode="tail"
-                          style={Styles.chatListIteminfoMsg}
-                        >
-                          {chat.about.about}{" "}
-                        </Text>
-                      </View>
-                    ) : null}
+                    <View style={Styles.chatListIteminfoBtm}>
+                      <Text
+                        numberOfLines={1}
+                        ellipsizeMode="tail"
+                        style={Styles.chatListIteminfoMsg}
+                      >
+                        {chat.about}
+                      </Text>
+                    </View>
                   </View>
                 </View>
               </Pressable>
             ))}
           </>
         ) : null}
-
+        <View style={{ ...Styles.searchresultsep }}></View>
         <View style={{ ...Styles.searchresultcontainer }}>
           <View style={{ ...Styles.searchresulthead }}>
-            <Text style={{ ...Styles.fontBold, ...Styles.fontlight, ...Styles.fontdefault }}>
+            <Text style={{ ...Styles.fontBold, ...Styles.fontlight }}>
               {translation.chats}
             </Text>
           </View>
@@ -162,24 +161,24 @@ const NewChat = () => {
             <View key={`new_chat_${item._id}`}>
               {(index == 0 ||
                 chats[index].name[0].toLowerCase() !==
-                  chats[index - 1].name[0].toLowerCase()) && (
-                <View style={{ ...Styles.searchresultsep }}>
-                  <Text
-                    style={{
-                      ...Styles.searchresultseptext,
-                      ...Styles.fontBold,
-                    }}
-                  >
-                    {item.name[0].toUpperCase()}
-                  </Text>
-                </View>
-              )}
+                chats[index - 1].name[0].toLowerCase()) && (
+                  <View style={{ ...Styles.searchresultsep }}>
+                    <Text
+                      style={{
+                        ...Styles.searchresultseptext,
+                        ...Styles.fontBold,
+                      }}
+                    >
+                      {item.name[0].toUpperCase()}
+                    </Text>
+                  </View>
+                )}
               <Pressable
                 onPress={() => handleNavigate(item._id, SCREEN.message)}
                 style={Styles.chatListItem}
               >
                 <View
-                  style={{ ...Styles.chatListItemInner, borderTopWidth: 0 }}
+                  style={{ ...Styles.chatListItemInner }}
                 >
                   <View style={Styles.chatListItemthumb}>
                     <Image
@@ -199,17 +198,17 @@ const NewChat = () => {
                         {item.name}
                       </Text>
                     </View>
-                    {item.about ? (
-                      <View style={Styles.chatListIteminfoBtm}>
-                        <Text
-                          numberOfLines={1}
-                          ellipsizeMode="tail"
-                          style={Styles.chatListIteminfoMsg}
-                        >
-                          {item.about.about}
-                        </Text>
-                      </View>
-                    ) : null}
+
+                    <View style={Styles.chatListIteminfoBtm}>
+                      <Text
+                        numberOfLines={1}
+                        ellipsizeMode="tail"
+                        style={Styles.chatListIteminfoMsg}
+                      >
+                        {item.about}
+                      </Text>
+                    </View>
+
                   </View>
                 </View>
               </Pressable>

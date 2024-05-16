@@ -17,7 +17,8 @@ import { CHAT_TYPE } from "../../constant";
 import {
   backIcon,
   checkcircleIcon,
-  starIconfill,
+  starIcon,
+  unstarredIcon,
   unstarredMessage,
 } from "../../constant/icons";
 import { AppContext } from "../../context/app";
@@ -25,15 +26,15 @@ import { AuthContext } from "../../context/auth";
 import { SettingContext } from "../../context/setting";
 import { deleteMessage, markUnstarred } from "../../services/message";
 import { allStarredMessage } from "../../services/setting";
-import Styles, { appStyle } from "../../styles";
+import { appStyle } from "../../styles";
 
-const SettingStarred = ({}) => {
+const SettingStarred = ({ }) => {
   const dispatch = useDispatch();
   const [messages, setMessage] = useState([]);
   const { USER_ID } = useContext(AuthContext);
   const [enableEdit, setEnableEdit] = useState(false);
   const [selected, setSelected] = useState([]);
-  const { setForwardOpen, setConfimationDialog, appNavigation, translation } =
+  const { setForwardOpen, setConfimationDialog, appNavigation, translation, Styles } =
     useContext(AppContext);
   const [loading, setLoading] = useState(false);
   const settingContext = useContext(SettingContext);
@@ -69,8 +70,8 @@ const SettingStarred = ({}) => {
         message.receiverType == CHAT_TYPE.group
           ? message.receiver
           : message.sender == USER_ID
-          ? message.receiver
-          : message.sender;
+            ? message.receiver
+            : message.sender;
       if (!unstarredMessage[chatId]) {
         unstarredMessage[chatId] = { chat: chatId, messages: [message._id] };
       } else {
@@ -130,7 +131,7 @@ const SettingStarred = ({}) => {
           >
             <View style={Styles.chatBubbleHeaderOptionIcon}>
               <View style={{ ...Styles.icon, ...Styles.icon24 }}>
-                {backIcon}
+                {backIcon(Styles.icondefault)}
               </View>
             </View>
           </Pressable>
@@ -170,7 +171,7 @@ const SettingStarred = ({}) => {
                 <Pressable
                   onPress={() => enableEdit && handleSelected(message)}
                   key={`starred_${message._id}`}
-                  style={Styles.starmessagesitem}
+                  style={{ ...Styles.starmessagesitem, ...Styles.borderbottom }}
                 >
                   <View style={Styles.starmessagesitemmain}>
                     <View style={Styles.starmessagesitemhead}>
@@ -184,13 +185,13 @@ const SettingStarred = ({}) => {
                           ...Styles.fdrow,
                         }}
                       >
-                        <Text style={{ ...Styles.font500 }}>
+                        <Text style={{ ...Styles.font500, ...Styles.fontdefault }}>
                           {message.sender == USER_ID
                             ? "You"
                             : message.user.name.split(" ")[0]}
                         </Text>
                         <Text style={{ ...Styles.fontlight }}>&#x2022;</Text>
-                        <Text>
+                        <Text style={{ ...Styles.fontdefault }}>
                           {message.receiver == USER_ID
                             ? "You"
                             : message.chat.name.split(" ")[0]}
@@ -222,7 +223,7 @@ const SettingStarred = ({}) => {
                               ...Styles.messageitembodyin,
                             }}
                           >
-                            <MessageContent message={message} color={"#000"} />
+                            <MessageContent message={message} color={Styles.fontdefault.color} />
                             {/* <View style={{ ...Styles.messageitembodytext }}>
                                                             <Text style={{ padding: 0 }}>Hello, how are you?</Text>
                                                         </View> */}
@@ -236,7 +237,7 @@ const SettingStarred = ({}) => {
                             ...Styles.icon12,
                           }}
                         >
-                          {starIconfill}
+                          {starIcon(Styles.iconlight)}
                         </View>
                         <Text
                           style={{
@@ -260,7 +261,7 @@ const SettingStarred = ({}) => {
                           ...Styles.itemCenter,
                         }}
                       >
-                        {checkcircleIcon}
+                        {checkcircleIcon({ fill: "#fff", ...Styles.icon16 })}
                       </View>
                     ) : null}
                   </View>
@@ -305,7 +306,7 @@ const SettingStarred = ({}) => {
 
                         <View style={Styles.starmessagesitem}>
                             <View style={Styles.starmessagesitemleft}>
-                                <View style={{ ...Styles.radioactive, ...Styles.itemCenter }}>{checkcircleIcon}</View>
+                                <View style={{ ...Styles.radioactive, ...Styles.itemCenter }}>{checkcircleIcon({ fill: "#fff", ...Styles.icon16 })}</View>
                             </View>
                             <View style={Styles.starmessagesitemmain}>
                                 <View style={Styles.starmessagesitemhead}>
@@ -416,7 +417,7 @@ const SettingStarred = ({}) => {
                 onPress={handleUnstarred}
                 style={{ ...Styles.optionbaricon, ...Styles.itemCenter }}
               >
-                {unstarredMessage}
+                {unstarredIcon(Styles.icon20)}
               </Pressable>
               <Pressable
                 onPress={() => {

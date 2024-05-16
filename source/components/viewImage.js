@@ -3,13 +3,12 @@ import moment from "moment";
 import { useContext } from "react";
 import { Image, Modal, Platform, Pressable, Text, View } from "react-native";
 import { CONTENT_TYPE } from "../constant";
-import { backIconWhite, closeIconWhite } from "../constant/icons";
+import { backIcon, closeIcon } from "../constant/icons";
 import { AppContext } from "../context/app";
 import { AuthContext } from "../context/auth";
-import Styles from "../styles";
 
 const ViewImage = () => {
-  const { showImage, setShowImage, translation } = useContext(AppContext);
+  const { showImage, setShowImage, translation, Styles } = useContext(AppContext);
   const onClose = () => setShowImage(null);
   const { USER_ID } = useContext(AuthContext);
   if (showImage)
@@ -28,7 +27,7 @@ const ViewImage = () => {
                 style={Styles.appmediaModelheaderOption}
               >
                 <View style={Styles.mediaModelheaderOptionicon}>
-                  {backIconWhite}
+                  {backIcon({ ...Styles.icondefault, fill: "#fff" })}
                 </View>
               </Pressable>
               <View style={Styles.appmediaModelheaderInfo}>
@@ -68,25 +67,29 @@ const ViewImage = () => {
               </View>
             </View>
             <View style={Styles.appmediaModelcontainer}>
-              {showImage.contentType == CONTENT_TYPE.video ? (
-                <Video
-                  style={Styles.appmediaModelvideo}
-                  videoStyle={{ ...Styles.appmediaModelvideoplayer }}
-                  source={{ uri: showImage.media }}
-                  useNativeControls
-                  resizeMode={ResizeMode.CONTAIN}
-                  isLooping={false}
-                  shouldPlay
-                // usePoster
-                // onPlaybackStatusUpdate={status => setStatus(() => status)}
-                />
-              ) : (
-                <Image
-                  style={{ ...Styles.appmediaModelimg }}
-                  source={{ uri: showImage.media }}
-                  alt="No Image"
-                />
-              )}
+              <View style={{ ...Styles.appmediaModelMediaitem }}>
+                {showImage.contentType == CONTENT_TYPE.video ? (
+                  <Video
+                    style={Styles.appmediaModelvideo}
+                    videoStyle={{
+                      ...Styles.appmediaModelvideoplayer, ...Styles.bgdark
+                    }}
+                    source={{ uri: showImage.media }}
+                    useNativeControls
+                    resizeMode={ResizeMode.CONTAIN}
+                    isLooping={false}
+                    shouldPlay
+                  // usePoster
+                  // onPlaybackStatusUpdate={status => setStatus(() => status)}
+                  />
+                ) : (
+                  <Image
+                    style={{ ...Styles.appmediaModelimg }}
+                    source={{ uri: showImage.media }}
+                    alt="No Image"
+                  />
+                )}
+              </View>
             </View>
             {/* <View style={{ ...Styles.optionbar }}>
                     <View style={{ ...Styles.optionbarinner }}>
@@ -118,7 +121,7 @@ const ViewImage = () => {
                     ...Styles.icon24,
                   }}
                 >
-                  {closeIconWhite}
+                  {closeIcon(Styles.icondefault)}
                 </View>
               </Pressable>
               {showImage.sender ||
@@ -162,23 +165,28 @@ const ViewImage = () => {
                         </View> */}
             </View>
             <View style={Styles.mediaModelcontainer}>
-              {showImage.contentType == CONTENT_TYPE.video ? (
-                <Video
-                  style={Styles.appmediaModelvideo}
-                  videoStyle={{ ...Styles.appmediaModelvideoplayer }}
-                  source={{ uri: showImage.media }}
-                  useNativeControls
-                  resizeMode={ResizeMode.CONTAIN}
-                  isLooping={false}
-                  shouldPlay
-                />
-              ) : (
-                <Image
-                  style={{ ...Styles.mediaModelimg }}
-                  source={{ uri: showImage.media }}
-                  alt="No Image"
-                />
-              )}
+              <View style={{ ...Styles.appmediaModelMediaitem }}>
+                {showImage.contentType == CONTENT_TYPE.video ? (
+                  <Video
+                    style={Styles.appmediaModelvideo}
+                    videoStyle={{
+                      ...Styles.appmediaModelvideoplayer, ...Styles.bgdark
+                    }}
+                    source={{ uri: showImage.media }}
+                    useNativeControls
+                    resizeMode={ResizeMode.CONTAIN}
+                    isLooping={false}
+                    shouldPlay
+                  />
+                ) : (
+                  <Image
+                    style={{ ...Styles.mediaModelimg }}
+                    source={{ uri: showImage.media }}
+                    resizeMode={ResizeMode.CENTER}
+                    alt="No Image"
+                  />
+                )}
+              </View>
             </View>
             {/* <View style={{ ...Styles.mediaModelNav, ...Styles.mediaModelNavprev, }}>
                         <Svg viewBox="0 -960 960 960" style={{ ...Styles.icon24 }}><Path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z" /></Svg>

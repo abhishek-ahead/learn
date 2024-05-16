@@ -5,11 +5,10 @@ import { Image, Pressable, Text, View } from "react-native";
 import { CHAT_TYPE, SCREEN } from "../../constant";
 import { AppContext } from "../../context/app";
 import { MessageContext } from "../../context/message";
-import Styles from "../../styles";
 
 const ProfileHeader = ({ handleNavigate }) => {
   const { chat, group } = useContext(MessageContext);
-  const { translation } = useContext(AppContext);
+  const { translation, Styles } = useContext(AppContext);
   if (chat)
     return (
       <View style={{marginVertical: 30 }}>

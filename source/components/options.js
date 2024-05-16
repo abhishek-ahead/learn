@@ -12,15 +12,16 @@ import {
 import {
   archiveIcon,
   blockIcon,
-  deletedanger,
-  markReaddefault,
-  markUnreaddefault,
-  mutedefault,
-  pindefault,
+  deleteIcon,
+  markReadIcon,
+  markUnreadIcon,
+  mute as muteIcon,
+  pin,
   profile,
-  reportFlag,
-  unarchive,
-  unmutedefault,
+  reportFlagIcon,
+  unPin,
+  unarchiveIcon,
+  unmute as unmuteIcon
 } from "../constant/icons";
 import { AppContext } from "../context/app";
 import { AuthContext } from "../context/auth";
@@ -36,13 +37,12 @@ import {
 import { blockFriend, unblockFriend } from "../services/friend";
 import { exitGroup } from "../services/group";
 import { report } from "../services/user";
-import Styles from "../styles";
 import { formatDate } from "../utils/helper";
 import MessageContentType from "./messageContentType";
 import MessageStatus from "./messageStatus";
 
 const Options = ({ item, setOpenOption, handleNavigate, context }) => {
-  const { setConfimationDialog, translation } = useContext(AppContext);
+  const { setConfimationDialog, Styles } = useContext(AppContext);
   const onClose = () => setOpenOption(null);
   if (item)
     if (Platform.OS == "web")
@@ -86,14 +86,13 @@ export const PopupOption = ({
   setConfimationDialog,
   context,
 }) => {
-  const { handleChatPin, setMuteOpen, translation, permissions } =
+  const { handleChatPin, setMuteOpen, translation, permissions, Styles } =
     useContext(AppContext);
   const { archive, pin: pinChat, unread, mute, blocked } = item;
   const users = useSelector((state) => state.chats.users);
   const { USER_ID } = useContext(AuthContext);
   const opens = useSelector((state) => state.chats.opens);
   const group = useSelector((state) => state.group.groups?.[item.chat._id]);
-
   return (
     <Pressable
       onPress={onClose}
@@ -167,7 +166,7 @@ export const PopupOption = ({
             }}
             style={Styles.optionsmodalitem}
           >
-            <View style={Styles.optionsmodalitemicon}>{profile}</View>
+            <View style={Styles.optionsmodalitemicon}>{profile(Styles.icondefault)}</View>
             <Text style={Styles.optionsmodalitemtext}>
               {translation.chatInfo}
             </Text>
@@ -180,7 +179,7 @@ export const PopupOption = ({
               }}
               style={Styles.optionsmodalitem}
             >
-              <View style={Styles.optionsmodalitemicon}>{unarchive}</View>
+              <View style={Styles.optionsmodalitemicon}>{unarchiveIcon(Styles.icondefault)}</View>
               <Text style={Styles.optionsmodalitemtext}>
                 {translation.unArchive}
               </Text>
@@ -193,7 +192,7 @@ export const PopupOption = ({
               }}
               style={Styles.optionsmodalitem}
             >
-              <View style={Styles.optionsmodalitemicon}>{archiveIcon}</View>
+              <View style={Styles.optionsmodalitemicon}>{archiveIcon({ ...Styles.icondefault })}</View>
               <Text style={Styles.optionsmodalitemtext}>
                 {translation.archive}
               </Text>
@@ -209,7 +208,7 @@ export const PopupOption = ({
                   }}
                   style={Styles.optionsmodalitem}
                 >
-                  <View style={Styles.optionsmodalitemicon}>{pindefault}</View>
+                  <View style={Styles.optionsmodalitemicon}>{unPin({ ...Styles.icondefault, ...Styles.icon20 })}</View>
                   <Text style={Styles.optionsmodalitemtext}>
                     {translation.unpin}
                   </Text>
@@ -222,7 +221,7 @@ export const PopupOption = ({
                   }}
                   style={Styles.optionsmodalitem}
                 >
-                  <View style={Styles.optionsmodalitemicon}>{pindefault}</View>
+                  <View style={Styles.optionsmodalitemicon}>{pin(Styles.icondefault)}</View>
                   <Text style={Styles.optionsmodalitemtext}>
                     {translation.pin}
                   </Text>
@@ -236,7 +235,7 @@ export const PopupOption = ({
                   }}
                   style={Styles.optionsmodalitem}
                 >
-                  <View style={Styles.optionsmodalitemicon}>{mutedefault}</View>
+                  <View style={Styles.optionsmodalitemicon}>{unmuteIcon(Styles.icondefault)}</View>
                   <Text style={Styles.optionsmodalitemtext}>
                     {translation.unmute}
                   </Text>
@@ -250,7 +249,7 @@ export const PopupOption = ({
                   style={Styles.optionsmodalitem}
                 >
                   <View style={Styles.optionsmodalitemicon}>
-                    {unmutedefault}
+                    {muteIcon(Styles.icondefault)}
                   </View>
                   <Text style={Styles.optionsmodalitemtext}>
                     {translation.mute}
@@ -271,7 +270,7 @@ export const PopupOption = ({
               }}
               style={Styles.optionsmodalitem}
             >
-              <View style={Styles.optionsmodalitemicon}>{markReaddefault}</View>
+              <View style={Styles.optionsmodalitemicon}>{markReadIcon(Styles.icondefault)}</View>
               <Text style={Styles.optionsmodalitemtext}>
                 {translation.markRead}
               </Text>
@@ -288,7 +287,7 @@ export const PopupOption = ({
               style={Styles.optionsmodalitem}
             >
               <View style={Styles.optionsmodalitemicon}>
-                {markUnreaddefault}
+                {markUnreadIcon(Styles.icondefault)}
               </View>
               <Text style={Styles.optionsmodalitemtext}>
                 {translation.markUnread}
@@ -310,7 +309,7 @@ export const PopupOption = ({
                 }}
                 style={Styles.optionsmodalitem}
               >
-                <View style={Styles.optionsmodalitemicon}>{blockIcon}</View>
+                <View style={Styles.optionsmodalitemicon}>{blockIcon(Styles.icondanger)}</View>
                 <Text
                   style={{
                     ...Styles.optionsmodalitemtext,
@@ -333,7 +332,7 @@ export const PopupOption = ({
                 }}
                 style={Styles.optionsmodalitem}
               >
-                <View style={Styles.optionsmodalitemicon}>{blockIcon}</View>
+                <View style={Styles.optionsmodalitemicon}>{blockIcon(Styles.icondanger)}</View>
                 <Text
                   style={{
                     ...Styles.optionsmodalitemtext,
@@ -361,7 +360,7 @@ export const PopupOption = ({
               }}
               style={Styles.optionsmodalitem}
             >
-              <View style={Styles.optionsmodalitemicon}>{blockIcon}</View>
+              <View style={Styles.optionsmodalitemicon}>{blockIcon(Styles.icondanger)}</View>
               <Text
                 style={{
                   ...Styles.optionsmodalitemtext,
@@ -384,7 +383,7 @@ export const PopupOption = ({
             }}
             style={Styles.optionsmodalitem}
           >
-            <View style={Styles.optionsmodalitemicon}>{deletedanger}</View>
+            <View style={Styles.optionsmodalitemicon}>{deleteIcon(Styles.icondanger)}</View>
             <Text
               style={{ ...Styles.optionsmodalitemtext, ...Styles.fontdanger }}
             >
@@ -406,7 +405,7 @@ export const PopupOption = ({
             <View
               style={{ ...Styles.optionsmodalitemicon, ...Styles.itemCenter }}
             >
-              {reportFlag}
+              {reportFlagIcon(Styles.icondanger)}
             </View>
             <Text
               style={{ ...Styles.optionsmodalitemtext, ...Styles.fontdanger }}

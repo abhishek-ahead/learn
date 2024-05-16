@@ -8,29 +8,29 @@ import {
   Text,
   View,
 } from "react-native";
+import { backIcon } from "../../constant/icons";
 import { AppContext } from "../../context/app";
 import { SettingContext } from "../../context/setting";
 import {
   getNotificationSetting,
   updateNotificationSetting,
 } from "../../services/setting";
-import Styles, { appStyle } from "../../styles";
-import { backIcon } from "../../constant/icons";
+import { appStyle } from "../../styles";
 
 const NotificationSetting = ({ navigation }) => {
-  const { translation } = useContext(AppContext);
+  const { translation, Styles } = useContext(AppContext);
   const settingContext = useContext(SettingContext);
   const toggle = useRef(false);
   const initialState = {
     message: {
-      showNotification: false,
-      reactionNotification: false,
+      showNotification: true,
+      reactionNotification: true,
     },
     group: {
-      showNotification: false,
-      reactionNotification: false,
+      showNotification: true,
+      reactionNotification: true,
     },
-    showPreview: false,
+    showPreview: true,
   };
   const [notificationSettings, setNotificationSetting] = useState(initialState);
   const [loading, setLoading] = useState(true);
@@ -71,7 +71,7 @@ const NotificationSetting = ({ navigation }) => {
           style={Styles.chatBubbleHeaderOption}
         >
           <View style={Styles.chatBubbleHeaderOptionIcon}>
-            <View style={{ ...Styles.icon, ...Styles.icon24 }}>{backIcon}</View>
+            <View style={{ ...Styles.icon, ...Styles.icon24 }}>{backIcon(Styles.icondefault)}</View>
           </View>
         </Pressable>
         <View style={Styles.chatBubbleHeaderInfo}>
@@ -96,6 +96,7 @@ const NotificationSetting = ({ navigation }) => {
                   ...Styles.userinfolinkitem,
                   borderTopWidth: 0,
                   ...Styles.cursor,
+                  ...Styles.userinfolinkitemtoggle
                 }}
               >
                 <Text style={{ ...Styles.userinfolinktext }}>
@@ -129,10 +130,10 @@ const NotificationSetting = ({ navigation }) => {
                 Note
               </Text>
               <View style={{ ...Styles.userinfolinkiconright }}>
-                {rightArrow}
+                {rightArrowIcon({ ...Styles.icondefault, ...Styles.icon20 })}
               </View>
             </View> */}
-              <View style={{ ...Styles.userinfolinkitem, ...Styles.cursor }}>
+              <View style={{ ...Styles.userinfolinkitem, ...Styles.cursor, ...Styles.userinfolinkitemtoggle }}>
                 <Text style={{ ...Styles.userinfolinktext }}>
                   {translation.reactionNotifications}
                 </Text>
@@ -168,6 +169,7 @@ const NotificationSetting = ({ navigation }) => {
                   ...Styles.userinfolinkitem,
                   borderTopWidth: 0,
                   ...Styles.cursor,
+                  ...Styles.userinfolinkitemtoggle
                 }}
               >
                 <Text style={{ ...Styles.userinfolinktext }}>
@@ -201,10 +203,10 @@ const NotificationSetting = ({ navigation }) => {
                 Note
               </Text>
               <View style={{ ...Styles.userinfolinkiconright }}>
-                {rightArrow}
+                {rightArrowIcon({ ...Styles.icondefault, ...Styles.icon20 })}
               </View>
             </View> */}
-              <View style={{ ...Styles.userinfolinkitem, ...Styles.cursor }}>
+              <View style={{ ...Styles.userinfolinkitem, ...Styles.cursor, ...Styles.userinfolinkitemtoggle }}>
                 <Text style={{ ...Styles.userinfolinktext }}>
                   {translation.reactionNotifications}
                 </Text>
@@ -244,6 +246,7 @@ const NotificationSetting = ({ navigation }) => {
                   ...Styles.userinfolinkitem,
                   borderTopWidth: 0,
                   ...Styles.cursor,
+                  ...Styles.userinfolinkitemtoggle
                 }}
               >
                 <Text style={{ ...Styles.userinfolinktext }}>

@@ -10,16 +10,16 @@ import {
   View
 } from "react-native";
 import { useDispatch } from "react-redux";
-import { eyeIcon, eyeIconcrossed, lockIconWhite } from "../../constant/icons";
+import { eyeIcon, eyeIconcrossed, lockIcon } from "../../constant/icons";
 import { AppContext } from "../../context/app";
 import { ChatContext } from "../../context/chat";
 import { validatePassword } from "../../services/group";
 import { chatPassword } from "../../store/reducer";
-import Styles, { webStyle } from "../../styles";
+import { webStyle } from "../../styles";
 
 const PasswordConfirmation = () => {
   const dispatch = useDispatch();
-  const { passwordDialog, setPassowordDialog, handleNavigate } =
+  const { passwordDialog, setPassowordDialog, handleNavigate, Styles } =
     useContext(AppContext);
   const { setOpenOption } = useContext(ChatContext)
   const onClose = () => setPassowordDialog(null);
@@ -74,7 +74,7 @@ const PasswordConfirmation = () => {
           <KeyboardAvoidingView behavior="padding">
             <View style={{ alignItems: "center" }}>
               <View style={{ ...Styles.centermodalIcon, ...Styles.itemCenter }}>
-                {lockIconWhite}
+                <View style={{ ...Styles.icon30 }}>{lockIcon(Styles.iconwhite)}</View>
               </View>
             </View>
             <Text
@@ -116,7 +116,7 @@ const PasswordConfirmation = () => {
                 autoFocus
               ></TextInput>
               <Pressable onPress={() => setShowPassword(prev => !prev)} style={{ ...Styles.forminputIcon, ...Styles.icon18, }}>
-                {!showPassword ? eyeIcon : eyeIconcrossed}
+                {!showPassword ? eyeIcon(Styles.iconlight) : eyeIconcrossed(Styles.iconlight)}
               </Pressable>
             </View>
             <Text style={{ ...Styles.mtop5, ...Styles.fontlink }}>

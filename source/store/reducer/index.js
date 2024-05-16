@@ -3,8 +3,7 @@ import { Platform } from "react-native";
 import {
   CHAT_TYPE,
   CONTENT_TYPE,
-  MESSAGE_STATUS,
-  USER_STATUS,
+  MESSAGE_STATUS
 } from "../../constant";
 
 // reducers/someReducer.js
@@ -371,14 +370,9 @@ const reducer = {
 
   chatDeleted: (state, action) => {
     try {
-      const { chat: chatId, group } = action.payload;
+      const { chat: chatId } = action.payload;
       const chat = state.data[chatId];
-      if (
-        chat.chat.chatType == CHAT_TYPE.group &&
-        group &&
-        group.member.status == USER_STATUS.active
-      ) {
-        const chat = state.data[chatId];
+      if (chat.chat.chatType == CHAT_TYPE.group) {
         delete chat.messages;
         chat.lastMessage = {
           ...chat.lastMessage,

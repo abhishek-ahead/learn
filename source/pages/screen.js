@@ -3,14 +3,18 @@ import { NavigationContainer, useNavigationContainerRef } from "@react-navigatio
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useContext, useEffect, useRef } from "react";
 import { NativeEventEmitter, NativeModules, Platform } from "react-native";
+import { useDispatch } from "react-redux";
 import People from "../components/people";
+import About from "../components/setting/about";
 import AccountSetting from "../components/setting/account";
 import NotificationSetting from "../components/setting/notification";
 import PrivacySetting from "../components/setting/privacy";
 import PrivacySettingOption from "../components/setting/privacyOptions";
 import { SCREEN } from "../constant";
 import { AppContext } from "../context/app";
+import { chatPassword } from "../store/reducer";
 import SafeArea from "../utils/SafeArea";
+import GroupInvite from "./groupInvite";
 import Main, {
   Chat,
   ChatMedia,
@@ -22,8 +26,6 @@ import Main, {
   Message,
   SettingStarred,
 } from "./index";
-import { useDispatch } from "react-redux";
-import { chatPassword } from "../store/reducer";
 
 const Stack = createNativeStackNavigator();
 
@@ -167,6 +169,11 @@ export default ({ chat_id }) => {
             options={{ headerShown: false }}
           />
           <Stack.Screen
+            name={SCREEN.about}
+            component={About}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
             name={SCREEN.notification}
             component={NotificationSetting}
             options={{ headerShown: false }}
@@ -196,8 +203,11 @@ export default ({ chat_id }) => {
             component={PrivacySettingOption}
             options={{ headerShown: false }}
           />
+          <Stack.Screen name={SCREEN.groupInvite}
+            component={GroupInvite}
+            options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
-    </SafeArea >
+    </SafeArea>
   );
 };

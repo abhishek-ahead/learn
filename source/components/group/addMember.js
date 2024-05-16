@@ -15,15 +15,15 @@ import { useSelector } from "react-redux";
 import {
   checkcircleIcon,
   closeIcon,
-  searchdefault,
+  search,
 } from "../../constant/icons";
 import { AppContext } from "../../context/app";
 import { addMember } from "../../services/group";
-import Styles, { webStyle } from "../../styles/index";
+import { webStyle } from "../../styles/index";
 const statusBarHeight = Constants.statusBarHeight;
 
 const AddMemberGroup = ({ id }) => {
-  const { chats, translation, addMemberGroup, setAddMemberGroup } =
+  const { chats, translation, Styles, addMemberGroup, setAddMemberGroup } =
     useContext(AppContext);
   const users = useSelector((state) => state.chats.users);
   const [selected, setSelected] = useState({});
@@ -78,7 +78,7 @@ const AddMemberGroup = ({ id }) => {
             <Pressable onPress={onClose} style={Styles.modalheaderOption}>
               <View style={Styles.modalheaderOptionicon}>
                 <View style={{ ...Styles.icon, ...Styles.icon24 }}>
-                  {closeIcon}
+                  {closeIcon(Styles.icondefault)}
                 </View>
               </View>
             </Pressable>
@@ -111,16 +111,15 @@ const AddMemberGroup = ({ id }) => {
             {/* Search */}
             <View style={{ ...Styles.modalsearch }}>
               <View style={{ ...Styles.icon, ...Styles.icon24 }}>
-                {searchdefault}
+                {search(Styles.icondefault)}
               </View>
               <View style={{ ...Styles.searchboxtextbox }}>
                 <View style={{ ...Styles.searchboxtext }} />
                 <TextInput
                   autoFocus={Platform.OS == "web"}
                   style={{
-                    ...Styles.searchboxtext,
+                    ...Styles.forminputText,
                     ...webStyle,
-                    width: "100%",
                   }}
                   onChangeText={(text) => setText(text)}
                   value={text}
@@ -133,7 +132,7 @@ const AddMemberGroup = ({ id }) => {
                   onPress={() => setText("")}
                   style={{ ...Styles.icon, ...Styles.icon24 }}
                 >
-                  {closeIcon}
+                  {closeIcon(Styles.icondefault)}
                 </Pressable>
               ) : null}
             </View>
@@ -216,7 +215,7 @@ const AddMemberGroup = ({ id }) => {
                                 ...Styles.itemCenter,
                               }}
                             >
-                              {checkcircleIcon}
+                              {checkcircleIcon({ fill: "#fff", ...Styles.icon16 })}
                             </View>
                           </View>
                         ) : (
@@ -264,7 +263,7 @@ const AddMemberGroup = ({ id }) => {
                           ...Styles.icon20,
                         }}
                       >
-                        {closeIcon}
+                        {closeIcon(Styles.icondefault)}
                       </Pressable>
                     </View>
                     <Text style={Styles.onlineUserItemName} numberOfLines={1}>
