@@ -1,0 +1,86 @@
+name: Upload Chat FE
+
+on:
+  push:
+    branches:
+      - staging
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 20.11.0
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Node Version
+        run: node -v
+
+      - name: NPM Version
+        run: npm -v
+
+      - name: Use .env file
+        env:
+          ENV_FILE: ${{ secrets.ENV_FILE }}
+        run: echo "$ENV_FILE" > .env
+
+      # - name: Print Secret
+      #   run: echo ${{ secrets.ENV_FILE }}
+
+      # - name: Print current working directory
+      #   run: echo "Current working directory:" $PWD
+
+      # - name: list files at PWD
+      #   run: echo "files are :" cd $PWD && ls
+
+      - name: Build web
+        run: npm run build:web
+
+      # - name: List build directory contents
+      #   run: ls ${{ github.workspace }}
+
+      # - name: Commit changes
+      # run: |
+      # git config --local user.email "actions@github.com"
+      # git config --local user.name "GitHub Actions"
+      # git add .
+      # git commit -m "Build and deploy to S3 [skip ci]"
+
+      #- uses: actions/checkout@master
+
+      - name: Install AWS CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y awscli
+
+      - name: configure AWS
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+        env:
+          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+
+      - name: Delete dist folder from S3 bucket
+        run: aws s3 rm s3://${{ secrets.AWS_S3_BUCKET }} --recursive
+
+      - name: Invalidate CloudFront cache
+        run: aws cloudfront create-invalidation --distribution-id E3LGHB8S4WYWIB --paths "/*"
+
+      - uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --acl public-read --follow-symlinks
+        env:
+          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          SOURCE_DIR: ${{ github.workspace }}/dist

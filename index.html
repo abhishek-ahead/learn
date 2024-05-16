@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body style="height: 100vh; margin: 0; padding: 0">
+    <iframe
+      allow="camera; microphone"
+      id="chatiframe"
+      src="http://localhost:8081/"
+      style="height: 100%; width: 100%; border: none"
+    >
+    </iframe>
+    <script type="application/javascript">
+      window.addEventListener(
+        "message",
+        (event) => {
+          if (event.data == "circuitChatDefaultParams") {
+            const circuitChatDefaultParams = {
+              type: "circuitChat",
+              token:
+                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTdiZWQxY2E2YmM2NjU2NDhiYTg1NmQiLCJpYXQiOjE3MDkyNzA5NTB9.5vP22Ytf10-v4bAmWE65dnrR01CHwYu8qeovj2qn7m0",
+              user: {
+                _id: "657bed1ca6bc665648ba856d",
+                email: "abhishek.jain@aheadsofttech.com",
+                uid: 2,
+                name: "abhishek Jain",
+                status: 1,
+                language: "en",
+                active: true,
+                verified: false,
+                avatar:
+                  "https://php8demo.socialnetworking.solutions/communitychat/public/user/43/02/f4cca2b5e1045ff29870045827a25681.png",
+                role: 4,
+                link: "https://php8demo.socialnetworking.solutions/communitychat/profile/abhishek",
+                timezone: "US/Pacific",
+                gender: "male",
+                about: "",
+                first_name: "abhishek",
+                last_name: "Jain",
+                createdAt: "2023-12-15T06:07:24.433Z",
+                updatedAt: "2024-03-01T04:47:37.114Z",
+                lastActive: "2024-03-01T04:45:46.664Z",
+                metadata: "",
+              },
+            };
+            document
+              .getElementById("chatiframe")
+              .contentWindow.postMessage(circuitChatDefaultParams, "*");
+          }
+
+          // …
+        },
+        false
+      );
+
+      // window.onmessage((e) => console.log("inframe e", e));
+    </script>
+  </body>
+</html>
