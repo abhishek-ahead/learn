@@ -29,8 +29,14 @@ jobs:
 
       - name: Use .env file for demo.sns
         env:
-          ENV_FILE: ${{ secrets.ENV_FILE_TEST1 }}
-        run: echo "$ENV_FILE" > .env
+          # ENV_FILE: ${{ secrets.ENV_FILE_TEST1 }}
+          EXPO_PUBLIC_SERVER_URL: "https://test1.socialnetworking.solutions"
+          EXPO_PUBLIC_CLIENT_ID: "657bebaca6bc665648ba838e"
+          EXPO_PUBLIC_CLIENT_SECRET: "fb10c572-a61f-4760-8d3f-252fbe803dba"
+        run: | 
+          echo "$EXPO_PUBLIC_SERVER_URL" >> .env
+          echo "$EXPO_PUBLIC_CLIENT_ID" >> .env
+          echo "$EXPO_PUBLIC_CLIENT_SECRET" >> .env
       
       
       # - name: check env file path
@@ -117,8 +123,15 @@ jobs:
 
       - name: Use second .env file
         env:
-          ENV_FILE_NEW: ${{ secrets.ENV_FILE_TEST2 }}
-        run: echo "$ENV_FILE_NEW" > .env
+          # ENV_FILE_NEW: ${{ secrets.ENV_FILE_TEST2 }}
+          EXPO_PUBLIC_SERVER_URL: "https://test2.socialnetworking.solutions"
+          EXPO_PUBLIC_CLIENT_ID: "657bebaca6bc665648ba838e"
+          EXPO_PUBLIC_CLIENT_SECRET: "fb10c572-a61f-4760-8d3f-252fbe803dba"
+        run: | 
+          echo "$EXPO_PUBLIC_SERVER_URL" >> .env
+          echo "$EXPO_PUBLIC_CLIENT_ID" >> .env
+          echo "$EXPO_PUBLIC_CLIENT_SECRET" >> .env
+        # run: echo "$ENV_FILE_NEW" > .env
 
       # - name: check env file path
       #   run: find . -name '.env' -exec ls {} \;
