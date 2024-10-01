@@ -4,7 +4,7 @@
 "View All Listings";"View All Listings"
 "Classified Listings";"Classified Listings"
 "Delete Classified Listing?";"Delete Classified Listing?"
-"Are you sure that you want to delete the classified listing with the title ""%1$s"" last modified %2$s? It will not be recoverable after being deleted.";"Are you sure that you want to delete the classified listing with the title ""%1$s"" last modified %2$s? It will not be recoverable after being deleted."
+"Are you sure that you want to delete the classified listing with the title ""%1$s"" last modified %2$s? It will not be recoverable after being deleted.";"Are you sure that you want to delete the classified listing with the title ""%1$s"" last modified %2$s? It will not be recoverabfle after being deleted."
 
 "Delete";"Delete"
 "or";"or"
@@ -294,3 +294,5 @@ http://[host][object_link]
 [footer]"
 
 "Choose the Networks to which this Classified will be displayed. If you want to show this Classified to all users then do not select any network.";"Choose the Networks to which this Classified will be displayed. If you want to show this Classified to all users then do not select any network."
+
+sdfdsffsdf
