@@ -8,7 +8,7 @@
 
 "Delete";"Delete"
 "or";"or"
-"cancel";"cancel"
+"cancel";"cancelfd"
 
 "ADMIN_ACTIVITY_TYPE_CLASSIFIED_NEW";"When a user (subject) posts a new classified listing (object)."
 "ADMIN_ACTIVITY_TYPE_COMMENT_CLASSIFIED";"When a user (subject) comments on another user's (object) classified listing."

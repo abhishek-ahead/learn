@@ -1,0 +1,90 @@
+"SES - Advanced Courses - Videos Extension";"Course Communities Videos"
+"SES - Course Videos Extension";"Course Communities Videos"
+
+"_ACTIVITY_ACTIONTYPE_COURSESVIDEO_FAV";"When I added course video to favorite"
+"_ACTIVITY_ACTIONTYPE_COURSESVIDEO_NEW";"When I add new course video"
+"_ACTIVITY_ACTIONTYPE_COURSESVIDEO_CRTE";"When I create a course video"
+"_ACTIVITY_ACTIONTYPE_COURSESVIDEO_RATING";"When I rate an course video"
+
+"ACTIVITY_TYPE_COURSESVIDEO_FAV";"When someone mark course video as favorite"
+"ACTIVITY_TYPE_COURSESVIDEO_RATING";"When someone rates an course video"
+"ACTIVITY_TYPE_COURSESVIDEO_APPROVED";"Video is approved by the administrator"
+"ACTIVITY_TYPE_COURSESVIDEO_DISAPPROVED";"Video is disapproved by the administrator"
+"ACTIVITY_TYPE_COURSESVIDEO_PROCESSED";"Video is processed"
+"ACTIVITY_TYPE_COURSESVIDEO_PRO_FAIL";"Video processed failed"
+"ADMIN_ACTIVITY_TYPE_COURSESVIDEO_NEW";"When a user (subject) posted a new video (object)."
+"ADMIN_ACTIVITY_TYPE_COURSESVIDEO_CRTE";"When a user (subject) posted a new video (object)."
+"ADMIN_ACTIVITY_TYPE_COURSESVIDEO_FAV";"When a user (subject) favourite a video (object)."
+"ADMIN_ACTIVITY_TYPE_COURSESVIDEO_RATING";"When a user (subject) rate a video (object)."
+
+"_ACTIVITY_ACTIONTYPE_COURSESVIDEO_VIDEO_CREATE";"When video is created in the course."
+
+
+"_EMAIL_NOTIFY_COURSESVIDEO_PROCESSED_TITLE";"Course video is processed."
+"_EMAIL_NOTIFY_COURSESVIDEO_PROCESSED_DESCRIPTION";"This email will be sent to the course owner when his video in course has been processed."
+"_EMAIL_NOTIFY_COURSESVIDEO_PROCESSED_SUBJECT";"Video in course has been processed."
+"_EMAIL_NOTIFY_COURSESVIDEO_PROCESSED_BODY";"[header]
+
+Course video in Course [Course_Name] has been processed.
+Click on the following link to view this Course Video:
+http://[host][object_link] 
+
+[footer]"
+
+
+
+
+"_EMAIL_COURSESVIDEO_FAV_RATE_FOLLOW_TITLE";"Favorited course video you have followed."
+"_EMAIL_COURSESVIDEO_FAV_RATE_FOLLOW_DESCRIPTION";"This email will be sent to the course owner when the course video has been favorited in the course you have followed."
+"_EMAIL_COURSESVIDEO_FAV_RATE_FOLLOW_SUBJECT";"Course Video has been favorited in the course you have followed. "
+"_EMAIL_COURSESVIDEO_FAV_RATE_FOLLOW_BODY";”[header]
+
+Course video has been favorited in the Course [Course_Name] you have followed.
+Click on the following link to view this Course Video:
+http://[host][object_link] 
+
+[footer]"
+
+
+
+
+"_EMAIL_NOTIFY_COURSESVIDEO_APPROVE_TITLE";"Course video has been approved."
+"_EMAIL_NOTIFY_COURSESVIDEO_APPROVE_DESCRIPTION";"This email will be sent to the course owner when his video in course has been approved."
+"_EMAIL_NOTIFY_COURSESVIDEO_APPROVE_SUBJECT";"Course video has been approved."
+"_EMAIL_NOTIFY_COURSESVIDEO_APPROVE_BODY";"[header]
+
+Course video in Course [Course_Name] has been approved by the site admin.
+Click on the following link to view this Course Video:
+
+http://[host][object_link] 
+
+[footer]"
+
+
+
+"_EMAIL_NOTIFY_COURSESVIDEO_DISAPPROVE_TITLE";"Course Video has been disapproved."
+"_EMAIL_NOTIFY_COURSESVIDEO_DISAPPROVE_DESCRIPTION";"This email will be sent to the course owner when his video in course has been disapproved."
+"_EMAIL_NOTIFY_COURSESVIDEO_DISAPPROVE_SUBJECT";"Course Video has been disapproved."
+"_EMAIL_NOTIFY_COURSESVIDEO_DISAPPROVE_BODY";"[header]
+
+Course video in Course [Course_Name] has been disapproved by the site admin.
+Click on the following link to view this Course Video:
+
+http://[host][object_link] 
+
+[footer]"
+
+
+"_EMAIL_NOTIFY_COURSESVIDEO_PRO_FAIL_TITLE";"Course Videos - Course video processing has failed."
+"_EMAIL_NOTIFY_COURSESVIDEO_PRO_FAIL_DESCRIPTION";"This email will be sent to the course owner when processing of video in course has failed."
+"_EMAIL_NOTIFY_COURSESVIDEO_PRO_FAIL_SUBJECT";"Processing of Video in Course has failed."
+"_EMAIL_NOTIFY_COURSESVIDEO_PRO_FAIL_BODY";"[header]
+
+Processing of video in Course [Course_Name] has failed.
+Click on the following link to view this Course video: 
+
+http://[host][object_link] 
+
+[footer]"
+
+"SNS - Course Videos Extension";"Course Videos Extension"
