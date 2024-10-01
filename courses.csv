@@ -1,0 +1,835 @@
+"Course";"Course"
+"course";"course"
+"courses";"courses"
+"Courses";"Courses"
+"Classroom";"Classroom"
+"classroom";"classroom"
+"classrooms";"classrooms"
+"Classrooms";"Classrooms"
+"Marks %s/%s";"Marks %s/%s"
+"Create New Course";"Create New Course"
+"Configure your new Course below, then click "Create Course" to create the Course.";"Configure your new Course below, then click "Create Course" to create the Course."
+"Separate tags with commas.";"Separate tags with commas."
+"No Courses in this  category.";"No Courses in this  category."
+"Posted in";"Posted in"
+"Featured";"Featured"
+"Sponsored";"Sponsored"
+"verified";"verified"
+"Verified";"Verified"
+"Hot";"Hot"
+"Contact";"Contact"
+"Share This Course";"Share This New Course"
+"Likes";"Likes"
+"Comments";"Comments"
+"Views";"Views"
+"Favourites";"Favourites"
+"Like";"Like"
+"Comment";"Comment"
+"View";"View"
+"Favourite";"Favourite"
+"Follower";"Follower"
+"Member";"Member"
+"You saved";"You saved"
+"Discount";"Discount"
+"Recently Created";"Recently Created"
+"Most Viewed";"Most Viewed"
+"Most Liked";"Most Liked"
+"Most Commented";"Most Commented"
+"Most Favourite";"Most Favourite"
+"Tax";"Tax"
+"Qty";"Qty"
+"or";"or"
+"COURSE CART";"COURSE CART"
+"cancel";"cancel"
+"Daily";"Daily"
+"Subtotal";"Subtotal"
+"Design 1";"Design 1"
+"Design 2";"Design 2"
+"Design 3";"Design 3"
+"Design 4";"Design 4"
+"Cart";"Cart"
+"Grand Total:";"Grand Total:"
+"Clear All";"Clear All"
+"Checkout";"Checkout"
+"Edit Thumbnail";"Edit Thumbnail"
+"Apply Changes";"Apply Changes"
+"Billing Duration";"Billing Duration"
+"Billing Cycle";"Billing Cycle"
+"One-time fee of %1$s";"One-time fee of %1$s"
+"Auto Approved Course";"Auto Approved Course"
+"Background Photo";"Background Photo"
+"Main Photo";"Main Photo"
+"Cover Photo";"Cover Photo"
+"Select Design Layout";"Select Design Layout"
+"Course found.";"Course found."
+"Courses found.";"Course found."
+"List View";"List View"
+"Grid View";"Grid View"
+"Pinboard View";"Pinboard View"
+"%s View";"%s View";"%s Views"
+"%s Comment";"%s Comment";"%s Comments"
+"%s Like";"%s Like";"%s Likes"
+"%s Favourite";"%s Favourite";"%s Favourites"
+"%s view";"%s view";"%s views"
+"%s comment";"%s comment";"%s comments"
+"%s like";"%s like";"%s likes"
+"%s favourite";"%s favourite";"%s favourites"
+"%s photo";"%s photo";"%s photos"
+"%s test";"%s test";"%s tests"
+"%s Review found.";"%s Review found.";"%s Review founds."
+"%s Test found.";"%s Test found.";"%s Test found."
+"%s location found";"%s location found";"%s locations found"
+"%s tax found";"%s tax found";"%s taxs found"
+"%s lecture";"%s lecture";"%s lectures"
+"%s Course";"%s Course";"%s Courses"
+"%s Course found";"%s Course found";"%s Courses found"
+"Total Question: %s";"Total Question: %s";"Total Questions: %s"
+"Country";"Country"
+"State";"State"
+"Tax Rate";"Tax Rate "
+"Status";"Status"
+"Creation Date";"Creation Date"
+"Options";"Options"
+"Are you sure want to delete this tax? It will not be recoverable after being deleted.";"Are you sure want to delete this tax? It will not be recoverable after being deleted."
+"Admin have not added any location yet.";"Admin have not added any location yet."
+"No location were found matching your selection.";"No location were found matching your selection."
+"Rate Depend On";"Rate Depend On"
+"Billing Address";"Billing Address"
+"Manage Locations";"Manage Locations"
+"You have not added courses yet in your cart.";"You have not added courses yet in your cart."
+"FEATURED";"FEATURED"
+"Featured";"Featured"
+"SPONSORED";"SPONSORED"
+"Sponsored";"Sponsored"
+"Verified";"Verified"
+"Most Rated";"Most Rated"
+"HOT";"HOT"
+"by ";"by "
+"PASSED";"PASSED"
+"FAILED";"FAILED"
+"Correct Answer is :";"Correct Answer is :"
+"TEST RESULT";"TEST RESULT"
+"View More";"View More"
+"Print Result";"Print Result"
+"Answered %s Out of %s Correctly";"Answered %s Out of %s Correctly"
+"Cancel Uploading";"Cancel Uploading"
+"Please fill the red mark fields";"Please fill the red mark fields"
+"Anything in here will be replaced on browsers that support the canvas element";"Anything in here will be replaced on browsers that support the canvas element"
+"Edit";"Edit"
+"First Name";"First Name"
+"Please enter your first name.";"Please enter your first name."
+"Last Name";"Last Name"
+"Email";"Email"
+"The email Id entered is not valid. Please enter other email Id.";"The email Id entered is not valid. Please enter other email Id."
+"Select Country";"Select Country"
+"Please select your country from the select box.";"Please select your country from the select box."
+"Please select your state from the select box.";"Please select your state from the select box."
+"City";"City"
+"Please enter your city.";"Please enter your city."
+"Address";"Address"
+"Phone Number";"Phone Number"
+"Please enter valid phone number.";"Please enter valid phone number."
+"ZIP/PIN Code";"ZIP/PIN Code"
+"Please enter valid area code.";"Please enter valid area code."
+"Continue";"Continue"
+"Order Recview.";"Order Recview."
+"Terms and Conditions";"Terms and Conditions"
+"Total:";"Total:"
+"Place Order";"Place Order"
+"Go To My Order";"Go To My Order"
+"Continue Shopping";"Continue Shopping"
+"Phone: ";"Phone: "
+"Email: ";"Email: "
+"Date: ";"Date: "
+"S.No.";"S.No."
+"Course Name";"Course Name"
+"Cost";"Cost"
+"Total";"Total"
+"Take Test  >>";"Take Test  >>"
+"FREE";"FREE"
+"Start Time";"Start Time"
+"Discount Start Date";"Discount Start Date"
+"End Time";"End Time"
+"Was this Review...?";"Was this Review...?"
+"Edit Review";"Edit Review"
+"Delete Review";"Delete Review"
+"Report";"Report"
+"Share Review";"Share Review"
+"Add To Compare";"Add To Compare"
+"Add to Cart";"Add to Cart"
+"Remove";"Remove"
+"Add Answer";"Add Answer"
+"Add Question";"Add Question"
+"Manage Test";"Manage Test"
+"Create Test";"Create Test"
+"Total Item";"Total Item"
+"Total Amount";"Total Amount"
+"billing cost";"billing cost"
+"Owner";"Owner"
+"Gateway Type";"Gateway Type"
+"Order Date";"Order Date"
+"Test Duration";"Test Duration"
+"Paypal Details";"Paypal Details"
+"Stripe Details";"Stripe Details"
+"Return Policy";"Return Policy"
+"Payment Details";"Payment Details"
+"Courses Name";"Courses Name"
+"Request Id";"Request Id"
+"Requested Amount";"Requested Amount"
+"Requested Date";"Requested Date"
+"Requested Message";"Requested Message"
+"Released Amount";"Released Amount"
+"Released Date";"Released Date"
+"Response Message";"Response Message"
+"View Course";"View Course"
+"Category";"Category"
+"Manage Lectures";"Manage Lectures"
+"Create Lecture";"Create Lecture"
+"Make Payment Request";"Make Payment Request"
+"Threshold Amount:";"Threshold Amount:"
+"Total Orders";"Total Orders"
+"Total Tax Amount";"Total Tax Amount"
+"Total Comission Amount";"Total Comission Amount"
+"Total Remaining Amount";"Total Remaining Amount"
+"Amount Requested";"Amount Requested"
+"Commission Amount";"Commission Amount"
+"No transactions have been made yet.";"No transactions have been made yet."
+"Sales Reports";"Sales Reports"
+"Download Report in CSV";"Download Report in CSV"
+"No Course sold yet.";"No Course sold yet."
+"Download Report in Excel";"Download Report in Excel"
+"Manage Your Course Taxes";"Manage Your Course Taxes"
+"No Tax were found matching your selection.";"No Tax were found matching your selection."
+"Terms and Conditions.";"Terms and Conditions."
+"Billing Tax:";"Billing Tax:"
+"Subtotal:";"Subtotal"
+"I agree with the.";"I agree with the."
+"General Information";"General Information"
+"Please enter Course title in the box";"Please enter Course title in the box"
+"Enter Course Title";"Enter Course Title"
+"You can use letters, numbers and periods.";"You can use letters, numbers and periods."
+"Additional Information";"Additional Information"
+"Price & Discounts";"Price & Discounts"
+"Separate tags with commas.";"Separate tags with commas."
+"Tags (Keywords)";"Tags (Keywords)"
+"Discount Type";"Discount Type"
+"Discount Value";"Discount Value"
+"Discount Value (%)";"Discount Value (%)"
+"Discount End Date";"Discount End Date"
+"Choose from below when do you want to end this discount.";"Choose from below when do you want to end this discount."
+"End discount on a specific date. (Please select date from below.)";"End discount on a specific date. (Please select date from below.)"
+"No End date.";"No End date."
+"Whom To Allow Discount?";"Whom To Allow Discount?"
+"Everyone";"Everyone"
+"All Registered Members";"All Registered Members"
+"Friends of Friends";"Friends of Friends"
+"Friends and Networks";"Friends and Networks"
+"Friends Only";"Friends Only"
+"Just Me";"Just Me"
+"Enter the purchase note for this Course & it will display on view page.";"Enter the purchase note for this Course & it will display on view page."
+"Purchase Note";"Purchase Note"
+"Advanced";"Advanced"
+"Course Availability";"Course Availability"
+"Yes, enable reviews for this Course.";"Yes, enable reviews for this Course."
+"Enable Reviews";"Enable Reviews"
+"Start Date";"Start Date"
+"Choose Start Date";"Choose Start Date"
+"Publish Now";"Publish Now"
+"End Date";"End Date"
+"End course show to a specific date.";"End course show to a specific date."
+"No End Date";"'No End Date'"
+"View page courses";"View page courses"
+"Enter Course name.";"Enter Course name."
+"Select the Courses that you want to display on Course View Page.";"Select the Courses that you want to display on Course View Page."
+"Checkout page courses";"Checkout page courses"
+"Select the Courses that you want to display on Checkout Page.";"Select the Courses that you want to display on Checkout Page."
+"Course Profile Photo.";"Course Profile Photo."
+"Add photo for your course";"Add photo for your course"
+"Manage Privacy";"Manage Privacy"
+"Choose the Networks to which this Course will be displayed. (Note: Hold down the CTRL key to select or de-select specific networks.)";"Choose the Networks to which this Course will be displayed. (Note: Hold down the CTRL key to select or de-select specific networks.)"
+"Member Levels";"Member Levels"
+"Choose the Member Levels to which this Course will be displayed. (Note: Hold down the CTRL key to select or de-select specific member levels.)";"Choose the Member Levels to which this Course will be displayed. (Note: Hold down the CTRL key to select or de-select specific member levels.)"
+"Lecture View Privacy";"Lecture View Privacy"
+"Who may view lectures on course?";"Who may view lectures on course?"
+"Who can take Test?";"Who can take Test?"
+"Test Privacy";"Test Privacy"
+"Privacy";"Privacy"
+"Who may see this Course?";"Who may see this Course?"
+"Comment Privacy";"Comment Privacy"
+"Who may post comments on this Course?";"Who may post comments on this Course?"
+"People can search for this Course.";"People can search for this Course."
+"Enable this Course";"Enable this Course"
+"If this Course is published, it cannot be switched back to draft mode.";"If this Course is published, it cannot be switched back to draft mode."
+"Saved As Draft";"Saved As Draft"
+"Published";"Published"
+"Create Course";"Create Course"
+"Description";"Description"
+"Source";"Source"
+"HTML Text";"HTML Text"
+"My Device";"My Device"
+"My Computer";"My Computer"
+"External Link";"External Link"
+"HTML";"HTML"
+"Upload photo for Video";"Upload photo for Video"
+"Video Source URL";"Video Source URL"
+"Paste the Url of the video here.";"Paste the Url of the video here."
+"Make this lecture as Preview";"Make this lecture as Preview"
+"Please compose your new Answer below.";"Please compose your new Answer below."
+"Create Answer";"Create Answer"
+"Answer";"Answer"
+"Add New Question";"Add New Question"
+"Please compose your new question below.";"Please compose your new question below."
+"Enter Mark.";"Enter Mark."
+"Multiple Answers";"Multiple Answers"
+"True/False";"True/False"
+"Multiple Answers";"Multiple Answers"
+"Create Question";"Create Question"
+"Add photo for your test";"Add photo for your test"
+"Add Photo for your Test";"Add Photo for your Test"
+"This photo will display on its profile and search pages.";"This photo will display on its profile and search pages."
+"Upload Photo";"Upload Photo"
+"Display Test Description on its view page.";"Display Test Description on its view page."
+"Enter Description";"Enter Description"
+"Congratulation Message";"Congratulation Message"
+"Success Message";"Success Message"
+"This will display when users passed their test.";"This will display when users passed their test."
+"Failure Message";"Failure Message"
+"Failed Message";"Failed Message"
+"Enter Time in Minutes.";"Enter Time in Minutes."
+"This will display when users failed in their test.";"This will display when users failed in their test."
+"Please enter time.";"Please enter time."
+"Create New Test";"Create New Test"
+"Conduct a test to measure the knowledge of the participants on a given topic. Here you can create different question types.";"Conduct a test to measure the knowledge of the participants on a given topic. Here you can create different question types."
+"Create new Lecture";"Create new Lecture"
+"Create your lecture with effective visuals, analogies, demonstrations, and examples to reinforce the main points of the topics.";"Create your lecture with effective visuals, analogies, demonstrations, and examples to reinforce the main points of the topics."
+"Add Course To Wishlist";"Add Course To Wishlist"
+"Create your wishlist with personalized collections of courses that you want to buy and save in your account for future reference.";"Create your wishlist with personalized collections of courses that you want to buy and save in your account for future reference."
+"Enter Wishlist Name";"Enter Wishlist Name"
+"Wishlist Name";"Wishlist Name"
+"Wishlist Description";"Wishlist Description"
+"Enter Wishlist Description";"Enter Wishlist Description"
+"Wishlist Photo Preview";"Wishlist Photo Preview"
+"Wishlist Photo";"Wishlist Photo"
+"Yes, remove wishlist photo.";"Yes, remove wishlist photo."
+"Do you want to make this wishlist private?";"Do you want to make this wishlist private?"
+"Edit your entry below, then click "Save Changes" to edit the Wishlist.";"Edit your entry below, then click "Save Changes" to edit the Wishlist."
+
+"Payment Gateway not Enabled in this Course";"Payment Gateway not Enabled in this Course"
+"No review have been posted on this member yet.";"No review have been posted on this member yet."
+"Below, create tax for your course. You can also manage the existing tax here.";"Below, create tax for your course. You can also manage the existing tax here."
+"You have not posted any review on courses.";"You have not posted any review on courses."
+"You have not any course to wishlist.";"You have not any course to wishlist."
+"You have not placed any order yet. Be the first one to purchase course.";"You have not placed any order yet. Be the first one to purchase course."
+"There are no order made by the members.";"There are no order made by the members."
+"Here, you are viewing the details of payments received from the website.";"Here, you are viewing the details of payments received from the website."
+"Here you can manage all lectures in this course.";"Here you can manage all lectures in this course."
+"Here you can manage all test in this course.";"Here you can manage all test in this course."
+"You do not have any pending payment request yet.";"You do not have any pending payment request yet."
+"Below, you can see the sales report of tickets sold from this website. Entering criteria into the filter fields will help you find specific reports. You can also download the reports in csv and excel formats.";"Below, you can see the sales report of tickets sold from this website. Entering criteria into the filter fields will help you find specific reports. You can also download the reports in csv and excel formats."
+"Start date must be less than end date.";"Start date must be less than end date."
+"Please complete the red mark fields";"Please complete the red mark fields"
+"Something went wrong,please try again later";"Something went wrong,please try again later"
+"Existing Package(s)";"Existing Package(s)"
+"Choose A Package";"Choose A Package"
+"Select a package that suits you most to start creating pages on this website.";"Select a package that suits you most to start creating pages on this website."
+"There are no lectures created by you.";"There are no lectures created by you."
+"You have not given any Tests. Please give a test and test your skills.";"You have not given any Tests. Please give a test and test your skills."
+"Below, you can manage your course locations on which tax will apply.";"Below, you can manage your course locations on which tax will apply."
+"You have not created any Test in your course. Please create Test for the course.";"You have not created any Test in your course. Please create Test for the course."
+"There was an error processing your request.  Please try again later.";"There was an error processing your request.  Please try again later."
+"Are you sure you want to delete?";"Are you sure you want to delete?"
+"Are you sure you want to delete the selected test entries?";"Are you sure you want to delete the selected test entries?"
+"Are you sure you want to delete the selected lecture entries?";"Are you sure you want to delete the selected lecture entries?"
+"Are you sure you want to delete the selected items?";"Are you sure you want to delete the selected items?"
+"Are you sure you want to delete the selected reviews?";"Are you sure you want to delete the selected reviews?"
+"Are you sure you want to delete the selected course entries?";"Are you sure you want to delete the selected course entries?"
+"There are no wishlist entries by your members yet.";"There are no wishlist entries by your members yet."
+"Are you sure you want to delete the selected Test?";"Are you sure you want to delete the selected Test?"
+"Submitting Form ...";"Submitting Form ..."
+"Please wait till all photos uploaded.";"Please wait till all photos uploaded."
+"Your order has been sent for the confirmation and after that you will receive the invoice of your order.";"Your order has been sent for the confirmation and after that you will receive the invoice of your order."
+"You will soon receive your order confirmation with invoice.";"You will soon receive your order confirmation with invoice."
+"Thank you for shopping! Your order has been successfully placed.";"Thank you for shopping! Your order has been successfully placed."
+"Error Occured";"Error Occured"
+"You have already created the maximum number of entries allowed.";"You have already created the maximum number of entries allowed."
+"If you would like to upload a new entry, please <a href=%1$s"">delete</a> an old one first.""";"If you would like to upload a new entry, please <a href=%1$s"">delete</a> an old one first."""
+"Your Question is successfully added.";"Your Question is successfully added."
+"Custom URL is not available. Please select another URL.";"Custom URL is not available. Please select another URL."
+"You have already uploaded the maximum number of entries allowed.";"You have already uploaded the maximum number of entries allowed."
+"We could not find a video there - please check the URL and try again. If you are sure that the URL is valid, please click %s to continue.";"We could not find a video there - please check the URL and try again. If you are sure that the URL is valid, please click %s to continue."
+"There are no reviews created by your members yet.";"There are no reviews created by your members yet."
+"Manage Reviews";"Manage Reviews"
+"Classsroom Reviews";"Classsroom Reviews"
+"Are you sure you want to delete the selected Review?";"Are you sure you want to delete the selected Review?"
+"Delete Course?";"Delete Course?"
+"Are you sure that you want to delete this product entry? It will not be recoverable after being deleted.";"Are you sure that you want to delete this product entry? It will not be recoverable after being deleted."
+"Untitled";"Untitled"
+"Added %1$s";"Added %1$s"
+"Add More Photos";"Add More Photos"
+"Nobody has created an album yet.";"Nobody has created an album yet."
+"Photo Albums";"Photo Albums"
+"Add New Photos";"Add New Photos"
+"Edit Photo";"Edit Photo"
+"Title";"Title"
+"Image Description";"Image Description"
+"Review Title";"Review Title"
+"Invite Members";"Invite Members"
+"Choose the people you want to invite to this classroom.";"Choose the people you want to invite to this classroom."
+"Select All";"Select All"
+"You have no friends you can invite.";"You have no friends you can invite."
+"Close";"Close"
+"Are you sure that you want to delete this course from wishlist? It will not be recoverable after being deleted.";"Are you sure that you want to delete this course from wishlist? It will not be recoverable after being deleted."
+"Delete Course From wishlist?";"Delete Course From wishlist?"
+"Course has been successfully deleted to your wishlist.";"Course has been successfully deleted to your wishlist."
+"ACTIVITY_TYPE_COURSES_COURSE_ADMINDISAPR";"When my Course gets disapproved."
+"ACTIVITY_TYPE_COURSES_COURSE_ADMINAAPR";"When my Course gets approved."
+"ACTIVITY_TYPE_COURSES_COURSE_CREATE";"When I create a new Course."
+"ACTIVITY_TYPE_COURSES_COURSE_FAVOURITE";"When someone marked my Course as favourite."
+"ACTIVITY_TYPE_COURSES_COURSE_LIKE";"When someone like my Course."
+"ACTIVITY_TYPE_COURSES_COURSE_WTAPR";"When I create a new Course and has to wait for admin approval."
+"ACTIVITY_TYPE_COURSES_WAITINGADMINAPPROVAL";"When I create a new Course and has to wait for admin approval."
+"ACTIVITY_TYPE_COURSES_TEST_PASS";"When someone pass Test."
+"ACTIVITY_TYPE_COURSES_TEST_FAIL";"When someone fail Test."
+"ACTIVITY_TYPE_COURSES_TEST_GIVEN";"When someone given Test."
+"ACTIVITY_TYPE_COURSES_TEST_CREATE";"When I create a new Test."
+"ACTIVITY_TYPE_COURSES_REVIEWPOST";"When someone gives a review on Course."
+"ACTIVITY_TYPE_COURSES_PAYMENT_DONE";"When my payment has been done by admin."
+"ACTIVITY_TYPE_COURSES_PAYMENT_DONETOUSER";"When my Course payment is done."
+"ACTIVITY_TYPE_COURSES_PAYMENT_REQUEST";"When Course owner request for payment."
+"ACTIVITY_TYPE_COURSES_WISHLIST_CREATE";"When I create wishlist."
+"ACTIVITY_TYPE_COURSES_LECTURE_CREATE";"When I create a new Lecture."
+"ACTIVITY_TYPE_COURSES_CANCEL_REQUEST";"When admin rejects Course request."
+"ACTIVITY_TYPE_COURSES_APPROVE_REQUEST";"When admin approves Course request"""
+"ACTIVITY_TYPE_ECLASSROOM_CLASSSROOM_ADMINDISAP";"When my Classroom gets disapproved."
+"ACTIVITY_TYPE_ECLASSROOM_CLASSSROOM_ADMINAAPR";"When my Classroom gets approved."
+"ACTIVITY_TYPE_ECLASSROOM_CLASSROOM_CREATE";"When I create a new Classroom."
+"ACTIVITY_TYPE_ECLASSROOM_CLASSROOM_FAVOURITE";"When someone marked my Classroom as favourite."
+"ACTIVITY_TYPE_ECLASSROOM_CLASSROOM_LIKE";"When someone like my Classroom."
+"ACTIVITY_TYPE_ECLASSROOM_CLASSSROOM_WTAPR";"When I create a new Classroom and has to wait for admin approval."
+"ACTIVITY_TYPE_ECLASSROOM_WAITINGADMINAPPROVAL";"When I create a new Classroom and has to wait for admin approval."
+"ACTIVITY_TYPE_ECLASSROOM_REVIEWPOST";"When someone gives a review on Classroom."
+"ACTIVITY_TYPE_SESUSER_CLAIM_CLASSROOM";"When someone claims your Classroom."
+"ACTIVITY_TYPE_SESUSER_CLAIMADMIN_CLASSROOM";"When someone claims Classroom owner."
+"ACTIVITY_TYPE_ECLASSROOM_REQJOIN";"When I Join a Classroom."
+"ACTIVITY_TYPE_ECLASSROOM_OWNER_INFORMED";"When admin has approved claim by other member for your Classroom."
+"ACTIVITY_TYPE_ECLASSROOM_CLAIM_APPROVE";"When admin approves your claim request for Classroom."
+"ACTIVITY_TYPE_ECLASSROOM_CLAIM_DECLINED";"When admin rejects your claim request for Classroom."
+"ACTIVITY_TYPE_ECLASSROOM_LINK_CLASSROOM";"When someone request to link my Classroom."
+"ACTIVITY_TYPE_ECLASSROOM_BSREVIEWPOST";"When someone gives a review on Classroom I Followed."
+"ACTIVITY_TYPE_ECLASSROOM_BSREQJOIN";"When someone joins the Classroom I Joined."
+"ACTIVITY_TYPE_ECLASSROOM_CLASSROOM_BSFOLLWLIKE";"When someone Likes a Classroom I Followed."
+"ACTIVITY_TYPE_ECLASSROOM_CLASSROOM_BSJOINLIKE";"When someone Likes a Classroom I Liked."
+"ACTIVITY_TYPE_COURSES_COURSE_FEATURED";"When my Course gets featured."
+"ACTIVITY_TYPE_COURSES_COURSE_SPONSORED";"When my Course gets sponsored."
+"ACTIVITY_TYPE_COURSES_COURSE_VERIFIED";"When my Course gets verified."
+"ACTIVITY_TYPE_COURSES_COURSE_HOT";"When my Course gets hot."
+"ACTIVITY_TYPE_ECLASSROOM_CLASSROOM_FEATURED";"When my Classroom gets featured."
+"ACTIVITY_TYPE_ECLASSROOM_CLASSROOM_SPONSORED";"When my Classroom gets sponsored."
+"ACTIVITY_TYPE_ECLASSROOM_CLASSROOM_VERIFIED";"When my Classroom gets verified."
+"ACTIVITY_TYPE_ECLASSROOM_CLASSROOM_HOT";"When my Classroom gets hot."
+"ACTIVITY_TYPE_ECLASSROOM_CLASSROOM_FOLLOW";"When I Follow a Classroom."
+
+"_ACTIVITY_ACTIONTYPE_COURSES_COURSE_CREATE";"When I create a new Course."
+"_ACTIVITY_ACTIONTYPE_COURSES_COURSE_FAVOURITE";"When someone marked my Course as favourite."
+"_ACTIVITY_ACTIONTYPE_COURSES_COURSE_LIKE";"When someone like my Course."
+"_ACTIVITY_ACTIONTYPE_COURSES_LECTURE_CREATE";"When I create a new Lecture."
+"_ACTIVITY_ACTIONTYPE_COURSES_TEST_CREATE";"When I create a new Test."""
+"_ACTIVITY_ACTIONTYPE_COURSES_REVIEWPOST";"When someone gives a review on Course."
+"_ACTIVITY_ACTIONTYPE_COURSES_WISHLIST_CREATE";"When I create wishlist."
+"_ACTIVITY_ACTIONTYPE_ECLASSROOM_CLASSROOM_CREATE";"When I create a new Classroom."
+"_ACTIVITY_ACTIONTYPE_ECLASSROOM_CLASSROOM_FAVOURITE";"When someone marked my Classroom as favourite."
+"_ACTIVITY_ACTIONTYPE_ECLASSROOM_CLASSROOM_LIKE";"When someone like my Classroom."
+"_ACTIVITY_ACTIONTYPE_ECLASSROOM_CLASSROOM_PFPHOTO";"When profile photo for classroom has been updated."
+"_ACTIVITY_ACTIONTYPE_ECLASSROOM_REVIEWPOST";"When someone gives a review on Classroom."
+"_ACTIVITY_ACTIONTYPE_ECLASSROOM_PHOTO_LIKE";"When I Like Classroom's album photo."
+"_ACTIVITY_ACTIONTYPE_ECLASSROOM_ALBUM_LIKE";"When I Like Classroom's album."
+"_ACTIVITY_ACTIONTYPE_ECLASSROOM_BSREVIEWPOST";"When someone gives a review on Classroom I Followed."
+
+"ADMIN_ACTIVITY_TYPE_ECLASSROOM_CLASSROOM_CREATE";"When a user (subject) creates a new Classroom (object)."
+"ADMIN_ACTIVITY_TYPE_ECLASSROOM_CLASSROOM_FAVOURITE";"When a user (subject) marks a Classroom (object) as a favorite."
+"ADMIN_ACTIVITY_TYPE_ECLASSROOM_CLASSROOM_LIKE";"When a user (subject) likes another user’s (object) Classroom."
+"ADMIN_ACTIVITY_TYPE_ECLASSROOM_REVIEWPOST";"When a user (subject) post reviews on a Classroom (object)."
+"ADMIN_ACTIVITY_TYPE_ECLASSROOM_ALBUM_LIKE";"When a user (subject) likes another user’s (object) Classroom’s album."
+"ADMIN_ACTIVITY_TYPE_ECLASSROOM_PHOTO_LIKE";"When a user (subject) comments on another user’s (object) classroom's album photo."
+"ADMIN_ACTIVITY_TYPE_ECLASSROOM_BSREVIEWPOST";"When a user (subject) post reviews on a Classroom (object) I Followed."
+"ADMIN_ACTIVITY_TYPE_ECLASSROOM_ALBUM_CREATE";"When a user (subject) creates an album in Classroom (object)."
+"ADMIN_ACTIVITY_TYPE_ECLASSROOM_ALBUM_PHOTO_NEW";"When I upload new photos in album of a Classroom."
+
+"ADMIN_ACTIVITY_TYPE_COURSES_COURSE_CREATE";"When a user (subject) creates a new Course (object)."
+"ADMIN_ACTIVITY_TYPE_COURSES_COURSE_FAVOURITE";"When a user (subject) marks a Course (object) as favorite."
+"ADMIN_ACTIVITY_TYPE_COURSES_COURSE_LIKE";"When a user (subject) likes a Course (object)."
+"ADMIN_ACTIVITY_TYPE_COURSES_LECTURE_CREATE";"When I create a new Lecture."
+"ADMIN_ACTIVITY_TYPE_COURSES_REVIEWPOST";"When a user (subject) posts a review on a Course (object)."
+"ADMIN_ACTIVITY_TYPE_COURSES_TEST_CREATE";"When a user (subject) creates a new lecture on a Course (object)."
+"ADMIN_ACTIVITY_TYPE_COURSES_WISHLIST_CREATE";"When a user (subject) creates a new Test on a Course (object)."
+"_EMAIL_COURSES_WAITINGADMINAPPROVAL_TITLE";"Course Created and waiting for approval."
+"_EMAIL_COURSES_WAITINGADMINAPPROVAL_DESCRIPTION";"This email will be sent to the admin for approving the Course when someone creates a Course."
+"_EMAIL_COURSES_WAITINGADMINAPPROVAL_SUBJECT";"New Course is waiting for Admin Approval"
+"_EMAIL_COURSES_WAITINGADMINAPPROVAL_BODY";"[header]
+
+Someone has created a Course [course_name] on your website, please take action to approve or disapprove that Course.
+
+http://[host][object_link]
+
+[footer]"
+"_EMAIL_COURSES_COURSE_WTAPR_TITLE";"Course Sent for Approved."
+"_EMAIL_COURSES_COURSE_WTAPR_DESCRIPTION";"This email will be sent to members when their  Course is sent to admin for approval."
+"_EMAIL_COURSES_COURSE_WTAPR_SUBJECT";"Your Course has been sent for approval"
+"_EMAIL_COURSES_COURSE_WTAPR_BODY";"[header]
+
+Your Course [course_name] has been sent to admin for its approval. You will be notified with its status (approved/disapproved) when the site admin takes any action on it. 
+
+http://[host][object_link]
+
+[footer]"
+"_EMAIL_NOTIFY_COURSES_COURSE_SUPERADMIN_TITLE";"Course Directories - New Course Notification"
+"_EMAIL_NOTIFY_COURSES_COURSE_SUPERADMIN_DESCRIPTION";"This is the email that gets sent to the admin when a member has created a new Course."
+"_EMAIL_NOTIFY_COURSES_COURSE_SUPERADMIN_SUBJECT";"[sender_title] has create a new Course."
+"_EMAIL_NOTIFY_COURSES_COURSE_SUPERADMIN_BODY";"[header]
+
+Congratulations, [sender_title] has created a new Course on your website. Click on the link below to visit the Course:
+
+http://[host][object_link]
+
+[footer]"
+"_EMAIL_COURSES_COURSE_ADMINAAPR_TITLE";"Course Approved "
+"_EMAIL_COURSES_COURSE_ADMINAAPR_DESCRIPTION";"This email will be sent to the member when their Course gets approved."
+"_EMAIL_COURSES_COURSE_ADMINAAPR_SUBJECT";"Your Course has been approved."
+"_EMAIL_COURSES_COURSE_ADMINAAPR_BODY";"[header]
+
+Congratulations [recipient_title] Your Course [course_name] has been approved by the admin. Click on the following link to view your Course.
+
+http://[host][object_link]
+
+[footer]"
+"_EMAIL_COURSES_COURSE_ADMINDISAPR_TITLE";"Course Disapproved"
+"_EMAIL_COURSES_COURSE_ADMINDISAPR_DESCRIPTION";"This email will be sent to the member when their Course gets disapproved."
+"_EMAIL_COURSES_COURSE_ADMINDISAPR_SUBJECT";"Your Course has been disapproved"
+"_EMAIL_COURSES_COURSE_ADMINDISAPR_BODY";"[header]
+
+Sorry [recipient_title] Your Course [course_name] has been disapproved by the admin. 
+
+http://[host][object_link]
+
+[footer]"
+"_EMAIL_NOTIFY_COURSES_COURSE_COURSELIKED_TITLE";" Like on Member’s Course."
+"_EMAIL_NOTIFY_COURSES_COURSE_COURSELIKED_DESCRIPTION";"This email will be sent to the member when someone likes their Course."
+"_EMAIL_NOTIFY_COURSES_COURSE_COURSELIKED_SUBJECT";"Someone likes your Course"
+"_EMAIL_NOTIFY_COURSES_COURSE_COURSELIKED_BODY";"[header]
+
+[sender_title]  likes your Course [course_name]  Click on the following link to view your Course:
+
+http://[host][object_link]
+
+[footer]"
+"_EMAIL_NOTIFY_COURSES_COURSE_COURSEFAVOURITES_TITLE";" Favorite on Member’s Course."
+"_EMAIL_NOTIFY_COURSES_COURSE_COURSEFAVOURITES_DESCRIPTION";"This email will be sent to the member when someone favorites their Course."
+"_EMAIL_NOTIFY_COURSES_COURSE_COURSEFAVOURITES_SUBJECT";"Someone favorite your Course."
+"_EMAIL_NOTIFY_COURSES_COURSE_COURSEFAVOURITES_BODY";"[header]
+
+[sender_title] favorite your Course [course_name]  Click on the following link to view your Course:
+
+http://[host][object_link]
+
+[footer]"
+"_EMAIL_NOTIFY_COURSES_LECTURE_CREATE_TITLE";"Lecture created in Course."
+"_EMAIL_NOTIFY_COURSES_LECTURE_CREATE_DESCRIPTION";"This email will be sent to the user when some other user has created a new Lecture in their Course."
+"_EMAIL_NOTIFY_COURSES_LECTURE_CREATE_SUBJECT";"New Lecture created in Course."
+"_EMAIL_NOTIFY_COURSES_LECTURE_CREATE_BODY";"[header]
+
+New Lecture [lecture_title] has been created in Course [course_name] by Instructor [sender_title] Click the following link to view the Course
+
+http://[host][object_link]
+
+[footer]"
+"_EMAIL_COURSES_PAYMENT_DONE_TITLE";"Payment made for Course."
+"_EMAIL_COURSES_PAYMENT_DONE_DESCRIPTION";"This email will be sent to the Instructor when the user made payment for the Course."
+"_EMAIL_COURSES_PAYMENT_DONE_SUBJECT";"Payment for the Course is made."
+"_EMAIL_COURSES_PAYMENT_DONE_BODY";"[header]
+
+Member [sender_title]  has made payment for the Course [course_name] Click the following link to view the Course & Payment details
+
+http://[host][object_link]
+
+[footer]"
+"_EMAIL_COURSES_PAYMENT_DONETOUSER_TITLE";"Payment successful for Course."
+"_EMAIL_COURSES_PAYMENT_DONETOUSER_DESCRIPTION";"This email will be sent to members when payment for their Course is successful."
+"_EMAIL_COURSES_PAYMENT_DONETOUSER_SUBJECT";"Payment successful."
+"_EMAIL_COURSES_PAYMENT_DONETOUSER_BODY";"[header]
+
+Payment for the Course [course_name] is successful.
+
+http://[host][object_link]
+
+[footer]"
+"_EMAIL_COURSES_PAYMENT_REQUEST_TITLE";"Payment request to admin."
+"_EMAIL_COURSES_PAYMENT_REQUEST_DESCRIPTION";"This email will be sent to the Site admin when Payment requested by Instructor."
+"_EMAIL_COURSES_PAYMENT_REQUEST_SUBJECT";"Payment Requested."
+"_EMAIL_COURSES_PAYMENT_REQUEST_BODY";"[header]
+
+Instructor [sender_title] requested payment for Course [course_name]
+
+http://[host][object_link]
+
+[footer]"
+"_EMAIL_COURSES_APPROVE_REQUEST_TITLE";"Payment approved by admin"
+"_EMAIL_COURSES_APPROVE_REQUEST_DESCRIPTION";"This email will be sent to Instructor when Payment requested has been approved by Admin."
+"_EMAIL_COURSES_APPROVE_REQUEST_SUBJECT";"Payment Approved."
+"_EMAIL_COURSES_APPROVE_REQUEST_BODY";"[header]
+
+Admin has approved payment for Course [course_name]
+
+http://[host][object_link]
+
+[footer]"
+"_EMAIL_COURSES_CANCEL_REQUEST_TITLE";"Payment rejected by admin"
+"_EMAIL_COURSES_CANCEL_REQUEST_DESCRIPTION";"This email will be sent to Instructor when Payment requested has been rejected by the Site admin."
+"_EMAIL_COURSES_CANCEL_REQUEST_SUBJECT";"Payment Rejected."
+"_EMAIL_COURSES_CANCEL_REQUEST_BODY";"[header]
+
+Site Admin has been rejected your payment request for course [course_name]
+
+http://[host][object_link]
+
+[footer]"
+"_EMAIL_COURSES_REVIEWPOST_TITLE";"New Review has been Posted on Course."
+"_EMAIL_COURSES_REVIEWPOST_DESCRIPTION";"This email will be sent to the member when some other user gives reviews on their Course."
+"_EMAIL_COURSES_REVIEWPOST_SUBJECT";"New Review on Your Course."
+"_EMAIL_COURSES_REVIEWPOST_BODY";"[header]
+
+[sender_title] posted a new review [review_title] on your Course [course_name] Click on the following link to view that review.
+
+http://[host][object_link]
+
+[footer]"
+"_EMAIL_COURSES_TEST_CREATE_TITLE";"New Test created in Course."
+"_EMAIL_COURSES_TEST_CREATE_DESCRIPTION";"This email is sent to the users when a new Test created in Course."
+"_EMAIL_COURSES_TEST_CREATE_SUBJECT";"Test created in Course."
+"_EMAIL_COURSES_TEST_CREATE_BODY";"[header]
+
+Member [sender_title] created new Test [test_title] in Course [course_name].
+
+http://[host][object_link]
+
+[footer]"
+"_EMAIL_COURSES_TEST_PASS_TITLE";"User passed in the Test."
+"_EMAIL_COURSES_TEST_PASS_DESCRIPTION";"This email is sent to the Instructors when a user is passed in the test."
+"_EMAIL_COURSES_TEST_PASS_SUBJECT";"Test passed."
+"_EMAIL_COURSES_TEST_PASS_BODY";"[header]
+
+Member [sender_title] passed in the Test [test_title] of Course [course_name].
+
+http://[host][object_link]
+
+[footer]"
+"_EMAIL_COURSES_TEST_FAIL_TITLE";"User failed in a Test."
+"_EMAIL_COURSES_TEST_FAIL_DESCRIPTION";"This email is sent to the Instructors when a user is failed in the Test."
+"_EMAIL_COURSES_TEST_FAIL_SUBJECT";"Test failed."
+"_EMAIL_COURSES_TEST_FAIL_BODY";"[header]
+
+Sorry [sender_title] You have failed in the Test [test_title] of Course [course_name].
+
+http://[host][object_link]
+
+[footer]"
+"_EMAIL_ECLASSROOM_WAITINGADMINAPPROVAL_TITLE";"Classroom Created and waiting for approval."
+"_EMAIL_ECLASSROOM_WAITINGADMINAPPROVAL_DESCRIPTION";"his email will be sent to the admin for approving the Classroom when someone creates a Classroom."
+"_EMAIL_ECLASSROOM_WAITINGADMINAPPROVAL_SUBJECT";"New Classroom is waiting for Site Admin Approval."
+"_EMAIL_ECLASSROOM_WAITINGADMINAPPROVAL_BODY";"[header]
+
+Someone has created a Classroom [classroom_name] on your website, please take action to approve or disapprove that Classroom.
+
+http://[host][object_link]
+
+[footer]"
+"_EMAIL_ECLASSROOM_CLASSROOM_WTAPR_TITLE";"Classroom Sent for Approved."
+"_EMAIL_ECLASSROOM_CLASSROOM_WTAPR_DESCRIPTION";"This email will be sent to the members when their Classroom is sent to site admin for approval."
+"_EMAIL_ECLASSROOM_CLASSROOM_WTAPR_SUBJECT";" Your Classroom has been sent for approval."
+"_EMAIL_ECLASSROOM_CLASSROOM_WTAPR_BODY";"[header]
+
+Your Classroom [classroom_name] has been sent to admin for its approval. You will be notified with its status (approved / disapproved) when site admin take any action on it. 
+
+http://[host][object_link]
+
+[footer]"
+"_EMAIL_ECLASSROOM_CLASSROOM_ADMINAAPR_TITLE";"Classroom Approved."
+"_EMAIL_ECLASSROOM_CLASSROOM_ADMINAAPR_DESCRIPTION";"This email will be sent to the members when their Classroom gets approved."
+"_EMAIL_ECLASSROOM_CLASSROOM_ADMINAAPR_SUBJECT";"Your Classroom has been approved."
+"_EMAIL_ECLASSROOM_CLASSROOM_ADMINAAPR_BODY";"[header]
+
+Congratulations [sender_title] Your Classroom [classroom_name] has been approved by the site admin. Click on the following link to view your Classroom:
+
+http://[host][object_link]
+
+[footer]"
+"_EMAIL_ECLASSROOM_CLASSROOM_ADMINDISAPR_TITLE";"Classroom Disapproved."
+"_EMAIL_ECLASSROOM_CLASSROOM_ADMINDISAPR_DESCRIPTION";"This email will be sent to the members when their Classroom gets disapproved."
+"_EMAIL_ECLASSROOM_CLASSROOM_ADMINDISAPR_SUBJECT";"Your Classroom has been disapproved."
+"_EMAIL_ECLASSROOM_CLASSROOM_ADMINDISAPR_BODY";"[header]
+
+Sorry [sender_title] Your Classroom [classroom_name] has been disapproved by the site admin. 
+
+http://[host][object_link]
+
+[footer]"
+"_EMAIL_ECLASSROOM_CLASSROOM_LIKE_TITLE";"Like on Member’s Classroom."
+"_EMAIL_ECLASSROOM_CLASSROOM_LIKE_DESCRIPTION";"This email will be sent to members when someone likes their Classroom."
+"_EMAIL_ECLASSROOM_CLASSROOM_LIKE_SUBJECT";"Someone likes your Classroom.
+"
+"_EMAIL_ECLASSROOM_CLASSROOM_LIKE_BODY";"[header]
+
+[sender_title]  likes your Classroom [classroom_name] Click on the following link to view your Classroom: 
+
+http://[host][object_link]
+
+[footer]"
+"_EMAIL_ECLASSROOM_CLASSROOM_BSFOLLWLIKE_TITLE";"Like on Classroom Member Followed."
+"_EMAIL_ECLASSROOM_CLASSROOM_BSFOLLWLIKE_DESCRIPTION";"This email will be sent to the members when someone liked a Classroom they followed."
+"_EMAIL_ECLASSROOM_CLASSROOM_BSFOLLWLIKE_SUBJECT";"Someone likes a Classroom you followed."
+"_EMAIL_ECLASSROOM_CLASSROOM_BSFOLLWLIKE_BODY";"[header]
+
+[sender_title] likes Classroom [classroom_name] that you followed. Click on the following link to view the Classroom: 
+
+http://[host][object_link]
+
+[footer]"
+"_EMAIL_ECLASSROOM_CLASSROOM_BSJOINLIKE_TITLE";"Like on Classroom Member Joined."
+"_EMAIL_ECLASSROOM_CLASSROOM_BSJOINLIKE_DESCRIPTION";"This email will be sent to the members when someone liked a Classroom they joined."
+"_EMAIL_ECLASSROOM_CLASSROOM_BSJOINLIKE_SUBJECT";"Someone likes a Classroom you Joined."
+"_EMAIL_ECLASSROOM_CLASSROOM_BSJOINLIKE_BODY";"[header]
+
+[sender_title] likes Classroom [classroom_name] that you Joined. Click on the following link to view the Classroom: 
+
+http://[host][object_link]
+
+[footer]"
+"_EMAIL_ECLASSROOM_CLASSROOM_FOLLOW_TITLE";"Follow Member’s Classroom."
+"_EMAIL_ECLASSROOM_CLASSROOM_FOLLOW_DESCRIPTION";"This email will be sent to the members when someone follows their Classroom."
+"_EMAIL_ECLASSROOM_CLASSROOM_FOLLOW_SUBJECT";"Someone follows your classroom."
+"_EMAIL_ECLASSROOM_CLASSROOM_FOLLOW_BODY";"[header]
+
+[sender_title] follows your Classroom  [classroom_name] Click on the following link to view your Classroom: 
+
+http://[host][object_link]
+
+[footer]"
+"_EMAIL_ECLASSROOM_BSREVIEWPOSTFOLLOW_TITLE";"New Review has been Posted on Classroom Member Followed."
+"_EMAIL_ECLASSROOM_BSREVIEWPOSTFOLLOW_DESCRIPTION";"This email will be sent to the members when some other members gives reviews on Classroom they followed."
+"_EMAIL_ECLASSROOM_BSREVIEWPOSTFOLLOW_SUBJECT";"New review on Classroom you followed."
+"_EMAIL_ECLASSROOM_BSREVIEWPOSTFOLLOW_BODY";"[header]
+
+[sender_title] posted a new review  [review_title] on Classroom [classroom_name] you followed. Click on the following link to view that review: 
+
+http://[host][object_link]
+
+[footer]"
+"_EMAIL_ECLASSROOM_REVIEWPOST_TITLE";"New Review has been Posted on Classroom."
+"_EMAIL_ECLASSROOM_BSREQJOIN_DESCRIPTION";"This email will be sent to the members when someone posted review on their Classroom."
+"_EMAIL_ECLASSROOM_BSREQJOIN_SUBJECT";"New Review on Your Classroom."
+"_EMAIL_ECLASSROOM_BSREQJOIN_BODY";"[header]
+
+[sender_title] posted a new review  [review_title] on your Classroom [classroom_name] Click on the following link to view that review:
+
+http://[host][object_link]
+
+[footer]"
+"_EMAIL_ECLASSROOM_BSREQJOIN_TITLE";"When someone post review on my Classroom"
+"_EMAIL_ECLASSROOM_REVIEWPOST_DESCRIPTION";"This email will be sent to the members when someone joined the Classroom they followed"
+"_EMAIL_ECLASSROOM_REVIEWPOST_SUBJECT";"New member joined the Classroom you followed."
+"_EMAIL_ECLASSROOM_REVIEWPOST_BODY";"[header]
+
+[sender_title] joined the Classroom [classroom_name] you followed. Click on the following link to view that member’s profile who joined the Classroom.
+
+http://[host][object_link]
+
+[footer]"
+"_EMAIL_ECLASSROOM_REQJOIN_TITLE";"New Member has joined member’s Classroom."
+"_EMAIL_ECLASSROOM_REQJOIN_DESCRIPTION";"This email will be sent to the members when someone joined their Classroom."
+"_EMAIL_ECLASSROOM_REQJOIN_SUBJECT";"New member joined your Classroom."
+"_EMAIL_ECLASSROOM_REQJOIN_BODY";"[header]
+
+[sender_title]  joined your Classroom  [classroom_name] Click on the following link to view that member’s profile:
+
+http://[host][object_link]
+
+[footer]"
+"_EMAIL_ECLASSROOM_LINK_CLASSROOM_TITLE";"The classroom sends a link request to the member’s Classroom."
+"_EMAIL_ECLASSROOM_LINK_CLASSROOM_DESCRIPTION";"This email will be sent to the members when some other Classrooms send a link request to their Classroom."
+"_EMAIL_ECLASSROOM_LINK_CLASSROOM_SUBJECT";"One Classroom wants to link with your Classroom."
+"_EMAIL_ECLASSROOM_LINK_CLASSROOM_BODY";"[header]
+
+Classroom [classroom_name] sent a Link Request to your Classroom [linkclassroom_name]. Click on the following link to view that member’s profile:
+
+http://[host][object_link]
+
+[footer]"
+"_EMAIL_ECLASSROOM_CLAIM_APPROVE_TITLE";"Claim Approval to Claimer"
+"_EMAIL_ECLASSROOM_CLAIM_APPROVE_DESCRIPTION";"This email will be sent to the claimer when the site admin approves the claim request of the Classroom."
+"_EMAIL_ECLASSROOM_CLAIM_APPROVE_SUBJECT";"Site admin has accepted your claim request for the Classroom."
+"_EMAIL_ECLASSROOM_CLAIM_APPROVE_BODY";"[header]
+
+Site admin has accepted your claim request on Classroom [classroom_name] Click on the following link to view your Classroom.
+
+http://[host][object_link]
+
+[footer]"
+"_EMAIL_ECLASSROOM_CLAIM_DECLINED_TITLE";"Claim Rejection to Claimer"
+"_EMAIL_ECLASSROOM_CLAIM_DECLINED_DESCRIPTION";"This email will be sent to the claimer when the site admin rejects the claim request of the Classroom."
+"_EMAIL_ECLASSROOM_CLAIM_DECLINED_SUBJECT";"Site admin has rejected your claim request for the Classroom."
+"_EMAIL_ECLASSROOM_CLAIM_DECLINED_BODY";"[header]
+
+Site admin has rejected your claim request on Classroom [classroom_name]. Click on the following link to view that member’s profile:
+
+http://[host][object_link]
+
+[footer]"
+"_EMAIL_ECLASSROOM_OWNER_INFORMED_TITLE";"Claim request Notice to Classroom Owner."
+"_EMAIL_ECLASSROOM_OWNER_INFORMED_DESCRIPTION";"This email is sent to the Classroom owners when members claims on their
+ Classroom."
+"_EMAIL_ECLASSROOM_OWNER_INFORMED_SUBJECT";"A member has claimed on your Classroom."
+"_EMAIL_ECLASSROOM_OWNER_INFORMED_BODY";"[header]
+
+[sender_title] has claimed on your Classroom [classroom_name]. Click on the following link to view the profile of the claimer:
+
+http://[host][object_link]
+
+[footer]"
+"_EMAIL_ECLASSROOM_CLASSROOM_OWNER_CLAIM_TITLE";"Claim Approval to Classroom Owner."
+"_EMAIL_ECLASSROOM_CLASSROOM_OWNER_CLAIM_DESCRIPTION";"This email will be sent to the owner of the Classroom when the site admin approves the claim request on their Classroom."
+"_EMAIL_ECLASSROOM_CLASSROOM_OWNER_CLAIM_SUBJECT";"Site admin has accepted the claim request on your Classroom."
+"_EMAIL_ECLASSROOM_CLASSROOM_OWNER_CLAIM_BODY";"[header]
+
+Site admin has accepted the claim request on your Classroom [classroom_name] made by the CLAIMER_NAME. Click on the following link to view the profile of the claimer.
+
+http://[host][object_link]
+
+[footer]"
+"_EMAIL_ECLASSROOM_SITE_OWNER_FOR_CLAIM_TITLE";"Member claims on a Classroom."
+"_EMAIL_ECLASSROOM_SITE_OWNER_FOR_CLAIM_DESCRIPTION";"This email will be sent to the site admin when one member claims on the Classroom created by some other Member."
+"_EMAIL_ECLASSROOM_SITE_OWNER_FOR_CLAIM_SUBJECT";"Member is claiming in a Classroom."
+"_EMAIL_ECLASSROOM_SITE_OWNER_FOR_CLAIM_BODY";"[header]
+
+[sender_title] claimed on Classroom [classroom_name]. created by [owner_name] Click on the following link to see the claim and to take appropriate action.
+
+http://[host][object_link]
+
+[footer]"
+
+# notify_eclassroom_classroom_albumcreatefollowed
+"_EMAIL_NOTIFY_CLASSROOMS_ALBUMCREATEFOLLOWED_TITLE";"New Photo Album Created in Classroom member Followed"
+"_EMAIL_NOTIFY_CLASSROOMS_ALBUMCREATEFOLLOWED_DESCRIPTION";"This email is sent to the member when a new Photo Album is created in a Classroom they Followed."
+"_EMAIL_NOTIFY_CLASSROOMS_ALBUMCREATEFOLLOWED_SUBJECT";"A new photo album is created in a Classroom [classroom_title]"
+"_EMAIL_NOTIFY_CLASSROOMS_ALBUMCREATEFOLLOWED_BODY";"[header]
+
+A new photo album [album_title] is created a Classroom [classroom_title] you Followed. Click on the following link to view your Classroom:
+
+http://[host][object_link]
+
+[footer]"
+
+"ITEM_TYPE_COURSES";"Courses"
+"ITEM_TYPE_COURSES_ALBUM";"Course Album"
+"SNS - Courses - Learning Management System";"Learning Management System"
+
+"You have already added this course in your cart.";"You have already added this course in your cart."
+"You have successfully added course to cart.";"You have successfully added course to cart."
