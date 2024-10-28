@@ -10,18 +10,18 @@
 }
 .profile_cover_wrapper{
   position:relative;
-  border-radius:10px;
+  border-radius:var(--theme-widget-radius);
 }
 .profile_cover_photo_wrapper{
   position:relative;
   height:300px;
 }
 .profile_cover_photo{
+  border-radius:var(--theme-widget-radius);
   overflow:hidden;
   position:relative;
   height:100%;
   width:100%;
-  border-radius:10px;
 }
 .profile_cover_photo:after{
   content:"";
@@ -42,9 +42,8 @@
   position:relative;
 }
 .profile_cover_photo_empty{
-  border:none;
+  border-radius:var(--theme-widget-radius);
   height:100%;
-  border-radius:10px;
 }
 .cover_photo_overlay{
   display:table;
@@ -88,7 +87,7 @@
 /* Photo */
 .layout_page_event_profile_index .layout_top .layout_middle,
 .layout_page_group_profile_index .layout_top .layout_middle,
-#global_page_user-profile-index .layout_top > .layout_middle {
+#global_page_user-profile-index .layout_top > .layout_middle{
   overflow: visible;
 }
 .profile_cover_head_inner{
@@ -146,7 +145,7 @@
 .cover_photo_profile_information h2{
   font-size:24px;
   text-transform:capitalize;
-  font-weight:bold;
+  font-weight:var(--theme-font-weight-bold);
   letter-spacing:normal;
   margin-bottom:5px;
 }
@@ -226,44 +225,14 @@
 [dir="rtl"] .coverphoto_navigation .dropdown-menu > li > a{
   text-align:right;
 }
-.coverphoto_navigation .dropdown-menu > li + li  > a{
+.coverphoto_navigation .dropdown-menu > li + li > a{
   border-top-width:1px;
 }
+.coverphoto_navigation .dropdown-menu > li > a:before{
+  font-weight:700 !important;
+}
 /*Cover Information Ends Here*/
-/*Follow Button*/
-.coverphoto_follow_inner{
-  width:100%;
-  display:block;
-  margin-top:8px;
-}
-.coverphoto_follow_btns {
-  max-width:250px;
-  display:flex;
-  align-items:center;
-  flex-wrap:wrap;
-  border-width:1px;
-  padding:12px;
-  border-radius:5px;
-}
-.coverphoto_follow_btns li + li{
-  margin-right:10px;
-}
-[dir="rtl"] .coverphoto_follow_btns li + li{
-  margin-right:0px;
-  margin-left:10px;
-}
-.coverphoto_follow_btns .coverphoto_follow_text{
-  width:100%;
-  display:block;
-  margin-bottom:10px;
-}
-.coverphoto_follow_btns > li > a{
-  border-width:1px;
-  padding:5px 12px;
-  border-radius:5px;
-  font-size:0.95em;
-  display:inline-block;
-}
+
 /* Photo edit icon and options pulldown UI for Profile and Cover photo */
 .profile_cover_options .edit-button{
   position:absolute;
@@ -347,10 +316,10 @@ ul.profile_options_pulldown .profile_cover_icon_photo_upload:before{
 ul.profile_options_pulldown .profile_cover_icon_photo_view:before{
   content:"\f302"
 }
-ul.profile_options_pulldown .profile_cover_icon_photo_delete:before {
+ul.profile_options_pulldown .profile_cover_icon_photo_delete:before{
   content:"\f056"
 }
-ul.profile_options_pulldown .profile_cover_icon_move:before {
+ul.profile_options_pulldown .profile_cover_icon_move:before{
   content:"\f0b2"
 }
 [dir="rtl"] ul.profile_options_pulldown > li > a:before{
@@ -461,7 +430,7 @@ ul.profile_options_pulldown .profile_cover_icon_move:before {
   z-index:1;
 }
 /*Shimmer Effect*/
-.shimmer_profile_cover_wrapper {
+.shimmer_profile_cover_wrapper{
   position:relative;
   border-radius:10px;
 }
@@ -498,7 +467,7 @@ ul.profile_options_pulldown .profile_cover_icon_move:before {
   margin-top:78px;
   margin-bottom:auto;
 }
-.shimmer_cover_photo_profile_status {
+.shimmer_cover_photo_profile_status{
   flex:1;
 }
 .shimmer_cover_photo_profile_status > h2{
@@ -565,12 +534,12 @@ ul.profile_options_pulldown .profile_cover_icon_move:before {
     background-position:1200px 0;
   }
 }
-@media(max-width:1199px) {
+@media(max-width:1199px){
   .profile_cover_photo img{
     top:auto !important;
   }
 }
-@media(max-width:991px) {
+@media(max-width:991px){
   .profile_cover_head_inner,
   .shimmer_profile_cover_head_inner{
     flex-direction:column;
@@ -600,7 +569,7 @@ ul.profile_options_pulldown .profile_cover_icon_move:before {
   .coverphoto_navigation_list{
     margin:5px 0 8px;
   }
-  .shimmer_cover_photo_profile_status > h2 {
+  .shimmer_cover_photo_profile_status > h2{
     margin-left: auto;
     margin-right: auto;
   }
@@ -610,7 +579,7 @@ ul.profile_options_pulldown .profile_cover_icon_move:before {
     margin-top: 8px;
     display:block;
   }
-  .shimmer_coverphoto_navigation {
+  .shimmer_coverphoto_navigation{
     text-align: center !important;
     margin: 0 auto;
     display: block;
@@ -620,7 +589,7 @@ ul.profile_options_pulldown .profile_cover_icon_move:before {
     margin:0 auto;
     display: block;
   }
-  .coverphoto_follow_btns {
+  .coverphoto_follow_btns{
     max-width: 300px;
     justify-content: center;
     margin:auto;
@@ -671,7 +640,7 @@ ul.profile_options_pulldown .profile_cover_icon_move:before {
   }
 }
 @media(max-width:600px){
-  .profile_cover_head_inner {
+  .profile_cover_head_inner{
     padding:0 10px 15px;
   }
   .profile_cover_wrapper .cover_photo_profile_information{
@@ -694,7 +663,7 @@ ul.profile_options_pulldown .profile_cover_icon_move:before {
     right:8px;
     left:auto;
   }
-  [dir="rtl"] .profile_main_photo ul.profile_options_pulldown::before {
+  [dir="rtl"] .profile_main_photo ul.profile_options_pulldown::before{
     right:auto;
     left:8px;
   }

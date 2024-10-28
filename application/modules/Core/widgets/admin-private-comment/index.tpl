@@ -45,7 +45,7 @@
                 </div>
               </div>
             </td>
-            <td><?php echo $this->string()->truncate($item->body, 20); ?> <b class="_message"> <?php echo $this->translate("in %s", ucfirst($resource->getShortType())); ?>  </b>  </td> 
+            <td><?php echo $this->partial('_activitycommentcontent.tpl', 'comment', array('comment' => $item)); ?><?php //echo $this->string()->truncate($item->body, 20); ?> <b class="_message"> <?php echo $this->translate("in %s", ucfirst($resource->getShortType())); ?>  </b>  </td> 
           </tr>
         <?php } ?>
       </tbody>
@@ -92,7 +92,7 @@
                 </div>
               </div>
             </td>
-            <td><?php echo $this->string()->truncate($item->body, 20); ?> </td> 
+            <td><?php echo $this->partial('_activitycommentcontent.tpl', 'comment', array('comment' => $item)); ?><?php //echo $this->string()->truncate($item->body, 20); ?> </td> 
           </tr>
         <?php } ?>
       </tbody>

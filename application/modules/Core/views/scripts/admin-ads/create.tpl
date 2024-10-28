@@ -13,18 +13,32 @@
 ?>
 <?php echo $this->partial('_admin_breadcrumb.tpl', 'core', array('parentMenu' => "core_admin_main_monetization", 'parentMenuItemName' => 'core_admin_main_ads', 'childMenuItemName' => 'core_admin_main_ads_create')); ?>
 
+<?php
+  $start = time();
+  $end = time();
+  $oldTz = date_default_timezone_get();
+  date_default_timezone_set($this->viewer()->timezone);
+  $start_date = date('m/d/Y',$start);
+  $end_date = date('m/d/Y',strtotime('+1 Days' ,$end));
+  date_default_timezone_set($oldTz);
+?>
 <script type="text/javascript">
-var myCalStart = false;
-var myCalEnd = false;
-
 en4.core.runonce.add(function(){
   scriptJquery(`<button type="button" class="event_calendar"></button>`).insertBefore(scriptJquery('#start_time-date').attr("type","text").attr("autocomplete","off").datepicker({
-    })
-  );
+    minDate: '<?php echo $start_date;  ?>',
+    changeMonth: true,
+    changeYear: true,
+    yearRange: "+0:+100",
+  }).on('change', function(ev){
+      sesselectedDate = scriptJquery('#starttime-date').val();
+      scriptJquery('#end_time-date').datepicker('option', 'minDate', scriptJquery('#start_time-date').val());  
+  }));
   
   scriptJquery(`<button type="button" class="event_calendar"></button>`).insertBefore(scriptJquery('#end_time-date').attr("type","text").attr("autocomplete","off").datepicker({
-    })
-  );
+    changeMonth: true,
+    changeYear: true,
+    yearRange: "+0:+100",
+  }));
 });
 
 

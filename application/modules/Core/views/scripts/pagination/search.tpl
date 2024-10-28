@@ -70,13 +70,13 @@
             'QUERY' => $query . ( $this->pageAsQuery ? '&page=' . $this->next : '' ),
           )), $this->translate('Next &#187;')) ?>
         </li>
-        <li>
-          <?php echo $this->htmlLink(array_merge($params, array(
-            'reset' => false,
-            'page' => ( $this->pageAsQuery ? null : $this->last ),
-            'QUERY' => $query . ( $this->pageAsQuery ? '&page=' . $this->last : '' ),
-          )), $this->translate('Last &#187;')) ?>
-        </li>
+        <!-- <li>
+          <?php // echo $this->htmlLink(array_merge($params, array(
+          //   'reset' => false,
+          //   'page' => ( $this->pageAsQuery ? null : $this->last ),
+          //   'QUERY' => $query . ( $this->pageAsQuery ? '&page=' . $this->last : '' ),
+          // )), $this->translate('Last &#187;')) ?>
+        </li> -->
       <?php endif; ?>
     </ul>
   </div>

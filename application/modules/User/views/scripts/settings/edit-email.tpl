@@ -12,7 +12,7 @@
 ?>
 <?php echo $this->form->render($this); ?>
 <script type="text/javascript">
-  scriptJquery(document).ready(function() {
+  en4.core.runonce.add(function() {
     <?php if(empty($this->emailErrors) && isset($_POST['submit_code']) && !empty($_POST['email'])) { ?>
       scriptJquery('#code-wrapper').show();
       scriptJquery('#code-label').children('label').removeClass('optional').addClass('requried');

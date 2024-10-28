@@ -13,7 +13,7 @@
 
 <div class="global_form_popup admin_member_stats">
   <h3><?php echo $this->translate('Comment') ?></h3>
-  <p><?php echo Engine_Text_Emoji::decode($this->comment->body); ?></p>
+  <p><?php echo $this->partial('_activitycommentcontent.tpl', 'comment', array('comment' => $this->comment)); ?><?php //echo Engine_Text_Emoji::decode($this->comment->body); ?></p>
   <br/>
   <button type="submit" onclick="parent.Smoothbox.close();return false;" name="close_button" value="Close"><?php echo $this->translate("Close"); ?></button>
 </div>

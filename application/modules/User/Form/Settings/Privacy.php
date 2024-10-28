@@ -45,6 +45,7 @@ class User_Form_Settings_Privacy extends Engine_Form
 
     $this->setTitle('Privacy Settings')
       ->setAction(Zend_Controller_Front::getInstance()->getRouter()->assemble(array()))
+      ->setAttrib('class', 'global_form form_submit_ajax')
       ;
 
     // Init blocklist

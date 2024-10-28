@@ -12,7 +12,7 @@
 ?>
 
 <?php if( engine_count($this->paginator) ): ?>
-  <ul class="generic_list_widget recent_messages">
+  <ul class="sidebar_list recent_messages">
     <?php foreach( $this->paginator as $conversation ):
       $message = $conversation->getInboxMessage($this->viewer());
       $recipient = $conversation->getRecipientInfo($this->viewer());
@@ -40,13 +40,13 @@
             $this->locale()->toNumber($conversation->recipients));
       }
       ?>
-      <li<?php if( !$recipient->inbox_read ): ?> class="new"<?php endif; ?>>
-        <div class="photo">
+      <li class="sidebar_list_item <?php if( !$recipient->inbox_read ): ?> new<?php endif; ?>">
+        <div class="sidebar_list_item_thumb">
           <span class="bg_item_photo bg_thumb_icon bg_item_photo_message bg_item_nophoto"></span>
         </div>
-        <div class="info">
-          <?php echo $this->translate('From %s %s', $author, $this->timestamp($message->date)) ?>
-          <p class="subject">
+        <div class="sidebar_list_item_info">
+          <div class="sidebar_list_item_owner"><?php echo $this->translate('From %s %s', $author, $this->timestamp($message->date)) ?></div>
+          <div class="sidebar_list_item_owner">
           <?php
             ( '' != ($title = trim($message->getTitle())) ||
               '' != ($title = trim($conversation->getTitle())) ||
@@ -54,7 +54,7 @@
             $title = $this->string()->truncate($this->string()->stripTags($title));
           ?>
           <span>Subject:</span><?php echo $this->htmlLink($conversation->getHref(), $title) ?>
-        </p>
+        </div>
         <p class="body">
           <span>Message:</span><?php echo $this->string()->truncate($this->string()->stripTags(str_replace('&nbsp;', ' ', html_entity_decode($message->body)))) ?>
         </p>

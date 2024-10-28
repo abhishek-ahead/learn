@@ -45,7 +45,7 @@
 </ul>
 <script  type="text/javascript">
 // Header Spacing
-scriptJquery(document).ready(function(){
+en4.core.runonce.add(function() {
   var height = scriptJquery(".global_header_top").height();
   if(document.getElementById("global_header")) {
     scriptJquery(".global_header_left").css("top", height+"px");

@@ -288,17 +288,23 @@ class User_SettingsController extends Core_Controller_Action_User
 
         // Check if valid
         if( !$form->isValid($this->getRequest()->getPost()) ) {
-            $this->view->status = false;
-            $this->view->error = Zend_Registry::get('Zend_Translate')->_('Invalid data');
-            return;
+          $validateFields = Engine_Api::_()->core()->validateFormFields($form);
+          if(is_countable($validateFields) && engine_count($validateFields)){
+            echo json_encode(array('status' => false, 'error_message' => $validateFields));die;
+          }
         }
         
         if(empty($_SESSION['isValidCode']) && !empty($phone_number) && $phone_number != $_POST['phone_number']) {
           $phoneNumberEl = $form->getElement('phone_number');
-          return $phoneNumberEl->addError('Please verify your phone number.');
+          //return $phoneNumberEl->addError('Please verify your phone number.');
+          $errors[] = array('errorMessage' => Zend_Registry::get('Zend_Translate')->_('Please verify your phone number.'));
+          echo json_encode(array('status' => false, 'error_message' => $errors));die;
         } else if(empty($_SESSION['isValidCode']) && !empty($_POST['phone_number']) && $phone_number != $_POST['phone_number']){
           $phoneNumberEl = $form->getElement('phone_number');
-          return $phoneNumberEl->addError('Please verify your phone number.');
+          $errors[] = array('errorMessage' => Zend_Registry::get('Zend_Translate')->_('Please verify your phone number.'));
+          echo json_encode(array('status' => false, 'error_message' => $errors));die;
+          
+          //return $phoneNumberEl->addError('Please verify your phone number.');
         }
         
         // -- Process --
@@ -311,7 +317,9 @@ class User_SettingsController extends Core_Controller_Action_User
             $values['email'] != $user->email ) {
             $bannedEmailsTable = Engine_Api::_()->getDbtable('BannedEmails', 'core');
             if( $bannedEmailsTable->isEmailBanned($values['email']) ) {
-                return $emailEl->addError('This email address is not available, please use another one.');
+              $errors[] = array('errorMessage' => Zend_Registry::get('Zend_Translate')->_('This email address is not available, please use another one.'));
+              echo json_encode(array('status' => false, 'error_message' => $errors));die;
+              //return $emailEl->addError('This email address is not available, please use another one.');
             }
         }
 
@@ -319,7 +327,10 @@ class User_SettingsController extends Core_Controller_Action_User
           $isPhoneNumberExist = Engine_Api::_()->getDbtable('users', 'user')->isPhoneNumberExist($values['phone_number'], $values['country_code']);
           if(!empty($isPhoneNumberExist) && $values['phone_number'] == $user->phone_number && !empty($_SESSION['isValidCode'])) {
             $phoneNumberEl = $form->getElement('phone_number');
-            return $phoneNumberEl->addError('This phone number is already exists. Please use another one.');
+            $errors[] = array('errorMessage' => Zend_Registry::get('Zend_Translate')->_('This phone number is already exists. Please use another one.'));
+            echo json_encode(array('status' => false, 'error_message' => $errors));die;
+              
+            //return $phoneNumberEl->addError('This phone number is already exists. Please use another one.');
           }
         }
 
@@ -329,7 +340,9 @@ class User_SettingsController extends Core_Controller_Action_User
             $values['username'] != $user->username ) {
             $bannedUsernamesTable = Engine_Api::_()->getDbtable('BannedUsernames', 'core');
             if( $bannedUsernamesTable->isUsernameBanned($values['username']) ) {
-                return $usernameEl->addError('This username is not available, please use another one.');
+              $errors[] = array('errorMessage' => Zend_Registry::get('Zend_Translate')->_('This username is not available, please use another one.'));
+              echo json_encode(array('status' => false, 'error_message' => $errors));die;
+              //return $usernameEl->addError('This username is not available, please use another one.');
             }
         }
 
@@ -404,6 +417,7 @@ class User_SettingsController extends Core_Controller_Action_User
         $this->view->status = true;
         $this->view->message = Zend_Registry::get('Zend_Translate')->_('Settings saved.');
         $form->addNotice(Zend_Registry::get('Zend_Translate')->_('Settings were successfully saved.'));
+        echo json_encode(array('status' => true, 'redirectURL' => '', 'success_message' => Zend_Registry::get('Zend_Translate')->_('Settings were successfully saved.')));die;
     }
 
     public function privacyAction()
@@ -455,9 +469,10 @@ class User_SettingsController extends Core_Controller_Action_User
         }
 
         if( !$form->isValid($this->getRequest()->getPost()) ) {
-            $this->view->status = false;
-            $this->view->error = Zend_Registry::get('Zend_Translate')->_('Invalid data');
-            return;
+          $validateFields = Engine_Api::_()->core()->validateFormFields($form);
+          if(is_countable($validateFields) && engine_count($validateFields)){
+            echo json_encode(array('status' => false, 'error_message' => $validateFields));die;
+          }
         }
 
         $form->save();
@@ -467,10 +482,13 @@ class User_SettingsController extends Core_Controller_Action_User
             ->save();
 
         $form->addNotice(Zend_Registry::get('Zend_Translate')->_('Your changes have been saved.'));
+        echo json_encode(array('status' => true, 'redirectURL' => '', 'success_message' => Zend_Registry::get('Zend_Translate')->_('Your changes have been saved.')));die;
     }
+    
     public function requirePasswordAction(){
         return $this->_forward('password', null, null, array('format' => 'html','require_password'=>1));
     }
+    
     public function passwordAction()
     {
         $user = Engine_Api::_()->core()->getSubject();
@@ -480,12 +498,18 @@ class User_SettingsController extends Core_Controller_Action_User
             return;
         }
         if( !$form->isValid($this->getRequest()->getPost()) ) {
-            return;
+          $validateFields = Engine_Api::_()->core()->validateFormFields($form);
+          if(is_countable($validateFields) && engine_count($validateFields)){
+            echo json_encode(array('status' => false, 'error_message' => $validateFields));die;
+          }
         }
         // Check conf
         if( $form->getValue('passwordConfirm') !== $form->getValue('password') ) {
-            $form->getElement('passwordConfirm')->addError(Zend_Registry::get('Zend_Translate')->_('Passwords did not match'));
-            return;
+            $errors[] = array('errorMessage' => Zend_Registry::get('Zend_Translate')->_('Passwords did not match'));
+            echo json_encode(array('status' => false, 'error_message' => $errors));die;
+                
+            //$form->getElement('passwordConfirm')->addError(Zend_Registry::get('Zend_Translate')->_('Passwords did not match'));
+            //return;
         }
         // Process form
         $userTable = Engine_Api::_()->getItemTable('user');
@@ -526,11 +550,17 @@ class User_SettingsController extends Core_Controller_Action_User
             ;
         }
         if($matchOldPassword){
-            $form->getElement('password')->addError(Zend_Registry::get('Zend_Translate')->_('It seems that you have used an old password. Choose a new password, to protect your account.'));
-            return;
+            $errors[] = array('errorMessage' => Zend_Registry::get('Zend_Translate')->_('It seems that you have used an old password. Choose a new password, to protect your account.'));
+            echo json_encode(array('status' => false, 'error_message' => $errors));die;
+            
+            //$form->getElement('password')->addError(Zend_Registry::get('Zend_Translate')->_('It seems that you have used an old password. Choose a new password, to protect your account.'));
+            //return;
         }else if( !$valid ) {
-            $form->getElement('oldPassword')->addError(Zend_Registry::get('Zend_Translate')->_('Old password did not match'));
-            return;
+            $errors[] = array('errorMessage' => Zend_Registry::get('Zend_Translate')->_('Old password did not match'));
+            echo json_encode(array('status' => false, 'error_message' => $errors));die;
+            
+            //$form->getElement('oldPassword')->addError(Zend_Registry::get('Zend_Translate')->_('Old password did not match'));
+            //return;
         }
         // Save
         $db->beginTransaction();
@@ -547,11 +577,16 @@ class User_SettingsController extends Core_Controller_Action_User
             $db->commit();
         } catch( Exception $e ) {
             $db->rollBack();
-            throw $e;
+            //throw $e;
+            $errors[] = array('errorMessage' => $e->getMessage());
+            echo json_encode(array('status' => false, 'error_message' => $errors));die;
         }
+        
         if(!empty($_SESSION['requirepassword']))
             $this->_helper->redirector->gotoRoute(array());
         $form->addNotice(Zend_Registry::get('Zend_Translate')->_('Settings were successfully saved.'));
+        
+        echo json_encode(array('status' => true, 'redirectURL' => '', 'success_message' => Zend_Registry::get('Zend_Translate')->_('Settings were successfully saved.')));die;
     }
 
     public function networkAction()
@@ -684,6 +719,7 @@ class User_SettingsController extends Core_Controller_Action_User
             'title' => 'Notification Settings',
             'description' => 'Which of the these do you want to receive notification alerts about?',
         ));
+        $form->setAttrib('class', 'global_form form_submit_ajax');
 
         foreach( $notificationTypesAssoc as $elementName => $info ) {
             $form->addElement('MultiCheckbox', $elementName, array(
@@ -704,7 +740,10 @@ class User_SettingsController extends Core_Controller_Action_User
         }
 
         if( !$form->isValid($this->getRequest()->getPost()) ) {
-            return;
+          $validateFields = Engine_Api::_()->core()->validateFormFields($form);
+          if(is_countable($validateFields) && engine_count($validateFields)){
+            echo json_encode(array('status' => false, 'error_message' => $validateFields));die;
+          }
         }
 
         // Process
@@ -725,6 +764,7 @@ class User_SettingsController extends Core_Controller_Action_User
             ->setEnabledNotifications($user, $values);
 
         $form->addNotice('Your changes have been saved.');
+        echo json_encode(array('status' => true, 'redirectURL' => '', 'success_message' => Zend_Registry::get('Zend_Translate')->_('Your changes have been saved.')));die;
     }
 
 
@@ -782,6 +822,7 @@ class User_SettingsController extends Core_Controller_Action_User
             'title' => 'Email Settings',
             'description' => 'Which of the these do you want to receive email alerts about?',
         ));
+        $form->setAttrib('class', 'global_form form_submit_ajax');
 
         // Disable all Email
         $form->addElement('Checkbox', 'disable_email', array(
@@ -814,7 +855,10 @@ class User_SettingsController extends Core_Controller_Action_User
         }
 
         if( !$form->isValid($this->getRequest()->getPost()) ) {
-            return;
+          $validateFields = Engine_Api::_()->core()->validateFormFields($form);
+          if(is_countable($validateFields) && engine_count($validateFields)){
+            echo json_encode(array('status' => false, 'error_message' => $validateFields));die;
+          }
         }
 
         // Process
@@ -851,6 +895,7 @@ class User_SettingsController extends Core_Controller_Action_User
             }
         }
         $form->addNotice('Your changes have been saved.');
+        echo json_encode(array('status' => true, 'redirectURL' => '', 'success_message' => Zend_Registry::get('Zend_Translate')->_('Your changes have been saved.')));die;
     }
 
     public function deleteAction()

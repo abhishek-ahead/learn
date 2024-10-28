@@ -25,16 +25,13 @@ class User_Widget_ListSignupsController extends Engine_Content_Widget_Abstract
       ->where('search = ?', 1)
       ->where('enabled = ?', 1)
       ->order('creation_date DESC')
+      ->limit($this->_getParam('itemCountPerPage', 4))
       ;
 
-    $this->view->paginator = $paginator = Zend_Paginator::factory($select);
-
-    // Set item count per page and current page number
-    $paginator->setItemCountPerPage($this->_getParam('itemCountPerPage', 4));
-    $paginator->setCurrentPageNumber($this->_getParam('page', 1));
+    $this->view->paginator = $paginator = $table->fetchAll($select);
 
     // Do not render if nothing to show
-    if( $paginator->getTotalItemCount() <= 0 ) {
+    if( engine_count($paginator) <= 0 ) {
       return $this->setNoRender();
     }
   }
@@ -43,7 +40,7 @@ class User_Widget_ListSignupsController extends Engine_Content_Widget_Abstract
   {
     $viewer = Engine_Api::_()->user()->getViewer();
     $translate = Zend_Registry::get('Zend_Translate');
-	$locale = Zend_Registry::get('Locale');
+    $locale = Zend_Registry::get('Locale');
     return $viewer->getIdentity() . $translate->getLocale() . $locale->toString();
   }
 

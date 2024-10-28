@@ -17,7 +17,7 @@
     var name = '<?php echo urlencode(base64_encode($this->errorName)) ?>';
     var loc = '<?php echo urlencode(base64_encode('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'])) ?>';
     var time = '<?php echo urlencode(base64_encode(time())) ?>';
-    window.location.href = url + '?name=' + name + '&loc=' + loc + '&time=' + time;
+    loadAjaxContentApp(url + '?name=' + name + '&loc=' + loc + '&time=' + time);
   }
 </script>
 

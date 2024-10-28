@@ -18,6 +18,32 @@
  */
 class Payment_Plugin_Core extends Core_Model_Abstract
 {
+  public function onRenderLayoutDefault($event) {
+  
+    if( defined('_ENGINE_ADMIN_NEUTER') && _ENGINE_ADMIN_NEUTER ) return;
+    
+    $view = Zend_Registry::isRegistered('Zend_View') ? Zend_Registry::get('Zend_View') : null;
+    $user = Engine_Api::_()->user()->getViewer();
+    $request = Zend_Controller_Front::getInstance()->getRequest();
+    $moduleName = $request->getModuleName();
+    $actionName = $request->getActionName();
+    $controllerName = $request->getControllerName();
+
+    //echo $moduleName . $controllerName . $actionName;die;
+
+    $subscriptionsTable = Engine_Api::_()->getDbtable('subscriptions', 'payment');
+    if ($user->getIdentity() && !$subscriptionsTable->check($user) && ($moduleName != 'payment' && $controllerName != 'subscription' && ($actionName != 'chooose' && $actionName != 'process')) && ($moduleName != 'core' && $controllerName != 'help') && ($controllerName != 'wallet')) {
+      $redirector = Zend_Controller_Action_HelperBroker::getStaticHelper('redirector');
+      
+      //if(empty($_SERVER['HTTP_REFERER'])) {
+        $redirector->gotoRoute(array('module' => 'user', 'controller' => 'wallet', 'action' => 'gateway'), 'default', false);
+      // } else {
+      //   $url = $view->url(array('module' => 'payment', 'controller' => 'subscription', 'action' => 'index'), 'default', false);
+      //   echo json_encode(array('status' => true, 'redirectFullURL' => $url, ''));die; 
+      // }
+    }
+  }
+  
   public function onUserCreateBefore($event)
   {
     $payload = $event->getPayload();
@@ -28,31 +54,10 @@ class Payment_Plugin_Core extends Core_Model_Abstract
 
     // Check if the user should be enabled?
     $subscriptionsTable = Engine_Api::_()->getDbtable('subscriptions', 'payment');
-    if( !$subscriptionsTable->check($payload) ) {
-      $payload->enabled = false;
-      // We don't want to save here
-    }
-  }
-
-  public function onUserUpdateBefore($event)
-  {
-    // $payload = $event->getPayload();
-
-    // if( !($payload instanceof User_Model_User) ) {
-      // return;
-    // }
-
-    //Actually, let's ignore if they've logged in before
-    // if( !empty($payload->lastlogin_date) ) {
-      // return;
-    // }
-
-    //Check if the user should be enabled?
-    // $subscriptionsTable = Engine_Api::_()->getDbtable('subscriptions', 'payment');
-    // if( !$subscriptionsTable->check($payload) ) {
-      // $payload->enabled = false;
-      //We don't want to save here
-    // }
+//     if( !$subscriptionsTable->check($payload) ) {
+//       $payload->enabled = false;
+//       // We don't want to save here
+//     }
   }
 
   public function onAuthorizationLevelDeleteBefore($event)

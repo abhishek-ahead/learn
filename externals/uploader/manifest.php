@@ -2,7 +2,7 @@
   'package' => array(
     'type' => 'external',
     'name' => 'uploader',
-    'version' => '6.7.0',
+    'version' => '7.0.0',
     'revision' => '$Revision: 9747 $',
     'path' => 'externals/uploader',
     'repository' => 'socialengine.com',

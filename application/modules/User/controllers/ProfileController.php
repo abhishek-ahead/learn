@@ -99,5 +99,13 @@ class User_ProfileController extends Core_Controller_Action_Standard
         ->setEnabled()
         ;
   }
-  
+
+  public function statusAction() {
+    $status = $this->_getParam('status');
+    $subject = Engine_Api::_()->core()->getSubject();
+    $subject->status = $status;
+    $subject->status_date = date('Y-m-d H:i:s');
+    $subject->save();
+    exit();
+  }
 }

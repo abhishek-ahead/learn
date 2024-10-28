@@ -11,8 +11,10 @@
  */
 ?>
 <div class="payment_transaction_details_popup">
-  <h3 class="payment_transaction_detail_headline"><?php echo $this->translate("Transaction Details") ?></h3>
-
+  <div class="payment_transaction_detail_headline d-flex justify-content-between align-items-center">
+    <h3><?php echo $this->translate("Transaction Details") ?></h3>
+    <a href="javascript:void(0);" onclick="parent.Smoothbox.close();" class="btn-icon btn-alt btn-icon rounded-circle center_item"><i class="icon_cross"></i></a>
+  </div>
   <table>
     <tr>  
       <td><?php echo $this->translate('Transaction ID') ?></td>
@@ -23,6 +25,8 @@
       <td>
         <?php if( $this->gateway ): ?>
           <?php echo $this->translate($this->gateway->title) ?>
+        <?php elseif( $this->transaction->gateway_id == 3000 ): ?>
+          <?php echo $this->translate("Wallet"); ?>
         <?php else: ?>
           <i><?php echo $this->translate('Unknown Gateway') ?></i>
         <?php endif; ?>
@@ -82,5 +86,4 @@
       </td>
     </tr>
   </table>
-  <button onclick="parent.Smoothbox.close();"><?php echo $this->translate("Close") ?></button>
 </div>

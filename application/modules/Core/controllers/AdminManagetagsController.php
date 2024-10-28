@@ -60,10 +60,10 @@ class Core_AdminManagetagsController extends Core_Controller_Action_Admin {
     }
 
     if (!empty($values['text']))
-      $select->where($tableTagName . ".text LIKE ?", '%' . $values['text'] . '%');
+      $select->where($tableTagName . ".text LIKE ?", $values['text'] . '%');
       
     if(!empty($values['resource_type']))
-      $select->where($tagmapName . ".resource_type LIKE ?", '%' . $values['resource_type'] . '%');
+      $select->where($tagmapName . ".resource_type LIKE ?", $values['resource_type'] . '%');
       
     if( !empty($_GET['tag_id']) ) {
       $select->where($tableTagName.'.tag_id = ?', (int) $_GET['tag_id']);

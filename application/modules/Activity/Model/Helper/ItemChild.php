@@ -18,8 +18,8 @@
  */
 class Activity_Model_Helper_ItemChild extends Activity_Model_Helper_Item
 {
-  public function direct($item, $type = null, $child_id = null)
-  {
+  public function direct($item, $type = null, $child_id = null,$separator = "")
+  { 
     $item = $this->_getItem($item, false);   
     
     // Check to make sure we have an item

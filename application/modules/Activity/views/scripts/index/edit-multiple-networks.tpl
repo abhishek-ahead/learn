@@ -16,7 +16,7 @@
   var globalActivityId = 'privacy_'+action_id;
   en4.core.runonce.add(function() {
     checkAll();
-  })
+  });
   function checkAll() {
     var checks = document.getElementsByName("network_list[]");
     var selectedPrivacyData = privacyData.split(',');

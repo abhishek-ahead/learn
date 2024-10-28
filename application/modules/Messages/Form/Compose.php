@@ -22,6 +22,7 @@ class Messages_Form_Compose extends Engine_Form
   {
     $to = Zend_Controller_Front::getInstance()->getRequest()->getParam('to', 0);
     $multi = Zend_Controller_Front::getInstance()->getRequest()->getParam('multi', 'user');
+    $format = Zend_Controller_Front::getInstance()->getRequest()->getParam('format');
     
     $this->setTitle('Compose Message');
     if(empty($to))
@@ -110,18 +111,22 @@ class Messages_Form_Compose extends Engine_Form
         ),
       ));
     }
+    $this->addElement('Hidden', 'fancyalbumuploadfileidsvideo', array(
+      'order' => 1000,
+    ));
     
     if(!empty($to)) {
       // Buttons
       $this->addElement('Button', 'submit', array(
         'label' => 'Send Message',
         'type' => 'submit',
+        'class' => 'compose_submit',
         'ignore' => true,
         'decorators' => array(
           'ViewHelper'
         )
       ));
-      if(empty($multi)) {
+      if($format == 'smoothbox') {
         $this->addElement('Cancel', 'cancel', array(
           'label' => 'cancel',
           'link' => true,
@@ -135,7 +140,7 @@ class Messages_Form_Compose extends Engine_Form
         ));
         $this->addDisplayGroup(array('submit', 'cancel'), 'buttons');
         $button_group = $this->getDisplayGroup('buttons');
-      } else if(!empty($multi)) {
+      } else if(!empty($multi) && $format != 'smoothbox') {
         $this->addElement('Cancel', 'cancel', array(
           'label' => 'cancel',
           'link' => true,
@@ -154,6 +159,7 @@ class Messages_Form_Compose extends Engine_Form
       $this->addElement('Button', 'submit', array(
         'label' => 'Send Message',
         'type' => 'submit',
+        'class' => 'compose_submit',
         'ignore' => true
       ));
     }

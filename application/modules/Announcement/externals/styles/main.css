@@ -7,20 +7,14 @@
 ANNOUNCEMENTS WIDGET
 Used to display announcements.
 */
-#announcements
-{
-  +foreground;
+#announcements{
   padding: 7px;
   border-top-width: 1px;
   margin-bottom: 15px;
 }
 
-
-
-
 /* ITEM TYPE ICONS */
-.item_icon_announcement:before
-{
- content: "\\f024";
+.item_icon_announcement:before{
+ content: "\f024";
  font-family:'Font Awesome 6 Free';
 }

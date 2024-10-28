@@ -19,11 +19,8 @@
 class Core_Widget_HashtagsCloudController extends Engine_Content_Widget_Abstract {
 
   public function indexAction() {
-  
-    if(empty(Engine_Api::_()->getApi('settings', 'core')->getSetting('activity.composer.options')))
-      return $this->setNoRender();
 
-    if (!engine_in_array("hashtags", Engine_Api::_()->getApi('settings', 'core')->getSetting('activity.composer.options'))) {
+    if (empty(Engine_Api::_()->getApi('settings', 'core')->getSetting('activity.composer.options')) && !engine_in_array("hashtags", Engine_Api::_()->getApi('settings', 'core')->getSetting('activity.composer.options'))) {
       return $this->setNoRender();
     }
 

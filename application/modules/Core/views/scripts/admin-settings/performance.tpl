@@ -16,7 +16,7 @@
   <?php echo $this->form->render($this) ?>
 </div>
 <script type="text/javascript">
-    scriptJquery(document).ready(function() {
+    en4.core.runonce.add(function() {
         showLogSize('<?php echo Engine_Api::_()->getApi('settings', 'core')->getSetting('core.empty.log',0); ?>');
     });
 

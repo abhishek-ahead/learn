@@ -10,15 +10,9 @@
  * @author     Steve
  */
 ?>
-
-<script type="text/javascript">
-  parent.scriptJquery('#comment-<?php echo $this->comment_id ?>').remove();
-  setTimeout(function()
-  {
-    parent.Smoothbox.close();
-  }, 1000 );
-</script>
-
-  <div class="global_form_popup_message">
-    <?php echo $this->message ?>
-  </div>
+<?php
+if (!empty($this->commentCount)) {
+  $commentcount = $this->translate(array('%s comment', '%s comments', $this->commentCount), $this->locale()->toNumber($this->commentCount));
+?>
+<?php echo $commentcount; ?>
+<?php } die; ?>

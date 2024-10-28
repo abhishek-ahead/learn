@@ -46,6 +46,7 @@ class User_Form_Signup_Photo extends Engine_Form
         array('Count', false, 1),
         array('Extension', false, 'jpg,png,gif,jpeg,webp'),
       ),
+      'accept' => 'image/*',
       'data-function' => 'uploadSignupPhoto',
     ));
   

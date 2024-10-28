@@ -120,7 +120,7 @@
   });
   
   scriptJquery('#starttime-hour, #starttime-minute, #starttime-ampm, #endtime-hour, #endtime-minute, #endtime-ampm').hide();
-  scriptJquery(document).on('change', '#interval', function (e) {
+  AttachEventListerSE('change', '#interval', function (e) {
     var value = scriptJquery(this).val();
 
     if (value == 'specific') {
@@ -131,7 +131,7 @@
   });
   scriptJquery('#interval').trigger('change');
 
-  scriptJquery(document).on('change', '#type', function (e) {
+  AttachEventListerSE('change', '#type', function (e) {
     var value = scriptJquery(this).val();
     if (value == 'memberlevel') {
       scriptJquery('#memberlevel').parent().show();

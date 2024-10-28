@@ -58,6 +58,23 @@ return array(
     'requirements' => array(
       'viewer',
     ),
+    'autoEdit' => true,
+    'adminForm' => array(
+      'elements' => array(
+        array(
+          'MultiCheckbox',
+          'options',
+          array(
+            'label' => "Choose options to be shown in this widget.",
+            'multiOptions' => array(
+              'coverphoto' => 'Cover Photo',
+              'recentfriends' => 'Recent Friends',
+              'username' => 'User Name',
+            ),
+          )
+        ),
+      ),
+    ),
   ),
   array(
     'title' => 'User Cover Photo',
@@ -69,20 +86,20 @@ return array(
       'viewer',
     ),
   ),
-  array(
-    'title' => 'Online Users',
-    'description' => 'Displays a list of online members.',
-    'category' => 'User',
-    'type' => 'widget',
-    'name' => 'user.list-online',
-    'isPaginated' => true,
-    'defaultParams' => array(
-      'title' => '%d Members Online',
-    ),
-    'requirements' => array(
-      'no-subject',
-    ),
-  ),
+  // array(
+  //   'title' => 'Online Users',
+  //   'description' => 'Displays a list of online members.',
+  //   'category' => 'User',
+  //   'type' => 'widget',
+  //   'name' => 'user.list-online',
+  //   'isPaginated' => true,
+  //   'defaultParams' => array(
+  //     'title' => '%d Members Online',
+  //   ),
+  //   'requirements' => array(
+  //     'no-subject',
+  //   ),
+  // ),
   array(
     'title' => 'Popular Members',
     'description' => 'Displays the list of most popular members.',
@@ -201,6 +218,23 @@ return array(
     'name' => 'user.profile-photo',
     'requirements' => array(
       'subject' => 'user',
+    ),
+    'autoEdit' => true,
+    'adminForm' => array(
+      'elements' => array(
+        array(
+          'MultiCheckbox',
+          'options',
+          array(
+            'label' => "Choose options to be shown in this widget.",
+            'multiOptions' => array(
+              'coverphoto' => 'Cover Photo',
+              'recentfriends' => 'Recent Friends',
+              'username' => 'User Name',
+            ),
+          )
+        ),
+      ),
     ),
   ),
   array(

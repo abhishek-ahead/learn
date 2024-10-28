@@ -92,7 +92,7 @@ class Payment_AdminSubscriptionController extends Core_Controller_Action_Admin
       $select
         ->from($table->info('name'))
         ->joinRight('engine4_users', 'engine4_users.user_id=engine4_payment_subscriptions.user_id', null)
-        ->where('(displayname LIKE ? || username LIKE ? || email LIKE ?)', '%' . $filterValues['query'] . '%');
+        ->where('(displayname LIKE ? || username LIKE ? || email LIKE ?)', $filterValues['query'] . '%');
     }
     if( ($user_id = $this->_getParam('user_id', @$filterValues['user_id'])) ) {
       $this->view->filterValues['user_id'] = $user_id;
@@ -160,8 +160,8 @@ class Payment_AdminSubscriptionController extends Core_Controller_Action_Admin
 
     // get any relevant orders
     $ordersRaw = Engine_Api::_()->getDbtable('orders', 'payment')->fetchAll(array(
-      'source_type = ?' => 'payment_subscription',
-      'source_id = ?' => $subscription->subscription_id,
+      'source_type = ?' => empty($subscription->resource_type) ? 'payment_subscription' : $subscription->resource_type,
+      'source_id = ?' => empty($subscription->resource_id) ? $subscription->subscription_id : $subscription->resource_id,
     ));
 
     $orders = array();

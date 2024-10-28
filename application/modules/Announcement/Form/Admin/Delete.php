@@ -30,7 +30,7 @@ class Announcement_Form_Admin_Delete extends Engine_Form
 
     $this->addElement('Button', 'cancel', array(
       'label' => 'cancel',
-      'onclick' => 'window.location.href="'.Zend_Controller_Front::getInstance()->assemble().'";'
+      'onclick' => 'window.proxyLocation.href="'.Zend_Controller_Front::getInstance()->assemble().'";'
     ));
   }
 }

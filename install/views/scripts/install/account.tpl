@@ -56,6 +56,15 @@
         this.classList.toggle('fa-eye-slash');
     });
 
+    scriptJquery(document).on('keyup', '#password_conf', function(e) {
+      var passwordconf = scriptJquery(this).val();
+      
+      if(passwordconf && scriptJquery('#confirmtogglePassword'))
+        scriptJquery('#confirmtogglePassword').show();
+      if(passwordconf == '')
+        scriptJquery('#confirmtogglePassword').hide();
+    });
+
     var confirmtogglePassword = document.querySelector('#confirmtogglePassword');
     var password_conf = document.querySelector('#password_conf');
     

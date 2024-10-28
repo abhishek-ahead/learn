@@ -11,15 +11,42 @@
 */
 
 ?>
-<?php $this->headTranslate(array('you already rated', 'please login to rate', 'click to rate','Thanks for rating!')); ?>
-<?php if(Engine_Api::_()->getApi('settings', 'core')->getSetting($this->module.'.enable.rating', 1)) { ?>
-  <?php $ratingIcon = Engine_Api::_()->getApi('settings', 'core')->getSetting($this->module.'.ratingicon', 'fas fa-star'); ?>
-  <?php $param = $this->param; ?>
+<?php 
+  $module = $this->module; 
+  $param = $this->param; 
+  $viewer_id = $this->viewer()->getIdentity();
+  $item = $this->item;
+  $notificationType = $this->notificationType;
+
+  $ratingTable = Engine_Api::_()->getDbTable('ratings', 'core');
+  $settings = Engine_Api::_()->getApi('settings', 'core');
+
+  $rating_count = $ratingTable->ratingCount(array('resource_id' => $item->getIdentity(), 'resource_type' => $item->getType()));
+
+  $rating_text = $this->translate(array('%s rating', '%s ratings', $rating_count),$this->locale()->toNumber($rating_count));
+  
+  $rated = $ratingTable->checkRated(array('resource_id' => $item->getIdentity(), 'resource_type' => $item->getType()));
+
+  $this->headTranslate(array('you already rated', 'please login to rate', 'click to rate','Thanks for rating!'));
+
+  $ratingIcon = $settings->getSetting($module.'.ratingicon', 'fas fa-star');
+?>
+<?php if($settings->getSetting($module.'.enable.rating', 1)) { ?>
+  <script type="text/javascript">
+    var modulename = '<?php echo $module; ?>';
+    var notificationType = '<?php echo $notificationType; ?>';
+    var pre_rate = <?php echo $item->rating;?>;
+    var rated = '<?php echo $rated;?>';
+    var resource_type = '<?php echo $item->getType();?>';
+    var resource_id = <?php echo $item->getIdentity();?>;
+    var total_votes = <?php echo $rating_count;?>;
+    var viewer = <?php echo $viewer_id;?>;
+    new_text = '';
+    var rating_text = "<?php echo $rating_text ?>";
+    var ratingIcon = "<?php echo $ratingIcon ? $ratingIcon : 'fas fa-star'; ?>";
+  </script>
+
   <?php if($param == 'create') { ?>
-    <?php 
-      $viewer_id = $this->viewer()->getIdentity();
-      $rated = $this->rated;
-    ?>
     <div class="rating rating_star_big" onmouseout="rating_out();">
       <span id="rate_1" class="rating_star_big_generic <?php echo $ratingIcon; ?>" <?php if (!$rated && $viewer_id):?> onclick="rate(1);"<?php endif; ?> onmouseover="rating_over(1);"></span>
       <span id="rate_2" class="rating_star_big_generic <?php echo $ratingIcon; ?>" <?php if (!$rated && $viewer_id):?> onclick="rate(2);"<?php endif; ?> onmouseover="rating_over(2);"></span>
@@ -29,7 +56,6 @@
       <span id="rating_text" class="rating_text"><?php echo $this->translate('click to rate');?></span>
     </div>
   <?php } else if($param == 'show') { ?>
-    <?php $item = $this->item ;?>
     <span class="star_rating_wrapper rating_star_show">
       <?php for( $x=1; $x <= $item->rating; $x++ ): ?>
         <span class="rating_star_generic rating_star <?php echo $ratingIcon; ?>"></span>
@@ -42,4 +68,9 @@
       <?php endfor; ?>
     </span>
   <?php } ?>
+  <script type="text/javascript">
+    en4.core.runonce.add(function() {
+      set_rating();
+    });
+  </script>
 <?php } ?>

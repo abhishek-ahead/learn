@@ -137,18 +137,18 @@ class Activity_Model_Action extends Core_Model_Item_Abstract
         );
 
         $body = $this->getTypeInfo()->body;
-        $shouldTranslate = true;
-        if (engine_count($others) > 0) {
-            $otherText = '{item:$subject} and {others:$otherItems}';
-            $translate = Zend_Registry::get('Zend_Translate');
-            if ($translate instanceof Zend_Translate) {
-                $body = $translate->translate($body);
-                $otherText = $translate->translate($otherText);
-            }
-            $body = str_replace('{item:$subject}', $otherText, $body);
-            $shouldTranslate = false;
-            $params['otherItems'] = $others;
-        }
+        $shouldTranslate = false;
+//         if (engine_count($others) > 0) {
+//             $otherText = '{item:$subject} and {others:$otherItems}';
+//             $translate = Zend_Registry::get('Zend_Translate');
+//             if ($translate instanceof Zend_Translate) {
+//                 $body = $translate->translate($body);
+//                 $otherText = $translate->translate($otherText);
+//             }
+//             $body = str_replace('{item:$subject}', $otherText, $body);
+//             $shouldTranslate = false;
+//             $params['otherItems'] = $others;
+//         }
         $content = $model->assemble($body, $params, $shouldTranslate);
         return $content;
     }
@@ -245,31 +245,29 @@ class Activity_Model_Action extends Core_Model_Item_Abstract
 
     public function getAttachments()
     {
-        if (null !== $this->_attachments) {
-            return $this->_attachments;
-        }
+      if (null !== $this->_attachments) {
+          // return $this->_attachments;
+      }
 
-        if ($this->attachment_count <= 0) {
-            return null;
-        }
+      if ($this->attachment_count <= 0) {
+          // return null;
+      }
 
-        $table = Engine_Api::_()->getDbtable('attachments', 'activity');
-        $select = $table->select()
-            ->where('action_id = ?', $this->action_id);
+      $table = Engine_Api::_()->getDbtable('attachments', 'activity');
+      $select = $table->select()
+          ->where('action_id = ?', $this->action_id);
+      $_attachments = array();
+      foreach ($table->fetchAll($select) as $row) {
+          $item = Engine_Api::_()->getItem($row->type, $row->id);
+          if ($item instanceof Core_Model_Item_Abstract) {
+              $val = new stdClass();
+              $val->meta = $row;
+              $val->item = $item;
+              $_attachments[] = $val;
+          }
+      }
 
-        foreach ($table->fetchAll($select) as $row) {
-					if(Engine_Api::_()->hasItemType($row->type)) {
-						$item = Engine_Api::_()->getItem($row->type, $row->id);
-						if ($item instanceof Core_Model_Item_Abstract) {
-							$val = new stdClass();
-							$val->meta = $row;
-							$val->item = $item;
-							$this->_attachments[] = $val;
-						}
-					}
-        }
-
-        return $this->_attachments;
+      return $_attachments;
     }
 
     public function getLikes()
@@ -281,43 +279,95 @@ class Activity_Model_Action extends Core_Model_Item_Abstract
         return $this->_likes = $this->likes()->getAllLikes();
     }
 
-    public function getComments($commentViewAll)
+    public function getComments($commentViewAll = false,$page = '',$type = 'newest')
     {
-        if (null !== $this->_comments) {
-            return $this->_comments;
-        }
 
-        $comments = $this->comments();
-        $table = $comments->getReceiver();
-        $commentCount = $comments->getCommentCount();
-
-        if ($commentCount <= 0) {
-            return;
-        }
-
-        $reverseOrder = 0;
-
-        // Always just get the last three comments
-        $select = $comments->getCommentSelect();
-
-        if ($commentCount <= 5) {
-            $select->limit(5);
-        } elseif (!$commentViewAll) {
-            if ($reverseOrder) {
-                $select->limit(5);
-            } else {
-                $select->limit(5, $commentCount - 5);
-            }
-        }
-
-        $this->_comments = $table->fetchAll($select);
-
-        foreach ($this->_comments as $comment) {
-            $comment->body = Zend_Registry::get('Zend_View')->getHelper('getActionContent')
-                ->updateActionContent($comment, $comment->body);
-        }
-
+      if( null !== $this->_comments ) {
         return $this->_comments;
+      }
+
+      $activityCommentTable = Engine_Api::_()->getDbTable('comments', 'activity');
+      $activityCommentTableName = $activityCommentTable->info('name');
+
+      $coreCommentTable = Engine_Api::_()->getDbTable('comments', 'core');
+      $coreCommentTableName = $coreCommentTable->info('name');
+
+      $comments = $this->comments();
+
+      $table = $comments->getReceiver();
+
+    // $comment_count = $comments->getCommentCount();
+
+      //if( $comment_count <= 0 ) {
+        //return;
+      //}
+
+      $reverseOrder = 1;//Engine_Api::_()->getApi('settings', 'core')->getSetting('activity.commentreverseorder', false);
+
+      // Always just get the last three comments
+      $select = $comments->getCommentSelect();
+
+      if($table->info('name') == 'engine4_core_comments') {
+          $select->from($coreCommentTableName, '*');
+      } else if($table->info('name') == 'engine4_activity_comments') {
+          $select->from($activityCommentTableName, '*');
+      }
+
+      if(Engine_Api::_()->getDbtable('modules', 'core')->isModuleEnabled('comment')) {
+
+          if($table->info('name') == 'engine4_core_comments') {
+              $select->setIntegrityCheck(false)
+                  ->where('parent_id =?',0);
+
+          } else if($table->info('name') == 'engine4_activity_comments') {
+              $select->setIntegrityCheck(false)
+                  ->where('parent_id =?',0);
+          }
+      }
+
+      if($page == 'zero')
+        $page = 1;
+
+      $select->reset('order');
+      if($type){
+        switch($type){
+          case "newest":
+            $select->order('comment_id DESC');
+          break;
+          case "oldest":
+            $select->order('comment_id ASC');
+            $select->order('comment_id DESC');
+          break;
+          case "liked":
+            $select->order('like_count DESC');
+            $select->order('comment_id DESC');
+          break;
+          case "replied":
+            if($table->info('name') == 'engine4_core_comments') {
+              $select->order('reply_count DESC');
+            } else if($table->info('name') == 'engine4_activity_comments') {
+              $select->order('reply_count DESC');
+            }
+            $select->order('comment_id DESC');
+          break;
+        }
+      }
+
+      if(!$type) {
+      if(!$reverseOrder)
+        $select->order('comment_id ASC');
+      else
+        $select->order('comment_id DESC');
+      }
+
+      if($commentViewAll)
+      return $table->fetchAll($select);
+    
+
+      $comments = Zend_Paginator::factory($select);
+      $comments->setCurrentPageNumber($page);
+      $comments->setItemCountPerPage(5);
+      return $comments;
     }
 
     public function getCommentsLikes($comments, $viewer)
@@ -363,70 +413,89 @@ class Activity_Model_Action extends Core_Model_Item_Abstract
         return $isLiked;
     }
 
-    public function comments()
+    public function comments($isGroup = false)
     {
-        $commentable = $this->getCommentable();
-        switch ($commentable) {
-            // Comments linked to action item
-            default: case 0: case 1:
-            return new Engine_ProxyObject($this, Engine_Api::_()->getDbtable('comments', 'activity'));
-            break;
+      $commentable = $this->getCommentable();
+      switch( $commentable ) {
+        // Comments linked to action item
+        default: case 0: case 1:
+          if($isGroup)
+            return  $this;
+          return new Engine_ProxyObject($this, Engine_Api::_()->getDbtable('comments', 'activity'));
+          break;
 
-            // Comments linked to subject
-            case 2:
-                return $this->getSubject()->comments();
-                break;
+        // Comments linked to subject
+        case 2:
+        if($isGroup)
+            return  $this->getSubject();
 
-            // Comments linked to object
-            case 3:
-                return $this->getObject()->comments();
-                break;
+          return $this->getSubject()->comments();
+          break;
 
-            // Comments linked to the first attachment
-            case 4:
-                $attachments = $this->getAttachments();
-                if (!isset($attachments[0])) {
-                    // We could just link them to the action item instead
-                    throw new Activity_Model_Exception('No attachment to link comments to');
-                }
-                return $attachments[0]->item->comments();
-                break;
-        }
+        // Comments linked to object
+        case 3:
+        if($isGroup)
+            return  $this->getObject();
+          return $this->getObject()->comments();
+          break;
 
-        throw new Activity_Model_Exception('Comment handler undefined');
+        // Comments linked to the first attachment
+        case 4:
+          $attachments = $this->getAttachments();
+          if( !isset($attachments[0]) ) {
+
+            // We could just link them to the action item instead
+            throw new Activity_Model_Exception('No attachment to link comments to');
+          }
+          if($isGroup)
+            return  $attachments[0]->item;
+          return $attachments[0]->item->comments();
+          break;
+      }
+
+      throw new Activity_Model_Exception('Comment handler undefined');
     }
 
-    public function likes()
+    public function likes($isGroup = false)
     {
-        $commentable = $this->getCommentable();
-        switch ($commentable) {
-            // Comments linked to action item
-            default: case 0: case 1:
-            return new Engine_ProxyObject($this, Engine_Api::_()->getDbtable('likes', 'activity'));
-            break;
+      $commentable = $this->getCommentable();
+      switch( $commentable ) {
+        // Comments linked to action item
+        default: case 0: case 1:
+          if($isGroup)
+            return  $this;
+          return new Engine_ProxyObject($this, Engine_Api::_()->getDbtable('likes', 'activity'));
+          break;
 
-            // Comments linked to subject
-            case 2:
-                return $this->getSubject()->likes();
-                break;
+        // Comments linked to subject
+        case 2:
+          if($isGroup)
+            return $this->getSubject();
+          return $this->getSubject()->likes();
+          break;
 
-            // Comments linked to object
-            case 3:
-                return $this->getObject()->likes();
-                break;
+        // Comments linked to object
+        case 3:
+        if($isGroup)
+            return $this->getObject();
+          return $this->getObject()->likes();
+          break;
 
-            // Comments linked to the first attachment
-            case 4:
-                $attachments = $this->getAttachments();
-                if (!isset($attachments[0])) {
-                    // We could just link them to the action item instead
-                    throw new Activity_Model_Exception('No attachment to link comments to');
-                }
-                return $attachments[0]->item->likes();
-                break;
-        }
+        // Comments linked to the first attachment
+        case 4:
+          $attachments = $this->getAttachments();
+          if( !isset($attachments[0]) )
+          {
+            // We could just link them to the action item instead
+            throw new Activity_Model_Exception('No attachment to link comments to');
+          }
+          if($isGroup)
+            return  $attachments[0]->item;
+          return $attachments[0]->item->likes();;
+          break;
+      }
 
-        throw new Activity_Model_Exception('Likes handler undefined');
+      throw new Activity_Model_Exception('Likes handler undefined');
     }
 
     public function deleteItem()
@@ -480,7 +549,7 @@ class Activity_Model_Action extends Core_Model_Item_Abstract
     {
         $editable = (int) $this->getTypeInfo()->editable;
         if (!$editable) {
-            return;
+            // return;
         }
         $viewer = Engine_Api::_()->user()->getViewer();
         if (!$viewer->getIdentity()) {
@@ -519,6 +588,9 @@ class Activity_Model_Action extends Core_Model_Item_Abstract
         Engine_Api::_()->getDbtable('attachments', 'activity')->delete(array(
             'action_id = ?' => $this->action_id,
         ));
+        
+        $db = Engine_Db_Table::getDefaultAdapter();
+        $db->query("DELETE FROM engine4_activity_buysells WHERE action_id = " . $this->action_id);
 
         parent::_delete();
     }
@@ -550,4 +622,83 @@ class Activity_Model_Action extends Core_Model_Item_Abstract
     {
       return new Engine_ProxyObject($this, Engine_Api::_()->getDbtable('tags', 'core'));
     }
+    
+  public function getReply($comment_id, $page = 'zero'){
+    if( null !== $this->_comments ) {
+      return $this->_comments;
+    }
+
+    $activityCommentTable = Engine_Api::_()->getDbTable('comments', 'activity');
+    $activityCommentTableName = $activityCommentTable->info('name');
+
+    $coreCommentTable = Engine_Api::_()->getDbTable('comments', 'core');
+    $coreCommentTableName = $coreCommentTable->info('name');
+
+    $comments = $this->comments();
+
+    $table = $comments->getReceiver();
+
+    $select = $comments->getCommentSelect();
+
+    if($table->info('name') == 'engine4_core_comments') {
+        $select->from($coreCommentTableName, '*');
+    } else if($table->info('name') == 'engine4_activity_comments') {
+        $select->from($activityCommentTableName, '*');
+    }
+
+    if(Engine_Api::_()->getDbtable('modules', 'core')->isModuleEnabled('comment')) {
+
+        if($table->info('name') == 'engine4_core_comments') {
+            $select->setIntegrityCheck(false)
+                ->where('parent_id =?',$comment_id);
+                $select->where('comment_id > '.$comment_id);
+        } else if($table->info('name') == 'engine4_activity_comments') {
+            $select->setIntegrityCheck(false)
+                ->where('parent_id =?',$comment_id);
+                $select->where('comment_id > '.$comment_id);
+        }
+    }
+
+    $reverseOrder = 1;//Engine_Api::_()->getApi('settings', 'core')->getSetting('activity.commentreverseorder', false);
+
+    if($page == 'zero'){
+       $commentCount = engine_count($select->query()->fetchAll());
+       $page = ceil($commentCount/1);
+       $itemCountPerPage = 5;
+    } else {
+      $itemCountPerPage = 5;
+    }
+
+    $select->reset('order');
+    if($reverseOrder)
+    $select->order('comment_id DESC');
+    else
+      $select->order('comment_id ASC');
+    //  echo $select;die;
+    $comments = Zend_Paginator::factory($select);
+    $comments->setCurrentPageNumber($page);
+    $comments->setItemCountPerPage($itemCountPerPage);
+    return $comments;
+  }
+  
+  public function isPinPost($params = array()){
+    if(!empty($params['resource_type']) && !empty($params['resource_id']) && !empty($params['action_id'])){
+      $table = Engine_Api::_()->getDbTable('pinposts','activity');
+      $select = $table->select()->where('resource_id	 =?',$params['resource_id'])->where('resource_type =?',$params['resource_type'])
+                ->where('action_id =?',$params['action_id']);
+      return $table->fetchRow($select);
+    }
+    return false;
+  }
+  
+  public function getBuySellItem(){
+    $action_id = $this->action_id;
+    $table  = Engine_Api::_()->getDbTable('buysells','activity');
+    $select = $table->select()->where('action_id = ?', (int) $action_id);
+    return $table->fetchRow($select);
+  }
+  
+  public function intializeAttachmentcount(){
+    $this->_attachments = null;
+  }
 }

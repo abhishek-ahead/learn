@@ -18,9 +18,10 @@
 <script type="text/javascript">
   function skipForm() {  
     document.getElementById("skip").value = "skipForm";
-    document.getElementById('SignupForm').submit();
-  }    
-  function finishForm() {  
+    scriptJquery('.signup_account_form').trigger("submit");
+    //document.getElementById('SignupForm').submit();
+  }
+  function finishForm() {
     document.getElementById("nextStep").value = "finish";
   }    
 </script>

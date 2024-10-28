@@ -71,7 +71,7 @@ INSERT IGNORE INTO `engine4_core_menus` (`name`, `type`, `title`, `order`) VALUE
 --
 INSERT IGNORE INTO `engine4_core_menuitems` (`name`, `module`, `label`, `plugin`, `params`, `menu`, `enabled`, `custom`, `order`) VALUES
 ('core_social_site_facebook', 'core', 'Facebook', '', '{"uri": "","target":"_blank", "icon":"fa-facebook"}', 'core_social_sites', 0, 1, 1),
-('core_social_site_twitter', 'core', 'Twitter', '', '{"uri": "","target":"_blank", "icon":"fa-twitter"}', 'core_social_sites', 0, 1, 2),
+('core_social_site_twitter', 'core', 'Twitter', '', '{"uri": "","target":"_blank", "icon":"fa-brands fa-x-twitter"}', 'core_social_sites', 0, 1, 2),
 ('core_social_site_linkedin', 'core', 'Linkedin', '', '{"uri": "","target":"_blank", "icon":"fa-linkedin"}', 'core_social_sites', 0, 1, 3),
 ('core_social_site_youtube', 'core', 'Youtube', '', '{"uri": "","target":"_blank", "icon":"fa-youtube"}', 'core_social_sites', 0, 1, 4),
 ('core_social_site_googleplus', 'core', 'Google +', '', '{"uri": "","target":"_blank", "icon":"fa-google-plus"}', 'core_social_sites', 0, 1, 5),

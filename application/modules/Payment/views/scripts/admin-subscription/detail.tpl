@@ -73,9 +73,18 @@
       <?php echo $this->translate('Plan') ?>
     </td>
     <td>
-      <a href='<?php echo $this->url(array('module' => 'payment', 'controller' => 'package', 'action' => 'edit', 'package_id' => $this->package->package_id)) ?>'>
-        <?php echo $this->translate($this->package->title) ?>
-      </a>
+      <?php if($this->subscription->resource_type != 'payment_verificationpackage') { ?>
+        <a href='<?php echo $this->url(array('module' => 'payment', 'controller' => 'package', 'action' => 'edit', 'package_id' => $this->package->package_id)) ?>'>
+          <?php echo $this->translate($this->package->title) ?>
+        </a>
+      <?php } else if($this->subscription->resource_type == 'payment_verificationpackage') { ?>
+        <?php $verficationPackage = Engine_Api::_()->getItem($this->subscription->resource_type, $this->subscription->resource_id); ?>
+        <?php if($verficationPackage) { ?>
+          <?php echo $this->translate($this->level->title); ?>
+        <?php } else { ?>
+          <?php echo "---"; ?>
+        <?php } ?>
+      <?php } ?>
     </td>
   </tr>
   <tr>
@@ -184,6 +193,8 @@
       <td>
         <?php if( $gateway ): ?>
           <?php echo $this->translate($gateway->title) ?>
+        <?php elseif( $transaction->gateway_id == 3000 ): ?>
+          <?php echo $this->translate("Wallet") ?>
         <?php else: ?>
           <i><?php echo $this->translate('Unknown Gateway') ?></i>
         <?php endif; ?>

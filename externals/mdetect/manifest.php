@@ -2,7 +2,7 @@
   'package' => array(
     'type' => 'external',
     'name' => 'mdetect',
-    'version' => '6.7.0',
+    'version' => '7.0.0',
     'revision' => '$Revision: 7593 $',
     'path' => 'externals/mdetect',
     'repository' => 'socialengine.com',

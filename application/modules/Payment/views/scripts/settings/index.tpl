@@ -22,7 +22,7 @@
     </div>
   </div>
   <div class="generic_layout_container layout_middle user_setting_main_middle">
-    <div class="theiaStickySidebar">
+    <div>
       <div>
         <?php if( $this->isAdmin ): ?>
           <div class="tip">

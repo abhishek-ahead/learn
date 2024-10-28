@@ -52,6 +52,7 @@ class Payment_Form_Admin_Transaction_Filter extends Engine_Form
     foreach( $gatewaysTable->fetchAll() as $gateway ) {
       $multiOptions[$gateway->gateway_id] = $gateway->title;
     }
+    $multiOptions[3000] = "Wallet";
     $this->addElement('Select', 'gateway_id', array(
       'label' => 'Gateway',
       'multiOptions' => $multiOptions,

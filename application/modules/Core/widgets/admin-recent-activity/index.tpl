@@ -29,7 +29,12 @@
         <li>
           <span class="activity_time"><?php echo $this->shorttimestamp($result->getTimeValue()) ?></span>
           <div class="activity_right_side">
-            <?php echo $this->getActionContent($result)?>
+            <?php $contentData = $this->getContent($result, array('resource_id' => $result->resource_id, 'resource_type' => $result->resource_type)); ?>
+            <?php if (!empty($contentData[1])) { ?>
+             <?php echo $contentData[1]; ?>
+            <?php } else { ?>
+              <?php echo $this->getActionContent($result)?>
+            <?php } ?>
           </div>
           <a class="_view_feed_btn" href="<?php echo $result->getHref(); ?>" target="_blank"><?php echo $this->translate("View Feed"); ?></a>
         </li>

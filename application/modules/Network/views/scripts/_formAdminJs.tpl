@@ -14,7 +14,7 @@
 
 <script type="text/javascript">
 
-  scriptJquery(document).ready(function() {
+  en4.core.runonce.add(function() {
     // Attach assignment stuff
     scriptJquery('.form-elements input[name=assignment]').on('change', function(event) {
       var ele = scriptJquery(this);

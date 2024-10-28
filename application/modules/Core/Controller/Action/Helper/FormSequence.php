@@ -31,8 +31,8 @@ class Core_Controller_Action_Helper_FormSequence
 
   public function direct()
   {
-    // If not posting, reset all
-    if( !$this->getActionController()->getRequest()->isPost() ) {
+    // If not posting, reset all / signup hack
+    if( !$this->getActionController()->getRequest()->isPost() && strpos(strtolower($_SERVER['REQUEST_URI']), '.png') === false && strpos(strtolower($_SERVER['REQUEST_URI']), '.jpg') === false && strpos(strtolower($_SERVER['REQUEST_URI']), '.jpeg') === false && strpos(strtolower($_SERVER['REQUEST_URI']), '.gif') === false && strpos(strtolower($_SERVER['REQUEST_URI']), '.webp') === false) {
       $this->resetAll();
     }
 

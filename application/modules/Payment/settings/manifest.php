@@ -14,7 +14,7 @@ return array(
   'package' => array(
     'type' => 'module',
     'name' => 'payment',
-    'version' => '6.7.0',
+    'version' => '7.0.0',
     'revision' => '$Revision: 10171 $',
     'path' => 'application/modules/Payment',
     'repository' => 'socialengine.com',
@@ -91,11 +91,11 @@ return array(
       'resource' => 'Payment_Plugin_Core',
     ),
     array(
-      'event' => 'onUserUpdateBefore',
+      'event' => 'onAuthorizationLevelDeleteBefore',
       'resource' => 'Payment_Plugin_Core',
     ),
     array(
-      'event' => 'onAuthorizationLevelDeleteBefore',
+      'event' => 'onRenderLayoutDefault',
       'resource' => 'Payment_Plugin_Core',
     ),
   ),
@@ -109,6 +109,10 @@ return array(
     'payment_verification',
     'payment_verificationgateway',
     'payment_currency',
+    
+    'payment_verificationpackage',
+    'payment_wallet',
+    'payment_walletgateway',
   ),
   // Routes --------------------------------------------------------------------
 );

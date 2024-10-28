@@ -27,10 +27,6 @@
   if( !$facebookTable->checkConnection() ) {
     return; 
   }
-
-  // Add script
-  $this->headScript()
-      ->appendFile($this->layout()->staticBaseUrl . 'application/modules/User/externals/scripts/composer_facebook.js');
 ?>
 
 <script type="text/javascript">

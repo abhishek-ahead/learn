@@ -1,34 +1,28 @@
 <?php
-/**
- * SocialEngine
- *
- * @category   Application_Core
- * @package    Activity
- * @copyright  Copyright 2006-2020 Webligo Developments
- * @license    http://www.socialengine.com/license/
- * @version    $Id: ActivityLoop.php 9814 2012-11-08 20:02:52Z richard $
- * @author     John
- */
 
-/**
- * @category   Application_Core
+ /**
+ * socialnetworking.solutions
+ *
+ * @category   Application_Modules
  * @package    Activity
- * @copyright  Copyright 2006-2020 Webligo Developments
- * @license    http://www.socialengine.com/license/
+ * @copyright  Copyright 2014-2020 Ahead WebSoft Technologies Pvt. Ltd.
+ * @license    https://socialnetworking.solutions/license/
+ * @version    $Id: ActivityLoop.php 2017-01-12  00:00:00 socialnetworking.solutions $
+ * @author     socialnetworking.solutions
  */
 class Activity_View_Helper_ActivityLoop extends Activity_View_Helper_Activity
 {
   public function activityLoop($actions = null, array $data = array())
   {
-    if( null == $actions || (!is_array($actions) && !($actions instanceof Zend_Db_Table_Rowset_Abstract)) ) {
-      return '';
+    if( !($actions instanceof Zend_Db_Table_Rowset_Abstract)) {
+      //return '';
     }
-
+    
     $form = new Activity_Form_Comment();
     $viewer = Engine_Api::_()->user()->getViewer();
     $activity_moderate = "";
-	$group_owner ="";
-	$group = "";
+	  $group_owner ="";
+	  $group = "";
     try
     {
         if (Engine_Api::_()->core()->hasSubject('group')) {
@@ -52,12 +46,16 @@ class Activity_View_Helper_ActivityLoop extends Activity_View_Helper_Activity
     $data = array_merge($data, array(
       'actions' => $actions,
       'commentForm' => $form,
-      'user_limit' => 1000,
-      'allow_delete' => 1,
+      'user_limit' => Engine_Api::_()->getApi('settings', 'core')->getSetting('activity_userlength'),
+      'allow_delete' => Engine_Api::_()->getApi('settings', 'core')->getSetting('activity_userdelete'),
       'activity_group' =>$group_owner,
       'activity_moderate' =>$activity_moderate,
     ));
-
+     
+    $data['feeddesign'] = empty($data['feeddesign']) ? 1 : $data['feeddesign'];
+		$data['filterFeed'] = empty($data['filterFeed']) ? '' : $data['filterFeed'];
+    $data['ulInclude'] = empty($data['ulInclude'])  || !empty($data->includeUl)? true : false;
+    $data['contentCount'] = empty($data['contentCount']) ? 0 : $data['contentCount'];
     return $this->view->partial(
       '_activityText.tpl',
       'activity',

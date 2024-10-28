@@ -34,6 +34,31 @@ class Install_Form_Account extends Engine_Form
     $this->site_title->getDecorator('Description')->setOption('placement', 'APPEND');
     $this->site_title->getValidator('NotEmpty')
       ->setMessage('Please fill in the Community Title.', 'isEmpty');
+      
+      
+    // Element: first name
+    $this->addElement('Text', 'firstname', array(
+      'label' => 'Admin First Name',
+      'required' => true,
+      'allowEmpty' => false,
+      'autofocus' => 'autofocus',
+      'validators' => array(
+        array('NotEmpty', true),
+      ),
+    ));
+    $this->firstname->getValidator('NotEmpty')->setMessage('Please enter first name.', 'isEmpty');
+    
+    // Element: last name
+    $this->addElement('Text', 'lastname', array(
+      'label' => 'Admin Last Name',
+      'required' => true,
+      'allowEmpty' => false,
+      'validators' => array(
+        array('NotEmpty', true),
+      ),
+      
+    ));
+    $this->lastname->getValidator('NotEmpty')->setMessage('Please enter last name.', 'isEmpty');
 
     // init email
     $this->addElement('Text', 'email', array(

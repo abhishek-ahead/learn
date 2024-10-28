@@ -2,7 +2,7 @@
   'package' => array(
     'type' => 'library',
     'name' => 'scaffold',
-    'version' => '6.7.0',
+    'version' => '7.0.0',
     'revision' => '$Revision: 10171 $',
     'path' => 'application/libraries/Scaffold',
     'repository' => 'socialengine.com',

@@ -135,4 +135,3 @@ CREATE TABLE IF NOT EXISTS `engine4_user_phonemessages` (
 
 ALTER TABLE `engine4_users` ADD `import` TINYINT(1) NOT NULL DEFAULT '0';
 ALTER TABLE `engine4_users` CHANGE `import` `import` TINYINT(1) NOT NULL DEFAULT '1';
-

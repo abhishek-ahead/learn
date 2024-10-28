@@ -90,7 +90,7 @@ class User_AuthController extends Core_Controller_Action_Standard
             $this->view->status = false;
             $this->view->error = Zend_Registry::get('Zend_Translate')->_('You are already signed in.');
             if( null === $this->_helper->contextSwitch->getCurrentContext() ) {
-                $this->_helper->redirector->gotoRoute(array(), 'default', true);;
+                $this->_helper->redirector->gotoRoute(array(), 'default', true);
             }
             return;
         }
@@ -355,6 +355,10 @@ class User_AuthController extends Core_Controller_Action_Standard
               $subscriptionSession = new Zend_Session_Namespace('Payment_Subscription');
               $subscriptionSession->unsetAll();
               $subscriptionSession->user_id = $user->getIdentity();
+              
+              Engine_Api::_()->user()->setViewer();
+              Engine_Api::_()->user()->getAuth()->getStorage()->write($user->getIdentity());
+              
               return $this->_helper->redirector->gotoRoute(array('module' => 'payment',
                   'controller' => 'subscription', 'action' => 'index'), 'default', true);
             }
@@ -543,20 +547,13 @@ class User_AuthController extends Core_Controller_Action_Standard
             // Redirect by form
             $uri = $form->getValue('return_url');
             if( $uri ) {
-              if (substr($uri, 0, 3) == '64-') {
-                unset($_SESSION['return_url']);
-                $uri = $uri; //base64_decode(substr($uri, 3));
-                if (strpos($uri, "http://") === true || strpos($uri, "https://") === true) {
-                    $url = (!empty($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $this->view->layout()->staticBaseUrl;
-                    return $this->_redirect($url, array('prependBase' => false));
-                } else {
-                    $url = (!empty($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'].$uri;
-                    return $this->_redirect($url, array('prependBase' => false));
-                }
-              } elseif(strlen($uri) > 0){
+              if(strlen($uri) > 0) {
                 unset($_SESSION['return_url']);
                 $url = (!empty($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'].$uri;
-                return $this->_redirect($url, array('prependBase' => false));
+
+                echo json_encode(array('status' => true, 'redirectFullURL' => $url));die;
+
+                //return $this->_redirect($url, array('prependBase' => false));
               }
             }
 
@@ -596,18 +593,21 @@ class User_AuthController extends Core_Controller_Action_Standard
 //                     'controller' => 'edit',
 //                 ), 'user_extended', false);
 //             }
-
+ 
           //Redirection
+          $url = "";
           $afterLogin = Engine_Api::_()->getApi('settings', 'core')->getSetting('core.after.login', 4);
           if($afterLogin == 4) {
-            return $this->_helper->_redirector->gotoRoute(array('action' => 'home'), 'user_general', true);
+            $url= $this->view->url(array('action' => 'home'), 'user_general',true);
           } else if($afterLogin == 3) {
-            return $this->_helper->redirector->gotoRoute(array('id' => $viewer->getIdentity()), 'user_profile', true);
+            $url= $this->view->url(array('id' => $viewer->getIdentity()), 'user_profile',true);
           } else if($afterLogin == 2) { 
-            return $this->_helper->redirector->gotoRoute(array('controller' => 'edit','action' => 'profile'), 'user_extended', true);
+            $url= $this->view->url(array('controller' => 'edit','action' => 'profile'), 'user_extended',true);
           } else if($afterLogin == 1) {
-            header('Location: '.Engine_Api::_()->getApi('settings', 'core')->getSetting('core.loginurl', ''));
+            $url= Engine_Api::_()->getApi('settings', 'core')->getSetting('core.loginurl', '');
           }
+
+          echo json_encode(array('status' => true, 'redirectFullURL' => $url));die;
         }
     }
 

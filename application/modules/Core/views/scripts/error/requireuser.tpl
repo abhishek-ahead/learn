@@ -15,7 +15,7 @@
   <div class="required_login_form"><?php echo $this->form->render($this); ?></div>
   <script type="text/javascript">
     if(typeof loginSignupPlaceHolderActive != 'undefined') {
-      scriptJquery (document).ready(function(e) {
+      en4.core.runonce.add(function() {
         scriptJquery('#email-label').hide();
         scriptJquery('#password-label').hide();
         scriptJquery('#email').attr('placeholder',scriptJquery('#email-label').find('label').html());

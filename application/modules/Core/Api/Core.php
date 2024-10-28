@@ -104,7 +104,7 @@ class Core_Api_Core extends Core_Api_Abstract
                 ),
             ), $params);
         } else if($recaptchaVersionSettings == 0  && !empty($spamSettings['recaptchaprivatev3']) && !empty($spamSettings['recaptchapublicv3'])) {
-            $script = "scriptJquery(document).ready(function() {
+            $script = "en4.core.runonce.add(function() {
             scriptJquery('#captcha-wrapper').hide();
               scriptJquery('<input>').attr({ 
                   name: 'recaptcha_response', 
@@ -457,6 +457,26 @@ class Core_Api_Core extends Core_Api_Abstract
     return $value;
   }
   
+  public function facebookShareUrl($href = '', $subject = '') {
+    if (!$href)
+      return 'javascript:;';
+    $href = (_ENGINE_SSL ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $href;
+    return 'https://www.facebook.com/sharer/sharer.php?u=' . urlencode($href) . '&t=' . $subject->getTitle();
+  }
+
+  public function twitterShareUrl($href = '', $subject = '') {
+    if (!$href)
+      return 'javascript:;';
+    $urlencode = urlencode(((!empty($_SERVER["HTTPS"]) && strtolower($_SERVER["HTTPS"]) == 'on') ? "https://" : "http://") . $_SERVER['HTTP_HOST'] . $href);
+    return 'https://twitter.com/share?url=' . $urlencode . '&text=' . htmlspecialchars(urlencode(html_entity_decode($subject->getTitle('encode'), ENT_COMPAT, 'UTF-8')), ENT_COMPAT, 'UTF-8') . "%0a";
+  }
+  
+  public function LinkedinShareUrl($href = '', $subject = '') {
+    if (!$href)
+      return 'javascript:;';
+    $href = (_ENGINE_SSL ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $href;
+    return 'https://www.linkedin.com/shareArticle?mini=true&url=' . $href;
+  }
   public function validateFormFields($form = null) {
     if(!$form)
       return "";
@@ -546,5 +566,380 @@ class Core_Api_Core extends Core_Api_Abstract
       'Asia/Magadan' => '(UTC+11) Magadan, Solomon Is., New Caledonia',
       'Pacific/Auckland' => '(UTC+12) Fiji, Kamchatka, Marshall Is., Wellington',
     );
+  }
+
+  function generateJsCss(){
+
+    $view = Zend_Registry::get('Zend_View');
+    $baseUrl = $view->baseUrl().'/';
+    
+    //remove js
+    $files = glob(APPLICATION_PATH."/externals/scripts/*"); // get all file names
+    foreach($files as $file){ // iterate files
+      if(is_file($file)) {
+        unlink($file); // delete file
+      }
+    }
+    // remove css
+    $files = glob(APPLICATION_PATH."/externals/styles/*"); // get all file names
+    foreach($files as $file){ // iterate files
+      if(is_file($file)) {
+        unlink($file); // delete file
+      }
+    }
+
+    // read manifest
+    $jsFile = array();
+    $cssFile = array();
+    foreach (Zend_Registry::get('Engine_Manifest') as $key => $data) {
+      if (empty($data['loadDefault'])) {
+        continue;
+      }
+      foreach ($data['loadDefault'] as $key => $file) {
+        if($key == "css"){
+          $cssFile = array_merge($cssFile, $file);
+        }else if($key == "js"){
+          $jsFile = array_merge($jsFile, $file);
+        }
+      }
+    }
+    
+    // remove duplicate files
+    array_unique($jsFile);
+    array_unique($cssFile);
+    
+    $jsFiles = array_chunk($jsFile, 30);
+    $cssFiles = array_chunk($cssFile, 40);
+    $counterJsKey = 0;
+    $counterCssKey = 0;
+    foreach($jsFiles as $key=>$files){
+      $js = "";
+      foreach($files as $file){
+        $js .= file_get_contents(APPLICATION_PATH.DS.$file);
+        $js .= ";
+        
+        ";
+      }
+      $counterJsKey = $key+1;
+      @file_put_contents(APPLICATION_PATH."/externals/scripts/script_$counterJsKey.js", $this->minify_js($js));
+    }
+
+    foreach($cssFiles as $key=>$files){
+      $css = "";
+      foreach($files as $file){
+        $css .= str_replace("~/",$baseUrl,file_get_contents(APPLICATION_PATH.DS.$file));
+      }
+      $counterCssKey = $key+1;
+      @file_put_contents(APPLICATION_PATH."/externals/styles/styles_$counterCssKey.css", $this->minify_css($css));
+    }
+
+    Engine_Api::_()->getApi('settings','core')->setSetting("core.scripts.counter",$counterJsKey);
+    Engine_Api::_()->getApi('settings','core')->setSetting("core.styles.counter",$counterCssKey);
+
+
+    $css = "";
+    $js = file_get_contents(APPLICATION_PATH.'/application/modules/Core/externals/scripts/core.js');
+    $js .= file_get_contents(APPLICATION_PATH.'/externals/jQuery/core.js');
+    $js .= file_get_contents(APPLICATION_PATH.'/application/modules/User/externals/scripts/core.js');
+    $js .= file_get_contents(APPLICATION_PATH.'/externals/mdetect/mdetect.js');
+    $js .= file_get_contents(APPLICATION_PATH.'/externals/smoothbox/smoothbox4.js');
+    $modulesEnable = Engine_Api::_()->getDbTable('modules', 'core')->getEnabledModuleNames();
+    foreach($modulesEnable as $module){
+      $moduleName = ucfirst($module);
+      if(file_exists(APPLICATION_PATH.'/application/modules/'.$moduleName.'/externals/styles/main.css')){
+        $css .= file_get_contents(APPLICATION_PATH.'/application/modules/'.$moduleName.'/externals/styles/main.css');
+      }
+      if(file_exists(APPLICATION_PATH.'/application/modules/'.$moduleName.'/externals/scripts/core.js') && $moduleName != "Core" && $moduleName != "User"){
+        $js .= file_get_contents(APPLICATION_PATH.'/application/modules/'.$moduleName.'/externals/scripts/core.js');
+      }
+    }
+    
+    @file_put_contents(APPLICATION_PATH.'/externals/styles/styles.css', str_replace("~/",$baseUrl,$this->minify_css($css)));
+    @file_put_contents(APPLICATION_PATH.'/externals/scripts/script.js', $this->minify_js($js));
+  }
+  
+
+function minify_css($input) {
+  if(trim($input) === "") return $input;
+  return preg_replace(
+      array(
+          // Remove comment(s)
+          '#("(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\')|\/\*(?!\!)(?>.*?\*\/)|^\s*|\s*$#s',
+          // Remove unused white-space(s)
+          '#("(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\'|\/\*(?>.*?\*\/))|\s*+;\s*+(})\s*+|\s*+([*$~^|]?+=|[{};,>~]|\s(?![0-9\.])|!important\b)\s*+|([[(:])\s++|\s++([])])|\s++(:)\s*+(?!(?>[^{}"\']++|"(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\')*+{)|^\s++|\s++\z|(\s)\s+#si',
+          // Replace `0(cm|em|ex|in|mm|pc|pt|px|vh|vw|%)` with `0`
+          '#(?<=[\s:])(0)(cm|em|ex|in|mm|pc|pt|px|vh|vw|%)#si',
+          // Replace `:0 0 0 0` with `:0`
+          '#:(0\s+0|0\s+0\s+0\s+0)(?=[;\}]|\!important)#i',
+          // Replace `background-position:0` with `background-position:0 0`
+          '#(background-position):0(?=[;\}])#si',
+          // Replace `0.6` with `.6`, but only when preceded by `:`, `,`, `-` or a white-space
+          '#(?<=[\s:,\-])0+\.(\d+)#s',
+          // Minify string value
+          '#(\/\*(?>.*?\*\/))|(?<!content\:)([\'"])([a-z_][a-z0-9\-_]*?)\2(?=[\s\{\}\];,])#si',
+          '#(\/\*(?>.*?\*\/))|(\burl\()([\'"])([^\s]+?)\3(\))#si',
+          // Minify HEX color code
+          '#(?<=[\s:,\-]\#)([a-f0-6]+)\1([a-f0-6]+)\2([a-f0-6]+)\3#i',
+          // Replace `(border|outline):none` with `(border|outline):0`
+          '#(?<=[\{;])(border|outline):none(?=[;\}\!])#',
+          // Remove empty selector(s)
+          '#(\/\*(?>.*?\*\/))|(^|[\{\}])(?:[^\s\{\}]+)\{\}#s'
+      ),
+      array(
+          '$1',
+          '$1$2$3$4$5$6$7',
+          '$1',
+          ':0',
+          '$1:0 0',
+          '.$1',
+          '$1$3',
+          '$1$2$4$5',
+          '$1$2$3',
+          '$1:0',
+          '$1$2'
+      ),
+  $input);
+}
+function removeComments($string){
+  //Takes a string of code, not an actual function.
+  $pattern = '/(?:(?:\/\*(?:[^*]|(?:\*+[^*\/]))*\*+\/)|(?:(?<!\:|\\\|\')\/\/.*))/';
+  return preg_replace($pattern, '', $string);
+}
+// JavaScript Minifier
+function minify_js($input) {
+  return $input;
+  return $input;
+  // return $input;
+    if(trim($input) === "") return $input;
+    $input = preg_replace('/([-\+])\s+\+([^\s;]*)/', '$1 (+$2)', $input);
+    // condense spaces
+    $input = preg_replace("/\s*\n\s*/", "\n", $input); // spaces around newlines
+    $input = preg_replace("/\h+/", " ", $input); // \h+ horizontal white space
+    // remove unnecessary horizontal spaces around non variables (alphanumerics, underscore, dollar sign)
+    $input = preg_replace("/\h([^A-Za-z0-9\_\$])/", '$1', $input);
+    $input = preg_replace("/([^A-Za-z0-9\_\$])\h/", '$1', $input);
+    // remove unnecessary spaces around brackets and parentheses
+    $input = preg_replace("/\s?([\(\[{])\s?/", '$1', $input);
+    $input = preg_replace("/\s([\)\]}])/", '$1', $input);
+    // remove unnecessary spaces around operators that don't need any spaces (specifically newlines)
+    $input = preg_replace("/\s?([\.=:\-+,])\s?/", '$1', $input);
+    // unnecessary characters 
+    $input = preg_replace("/;\n/", ";", $input); // semicolon before newline
+    $input = preg_replace('/;}/', '}', $input); // semicolon before end bracket
+    // return $input;
+    echo $input;die;
+    $input =  preg_replace(
+        array(
+            // Remove comment(s)
+            '#\s*("(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\')\s*|\s*\/\*(?!\!|@cc_on)(?>[\s\S]*?\*\/)\s*|\s*(?<![\:\=])\/\/.*(?=[\n\r]|$)|^\s*|\s*$#',
+            // Remove white-space(s) outside the string and regex
+            '#("(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\'|\/\*(?>.*?\*\/)|\/(?!\/)[^\n\r]*?\/(?=[\s.,;]|[gimuy]|$))|\s*([!%&*\(\)\-=+\[\]\{\}|;:,.<>?\/])\s*#s',
+            // Remove the last semicolon
+            '#;+\}#',
+            // Minify object attribute(s) except JSON attribute(s). From `{'foo':'bar'}` to `{foo:'bar'}`
+            '#([\{,])([\'])(\d+|[a-z_][a-z0-9_]*)\2(?=\:)#i',
+            // --ibid. From `foo['bar']` to `foo.bar`
+            '#([a-z0-9_\)\]])\[([\'"])([a-z_][a-z0-9_]*)\2\]#i'
+        ),
+        array(
+            '$1',
+            '$1$2',
+            '}',
+            '$1$3',
+            '$1.$3'
+        ),
+      $this->removeComments($input));
+
+      
+      return $input;
+  }
+
+  function fileTypes($type) {
+  
+    $counter = 0;
+    $types = array(
+    // Image formats
+    'image_'.$counter++ => 'image/jpeg',
+    'image_'.$counter++ => 'image/gif',
+    'image_'.$counter++ => 'image/png',
+    'image_'.$counter++ => 'image/bmp',
+    'image_'.$counter++ => 'image/tiff',
+    'image_'.$counter++ => 'image/x-icon',
+    // Video formats
+    'video_'.$counter++ => 'video/x-ms-asf',
+    'video_'.$counter++ => 'video/x-ms-wmv',
+    'video_'.$counter++ => 'video/x-ms-wmx',
+    'video_'.$counter++ => 'video/x-ms-wm',
+    'video_'.$counter++ => 'video/avi',
+    'video_'.$counter++ => 'video/divx',
+    'video_'.$counter++ => 'video/x-flv',
+    'video_'.$counter++ => 'video/quicktime',
+    'video_'.$counter++ => 'video/mpeg',
+    'video_'.$counter++ => 'video/mp4',
+    'video_'.$counter++ => 'video/ogg',
+    'video_'.$counter++ => 'video/webm',
+    'video_'.$counter++ => 'video/x-matroska',
+    // Text formats
+    'text_'.$counter++ => 'text/plain',
+    'code_'.$counter++ => 'application/octet-stream',
+    'csv_'.$counter++ => 'text/csv',
+    'text_'.$counter++ => 'text/tab-separated-values',
+    'calander_'.$counter++ => 'text/calendar',
+    'text_'.$counter++ => 'text/richtext',
+    'code_'.$counter++ => 'text/css',
+    'code_'.$counter++ => 'text/html',
+    // Audio formats
+    'audio_'.$counter++ => 'audio/mpeg',
+    'audio_'.$counter++ => 'audio/x-realaudio',
+    'audio_'.$counter++ => 'audio/wav',
+    'audio_'.$counter++ => 'audio/amr',
+      'audio_'.$counter++ => 'audio/mp3',
+    'audio_'.$counter++ => 'audio/ogg',
+    'audio_'.$counter++ => 'audio/midi',
+    'audio_'.$counter++ => 'audio/x-ms-wma',
+    'audio_'.$counter++ => 'audio/x-ms-wax',
+    'audio_'.$counter++ => 'audio/x-matroska',
+    // Misc application formats
+    'file_'.$counter++ => 'application/rtf',
+    'code_'.$counter++ => 'application/javascript',
+    'pdf_'.$counter++ => 'application/pdf',
+    'file_'.$counter++ => 'application/x-shockwave-flash',
+    'file_'.$counter++ => 'application/java',
+    'archive_'.$counter++ => 'application/x-tar',
+    'archive_'.$counter++ => 'application/zip',
+    'archive_'.$counter++ => 'application/x-gzip',
+    'archive_'.$counter++ => 'application/rar',
+    'file_'.$counter++ => 'application/x-7z-compressed',
+    'exe_'.$counter++ => 'application/x-msdownload',
+    // MS Office formats
+    'document_'.$counter++ => 'application/msword',
+    'document_'.$counter++ => 'application/vnd.ms-powerpoint',
+    'document_'.$counter++ => 'application/vnd.ms-write',
+    'document_'.$counter++ => 'application/vnd.ms-excel',
+    'document_'.$counter++ => 'application/vnd.ms-access',
+    'document_'.$counter++ => 'application/vnd.ms-project',
+    'document_'.$counter++ => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'document_'.$counter++ => 'application/vnd.ms-word.document.macroEnabled.12',
+    'document_'.$counter++ => 'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
+    'document_'.$counter++ => 'application/vnd.ms-word.template.macroEnabled.12',
+    'document_'.$counter++ => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'document_'.$counter++ => 'application/vnd.ms-excel.sheet.macroEnabled.12',
+    'document_'.$counter++ => 'application/vnd.ms-excel.sheet.binary.macroEnabled.12',
+    'document_'.$counter++ => 'application/vnd.openxmlformats-officedocument.spreadsheetml.template',
+    'document_'.$counter++ => 'application/vnd.ms-excel.template.macroEnabled.12',
+    'document_'.$counter++ => 'application/vnd.ms-excel.addin.macroEnabled.12',
+    'document_'.$counter++ => 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    'document_'.$counter++ => 'application/vnd.ms-powerpoint.presentation.macroEnabled.12',
+    'document_'.$counter++ => 'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
+    'document_'.$counter++ => 'application/vnd.ms-powerpoint.slideshow.macroEnabled.12',
+    'document_'.$counter++ => 'application/vnd.openxmlformats-officedocument.presentationml.template',
+    'document_'.$counter++ => 'application/vnd.ms-powerpoint.template.macroEnabled.12',
+    'document_'.$counter++ => 'application/vnd.ms-powerpoint.addin.macroEnabled.12',
+    'document_'.$counter++ => 'application/vnd.openxmlformats-officedocument.presentationml.slide',
+    'document_'.$counter++ => 'application/vnd.ms-powerpoint.slide.macroEnabled.12',
+    'document_'.$counter++ => 'application/onenote',
+    // OpenOffice formats
+    'file_'.$counter++ => 'application/vnd.oasis.opendocument.text',
+    'file_'.$counter++ => 'application/vnd.oasis.opendocument.presentation',
+    'file_'.$counter++ => 'application/vnd.oasis.opendocument.spreadsheet',
+    'file_'.$counter++ => 'application/vnd.oasis.opendocument.graphics',
+    'file_'.$counter++ => 'application/vnd.oasis.opendocument.chart',
+    'file_'.$counter++ => 'application/vnd.oasis.opendocument.database',
+    'file_'.$counter++ => 'application/vnd.oasis.opendocument.formula',
+    // WordPerfect formats
+    'file_'.$counter++ => 'application/wordperfect',
+    // iWork formats
+    'file_'.$counter++ => 'application/vnd.apple.keynote',
+    'file_'.$counter++ => 'application/vnd.apple.numbers',
+    'file_'.$counter++ => 'application/vnd.apple.pages',
+    );
+    if(false !== $key = array_search($type, $types)) {
+      return $key;
+    } else {
+      return "";
+    }
+  }
+  public function saveThemeVariables($values, $form, $themeName) {
+
+    unset($values['contrast_mode']);
+    unset($values['theme_color']);
+
+    $theme = APPLICATION_PATH . '/application/themes/'.$themeName;
+    @chmod($theme, 0777);
+    $filename = $theme . '/theme-variables.css';
+    if (!is_readable($theme)) {
+      $error = Zend_Registry::get('Zend_Translate')->_("You do not have read permission on below file path. So, please give chmod 777 recursive permission to continue this process. Path Name: %s", $theme);
+      $form->addError($error);
+      return;
+    }
+
+    $fileExists = @file_exists($filename);
+    if (!empty($fileExists)) {
+      @chmod($theme, 0777);
+      if (!is_writable($theme)) {
+        $error = Zend_Registry::get('Zend_Translate')->_("You do not have writable permission on below file path. So, please give chmod 777 recursive permission to continue this process.  Path Name: $theme");
+        $form->addError($error);
+        return;
+      }
+      
+      $fh = @fopen($filename, 'w');
+      $constant = '';
+      $constant .= ':root {';
+      $constant .= PHP_EOL ;
+      foreach($values as $key => $value) {
+        $key = str_replace('_', '-', $key);
+        $constant .= '--'.$key.':'.$value.';' . PHP_EOL;
+      }
+      $constant .= '}';
+      @fwrite($fh, $constant);
+      @chmod($filename, 0777);
+      @fclose($fh);
+      @chmod($filename, 0777);
+      @chmod($filename, 0777);
+    } else {
+      $fh = @fopen($filename, 'w');
+      $constant = '';
+      $constant .= ':root {';
+      $constant .= PHP_EOL ;
+      foreach($values as $key => $value) {
+        $key = str_replace('_', '-', $key);
+        $constant .= '--'.$key.':'.$value.';' . PHP_EOL;
+      }
+      $constant .= '}';
+      @fwrite($fh, $constant);
+      @chmod($filename, 0777);
+      @fclose($fh);
+      @chmod($filename, 0777);
+      @chmod($filename, 0777);
+    }
+  }
+
+  public function getGoogleFonts($param) {
+
+    $url = "https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyDczHMCNc0JCmJACM86C7L8yYdF9sTvz1A";
+    
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_HEADER, 0);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+    $data = curl_exec($ch);
+    curl_close($ch);
+
+    $results = json_decode($data,true);
+
+    $googleFontArray = $googleFontVariants = array();
+
+    foreach($results['items'] as $re) {
+      $googleFontArray['"'.$re["family"].'"'] = $re['family'];
+      $googleFontVariants['"'.$re["family"].'"'] = $re['variants'];
+    }
+
+    if($param == 'fontfamily') {
+      return $googleFontArray;
+    } else if($param == 'variants') {
+      return $googleFontVariants;
+    }
   }
 }

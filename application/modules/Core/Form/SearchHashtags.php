@@ -37,6 +37,13 @@ class Core_Form_SearchHashtags extends Engine_Form
       'label' => 'Search Hashtags',
     ));
 
+    if(!Engine_Api::_()->user()->getViewer()->getIdentity()) {
+      $this->addElement('Hidden', 'hashtagtext', array(
+        'order' => 1202,
+        'value' => !empty($_GET['search']) ? $_GET['search'] : '',
+      ));
+    }
+
     $this->addElement('Button', 'submit', array(
       'type' => 'submit',
       'label' => 'Search',

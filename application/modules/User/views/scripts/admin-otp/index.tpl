@@ -36,7 +36,7 @@
       scriptJquery('#otpsms_test_code-wrapper').hide();  
     }
   }
-  scriptJquery(document).ready(function() {
+  en4.core.runonce.add(function() {
     hideShow("<?php echo Engine_Api::_()->getApi('settings', 'core')->getSetting('otpsms.signup.phonenumber', 0); ?>");
   }); 
 

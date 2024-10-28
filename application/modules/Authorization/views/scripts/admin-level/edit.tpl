@@ -63,7 +63,7 @@
     Smoothbox.open(scriptJquery('#show_default_preview'));
   }
 
-  scriptJquery("ready").ready(function() {
+  en4.core.runonce.add(function() {
     showProfileMemberLevel('<?php echo $permissionTable->getAllowed('user', $this->level_id, 'editprofiletype'); ?>');
 
     hideShowMessageSettings('<?php echo $permissionTable->getAllowed('messages', $this->level_id, 'auth'); ?>');

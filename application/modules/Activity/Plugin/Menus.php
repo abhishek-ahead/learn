@@ -37,5 +37,12 @@ class Activity_Plugin_Menus
       'uri' => 'javascript:void(0);this.blur();',
     );
   }
-
+  
+  public function enableonthisday() {
+    $viewer = Engine_Api::_()->user()->getViewer();
+    if(!$viewer->getIdentity()){
+			return false;	
+		}    
+    return true;
+  }
 }

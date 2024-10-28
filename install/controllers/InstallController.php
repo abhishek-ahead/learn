@@ -709,7 +709,7 @@ class InstallController extends Zend_Controller_Action
     }
 
     // Create database shtuff
-    $preInstallModules = array('core', 'authorization', 'activity', 'user', 'messages', 'network', 'invite', 'fields', 'storage', 'announcement', 'payment', 'elpis');
+    $preInstallModules = array('core', 'authorization', 'activity', 'user', 'messages', 'network', 'invite', 'fields', 'storage', 'announcement', 'payment', 'harmony');
     try {
       foreach( $preInstallModules as $module ) {
         $file = APPLICATION_PATH . '/application/modules/' . ucwords($module) . '/settings/my.sql';
@@ -888,6 +888,11 @@ class InstallController extends Zend_Controller_Action
       // Insert
       $row = $usersTable->createRow();
       $row->setFromArray($values);
+      $row->save();
+
+      //Display name
+      $displayname = $values['firstname'] . ' ' . $values['lastname'];
+      $row->displayname = $displayname;
       $row->save();
 
       // First Signup Increment

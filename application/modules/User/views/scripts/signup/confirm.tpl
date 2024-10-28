@@ -35,5 +35,7 @@
   </div>
 </div>
 <script type="text/javascript">
-  scriptJquery("#global_wrapper").addClass('authpage')
+  en4.core.runonce.add(function() {
+    scriptJquery("body").addClass('authpage')
+  });
 </script>

@@ -32,7 +32,7 @@
 </div>
 
 <script type="application/javascript">
-  scriptJquery(document).ready(function() {
+  en4.core.runonce.add(function() {
     recaptchaVersion("<?php echo Engine_Api::_()->getApi('settings', 'core')->core_spam_recaptcha_version; ?>", '');
   });
   function recaptchaVersion(value) {
@@ -56,7 +56,7 @@
       }
   }
 
-  scriptJquery(document).ready(function() {
+  en4.core.runonce.add(function() {
     changeLock(scriptJquery('input[name=lockaccount]:checked')[0]);
   });
 </script>

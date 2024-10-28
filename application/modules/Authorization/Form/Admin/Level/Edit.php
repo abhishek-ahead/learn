@@ -155,15 +155,15 @@ class Authorization_Form_Admin_Level_Edit extends Authorization_Form_Admin_Level
         )
       ));
 
-      $this->addElement('Text', 'activity_edit_time', array(
-        'label' => 'Maximum Allowed time for editing status posts?',
-        'description' => 'Enter the maximum allowed time (in minutes) for which members will be able to edit their status posts via activity feed.'
-        . ' The field must contain an integer between 1 and 1000000, or 0 for unlimited.',
-        'validators' => array(
-          array('Int', true),
-          new Engine_Validate_AtLeast(0),
-        ),
-      ));
+      // $this->addElement('Text', 'activity_edit_time', array(
+      //   'label' => 'Maximum Allowed time for editing status posts?',
+      //   'description' => 'Enter the maximum allowed time (in minutes) for which members will be able to edit their status posts via activity feed.'
+      //   . ' The field must contain an integer between 1 and 1000000, or 0 for unlimited.',
+      //   'validators' => array(
+      //     array('Int', true),
+      //     new Engine_Validate_AtLeast(0),
+      //   ),
+      // ));
       
       // Element: username
       $this->addElement('Select', 'changeemail', array(
@@ -253,6 +253,7 @@ class Authorization_Form_Admin_Level_Edit extends Authorization_Form_Admin_Level
         )
       ));
       
+      //Cover Photo Settings
       //New File System Code
       $covers = array('' => '');
       $files = Engine_Api::_()->getDbTable('files', 'core')->getFiles(array('fetchAll' => 1, 'extension' => array('gif', 'jpg', 'jpeg', 'png', 'webp')));
@@ -268,10 +269,26 @@ class Authorization_Form_Admin_Level_Edit extends Authorization_Form_Admin_Level
         'multiOptions' => $covers,
       ));
       $this->coverphoto->addDecorator('Description', array('placement' => Zend_Form_Decorator_Abstract::PREPEND, 'escape' => false));
-
-//       $this->addElement('dummy', 'coverphoto_dummy', [
-//         'label' => 'Default User Cover Photo',
-//       ]);
+      
+      $this->addElement('Select', 'is_fullwidth', array(
+        'label' => "Show Cover Photo in Full Width",
+        'description' => 'Do you want to show Cover Photo in full width?',
+        'multiOptions' => array(
+          '1' => 'Yes',
+          '0' => 'No',
+        ),
+        'value' => 1,
+      ));
+      $this->addElement('Select', 'tab', array(
+        'label' => 'Tab Placement',
+        'description' => "Choose from below where you want to show Tab (Note: This setting does not work in Template - 2)",
+        'multiOptions' => array(
+          'inside' => 'Inside Cover Photo Widget',
+          'outside' => 'Outside Cover Photo Widget',
+        ),
+        'value' => 1,
+      ));
+      //End Cover Photo Settings
 
         $this->addElement('FloodControl', 'activity_flood', array(
             'label' => 'Maximum Allowed Status Messages per Duration',

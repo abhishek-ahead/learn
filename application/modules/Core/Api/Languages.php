@@ -12,53 +12,22 @@
 
 class Core_Api_Languages extends Core_Api_Abstract {
 
-  public function getLanguages() {
+  public function getLanguages($params = array()) {
   
-    // Languages
-    $languagePath = APPLICATION_PATH . '/application/languages';
-    $translate    = Zend_Registry::get('Zend_Translate');
-    $languageList = $translate->getList();
+    $table = Engine_Api::_()->getDbTable('languages', 'core');
+    $tableName = $table->info('name');
     
-    // Prepare default langauge
-    $defaultLanguage = Engine_Api::_()->getApi('settings', 'core')->getSetting('core.locale.locale', 'en');
-    if ($defaultLanguage == 'auto') {
-        $defaultLanguage = 'en';
+    $select = $table->select()
+                    ->from($tableName);
+    if(!isset($params['admin']) && empty($params['admin'])) {
+      $select->where('enabled = ?', 1);
     }
-
-    // Init default locale
-    $localeObject = Zend_Registry::get('Locale');
-    $languages = Zend_Locale::getTranslationList('language', $localeObject);
-    $territories = Zend_Locale::getTranslationList('territory', $localeObject);
-
+    $select->order('order ASC');
+    
+    $languages = $table->fetchAll($select);
     $localeMultiOptions = array();
-    foreach ($languageList as $key) {
-      $dir = $languagePath . '/' . $key;
-      if (!is_dir($dir)) {
-          continue;
-      }
-      $isEnabled = Engine_Api::_()->getDbTable('languages', 'core')->isEnabled($key);
-      if(empty($isEnabled)) {
-        continue;
-      }
-      $languageName = null;
-      if (!empty($languages[$key])) {
-        $languageName = $languages[$key];
-      } else {
-        $tmpLocale = new Zend_Locale($key);
-        $region = $tmpLocale->getRegion();
-        $language = $tmpLocale->getLanguage();
-        if (!empty($languages[$language]) && !empty($territories[$region])) {
-            $languageName =  $languages[$language] . ' (' . $territories[$region] . ')';
-        }
-      }
-
-      if ($languageName) {
-        $localeMultiOptions[$key] = $languageName . '';
-      }
-    }
-
-    if (!isset($localeMultiOptions[$defaultLanguage])) {
-      $defaultLanguage = 'en';
+    foreach ($languages as $language) {
+      $localeMultiOptions[$language->code] = $language->name;
     }
     return $localeMultiOptions;
   }

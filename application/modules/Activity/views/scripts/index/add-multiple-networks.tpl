@@ -15,7 +15,7 @@
     var oldNetworks = window.parent.document.getElementById('auth_view').value;
     var tempNetworks = oldNetworks.split(",");
     for (var i = 0; i < tempNetworks.length; i++) {
-      var tempListElement = window.parent.document.getElementById('privacy_list_' + tempNetworks[i] );
+      var tempListElement = window.parent.document.getElementById('privacy_list_' + tempNetworks[i]);
       scriptJquery(tempListElement).removeClass('activity_tab_active').addClass('activity_tab_unactive');
     }
 
@@ -29,7 +29,7 @@
         label = label + ", " + scriptJquery('#network_list-' + networksArray[i]).parent('li').find('label').html();
       }
 
-      tempListElement = window.parent.document.getElementById('privacy_list_'+ networksArray[i]);
+      tempListElement = window.parent.document.getElementById('privacy_list_' + networksArray[i]);
       scriptJquery(tempListElement).addClass('activity_tab_active').removeClass('activity_tab_unactive');
     }
 
@@ -46,8 +46,8 @@
 
   function getSelectedNetworks() {
     var selectedNets = new Array();
-    scriptJquery('.network_list').each(function() {
-      if(scriptJquery(this).is(':checked')){
+    scriptJquery('.network_list').each(function () {
+      if (scriptJquery(this).is(':checked')) {
         selectedNets.push(scriptJquery(this).val());
       }
     });
@@ -56,15 +56,18 @@
 </script>
 <div class="global_form_popup">
   <form class="global_form">
-    <p class="form-description"><b><?php echo $this->translate("Choose Multiple Networks you want to share with:") ?></b>
+    <p class="form-description">
+      <b><?php echo $this->translate("Choose Multiple Networks you want to share with:") ?></b>
     </p>
-    <br/>
+    <br />
     <div class="form-elements">
       <div id="network_list_wapper" class="form-wrapper">
         <ul class="form-options-wrapper">
           <?php foreach ($this->networkLists as $list): ?>
             <li>
-              <input class="network_list" type="checkbox" name="network_list[]" id="network_list-<?php echo "network_" . $list->getIdentity() ?>" value="network_<?php echo $list->getIdentity() ?>">
+              <input class="network_list" type="checkbox" name="network_list[]"
+                id="network_list-<?php echo "network_" . $list->getIdentity() ?>"
+                value="network_<?php echo $list->getIdentity() ?>">
               <label for="network_list-network_<?php echo $list->getIdentity() ?>">
                 <?php echo $this->translate($list->getTitle()) ?>
               </label>
@@ -72,7 +75,7 @@
           <?php endforeach; ?>
         </ul>
       </div>
-      <br/>
+      <br />
       <div class="form-element" id="add-element">
         <button onclick="setNetworks();" type="button" id="add" name="add">
           <?php echo $this->translate("Done") ?>

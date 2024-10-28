@@ -18,7 +18,7 @@
 
 
 <script type="text/javascript">
-  scriptJquery(document).ready(function(){
+  en4.core.runonce.add(function() {
     var smtp = scriptJquery('#mail_smtp_server-wrapper, \
               #mail_smtp_port-wrapper, \
               #mail_smtp_authentication-wrapper, \

@@ -22,8 +22,7 @@ class Core_Api_Links extends Core_Api_Abstract
   {
     $table = Engine_Api::_()->getDbtable('links', 'core');
 
-    if( empty($data['parent_type']) || empty($data['parent_id']) )
-    {
+    if (empty($data['parent_type']) || empty($data['parent_id'])) {
       $data['parent_type'] = $owner->getType();
       $data['parent_id'] = $owner->getIdentity();
     }
@@ -36,29 +35,26 @@ class Core_Api_Links extends Core_Api_Abstract
 
     // Now try to create thumbnail
     $thumbnail = (string) @$data['thumb'];
-    $thumbnail_parsed = true;
-    $content = $this->url_get_contents($thumbnail);
+    $thumbnail_parsed = @parse_url($thumbnail);
 
-    //$ext = @ltrim(strrchr($thumbnail_parsed['path'], '.'), '.');
-    //$link_parsed = @parse_url($link->uri);
-
-    // Make sure to not allow thumbnails from domains other than the link (problems with subdomains, disabled for now)
-    //if( $thumbnail && $thumbnail_parsed && $thumbnail_parsed['host'] === $link_parsed['host'] )
-    //if( $thumbnail && $ext && $thumbnail_parsed && engine_in_array($ext, array('jpg', 'jpeg', 'gif', 'png')) )
-    if( $thumbnail && $content )
-    {
+    if ($thumbnail && $thumbnail_parsed) {
       $tmp_path = APPLICATION_PATH . '/temporary/link';
       $tmp_file = $tmp_path . '/' . md5($thumbnail);
 
-      if( !is_dir($tmp_path) && !mkdir($tmp_path, 0777, true) ) {
+      if (!is_dir($tmp_path) && !mkdir($tmp_path, 0777, true)) {
         throw new Core_Model_Exception('Unable to create tmp link folder : ' . $tmp_path);
       }
-
-      $file = file_put_contents($tmp_file, $content);
-
-      if( ($info = getimagesize($tmp_file)) && !empty($info[2]) ) {
+      $ext = ltrim(strrchr($thumbnail, '.'), '.');
+      $content = $this->url_get_contents($thumbnail);
+      if ($content) {
+        $valid_thumb = true;
+        file_put_contents($tmp_file, $content);
+      } else {
+        $valid_thumb = false;
+      }
+      if ($valid_thumb && ($info = getimagesize($tmp_file)) && !empty($info[2])) {
         $ext = Engine_Image::image_type_to_extension($info[2]);
-        $thumb_file = $tmp_path . '/thumb_'.md5($thumbnail) . '.'.$ext;
+        $thumb_file = $tmp_path . '/thumb_' . md5($thumbnail) . '.' . $ext;
 
         $image = Engine_Image::factory();
         $image->open($tmp_file)
@@ -69,7 +65,8 @@ class Core_Api_Links extends Core_Api_Abstract
         $thumbFileRow = Engine_Api::_()->storage()->create($thumb_file, array(
           'parent_type' => $link->getType(),
           'parent_id' => $link->getIdentity()
-        ));
+        )
+        );
 
         $link->photo_id = $thumbFileRow->file_id;
         $link->save();
@@ -79,16 +76,16 @@ class Core_Api_Links extends Core_Api_Abstract
 
       @unlink($tmp_file);
     }
-
     return $link;
   }
-    function url_get_contents ($Url) {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $Url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-        $output = curl_exec($ch);
-        curl_close($ch);
-        return $output;
-    }
+  function url_get_contents($Url)
+  {
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $Url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+    $output = curl_exec($ch);
+    curl_close($ch);
+    return $output;
+  }
 }

@@ -19,7 +19,6 @@
 <div class="generic_layout_container layout_main user_setting_main_page_main">
   <div class="generic_layout_container layout_middle user_setting_main_middle">
     <div class="theiaStickySidebar">
-      <?php $this->headScript()->appendFile($this->layout()->staticBaseUrl.'application/modules/Core/externals/scripts/create_edit_category.js'); ?>
       <div class="user_setting_global_form">
           <div class="mb-3">
             <h3><?php echo $this->translate("Support Inbox") ?></h3>
@@ -27,7 +26,7 @@
           <div class="mb-2">
             <a href='<?php echo $this->url(array('module' => 'user', 'controller' => 'support', 'action' => 'create', 'id' => $this->user_id, 'param' => 1), 'user_support', true) ?>' class="smoothbox btn btn-primary"><i class="fas fa-plus"></i><span><?php echo $this->translate("Open New Ticket") ?></span></a>
           </div>
-          <div class="manage_search">
+          <div class="manage_search core_search_form">
             <?php echo $this->formFilter->render($this) ?>
           </div>
         <script type="text/javascript">
@@ -80,7 +79,7 @@
             }
           });
 
-          scriptJquery(document).ready(function(){
+          en4.core.runonce.add(function() {
             scriptJquery("#selectall").click(function(){
               if(this.checked){
                 scriptJquery('.checkbox').each(function(){
@@ -167,15 +166,15 @@
         <?php } ?>
       </div>
       <script type="text/javascript">
-        var sesselectedDate;
+        var coreselectedDate;
         scriptJquery('#date-date_from').attr("type","text").attr("autocomplete","off").attr("placeholder","<?php echo $this->translate('From'); ?>").datepicker({
         }).on('change', function(ev){
-          sesselectedDate = scriptJquery('#date-date_from').val();
+          coreselectedDate = scriptJquery('#date-date_from').val();
           scriptJquery('#date-date_to').datepicker('option', 'minDate', scriptJquery('#date-date_from').val());
         });
         
         scriptJquery('#date-date_to').attr("type","text").attr("autocomplete","off").attr("placeholder","<?php echo $this->translate('To'); ?>").datepicker({
-          minDate: sesselectedDate,
+          minDate: coreselectedDate,
         });
       </script>
     </div>

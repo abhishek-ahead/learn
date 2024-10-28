@@ -72,7 +72,8 @@ function selectAll(obj){
               <tr>
                 <td><input name='modify_<?php echo $item->getIdentity();?>' value='<?php echo $item->getIdentity();?>' type='checkbox' class='checkbox'></td>
                 <td data-label="<?php echo $this->translate("ID") ?>"><?php echo $item->getIdentity() ?></td>
-                <td data-label="<?php echo $this->translate("Comment") ?>"><?php echo $this->string()->truncate(Engine_Text_Emoji::decode($item->body), 45, '...') ?></td>
+                <td data-label="<?php echo $this->translate("Comment") ?>">
+                  <?php echo $this->partial('_activitycommentcontent.tpl', 'comment', array('comment' => $item)); ?><?php //echo $this->string()->truncate(Engine_Text_Emoji::decode($item->body), 45, '...') ?></td>
                 <td data-label="<?php echo $this->translate("Commented By") ?>">
                   <div class="admin_table_comments">
                     <?php $poster = Engine_Api::_()->getItem($item->poster_type, $item->poster_id); ?>

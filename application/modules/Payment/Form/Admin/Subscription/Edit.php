@@ -33,8 +33,7 @@ class Payment_Form_Admin_Subscription_Edit extends Engine_Form
           'changing this to "cancelled" will not refund any transactions or ' .
           'cancel any recurring payment profiles, however if it was ' .
           'previously "active," the member will have to create a new ' .
-          'subscription. Please use the details link on ' .
-          'Manage Subscriptions page to perform these actions.',
+          'subscription.',
       'multiOptions' => array(
         'initial' => 'Initializing',
         'trial' => 'Trial',

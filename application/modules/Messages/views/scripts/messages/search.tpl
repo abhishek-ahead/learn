@@ -11,22 +11,21 @@
  */
 ?>
 
-<div>
-  <?php echo $this->translate(array('%1$s message matches your search', '%1$s messages match your search', $this->paginator->getTotalItemCount()),
-                              $this->locale()->toNumber($this->paginator->getTotalItemCount())) ?>
-  <form action="messages/search" method="GET" style="float: right;">
-    <input type="text" placeholder="Search" name="query" value="<?php echo htmlspecialchars(!empty($this->queryStr) ? $this->queryStr : '', ENT_QUOTES, 'UTF-8') ?>"  />
-  </form>
-</div>
-<br />
-
-<?php if( $this->paginator->getTotalItemCount() <= 0 ): ?>
-  <div class="tip">
-    <span>
-      <?php echo $this->translate('No results'); ?>
-    </span>
+<div class="messages_list_header">
+  <div class="messages_list_header_left">
+    <p class="font_bold  m-0"><?php echo $this->translate(array('%1$s message matches your search', '%1$s messages match your search', $this->paginator->getTotalItemCount()), $this->locale()->toNumber($this->paginator->getTotalItemCount())) ?></p>
   </div>
-  <br />
+  <div class="messages_list_header_search">
+    <form action="messages/search" method="GET">
+      <input type="text" placeholder="Search" name="query" value="<?php echo htmlspecialchars(!empty($this->queryStr) ? $this->queryStr : '', ENT_QUOTES, 'UTF-8') ?>"  />
+    </form>
+  </div>
+</div>
+<?php if( $this->paginator->getTotalItemCount() <= 0 ): ?>
+  <div class="no_result_tip">
+    <i><img src="application/modules/Core/externals/images/no-results.png" height="100" width="100" alt="No Result"></i>
+    <p><?php echo $this->translate('No results'); ?></p>
+  </div>
 <?php endif; ?>
 
 <?php if( engine_count($this->paginator) ): ?>
@@ -97,10 +96,9 @@
       <?php endforeach; ?>
     </ul>
   </div>
-
-<script type="text/javascript">
-  scriptJquery('.messages_list').enableLinks();
-</script>
+  <script type="text/javascript">
+    scriptJquery('.messages_list').enableLinks();
+  </script>
 <?php endif; ?>
 
 <?php echo $this->paginationControl($this->paginator); ?>

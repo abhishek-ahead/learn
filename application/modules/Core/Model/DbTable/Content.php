@@ -18,21 +18,31 @@
  */
 class Core_Model_DbTable_Content extends Engine_Db_Table
 {
-    protected $_serializedColumns = array('params');
+  protected $_serializedColumns = array('params');
 
-    public function widgetId($widgetName, $pageName) {
+  public function widgetId($widgetName, $pageName)
+  {
 
-        $contentTableName = $this->info('name');
+    $contentTableName = $this->info('name');
 
-        $pagesTableName = Engine_Api::_()->getDbTable('pages', 'core')->info('name');
+    $pagesTableName = Engine_Api::_()->getDbTable('pages', 'core')->info('name');
 
-        return $this->select()
-            ->setIntegrityCheck(false)
-            ->from($contentTableName, 'content_id')
-            ->joinLeft($pagesTableName, $pagesTableName . '.page_id = ' . $contentTableName . '.page_id')
-            ->where($pagesTableName . '.name = ?', $pageName)
-            ->where($contentTableName . '.name = ?', $widgetName)
-            ->query()
-            ->fetchColumn();
-    }
+    return $this->select()
+      ->setIntegrityCheck(false)
+      ->from($contentTableName, 'content_id')
+      ->joinLeft($pagesTableName, $pagesTableName . '.page_id = ' . $contentTableName . '.page_id')
+      ->where($pagesTableName . '.name = ?', $pageName)
+      ->where($contentTableName . '.name = ?', $widgetName)
+      ->query()
+      ->fetchColumn();
+  }
+  public function getWidgetParams($content_id)
+  {
+    $params = $this->select()
+      ->from($this->info('name'), 'params')
+      ->where('`content_id` = ?', $content_id)
+      ->query()
+      ->fetchColumn();
+    return json_decode($params, true);
+  }
 }

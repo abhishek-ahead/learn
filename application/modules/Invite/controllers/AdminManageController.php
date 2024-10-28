@@ -77,7 +77,7 @@ class Invite_AdminManageController extends Core_Controller_Action_Admin
     ->order(( !empty($values['order']) ? $values['order'] : 'id' ) . ' ' . ( !empty($values['order_direction']) ? $values['order_direction'] : 'DESC' ));
 
     if( !empty($values['recipient']) ) {
-      $select->where($table.'.recipient LIKE ?', '%' . $values['recipient'] . '%');
+      $select->where($table.'.recipient LIKE ?', $values['recipient'] . '%');
     }
 
     if( !empty($values['country_code']) ) {
@@ -93,7 +93,7 @@ class Invite_AdminManageController extends Core_Controller_Action_Admin
     }
     
     if( isset($values['import_method']) && $values['import_method'] != -1 ) {
-      $select->where($table.'.import_method LIKE ?', '%' . $values['import_method'] . '%');
+      $select->where($table.'.import_method LIKE ?', $values['import_method'] . '%');
     }
 
     if( !empty($values['id']) ) {

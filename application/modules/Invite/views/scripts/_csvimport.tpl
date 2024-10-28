@@ -264,19 +264,19 @@ scriptJquery('#importcnt').click(function(e) {
 		//window.close();
 });
 
-scriptJquery(document).on('click', '#mailing_footer_back', function(){
+AttachEventListerSE('click', '#mailing_footer_back', function(){
   scriptJquery('#send_invitions_form').hide();
   scriptJquery('#emailimport_content').show();
   scriptJquery('#importEmails').val('');
   
 });
 
-scriptJquery(document).on('click', '#invitepopup_close', function(){
+AttachEventListerSE('click', '#invitepopup_close', function(){
   scriptJquery('#importsend_email').remove();
   scriptJquery('#invite_import_popup_list_container').remove();
 });
 
-scriptJquery(document).on('click','#mailing_name_close',function(){
+AttachEventListerSE('click','#mailing_name_close',function(){
 
   var dataid = scriptJquery(this).attr('data-rel');
   scriptJquery(this).closest('li').remove();
@@ -294,7 +294,7 @@ scriptJquery('#checkall').change(function(e){
     document.getElementById('emailerror_message').style.display = 'none';
 });
 
-scriptJquery(document).on('change','.checkbox_slt_sm_im',function() {
+AttachEventListerSE('change','.checkbox_slt_sm_im',function() {
 
 	if(!scriptJquery(this).prop('checked')) {
 		scriptJquery('#checkall').prop('checked',false);

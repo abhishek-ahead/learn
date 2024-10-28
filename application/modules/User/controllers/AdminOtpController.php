@@ -258,7 +258,7 @@ class User_AdminOtpController extends Core_Controller_Action_Admin {
       $select->where($tableName . ".country_id = ?", $_GET['country_id']);
 
     if (!empty($_GET['name']))
-      $select->where($tableName . ".name LIKE ?", '%' . $_GET['name'] . '%');
+      $select->where($tableName . ".name LIKE ?", $_GET['name'] . '%');
 
     if(!empty($_GET['phonecode']))
       $select->where($tableName . ".phonecode = ?", $_GET['phonecode']);

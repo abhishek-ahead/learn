@@ -127,6 +127,33 @@ class Core_Plugin_Core
       //   'subject_type = ?' => $payload->getType(),
       //   'subject_id = ?' => $payload->getIdentity(),
       // ));
+
+      // Delete rating by resource
+      $ratingTable = Engine_Api::_()->getDbTable('ratings', 'core');
+      $ratingSelect = $ratingTable->select()
+        ->where('resource_type = ?', $payload->getType())
+        ->where('resource_id = ?', $payload->getIdentity());
+      foreach( $ratingTable->fetchAll($ratingSelect) as $rating ) {
+        $rating->delete();
+      }
+
+      // Delete favourite by resource
+      $favouriteTable = Engine_Api::_()->getDbTable('favourites', 'core');
+      $favouriteSelect = $favouriteTable->select()
+        ->where('resource_type = ?', $payload->getType())
+        ->where('resource_id = ?', $payload->getIdentity());
+      foreach( $favouriteTable->fetchAll($favouriteSelect) as $favourite ) {
+        $favourite->delete();
+      }
+      
+      // Delete location by resource
+      $locationsTable = Engine_Api::_()->getDbTable('locations', 'core');
+      $locationSelect = $locationsTable->select()
+        ->where('resource_type = ?', $payload->getType())
+        ->where('resource_id = ?', $payload->getIdentity());
+      foreach( $locationsTable->fetchAll($locationSelect) as $location ) {
+        $location->delete();
+      }
     }
 
     // Users only
@@ -152,6 +179,14 @@ class Core_Plugin_Core
     }
     
     $request = Zend_Controller_Front::getInstance()->getRequest(); 
+    $moduleName = $request->getModuleName();
+    $controllerName = $request->getControllerName();
+    $actionName = $request->getActionName();
+
+    if($moduleName == 'user' && $controllerName == 'index' && $actionName == 'home') {
+      $moduleName = 'home';
+    }
+
     $mobile = $request->getParam("mobile");
     $session = new Zend_Session_Namespace('mobile');
     
@@ -203,21 +238,22 @@ $analytics_code = <<<EOF
 EOF;
 $view->headScript()->appendScript($analytics_code);
     }
-
-    //Get post max size
-    $script .="var post_max_size = ".Engine_Api::_()->core()->convertPHPSizeToBytes(ini_get('upload_max_filesize')).";";
-    $script .="var max_photo_upload_limit = 50;";
-    $script .="var photo_upload_text = '".$view->translate('Max upload of %s allowed.', 50)."';";
     
     //hide email from email setting tab
 		if($viewer->getIdentity()) {
 			if($viewer->level_id != 1) {
-        $script .= 'scriptJquery(document).ready(function() {
+        $script .= 'en4.core.runonce.add(function() {
           scriptJquery("#general-userverirequesttosuperadmin").parent().remove();
           scriptJquery("#payment-paymentmanualverification").parent().remove();
         });';
       }
     }
+
+    //Show main menu active
+		$script .= "en4.core.runonce.add(function(){
+      scriptJquery('.core_main_".$moduleName."').parent().addClass('active');
+    });";
+	
     
     $view->headScript()->appendScript($script);
 

@@ -55,7 +55,7 @@ class Core_Widget_MenuMiniController extends Engine_Content_Widget_Abstract
         (empty($headernonloggedinoptions) ? $this->setNoRender() : ((!engine_in_array('miniMenu', $headernonloggedinoptions)) ? $this->setNoRender() : ''));
     }
     
-    $this->view->navigation = $navigation = Engine_Api::_()->getApi('menus', 'core')->getNavigation('core_mini');
+    $this->view->navigation = Engine_Api::_()->getApi('menus', 'core')->getNavigation('core_mini');
     $request = Zend_Controller_Front::getInstance()->getRequest();
     $this->view->notificationOnly = $request->getParam('notificationOnly', false);
     $this->view->updateSettings = 120000;
@@ -63,9 +63,15 @@ class Core_Widget_MenuMiniController extends Engine_Content_Widget_Abstract
     $this->view->message_count = Engine_Api::_()->messages()->getUnreadMessageCount($viewer);
     $this->view->requestCount = Engine_Api::_()->getDbTable('notifications', 'activity')->hasFriendNotifications($viewer);
     $this->view->currencies = Engine_Api::_()->getDbTable('currencies', 'payment')->getCurrencies(array('enabled' => 1, 'change_rate' => 1));
-    $this->view->contrast_mode = Engine_Api::_()->core()->getContantValueXML('contrast_mode') ? Engine_Api::_()->core()->getContantValueXML('contrast_mode') : 'dark_mode';
+    $this->view->contrast_mode = $settingsApi->getSetting('contrast.mode', 'dark_mode');
     $this->view->accessibility = $settingsApi->getSetting("accessibility.options",1);
     
     $this->view->core_minimenuquick = Engine_Api::_()->getApi('menus', 'core')->getNavigation('core_minimenuquick');
+    //Languages
+    $this->view->languageNameList = Engine_Api::_()->getApi('languages', 'core')->getLanguages();
+    //Location
+    if(Engine_Api::_()->getApi('settings', 'core')->getSetting('enableglocation', 0) == 1) {
+      $this->view->cookiedata = Engine_Api::_()->getApi('location', 'core')->getUserLocationBasedCookieData();
+    }
   }
 }

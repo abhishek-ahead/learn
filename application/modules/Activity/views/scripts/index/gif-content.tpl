@@ -1,0 +1,45 @@
+<?php
+
+ /**
+ * socialnetworking.solutions
+ *
+ * @category   Application_Modules
+ * @package    Activity
+ * @copyright  Copyright 2014-2020 Ahead WebSoft Technologies Pvt. Ltd.
+ * @license    https://socialnetworking.solutions/license/
+ * @version    $Id: gif-content.tpl 2017-01-12 00:00:00 socialnetworking.solutions $
+ * @author     socialnetworking.solutions
+ */
+ 
+?>
+<?php if(empty($this->value)) { ?>
+<div class="comment_emotion_search_content custom_scrollbar">
+  <?php if($this->paginator->getTotalItemCount() > 0) { ?>
+    <ul class="activity_search_results">
+<?php } ?>
+      <?php
+      foreach($this->paginator as $gif) { die;
+        if($gif->file_id == 0) continue; ?>
+        <li rel="<?php echo $gif->image_id; ?>">
+          <a href="javascript:;" class="_activitygif_gif">
+            <img src="<?php echo Engine_Api::_()->storage()->get($gif->file_id, '')->getPhotoUrl(); ?>" alt="" />
+          </a>
+        </li>
+      <?php 
+      } ?>
+<?php if(empty($this->value)) { ?>
+    </ul>
+  <?php } ?>
+</div>
+<?php } ?>
+<?php if($this->paginator->getTotalItemCount() == 0) { ?>
+  <div class="comment_emotion_search_noresult">
+    <i class="far fa-frown font_color_light" aria-hidden="true"></i>
+    <span class="font_color_light"><?php echo $this->translate("No GIF image found.") ?></span>
+  </div>
+<?php } ?>
+<script type="application/javascript">
+  canPaginateExistingPhotos = "<?php echo ($this->paginator->count() == 0 ? '0' : ($this->paginator->count() == $this->paginator->getCurrentPageNumber() ? '0' : '1' ))  ?>";
+  canPaginatePageNumber = "<?php echo $this->page + 1; ?>";
+</script>
+<?php die; ?>

@@ -275,7 +275,9 @@ class Engine_View_Helper_TinyMce extends Zend_View_Helper_Abstract
 
   protected function _renderEditor()
   {
-    $script = 'tinymce.init({' . PHP_EOL;
+    $script = '
+    tinyMCE.baseURL = "'.$this->view->baseUrl().'/externals/tinymce";
+    tinymce.init({' . PHP_EOL;
 
     $length = count($this->_config);
     $i = 0;

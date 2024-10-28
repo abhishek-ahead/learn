@@ -21,7 +21,7 @@ class User_Form_Signup_Account extends Engine_Form_Email
   public function init()
   {
     $settings = Engine_Api::_()->getApi('settings', 'core');
-    $enablesigupfields = (array) json_decode($settings->getSetting('user.signup.enablesigupfields', '["confirmpassword","profiletype","timezone","language"]'));
+    $enablesigupfields = (array) json_decode($settings->getSetting('user.signup.enablesigupfields', '["confirmpassword","dob","gender","profiletype","timezone","language","location"]'));
     
     $translate = Zend_Registry::get('Zend_Translate');
     
@@ -305,6 +305,25 @@ class User_Form_Signup_Account extends Engine_Form_Email
     //     ),
     //   ));
     // }
+
+    if(isset($enablesigupfields) && engine_in_array('location', $enablesigupfields) && Engine_Api::_()->getApi('settings', 'core')->getSetting('enableglocation', 0)) {
+      //Location
+      $this->addElement('Text', 'location', array(
+        'label' => 'Location',
+        'filters' => array(
+          new Engine_Filter_Censor(),
+          new Engine_Filter_HtmlSpecialChars(),
+        ),
+      ));
+      if(Engine_Api::_()->getApi('settings', 'core')->getSetting('enableglocation', 0) == 1) {
+        $this->addElement('Hidden', 'lat', array('order' => 3000, 'value' => ''));
+        $this->addElement('Hidden', 'lng', array('order' => 3001, 'value' => ''));
+        $this->addElement('Hidden', 'city', array('order' => 3002, 'value' => ''));
+        $this->addElement('Hidden', 'state', array('order' => 3003, 'value' => ''));
+        $this->addElement('Hidden', 'country', array('order' => 3004, 'value' => ''));
+        $this->addElement('Hidden', 'zip', array('order' => 3005, 'value' => ''));
+      }
+    }
     
     if(isset($enablesigupfields) && engine_in_array('timezone', $enablesigupfields)) {
       // Element: timezone

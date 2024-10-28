@@ -1,0 +1,92 @@
+/*Common Css*/
+.container{
+	max-width:var(--theme-main-width);
+}
+.harmony_landingpage{
+	background-color:var(--theme-list-background-color);
+}
+.harmony_title::after {
+	background-color:var(--theme-color);
+}
+.harmony_title::before {
+	background-color:var(--theme-color);
+}
+/*Banner Section*/
+.harmony_landing_page_banner_inner .btn i {
+	background-color:var(--theme-button-font-color);
+	color:var(--theme-button-background-color) !important;
+}
+.harmony_landing_page_banner::after {
+	background-color:var(--theme-list-background-color);
+}
+/*Features Section*/
+.harmony_landingpage_features article figure{
+	background-color:var(--theme-list-background-color);
+}
+/*Services Page*/
+.harmony_landingpage_service article:before{
+	background-color:var(--theme-list-background-color);
+}
+/*Landing Page Cta Section*/
+.harmony_landingpage_cta_section {
+	background-color:var(--theme-button-background-color);
+}
+.harmony_landingpage_cta_right ._btn{
+	border-color:var(--theme-button-font-color);
+	color:var(--theme-button-font-color) !important;
+}
+.harmony_landingpage_cta_right ._btn span{
+	color:var(--theme-button-font-color) !important;
+}
+.harmony_landingpage_cta_right ._btn:hover{
+	color:var(--theme-button-font-color) !important;
+	background-color:var(--theme-button-background-color);
+	border-radius:5px 20px 5px 20px;
+}
+.harmony_landingpage_cta_right ._btn:hover span {
+	color: var(--theme-button-font-color) !important;
+}
+.harmony_landingpage_cta_right ._btn i::before{
+	color:var(--theme-button-font-color) !important;
+	background-color:var(--theme-button-background-color);
+}
+.harmony_landingpage_cta_right ._btn:hover i::before{
+	background-color:var(--theme-button-font-color) !important;
+	color:var(--theme-button-background-color) !important;	
+}
+/*Why Choose Us*/
+.harmony_landingpage_why_choose{
+	background-color:var(--theme-list-background-color-alt);
+}
+.harmony_landingpage_features_item_icon {
+	background-color:var(--theme-button-background-color);
+	border-color:var(--theme-list-background-color) !important;
+}
+/*Landing Page App Section*/
+/*Default Landing Page*/
+body#global_page_core-index-index div#global_wrapper {
+	padding-top: 0;
+}
+.generic_layout_container.layout_core_parallax,
+.layout_core_landing_page_features{
+	background: transparent !important;
+	box-shadow: inherit !important;
+}
+.layout_core_landing_page_features {
+	padding: 35px 0 !important;
+}
+.layout_core_landing_page_features > h3{
+	text-align:center !important;
+	border:0 !important;
+	background: transparent !important;
+	box-shadow: inherit !important;
+	font-size:2em !important;
+	padding-bottom:30px !important;
+}
+.core_landingpage_features > div > div > article{
+	margin:0;
+}
+.layout_core_parallax {
+	margin: 0 !important;
+	padding: 0 !important;
+}

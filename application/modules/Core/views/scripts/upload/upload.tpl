@@ -8,6 +8,9 @@
  * @license    http://www.socialengine.com/license/
  */
 ?>
+<?php $this->headScript()->appendFile($this->layout()->staticBaseUrl . 'externals/uploader/uploader.js');
+$this->headLink()->appendStylesheet($this->layout()->staticBaseUrl . 'externals/uploader/uploader.css');
+?>
 <div id="file-status">
   <a class="buttonlink icon_clearlist" href="javascript:void(0);" id="remove_all_files" style="display:none">
     <?php echo $this->translate('Clear Lists'); ?>

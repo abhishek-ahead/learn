@@ -1,5 +1,4 @@
 
-<?php $this->headScript()->appendFile($this->layout()->staticBaseUrl . 'externals/autocompleter/autocomplete.js'); ?>
 <?php
 /* Include the common user-end field switching javascript */
 echo $this->partial('_jsSwitch.tpl', 'fields', array(
@@ -7,8 +6,10 @@ echo $this->partial('_jsSwitch.tpl', 'fields', array(
     'topLevelValue' => (int) $this->topLevelValue
 ));
 ?>
-<?php $this->headScript()->appendFile($this->layout()->staticBaseUrl . 'externals/selectize/js/selectize.js'); ?>
+<?php echo $this->partial('_location.tpl', 'core', array('modulename' => 'user')); ?>
+<div class="sidebar_search_form core_search_form">
 <?php echo $this->form->setAction($this->url(array(), 'user_general', true))->render($this); ?>
+</div>
 <script type="text/javascript">
   en4.core.runonce.add(function () {
     var formElement = scriptJquery('.layout_user_browse_search .field_search_criteria');

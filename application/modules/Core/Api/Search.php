@@ -112,7 +112,7 @@ class Core_Api_Search extends Core_Api_Abstract
       ->where('approved = ?', 1)
       ->order('search_id DESC');
 
-    $select->where("( title LIKE ? || username LIKE ? || description LIKE ? || keywords LIKE ? || hidden LIKE ?)",'%' . $text . '%');
+    $select->where("( title LIKE ? || username LIKE ? || description LIKE ? || keywords LIKE ? || hidden LIKE ?)", $text . '%');
     
     // Filter by item types
     $availableTypes = Engine_Api::_()->getItemTypes();

@@ -209,8 +209,12 @@ class Zend_View_Helper_HeadStyle extends Zend_View_Helper_Placeholder_Container_
             $e->setView($this->view);
             throw $e;
         }
-
-        return $this->getContainer()->append($value);
+        if(isset($value->attributes["src"])) {
+          if(substr($value->attributes["src"], -15) != "styles/main.css")
+            return $this->getContainer()->append($value);
+        } else {
+          return $this->getContainer()->append($value);
+        }
     }
 
     /**
@@ -228,8 +232,6 @@ class Zend_View_Helper_HeadStyle extends Zend_View_Helper_Placeholder_Container_
             $e->setView($this->view);
             throw $e;
         }
-
-        return $this->getContainer()->offsetSet($index, $value);
     }
 
     /**
@@ -246,8 +248,12 @@ class Zend_View_Helper_HeadStyle extends Zend_View_Helper_Placeholder_Container_
             $e->setView($this->view);
             throw $e;
         }
-
-        return $this->getContainer()->prepend($value);
+        if(isset($value->attributes["src"])) {
+          if(substr($value->attributes["src"], -15) != "styles/main.css")
+            return $this->getContainer()->append($value);
+        } else {
+          return $this->getContainer()->append($value);
+        }
     }
 
     /**

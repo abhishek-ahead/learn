@@ -69,13 +69,13 @@ class Core_AdminManageActivityController extends Core_Controller_Action_Admin {
     $this->view->assign($values);
 
     if (!empty($_GET['posted_by']))
-      $select->where($userTableName . '.displayname LIKE ?', '%' . $_GET['posted_by'] . '%');
+      $select->where($userTableName . '.displayname LIKE ?', $_GET['posted_by'] . '%');
 
     if(!empty($_GET['action_id']))
       $select->where($tableName . ".action_id = ?", $_GET['action_id']);
       
     if (!empty($_GET['body']))
-      $select->where($tableName . ".body LIKE ?", '%' . $_GET['body'] . '%');
+      $select->where($tableName . ".body LIKE ?", $_GET['body'] . '%');
 
     $date_from = !empty($_GET['date']['date_from']) ? date("Y-m-d", strtotime($_GET['date']['date_from'])) : '';
     $date_to = !empty($_GET['date']['date_to']) ? date("Y-m-d", strtotime($_GET['date']['date_to'])) : '';

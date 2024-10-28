@@ -26,7 +26,7 @@
 </div>
 <script>
 
-  scriptJquery(document).ready(function() {
+  en4.core.runonce.add(function() {
     hideside("<?php echo Engine_Api::_()->getApi('settings', 'core')->getSetting('coreseo_schema_type', 1); ?>");
   });
 

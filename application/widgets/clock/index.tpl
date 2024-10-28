@@ -13,7 +13,7 @@
 
 <script type="text/javascript">
   
-  scriptJquery(document).ready(function() {
+  en4.core.runonce.add(function() {
     var updateClock = function() {
       var currentTime = new Date();
       currentTime.setMilliseconds(currentTime.getMilliseconds() + Date.getServerOffset());

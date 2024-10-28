@@ -17,7 +17,7 @@ settings area.
   padding:0 15px;
 }
 .netwroks_main_section > div h3{
-	background-color:$theme_list_background_color_alt;
+	background-color:var(--theme-list-background-color-alt);
 	margin:0 0 10px;
 	border-radius:10px;
 	padding:12px 15px;
@@ -37,7 +37,7 @@ ul.networks{
 }
 ul.networks > li{
   overflow:hidden;
-  border:1px solid $theme_border_medium_color;
+  border:1px solid var(--theme-border-color);
 	border-top:none;
   padding:10px;
   display:flex;
@@ -51,7 +51,7 @@ ul.networks > li > div{
 }
 ul.networks > li > div > span{
   font-weight:normal;
-  font-size:$theme_font_size_small;
+  font-size:var(--theme-font-size-small);
 }
 ul.networks > li > a{
   display:block;
@@ -69,12 +69,12 @@ form#network-form input.network_join_selected{
 }
 /* ITEM TYPE ICONS */
 .item_icon_network:before{
-  content:"\\f0ac";
+  content:"\f0ac";
 	font-weight:900;
 }
 /* ACTION TYPE ICONS */
 .activity_icon_network_join:before{
-  content:"\\f0ac";
+  content:"\f0ac";
 	font-weight:900;
 }
 @media(max-width:767px){

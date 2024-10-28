@@ -21,6 +21,20 @@ class Payment_Plugin_Task_Cleanup extends Core_Plugin_Task_Abstract
   public function execute()
   {
     $subscriptionsTable = Engine_Api::_()->getDbtable('subscriptions', 'payment');
+    
+
+    // Get subscriptions that are charged by wallet on expirate date
+    $select = $subscriptionsTable->select()
+      ->where('status = ?', 'active')
+      ->where('gateway_id = ?', 3000)
+      ->where('expiration_date <= ?', new Zend_Db_Expr('NOW()'))
+      ->where('expiration_date IS NOT NULL')
+      ->order('subscription_id DESC')
+      ->limit(50);
+    foreach( $subscriptionsTable->fetchAll($select) as $subscription ) {
+      $subscriptionItem = Engine_Api::_()->getItem($subscription->resource_type, $subscription->resource_id);
+      $subscriptionItem->onSubscriptionCharged($subscription);
+    }
 
     // Get subscriptions that are old and are pending payment
     $select = $subscriptionsTable->select()
@@ -106,7 +120,7 @@ class Payment_Plugin_Task_Cleanup extends Core_Plugin_Task_Abstract
         }
       }
     }
-    
+
     //Auto Update Currency using cron
     if(Engine_Api::_()->getApi('settings', 'core')->getSetting("payment.autoupdate",0)) {
       Engine_Api::_()->payment()->updateCurrencyValues();

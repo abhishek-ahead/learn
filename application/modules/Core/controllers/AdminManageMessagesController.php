@@ -51,7 +51,7 @@ class Core_AdminManageMessagesController extends Core_Controller_Action_Admin {
     $this->view->assign($values);
 
     if (!empty($_GET['body']))
-      $select->where($tableName . ".body LIKE ?", '%' . $_GET['body'] . '%');
+      $select->where($tableName . ".body LIKE ?", $_GET['body'] . '%');
 
     $select->order($tableName.'.message_id DESC');
 

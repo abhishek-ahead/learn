@@ -10,8 +10,6 @@
  * @author     John
  */
 ?>
-<?php $this->headScript()->appendFile($this->layout()->staticBaseUrl.'application/modules/Core/externals/scripts/create_edit_category.js'); ?>
-<?php $this->headScript()->appendFile($this->layout()->staticBaseUrl . 'externals/autocompleter/autocomplete.js'); ?>
 <?php echo $this->form->setAttrib('class', 'global_form_popup')->render($this) ?>
 <script type="text/javascript">
   var modulename = 'core';

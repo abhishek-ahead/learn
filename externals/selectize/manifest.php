@@ -2,7 +2,7 @@
   'package' => array(
     'type' => 'external',
     'name' => 'Selectize',
-    'version' => '6.7.0',
+    'version' => '7.0.0',
     'revision' => '$Revision: 9747 $',
     'path' => 'externals/selectize',
     'repository' => 'socialengine.com',

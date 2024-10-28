@@ -57,7 +57,7 @@
           scriptJquery(obj).find('.form-elements').parent().find('.form-errors').remove();
           scriptJquery(html).insertBefore(scriptJquery(obj).find('.form-elements'));
         }else{
-          window.location.href = responseJSON.url;
+          loadAjaxContentApp(responseJSON.url);
           return;  
         }
         elem.html(otpsmsVerifyText);
@@ -66,14 +66,14 @@
   }
   
   <?php if(is_numeric($this->email) && $this->country_code) { ?> 
-    scriptJquery(document).ready(function() {
+    en4.core.runonce.add(function() {
       scriptJquery('#code-element').append(scriptJquery('#otptimer').html());
       scriptJquery('#otptimer').remove();
     });
     otpsmsTimerData('<?php echo $this->email; ?>');
   <?php } ?>
   
-  scriptJquery(document).on('click', '#resend_otp', function(e){
+  AttachEventListerSE('click', '#resend_otp', function(e){
     resendOtpCode();
   });
   
@@ -107,7 +107,9 @@
       }
     });
   }
-  scriptJquery("#global_wrapper").addClass('authpage')
+  en4.core.runonce.add(function(){
+    scriptJquery("body").addClass('authpage');
+  })
 </script>
 <?php if(is_numeric($this->email) && $this->country_code) { ?> 
   <div id="otptimer" class="mt-2 input_field d-flex justify-content-between" style="display:none;">

@@ -90,7 +90,7 @@ class Core_AdminManagePackagesController extends Core_Controller_Action_Admin {
       $select->where('name IN (?)', $menus);
     }
     if(isset($params['name']) && !empty($params['name']))
-      $select->where("title LIKE ?", '%'.$params['name'].'%');
+      $select->where("title LIKE ?", $params['name'].'%');
     if(isset($params['enabled']) && $params['enabled'] == 1) {
       $select->where('enabled = ?', 1);
     }

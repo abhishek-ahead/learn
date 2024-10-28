@@ -41,7 +41,7 @@
   var up;
   var swfPath = '<?php echo $baseUrl . '/externals/fancyupload/Swiff.Uploader.swf' ?>';
   var extraData = {};
-  scriptJquery(document).ready(function() {
+  en4.core.runonce.add(function() {
     up = new FancyUpload2($('upload-status'), $('upload-list'), {
       verbose: true,
       appendCookieData: true,

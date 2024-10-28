@@ -10,7 +10,6 @@
  * @author     John
  */
 ?>
-<?php $this->headScript()->appendFile($this->layout()->staticBaseUrl .'application/modules/User/externals/scripts/core.js');?>
 <div class="user_password_popup_main">
   <div class="user_password_popup">
     <div class="user_password_popup_thumb">
@@ -36,7 +35,7 @@
 </div>
 <script>
 
-  scriptJquery(document).ready(function() {
+  en4.core.runonce.add(function() {
     scriptJquery('#poplogin_password').keydown(function(e) {
       if (e.which === 13) {
         loginAsUser('<?php echo $this->user_id; ?>', '', 1);

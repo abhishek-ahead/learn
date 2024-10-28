@@ -18,19 +18,20 @@
  */
 class Activity_Bootstrap extends Engine_Application_Bootstrap_Abstract
 {
-    public function __construct($application)
-    {
-        parent::__construct($application);
-        $this->initViewHelperPath();
 
-        $headScript = new Zend_View_Helper_HeadScript();
-        $headScript->appendFile(Zend_Registry::get('StaticBaseUrl')
-            . 'application/modules/Activity/externals/scripts/core.js');
+  public function __construct($application)
+  {
 
+    parent::__construct($application);
 
-        //Emotions Load
-        $view = Zend_Registry::isRegistered('Zend_View') ? Zend_Registry::get('Zend_View') : null;
-        $script = "var chatEmotions = ".Engine_Api::_()->activity()->getEmoticons('', '', true).";";
-        $view->headScript()->appendScript($script);
-    }
+    $this->initViewHelperPath();
+
+    $front = Zend_Controller_Front::getInstance();
+    $front->registerPlugin(new Activity_Plugin_Core);
+
+    //Emotions Load
+    $view = Zend_Registry::isRegistered('Zend_View') ? Zend_Registry::get('Zend_View') : null;
+    $script = "var chatEmotions = " . Engine_Api::_()->activity()->getEmoticons('', '', true) . ";";
+    $view->headScript()->appendScript($script);
+  }
 }

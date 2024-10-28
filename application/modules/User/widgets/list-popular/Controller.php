@@ -33,7 +33,7 @@ class User_Widget_ListPopularController extends Engine_Content_Widget_Abstract
     $select = $table->select()
       ->where('search = ?', 1)
       ->where('enabled = ?', 1)
-      ->where($popularCol . ' >= ?', 0)
+      ->where($popularCol . ' > ?', 0)
       ->order($popularCol . ' DESC')
       ;
 
