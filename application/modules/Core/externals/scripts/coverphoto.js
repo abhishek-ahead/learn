@@ -208,9 +208,9 @@ var Mainphoto = function(options){
           return;
         }
         self.block.html(responseHTML);
-        Smoothbox.bind(self.block);
+        // Smoothbox.bind(self.block);
         self.attach();
-        en4.core.runonce.trigger();
+        // en4.core.runonce.trigger();
         Smoothbox.close();
       }
     });

@@ -98,9 +98,17 @@ abstract class Core_Controller_Action_Standard extends Engine_Controller_Action
             } elseif ($exception->getCode() == Storage_Model_DbTable_Files::SPACE_LIMIT_REACHED_CODE) {
                 $form->addError($exception->getMessage());
             }
-
+            
+            if(!empty($_POST['isFormAjaxPost'])) {
+                $errors[] = array('errorMessage' => $exception->getMessage());
+                echo json_encode(array('status' => false, 'error_message' => $errors));die;
+            }
             return $form;
         } else {
+            if(!empty($_POST['isFormAjaxPost'])) {
+                $errors[] = array('errorMessage' => $exception->getMessage());
+                echo json_encode(array('status' => false, 'error_message' => $errors));die;
+            }
             throw $exception;
         }
     }
@@ -135,6 +143,13 @@ abstract class Core_Controller_Action_Standard extends Engine_Controller_Action
 
         switch ($this->_helper->contextSwitch->getCurrentContext()) {
             case 'smoothbox':
+                if($this->isAjax()){
+                    if (strpos($to,'?') !== false) {
+                        $to = $to.'&getContentOnly=1';
+                    }else{
+                        $to = $to.'?getContentOnly=1';
+                    }
+                }
                 return $this->_forward('success', 'utility', 'core', [
                     'messages' => [$message],
                     'smoothboxClose' => true,

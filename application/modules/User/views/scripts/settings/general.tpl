@@ -15,10 +15,6 @@ $settings = Engine_Api::_()->getApi('settings', 'core');
 $otpsms_signup_phonenumber = $settings->getSetting('otpsms.signup.phonenumber', 0);
 
 if(!empty($otpsms_signup_phonenumber)) {
-  $this->headLink()->appendStylesheet($this->layout()->staticBaseUrl."externals/selectize/css/normalize.css");
-  $headScript = new Zend_View_Helper_HeadScript();
-  $headScript->appendFile($this->layout()->staticBaseUrl.'externals/selectize/js/selectize.js');
-  
   $defaultCountry = !empty($this->user->country_code) ? $this->user->country_code : Engine_Api::_()->getApi('settings', 'core')->getSetting('otpsms.default.countries','US');
   $getCountry = Engine_Api::_()->getDbTable('countries', 'core')->getCountry($defaultCountry);
   if(!empty($getCountry)) {
@@ -64,7 +60,7 @@ if(!empty($otpsms_signup_phonenumber)) {
       <?php if(Engine_Api::_()->authorization()->getPermission($this->user,'user', 'changeEmail')) { ?>
         <?php $url = $this->url(array('module' => 'user', 'controller' => 'settings','action' => 'edit-email', 'param' => 1), 'user_extended', true); ?>
         <script type="text/javascript">
-          scriptJquery(document).ready(function(){
+          en4.core.runonce.add(function() {
             var editEmail = '<a href="<?php echo $url; ?>"  data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="<?php echo $this->translate("Edit Email Address"); ?>" class="smoothbox edit_email_setting"  ><?php echo $this->translate('<i class="fa fa-pencil-alt"></i>'); ?></a>';
             scriptJquery('#email-element').after(editEmail);
           });
@@ -81,7 +77,7 @@ if(!empty($otpsms_signup_phonenumber)) {
     <?php if($this->user->phone_number) { ?>
       currentPhoneNumber = '<?php echo $this->user->phone_number; ?>';
     <?php } ?>
-    scriptJquery(document).ready(function() {
+    en4.core.runonce.add(function() {
       scriptJquery('#phone_number-element').prepend(scriptJquery('#settings_country_code').html());
       scriptJquery('#settings_country_code').remove();
       
@@ -139,11 +135,11 @@ if(!empty($otpsms_signup_phonenumber)) {
       
       scriptJquery('#country_code_element').show();
       scriptJquery('#phone_number-wrapper').addClass('country_code_main');
-      scriptJquery(scriptJquery('#signup_pop_wrap').html()).appendTo('body');
+      scriptJquery(scriptJquery('#signup_pop_wrap').html()).appendTo('#script-default-data');
       scriptJquery('#signup_pop_wrap').remove();
     });
     
-    scriptJquery(document).on('blur', '#phone_number', function(e) {
+    AttachEventListerSE('blur', '#phone_number', function(e) {
     
       if(scriptJquery('#verifed_text').length == 0) {
         scriptJquery("#verify_email").remove();
@@ -156,7 +152,7 @@ if(!empty($otpsms_signup_phonenumber)) {
       }
     });
 
-    scriptJquery(document).on('keyup', '#phone_number', function(e) {
+    AttachEventListerSE('keyup', '#phone_number', function(e) {
       var emailVal = scriptJquery("#phone_number").val();
       //if(emailVal === '') {
         scriptJquery("#verify_email").remove();
@@ -243,7 +239,7 @@ if(!empty($otpsms_signup_phonenumber)) {
       }));
     }
 
-    scriptJquery(document).on('click', '#verify_email', function(e){
+    AttachEventListerSE('click', '#verify_email', function(e){
       sendEmailCode();
     });
 
@@ -272,6 +268,7 @@ if(!empty($otpsms_signup_phonenumber)) {
             scriptJquery('#twostep_auth_form').hide();
             scriptJquery('#send_signup_form').append("<div id='success_msg' class='success_msg success_msg m-2'><span>"+response.message+"</span></div>");
             setTimeout(() => {
+              scriptJquery('#cancel_verify_otp').trigger('click');
               closeVerifyPopup();
               scriptJquery('#verify_email').remove();
               scriptJquery('#phone_number-element').append('<div id="verifed_text" class="font_small"><?php echo $this->translate("Verified"); ?></div>');
@@ -285,15 +282,15 @@ if(!empty($otpsms_signup_phonenumber)) {
     }
     
     function closeVerifyPopup() {
-      scriptJquery('#user_signup_email').modal('hide');;
+      scriptJquery('#user_signup_email').hide();
       scriptJquery('#send_signup_form').hide();
     }
     
-    scriptJquery(document).on('click', '#verify_otp', function(e){
+    AttachEventListerSE('click', '#verify_otp', function(e){
       validateTwoStepCode();
     });
     
-    scriptJquery(document).on('click', '#resend_otp', function(e){
+    AttachEventListerSE('click', '#resend_otp', function(e){
       resendOtpCode();
     });
 

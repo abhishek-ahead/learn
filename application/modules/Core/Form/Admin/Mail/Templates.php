@@ -57,38 +57,7 @@ class Core_Form_Admin_Mail_Templates extends Engine_Form
     ));
 
     // Languages
-    $localeObject = Zend_Registry::get('Locale');
-    $translate    = Zend_Registry::get('Zend_Translate');
-    $languageList = $translate->getList();
-
-    $languages = Zend_Locale::getTranslationList('language', $localeObject);
-    $territories = Zend_Locale::getTranslationList('territory', $localeObject);
-
-    $localeMultiOptions = array();
-    foreach( /*array_keys(Zend_Locale::getLocaleList())*/ $languageList as $key ) {
-      $languageName = null;
-      if( !empty($languages[$key]) ) {
-        $languageName = $languages[$key];
-      } else {
-        $tmpLocale = new Zend_Locale($key);
-        $region = $tmpLocale->getRegion();
-        $language = $tmpLocale->getLanguage();
-        if( !empty($languages[$language]) && !empty($territories[$region]) ) {
-          $languageName =  $languages[$language] . ' (' . $territories[$region] . ')';
-        }
-      }
-
-      if( $languageName ) {
-        $localeMultiOptions[$key] = $languageName . ' [' . $key . ']';
-      }
-    }
-
-    $defaultLanguage = Engine_Api::_()->getApi('settings', 'core')->getSetting('core.locale.locale', 'en');
-    if( isset($localeMultiOptions[$defaultLanguage]) ) {
-      $localeMultiOptions = array_merge(array(
-        $defaultLanguage => $localeMultiOptions[$defaultLanguage],
-      ), $localeMultiOptions);
-    }
+    $localeMultiOptions = Engine_Api::_()->getApi('languages', 'core')->getLanguages();
 
     $this->language->setMultiOptions($localeMultiOptions);
 

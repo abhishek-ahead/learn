@@ -20,7 +20,7 @@
       <div class="user_setting_cover_member_info">
         <?php if($this->subject()) { ?>
           <h3>
-            <a href="<?php echo $this->subject()->getHref(); ?>"><?php echo $this->subject()->getTitle() ?></a>
+            <a href="<?php echo $this->subject()->getHref(); ?>" class="font_color"><?php echo $this->subject()->getTitle() ?></a>
           </h3>
         <?php } ?>
         <?php if(Engine_Api::_()->getApi('settings', 'core')->getSetting('user.signup.username', 1)) { ?>

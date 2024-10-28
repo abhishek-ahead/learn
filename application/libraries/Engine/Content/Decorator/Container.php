@@ -44,7 +44,11 @@ class Engine_Content_Decorator_Container extends Engine_Content_Decorator_Abstra
         $attribs['class'] .= ' ' . $class;
       }
     }
-
+    $name = $this->getElement()->getName();
+    $layout = preg_replace('/[^\w\d]/', '_', $name);
+    if($layout == 'left' || $layout == 'right'){
+      $content = "<div class='theiaStickySidebar'>".$content.'</div>';
+    }
     return $view->{$this->helper}($content, $attribs) . $separator;
   }
 }

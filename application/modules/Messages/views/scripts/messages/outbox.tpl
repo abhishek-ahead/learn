@@ -83,34 +83,28 @@
         </li>
       <?php endforeach; ?>
     </ul>
+    <div class="mt-3">
+      <button id="delete" class="btn btn-primary"><?php echo $this->translate('Delete Selected');?></button>
+    </div>
   </div>
-
-  <br />
-  <button id="delete"><?php echo $this->translate('Delete Selected');?></button>
-  
-    <script type="text/javascript">
-      scriptJquery('.messages_list').enableLinks();
-      scriptJquery('#delete').on('click', function(){
-        var selected_ids = new Array();
-        scriptJquery('input[type=checkbox]:checked').each(function() {
-          selected_ids[selected_ids.length] = this.value;
-        });
-        var sb_url = '<?php echo $this->url(array('action'=>'delete'), 'messages_general', true) ?>?place=outbox&message_ids='+selected_ids.join(',');
-        if (selected_ids.length > 0)
-          Smoothbox.open(sb_url);
+  <script type="text/javascript">
+    scriptJquery('.messages_list').enableLinks();
+    scriptJquery('#delete').on('click', function(){
+      var selected_ids = new Array();
+      scriptJquery('input[type=checkbox]:checked').each(function() {
+        selected_ids[selected_ids.length] = this.value;
       });
-    //-->
-    </script>
-  <br />
-  <br />
-
+      var sb_url = '<?php echo $this->url(array('action'=>'delete'), 'messages_general', true) ?>?place=outbox&message_ids='+selected_ids.join(',');
+      if (selected_ids.length > 0)
+        Smoothbox.open(sb_url);
+    });
+  //-->
+  </script>
 <?php else: ?>
-  <p><?php echo $this->translate(array('You have %s sent message total', 'You have %s sent messages total', $this->paginator->getTotalItemCount()), $this->locale()->toNumber($this->paginator->getTotalItemCount())) ?></p>
-  <br />
-  <div class="tip">
-    <span>
-      <?php echo $this->translate('Tip: %1$sClick here%2$s to send your first message!', "<a href='".$this->url(array('action' => 'compose'), 'messages_general')."'>", '</a>'); ?>
-    </span>
+  <div class="no_result_tip">
+    <i><img src="application/modules/Core/externals/images/no-results.png" height="100" width="100" alt="No Result"></i>
+    <p><?php echo $this->translate(array('You have %s sent message total', 'You have %s sent messages total', $this->paginator->getTotalItemCount()), $this->locale()->toNumber($this->paginator->getTotalItemCount())) ?></p>
+    <p><?php echo $this->translate('Tip: %1$sClick here%2$s to send your first message!', "<a href='".$this->url(array('action' => 'compose'), 'messages_general')."'>", '</a>'); ?></p>
   </div>
 <?php endif; ?>
 

@@ -17,7 +17,7 @@
 
   <script type="text/javascript">
     setTimeout(function() {
-      parent.window.location.href = '<?php echo $this->url(array(), 'user_login', true); ?>';
+      loadAjaxContentApp('<?php echo $this->url(array(), 'user_login', true); ?>');
     }, 5000);
   </script>
 

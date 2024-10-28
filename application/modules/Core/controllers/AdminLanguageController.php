@@ -27,74 +27,56 @@ class Core_AdminLanguageController extends Core_Controller_Action_Admin
 
     public function indexAction()
     {
-        $translate = Zend_Registry::get('Zend_Translate');
-
-        // Prepare language list
-        $this->view->languageList = $languageList = $translate->getList();
 
         // Prepare default langauge
-        $defaultLanguage = Engine_Api::_()->getApi('settings', 'core')->getSetting('core.locale.locale', 'en');
+        $this->view->defaultLanguage = $defaultLanguage = Engine_Api::_()->getApi('settings', 'core')->getSetting('core.locale.locale', 'en');
         if ($defaultLanguage == 'auto') {
-            $defaultLanguage = 'en';
+            $this->view->defaultLanguage = $defaultLanguage = 'en';
         }
 
+        $languageTable = Engine_Api::_()->getDbTable('languages', 'core');
         // Init default locale
         $localeObject = Zend_Registry::get('Locale');
-
         $languages = Zend_Locale::getTranslationList('language', $localeObject);
         $territories = Zend_Locale::getTranslationList('territory', $localeObject);
 
-        $localeMultiOptions = array();
-        foreach ($languageList as $key) {
-            $dir = $this->_languagePath . '/' . $key;
-            if (!is_dir($dir)) {  
+        //Create in table
+        $languagesDir = [];
+        $items = scandir($this->_languagePath);
+        foreach ($items as $item) {
+            if ($item == '..' || $item == '.' || $item == 'index.html')
                 continue;
-            }
+            if (is_dir($this->_languagePath . '/' . $item))
+                $languagesDir[] = $item;
+        }
 
-            $languageName = null;
-            if (!empty($languages[$key])) {
-                $languageName = $languages[$key];
-            } else {
-                $tmpLocale = new Zend_Locale($key);
-                $region = $tmpLocale->getRegion();
-                $language = $tmpLocale->getLanguage();
-                if (!empty($languages[$language]) && !empty($territories[$region])) {
-                    $languageName =  $languages[$language] . ' (' . $territories[$region] . ')';
+        foreach ($languagesDir as $language) {
+            $isLanguageExist = Engine_Api::_()->getDbTable('languages', 'core')->isLanguageExist($language);
+            if (empty($isLanguageExist)) {
+                try {
+                    if (isset($languages[$language]) && $languages[$language]) {
+                        $languageName = $languages[$language];
+                    } else {
+                        $languageArray = explode('_', $language);
+                        if (isset($languageArray[1])) {
+                            $languageName = $territories[$languageArray[1]];
+                        }
+                    }
+                    $row = $languageTable->createRow();
+                    $values['code'] = $language;
+                    $values['name'] = $languageName;
+                    $values['fallback'] = $language;
+                    $row->setFromArray($values);
+                    $row->save();
+                    $row->order = $row->language_id;
+                    $row->save();
+                } catch (Exception $e) {
+                    //silence
                 }
             }
-
-            if ($languageName) {
-                $localeMultiOptions[$key] = $languageName . ' [' . $key . ']';
-            } else {
-                $localeMultiOptions[$key] = $this->view->translate('Unknown')  . ' [' . $key . ']';
-            }
-        }  
-
-        $this->view->customLocale = false;
-        if (!isset($localeMultiOptions[$defaultLanguage])) {
-            $this->view->customLocale = isset($languages[$defaultLanguage])
-                ? $languages[$defaultLanguage] : $defaultLanguage;
-            $defaultLanguage = 'en';
         }
 
-        //Create in table
-        $languageTable = Engine_Api::_()->getDbTable('languages', 'core');
-        foreach($localeMultiOptions as $key => $localeMultiOption) {
-          $isLanguageExist = Engine_Api::_()->getDbTable('languages', 'core')->isLanguageExist($key);
-          if(empty($isLanguageExist)) {
-            $language = $languageTable->createRow();
-            $values['code'] = $key;
-            $values['name'] = $localeMultiOption;
-            $values['fallback'] = $key;
-            $language->setFromArray($values);
-            $language->save();
-            $language->order = $language->language_id;
-            $language->save();
-          }
-        }
-        
-        $this->view->defaultLanguage = $defaultLanguage;
-        $this->view->languageNameList = $localeMultiOptions;
+        $this->view->languageNameList = $localeMultiOptions = Engine_Api::_()->getApi('languages', 'core')->getLanguages(array('admin' => 1));
     }
 
     public function createAction()
@@ -104,7 +86,7 @@ class Core_AdminLanguageController extends Core_Controller_Action_Admin
         $this->view->languageList = $languageList = $translate->getList();
 
         if ($this->getRequest()->isPost() && $form->isValid($this->getRequest()->getPost())) {
-            $localeCode   = $this->_getParam('language');
+            $localeCode = $this->_getParam('language');
 
             $defaultLanguage = Engine_Api::_()->getApi('settings', 'core')->getSetting('core.locale.locale', 'en');
             if (!engine_in_array($defaultLanguage, $languageList)) {
@@ -116,38 +98,38 @@ class Core_AdminLanguageController extends Core_Controller_Action_Admin
             }
 
             if (!engine_in_array($localeCode, $translate->getList())) {
-              $filename = APPLICATION_PATH . "/application/languages/$localeCode/custom.csv";
-              mkdir(dirname($filename));
-              chmod(dirname($filename), 0777);
-              touch($filename);
-              chmod($filename, 0777);
-              $csv = new Engine_Translate_Writer_Csv($filename);
-              // each language pack must have at least one line written to it to be recognized
-              $csv->setTranslation($localeCode, $localeCode);
-              $csv->write();
+                $filename = APPLICATION_PATH . "/application/languages/$localeCode/custom.csv";
+                mkdir(dirname($filename));
+                chmod(dirname($filename), 0777);
+                touch($filename);
+                chmod($filename, 0777);
+                $csv = new Engine_Translate_Writer_Csv($filename);
+                // each language pack must have at least one line written to it to be recognized
+                $csv->setTranslation($localeCode, $localeCode);
+                $csv->write();
 
-              $adapter = Engine_Api::_()->getApi('settings', 'core')->getSetting('core.translate.adapter', 'array');
+                $adapter = Engine_Api::_()->getApi('settings', 'core')->getSetting('core.translate.adapter', 'array');
 
-              if ($adapter == 'array') {
-                  //create array file
-                  $folder = APPLICATION_PATH . "/application/languages/$localeCode";
-                  $this->csv_folder_to_array($folder, $localeCode);
-              }
-          
-          
-              //Create in table
-              $languageName = Zend_Locale_Data::getList($localeCode, 'language');
-              $languageTable = Engine_Api::_()->getDbTable('languages', 'core');
-              $language = $languageTable->createRow();
-              $values['code'] = $localeCode;
-              $values['name'] = $languageName[$localeCode];
-              $values['fallback'] = $localeCode;
-              $language->setFromArray($values);
-              $language->save();
-              $language->order = $language->language_id;
-              $language->save();
+                if ($adapter == 'array') {
+                    //create array file
+                    $folder = APPLICATION_PATH . "/application/languages/$localeCode";
+                    $this->csv_folder_to_array($folder, $localeCode);
+                }
+
+
+                //Create in table
+                $languageName = Zend_Locale_Data::getList($localeCode, 'language');
+                $languageTable = Engine_Api::_()->getDbTable('languages', 'core');
+                $language = $languageTable->createRow();
+                $values['code'] = $localeCode;
+                $values['name'] = $languageName[$localeCode];
+                $values['fallback'] = $localeCode;
+                $language->setFromArray($values);
+                $language->save();
+                $language->order = $language->language_id;
+                $language->save();
             }
-            $this->_helper->redirector->gotoRoute(array('action'=>'index'));
+            $this->_helper->redirector->gotoRoute(array('action' => 'index'));
         }
     }
 
@@ -171,10 +153,11 @@ class Core_AdminLanguageController extends Core_Controller_Action_Admin
                     }
 
                     $this->_forward('success', 'utility', 'core', array(
-                        'parentRefresh'  => 2000,
+                        'parentRefresh' => 2000,
                         'messages' => array(Zend_Registry::get('Zend_Translate')->_('Language file has been uploaded.')),
-                        'redirect' => Zend_Controller_Front::getInstance()->getRouter()->assemble(array('action'=>'index')),
-                    ));
+                        'redirect' => Zend_Controller_Front::getInstance()->getRouter()->assemble(array('action' => 'index')),
+                    )
+                    );
                 } else {
                     $form->addError('Unable to import language file to this language.  Please CHMOD 777 the "/application/languages" directory an all directories and files inside it, then try again.');
                 }
@@ -184,71 +167,73 @@ class Core_AdminLanguageController extends Core_Controller_Action_Admin
         }
     }
 
-    public function defaultAction() {
-      if ($this->getRequest()->isPost()) {
-        $locale    = $this->_getParam('locale', 'en');
-        $translate = Zend_Registry::get('Zend_Translate');
+    public function defaultAction()
+    {
+        if ($this->getRequest()->isPost()) {
+            $locale = $this->_getParam('locale', 'en');
 
-        if (engine_in_array($locale, $translate->getList())) {
-          Engine_Api::_()->getApi('settings', 'core')->core_locale_locale = $locale;
-          if($locale == 'en') {
-            $dbGetInsert = Engine_Db_Table::getDefaultAdapter();
-            $dbGetInsert->update('engine4_core_languages', array('enabled' => 1), array('code =?' => $locale));
-          }
+            $languageNameList = Engine_Api::_()->getApi('languages', 'core')->getLanguages(array('admin' => 1));
+
+            if (engine_in_array($locale, array_keys($languageNameList))) {
+                Engine_Api::_()->getApi('settings', 'core')->core_locale_locale = $locale;
+                if ($locale == 'en') {
+                    $dbGetInsert = Engine_Db_Table::getDefaultAdapter();
+                    $dbGetInsert->update('engine4_core_languages', array('enabled' => 1), array('code =?' => $locale));
+                }
+            }
         }
-      }
     }
-    
-    public function enabledAction() {
-      if ($this->getRequest()->isPost()) {
-        $locale = $this->_getParam('locale', 'en');
-        $disableLocale = $this->_getParam('disableLocale', 1);
-        $translate = Zend_Registry::get('Zend_Translate');
-        //if (engine_in_array($locale, $translate->getList())) {
-          $dbGetInsert = Engine_Db_Table::getDefaultAdapter();
-          if(!empty($disableLocale)) {
-            $dbGetInsert->update('engine4_core_languages', array('enabled' => 0), array('code =?' => $locale));
-          } else {
-            $dbGetInsert->update('engine4_core_languages', array('enabled' => 1), array('code =?' => $locale));
-          }
-        //}
-      }
-    }
-    
-    public function editIconAction() {
 
-      $this->_helper->layout->setLayout('admin-simple');
-      $locale = $this->_getParam('locale', null);
-      $this->view->form = $form = new Core_Form_Admin_Language_EditIcon();
-      $isLanguageExist = Engine_Api::_()->getDbTable('languages', 'core')->isLanguageExist($locale);
-      $language = Engine_Api::_()->getItem('core_language', $isLanguageExist);
-      $form->icon->setValue($language->icon);
-      if ($this->getRequest()->isPost() && $form->isValid($this->getRequest()->getPost())) {
-        $language->icon = $_POST['icon'];
-        $language->save();
-        
-        $this->_forward('success', 'utility', 'core', array(
-          'smoothboxClose' => 10,
-          'parentRefresh' => 10,
-          'messages' => array('Icon has been upoaded successfully.')
-        ));
-      }
+    public function enabledAction()
+    {
+        if ($this->getRequest()->isPost()) {
+            $locale = $this->_getParam('locale', 'en');
+            $disableLocale = $this->_getParam('disableLocale', 1);
+            $dbGetInsert = Engine_Db_Table::getDefaultAdapter();
+            if (!empty($disableLocale)) {
+                $dbGetInsert->update('engine4_core_languages', array('enabled' => 0), array('code =?' => $locale));
+            } else {
+                $dbGetInsert->update('engine4_core_languages', array('enabled' => 1), array('code =?' => $locale));
+            }
+        }
+    }
+
+    public function editIconAction()
+    {
+
+        $this->_helper->layout->setLayout('admin-simple');
+        $locale = $this->_getParam('locale', null);
+        $this->view->form = $form = new Core_Form_Admin_Language_EditIcon();
+        $isLanguageExist = Engine_Api::_()->getDbTable('languages', 'core')->isLanguageExist($locale);
+        $language = Engine_Api::_()->getItem('core_language', $isLanguageExist);
+        $form->icon->setValue($language->icon);
+        if ($this->getRequest()->isPost() && $form->isValid($this->getRequest()->getPost())) {
+            $language->icon = $_POST['icon'];
+            $language->save();
+
+            $this->_forward('success', 'utility', 'core', array(
+                'smoothboxClose' => 10,
+                'parentRefresh' => 10,
+                'messages' => array('Icon has been upoaded successfully.')
+            )
+            );
+        }
     }
 
     public function deleteAction()
     {
         $form = $this->view->form = new Core_Form_Admin_Language_Delete();
 
-        $languageList     = Zend_Locale_Data::getList('en', 'language');
-        $territoryList    = Zend_Locale_Data::getList('en', 'territory');
-        $localeCode       = $this->_getParam('locale', null);
+        $languageList = Zend_Locale_Data::getList('en', 'language');
+        $territoryList = Zend_Locale_Data::getList('en', 'territory');
+        $localeCode = $this->_getParam('locale', null);
         if (empty($localeCode)) {
             return;
         }
         if (false !== strpos($localeCode, '_')) {
             list($locale, $territory) = explode('_', $localeCode);
         } else {
-            $locale    = $localeCode;
+            $locale = $localeCode;
             $territory = null;
         }
 
@@ -257,7 +242,7 @@ class Core_AdminLanguageController extends Core_Controller_Action_Admin
         if ($territory && !empty($territoryList[$territory])) {
             $languagePack .= " ({$territoryList[$territory]})";
         }
-        $languagePack     .= "  [$localeCode]";
+        $languagePack .= "  [$localeCode]";
 
         $form->setDescription(sprintf($form->getDescription(), $languagePack));
 
@@ -265,18 +250,19 @@ class Core_AdminLanguageController extends Core_Controller_Action_Admin
         if ($this->getRequest()->isPost() && $form->isValid($this->getRequest()->getPost())) {
             $lang_dir = APPLICATION_PATH . '/application/languages/' . $localeCode;
             try {
-              @Engine_Package_Utilities::fsRmdirRecursive($lang_dir, true);
-              
-              Engine_Api::_()->getDbTable('languages', 'core')->delete(array('code =?' => $localeCode, "fallback =?" => $localeCode));
-              
-              $this->_forward('success', 'utility', 'core', array(
-                  'smoothboxClose' => 2000,
-                  'parentRefresh'  => 2000,
-                  'format' => 'smoothbox',
-                  'messages' => array(Zend_Registry::get('Zend_Translate')->_('Language has been deleted.')),
-              ));
+                @Engine_Package_Utilities::fsRmdirRecursive($lang_dir, true);
+
+                Engine_Api::_()->getDbTable('languages', 'core')->delete(array('code =?' => $localeCode, "fallback =?" => $localeCode));
+
+                $this->_forward('success', 'utility', 'core', array(
+                    'smoothboxClose' => 2000,
+                    'parentRefresh' => 2000,
+                    'format' => 'smoothbox',
+                    'messages' => array(Zend_Registry::get('Zend_Translate')->_('Language has been deleted.')),
+                )
+                );
             } catch (Exception $e) {
-                $form->addError('Unable to delete language files.  Please log in through FTP and delete the directory "/application/languages/'.$localeCode.'/ and all of the files inside.');
+                $form->addError('Unable to delete language files.  Please log in through FTP and delete the directory "/application/languages/' . $localeCode . '/ and all of the files inside.');
             }
         }
     }
@@ -285,7 +271,13 @@ class Core_AdminLanguageController extends Core_Controller_Action_Admin
     {
         $this->view->locale = $locale = $this->_getParam('locale');
         $this->view->page = $page = $this->_getParam('page');
-        $translate = Zend_Registry::get('Zend_Translate');
+
+        $translate = new Zend_Translate(
+            'Engine_Translate_Adapter_Csv',
+            APPLICATION_PATH . '/application/languages/' . $locale,
+            null,
+            array(),
+        );
 
         try {
             if (!$locale || !Zend_Locale::findLocale($locale)) {
@@ -312,13 +304,13 @@ class Core_AdminLanguageController extends Core_Controller_Action_Admin
 
         // Get locale translation info
         $localeLanguage = $localeObject->getLanguage();
-        $localeRegion   = $localeObject->getRegion();
+        $localeRegion = $localeObject->getRegion();
         $this->view->localeLanguageTranslation = $localeLanguageTranslation
             = Zend_Locale::getTranslation($localeLanguage, 'language', Zend_Registry::get('Locale'));
         $this->view->localeRegionTranslation = $localeRegionTranslation
             = Zend_Locale::getTranslation($localeRegion, 'territory', Zend_Registry::get('Locale'));
 
-        $translate = Zend_Registry::get('Zend_Translate');
+        $translate1 = Zend_Registry::get('Zend_Translate');
 
         if ($localeLanguageTranslation && $localeRegionTranslation) {
             $this->view->localeTranslation = $localeLanguageTranslation . ' '
@@ -333,19 +325,19 @@ class Core_AdminLanguageController extends Core_Controller_Action_Admin
 
         // Query plural system for max and sample space
         $sample = array();
-        $max    = 0;
+        $max = 0;
         for ($i = 0; $i <= 1000; $i++) {
             $form = Zend_Translate_Plural::getPlural($i, $locale);
-            $max  = max($max, $form);
+            $max = max($max, $form);
             if (!empty($sample[$form]) && is_countable($sample[$form]) && @count($sample[$form]) < 3) {
                 $sample[$form][] = $i;
             }
         }
-        $this->view->pluralFormCount  = ($max + 1);
+        $this->view->pluralFormCount = ($max + 1);
         $this->view->pluralFormSample = $sample;
 
         // Get initial and default values
-        $baseMessages = $translate->getMessages('en');
+        $baseMessages = $translate1->getMessages('en');
         if ($translate->isAvailable($locale)) {
             $currentMessages = $translate->getMessages($locale);
         } else {
@@ -362,7 +354,7 @@ class Core_AdminLanguageController extends Core_Controller_Action_Admin
         // Build the fancy array
         $resultantMessages = array();
         $missing = 0;
-        $index   = 0;
+        $index = 0;
         foreach ($baseMessages as $key => $value) {
             // Build
             $composite = array(
@@ -412,7 +404,7 @@ class Core_AdminLanguageController extends Core_Controller_Action_Admin
 
         // Process form POST
         if ($this->getRequest()->isPost()) {
-            $keys   = $this->_getParam('keys');
+            $keys = $this->_getParam('keys');
             $values = $this->_getParam('values');
 
             // Try to combine the values and keys arrays
@@ -429,15 +421,15 @@ class Core_AdminLanguageController extends Core_Controller_Action_Admin
                         continue;
                     }
                     $key = $keys[$index][0];
-                    if(engine_count($value) == 1)
-                    $combined[$key] = array_merge($value, array($value[0]));
-                    else 
-                    $combined[$key] = $value;
+                    if (engine_count($value) == 1)
+                        $combined[$key] = array_merge($value, array($value[0]));
+                    else
+                        $combined[$key] = $value;
                 }
             }
 
             // Try to write to a file
-            $targetFile = APPLICATION_PATH . '/application/languages/'.$locale.'/custom.csv';
+            $targetFile = APPLICATION_PATH . '/application/languages/' . $locale . '/custom.csv';
             if (!file_exists($targetFile)) {
                 touch($targetFile);
                 chmod($targetFile, 0777);
@@ -455,34 +447,38 @@ class Core_AdminLanguageController extends Core_Controller_Action_Admin
         }
     }
 
-    public function addPhraseAction() {
-    
-      $form = $this->view->form = new Core_Form_Admin_Language_AddPhrase();
-      
-      if ($this->getRequest()->isPost() && $form->isValid($this->getRequest()->getPost())) {
-        $phrase = $this->_getParam('phrase');
+    public function addPhraseAction()
+    {
 
-        $locale = $this->_getParam('locale');
+        $form = $this->view->form = new Core_Form_Admin_Language_AddPhrase();
 
-        if ($phrase && $locale) {
-          $targetFile = APPLICATION_PATH . '/application/languages/'.$locale.'/custom.csv';
-          if (!file_exists($targetFile)) {
-              touch($targetFile);
-              chmod($targetFile, 0777);
-          }
-          if (file_exists($targetFile)) {
-            $writer = new Engine_Translate_Writer_Csv($targetFile);
-            $writer->setTranslations(array(
-                $phrase => $phrase,
-            ));
-            $writer->write();
-            @Zend_Registry::get('Zend_Cache')->clean();
-          }
+        if ($this->getRequest()->isPost() && $form->isValid($this->getRequest()->getPost())) {
+            $phrase = $this->_getParam('phrase');
+
+            $locale = $this->_getParam('locale');
+
+            if ($phrase && $locale) {
+                $targetFile = APPLICATION_PATH . '/application/languages/' . $locale . '/custom.csv';
+                if (!file_exists($targetFile)) {
+                    touch($targetFile);
+                    chmod($targetFile, 0777);
+                }
+                if (file_exists($targetFile)) {
+                    $writer = new Engine_Translate_Writer_Csv($targetFile);
+                    $writer->setTranslations(
+                        array(
+                            $phrase => $phrase,
+                        )
+                    );
+                    $writer->write();
+                    @Zend_Registry::get('Zend_Cache')->clean();
+                }
+            }
+            $this->_forward('success', 'utility', 'core', array(
+                'parentRedirect' => Zend_Controller_Front::getInstance()->getRouter()->assemble(array('module' => 'core', 'controller' => 'language', 'action' => 'edit', 'locale' => $locale, 'search' => $phrase), 'admin_default', true),
+            )
+            );
         }
-        $this->_forward('success', 'utility', 'core', array(
-          'parentRedirect' => Zend_Controller_Front::getInstance()->getRouter()->assemble(array('module' => 'core', 'controller' => 'language', 'action' => 'edit', 'locale' => $locale, 'search' => $phrase), 'admin_default', true),
-        ));
-      }
     }
 
     public function translateAction()
@@ -507,12 +503,12 @@ class Core_AdminLanguageController extends Core_Controller_Action_Admin
         set_time_limit(0);
 
         // Get params
-        $this->view->source       = $source       = $this->_getParam('source');
-        $this->view->target       = $target       = $this->_getParam('target');
-        $this->view->batchCount   = $batchCount   = $this->_getParam('batchCount', 50);
-        $this->view->retranslate  = $retranslate  = $this->_getParam('retranslate');
-        $this->view->file         = $file         = $this->_getParam('file');
-        $this->view->offset       = $offset       = $this->_getParam('offset', 0);
+        $this->view->source = $source = $this->_getParam('source');
+        $this->view->target = $target = $this->_getParam('target');
+        $this->view->batchCount = $batchCount = $this->_getParam('batchCount', 50);
+        $this->view->retranslate = $retranslate = $this->_getParam('retranslate');
+        $this->view->file = $file = $this->_getParam('file');
+        $this->view->offset = $offset = $this->_getParam('offset', 0);
 
         // Check params
 
@@ -670,7 +666,7 @@ class Core_AdminLanguageController extends Core_Controller_Action_Admin
         }
 
         // Send to google
-        $response  = (array) $languageApi->query($source, $target, $currentValues);
+        $response = (array) $languageApi->query($source, $target, $currentValues);
         if (!$response || engine_count($response) !== engine_count($currentValues)) {
             $this->view->status = false;
             $this->view->error = 'Translation failed';
@@ -755,7 +751,7 @@ class Core_AdminLanguageController extends Core_Controller_Action_Admin
             $text = $this->_escape($text);
         }
 
-        $response  = $languageApi->query($source, $target, $text);
+        $response = $languageApi->query($source, $target, $text);
 
         if ($escape) {
             $this->view->targetPhraseEscaped = $response;
@@ -770,12 +766,12 @@ class Core_AdminLanguageController extends Core_Controller_Action_Admin
 
     public function exportAction()
     {
-        $output    = array();
-        $locale    = $this->_getParam('locale', 'en');
+        $output = array();
+        $locale = $this->_getParam('locale', 'en');
         $translate = Zend_Registry::get('Zend_Translate');
 
         // export en, then the language being exported, so that language pack will always contain ALL possible keys
-        $output    = array_merge($translate->getMessages('en'), $translate->getMessages($locale));
+        $output = array_merge($translate->getMessages('en'), $translate->getMessages($locale));
 
         /*
         $languages = $translate->getList();
@@ -791,7 +787,7 @@ class Core_AdminLanguageController extends Core_Controller_Action_Admin
         $tmp_file = APPLICATION_PATH . "/temporary/lang_export_{$locale}.csv";
         touch($tmp_file);
         chmod($tmp_file, 0777);
-        $export   = new Engine_Translate_Writer_Csv($tmp_file);
+        $export = new Engine_Translate_Writer_Csv($tmp_file);
         $export->setTranslations($output);
         $export->write();
 

@@ -14,4 +14,4 @@
 <?php if( isset($this->param) ): ?>
   <?php $href .= "?" . urldecode(http_build_query($this->param)); ?>
 <?php endif;?>
-<a class="viewlink" href="<?php echo $href ?>"><?php echo $this->translate('View All') ?><i class="fa-angle-double-right fa"></i></a>
+<a href="<?php echo $href ?>" class="font_small"><?php echo $this->translate('View All') ?> <i class="fa-solid fa-arrow-right"></i></a>

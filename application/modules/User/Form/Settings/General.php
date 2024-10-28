@@ -42,7 +42,7 @@ class User_Form_Settings_General extends Engine_Form
       ->setAction(Zend_Controller_Front::getInstance()->getRouter()->assemble(array()))
       ;
     $this->setAttrib('id', 'general_account_form');
-
+    $this->setAttrib('class', 'global_form form_submit_ajax');
     //$this->addElement('Hash', 'token');
 
     $changeEmail = Engine_Api::_()->authorization()->getPermission($this->getItem(),'user', 'changeEmail');

@@ -13,38 +13,16 @@
 .user_invite_tabs .tabs ul.navigation{
 	flex:1;
 }
-.user_invite_tabs .tabs .invite_invite_friend{
-	margin:0 10px;
-}
-.user_invite_tabs .tabs .invite_invite_friend .invite_referral_field{
-	background-color: transparent !important;
-	border-width:0 !important;
-}
 .user_invite_tabs .invite_invite_btns > a{
 	padding:6px 10px;
-}
-.user_invite_tabs .invite_invite_friend .invite_referral_field input{
-	padding-top:8px;
-	padding-bottom:8px;
-	font-size:14px;
-	border-width:1px;
-	border-radius:5px;
-	overflow:hidden;
-	background-color:$theme_list_background_color_alt !important;
-	max-width:180px;
 }
 .user_invite_tabs ._des{
 	font-size:14px;
 	padding:0 10px;
 }
-.user_invite_tabs .invite_referral_field button{
-	width:32px;
-	height:32px;
-	font-size:13px;
-}
 .invites_notify a,
 .invites_notify b{
-	color:$theme_button_background_color;
+	color:var(--theme-button-background-color);
 	font-weight:600;
 }
 .invite-primary,
@@ -56,12 +34,12 @@
 	margin:10px 0;
 }
 .invite-primary{
-  color:$theme_button_background_color !important;	
+  color:var(--theme-button-background-color) !important;	
 }
 .invite-secondary{
-	border:2px solid $theme_button_background_color;
-	color:$theme_button_font_color !important;	
-	background:$theme_button_background_color;	
+	border:2px solid var(--theme-button-background-color);
+	color:var(--theme-button-font-color) !important;	
+	background:var(--theme-button-background-color);	
 }
 .invite-primary > i,
 .invite-secondary > i{
@@ -92,15 +70,8 @@
 	.user_setting_main_page_main .layout_middle > .user_invite_tabs{
 		padding:5px 10px 0 !important;
 	}
-	.user_invite_tabs .tabs .invite_invite_friend{
-		margin:10px 0;
-		width:100%;
-	}
 	.user_invite_tabs .tabs ul.navigation{
 		flex:inherit;
-	}
-	.user_invite_tabs .invite_invite_friend .invite_referral_field input{
-		max-width:100%;
 	}
 }
 @media(max-width:767px){
@@ -116,9 +87,6 @@
 	}
 }
 @media(max-width:600px){
-	.user_invite_tabs .invite_referral_field{
-		flex:1;
-	}
 	.user_invite_tabs .invite_invite_btns{
     margin:0 0 0 6px !important;
 	}
@@ -190,17 +158,17 @@
 	display:block;
   border-radius:10px;
 	border-width:1px;
-	border-color:$theme_border_color;
+	border-color:var(--theme-border-color);
 	font-size:0.90em;
-	color:$theme_font_color;
+	color:var(--theme-font-color);
 	transition:0.5s;
 }
 .invite_tab a.active,
 .invite_tab a:hover{
 	position:relative;
-	color:$theme_button_font_color !important;
-	background-color:$theme_button_background_color !important;
-	border-color:$theme_button_background_color !important;
+	color:var(--theme-button-font-color) !important;
+	background-color:var(--theme-button-background-color) !important;
+	border-color:var(--theme-button-background-color) !important;
 	text-decoration:none;
 }
 .invite_main .tabcontent{
@@ -211,7 +179,7 @@
 	padding:0;
 	margin:0;
   border-width:0;
-	color:$theme_font_color;
+	color:var(--theme-font-color);
 }
 .invite_tab_content_des{
 	margin:8px 0 0;
@@ -303,10 +271,11 @@
 	padding:0 !important;
 }
 .invite_invite_form .global_form > div > div > h3{
+	border-width:0;
 	margin:0 0 10px !important;
 	padding:0;
 	font-size:1.2em;
-	color:$theme_font_color;
+	color:var(--theme-font-color);
 }
 .invite_invite_form .global_form > div > div > h3 + p{
 	padding:0 !important;
@@ -355,7 +324,7 @@
 	width:100%;
 	max-width:500px;
 	position:relative;
-	background-color:$theme_list_background_color;
+	background-color:var(--theme-list-background-color);
 }
 .invite_help_modal_content .close{
 	background-color:#000;
@@ -392,7 +361,7 @@
 	margin:0px;
 }
 .invite_help_modal_content p.title a{
-	background-color:$theme_list_background_color_alt;
+	background-color:var(--theme-list-background-color-alt);
 	text-transform:capitalize;
 	text-decoration:none;
 	font-weight:bold;
@@ -412,7 +381,7 @@
 	margin-bottom:8px;
 }
 .invite_help_modal_sec p.discription span a{
-	color:$theme_button_background_color;
+	color:var(--theme-button-background-color);
 }
 .invite_help_modal_content_inner {
 	max-height:78vh;
@@ -442,7 +411,7 @@
 	max-width:500px;
 	position:relative;
 	overflow:hidden;
-	background-color:$theme_list_background_color;
+	background-color:var(--theme-list-background-color);
 }
 .invite_import_contacts_modal_content .ic_close{
 	font-size:28px;
@@ -469,10 +438,10 @@
 /*MODAL CSS END*/
 /*IMPORT CONTACT LIST START*/
 .invite_import_contactlist{
-	border:1px solid $theme_border_color;
+	border:1px solid var(--theme-border-color);
 }
 .invite_import_contactlist h2{
-	background-color:$theme_list_background_color_alt;
+	background-color:var(--theme-list-background-color-alt);
 	border-bottom-width:1px;
 	padding:0 15px;
 	margin:0px;
@@ -592,7 +561,7 @@
 .invite_send_invitions_form .torow .mailing_box_holdier ul li{
 	display:inline-block;
 	padding:5px 11px;
-	background:$theme_list_background_color_alt;
+	background:var(--theme-list-background-color-alt);
 	margin:6px 0px 6px 9px;
 	border-radius:3px;
 }
@@ -612,7 +581,7 @@
 	width:100%;
 	padding:10px;
 	border-radius:3px;
-	border:1px solid $theme_border_color;
+	border:1px solid var(--theme-border-color);
 	margin:10px 0px;
 }
 .invite_send_invitions_form .mailing_box_holdier textarea{
@@ -632,8 +601,8 @@
 	border-radius:3px;
 	width:auto;
 	height:auto;
-	background-color:$theme_button_background_color;
-	color:$theme_button_font_color;
+	background-color:var(--theme-button-background-color);
+	color:var(--theme-button-font-color);
 }
 .invite_import_contacts_modal_footer .mailing_footer_back input{
 	border-width:1px;
@@ -688,114 +657,13 @@
 }
 /*INVITOR POPUP CSS END*/
 /*INVITE FRIEND START*/
-.invite_invite_friend_main{
+.invite_firends_container_main{
 	margin-top:12px;
 	border-top-width:1px;
 	padding-top:12px;
 }
-.invite_invite_friend_main .invite_tab_content_heading{
-	color:$theme_font_color;
-}
-.invite_invite_friend{
-  position:relative;
-	display:flex;
-	align-items:center;
-	justify-content:flex-start;
-	margin:12px 0 16px;
-}
-.invite_invite_friend > ._des{
-	font-size:115%;
-	margin-top:10px;
-	font-weight:600;
-}
-.invite_referral_field{
-	display:flex;
-	align-items:center;
-	justify-content:flex-start;
-	border-width:1px;
-	border-radius:5px;
-	overflow:hidden;
-	background-color:$theme_list_background_color_alt;
-	position:relative;
-	flex:1;
-}
-.invite_referral_field ._des{
-	padding:0 15px;
-}
-.invite_invite_friend .invite_referral_field input{
-	padding:12px 10px;
-	padding-right:50px;
-	width:100%;
-	min-width:inherit;
-	max-width:100%;
-	border-width:0px;
-	border-left-width:1px;
-	background-color:transparent !important;
-	color:$theme_font_color;
-	flex:1;
-}
-[dir="rtl"] .invite_invite_friend .invite_referral_field input{
-	border-left-width:0px;
-	border-right-width:1px;
-	padding-left:50px;
-	padding-right:10px;
-}
-.invite_invite_friend .invite_referral_field input{
-	outline:none;
-	border-color:$theme_border_color !important;
-}
-.invite_invite_btns{
-	display:flex;
-	justify-content:space-between;
-	margin-left:10px;
-}
-[dir="rtl"] .invite_invite_btns{
-	margin-left:0;
-	margin-right:10px;
-}
-.invite_invite_btns > a{
-	padding:10px 15px;
-	border-radius:4px;
-	border:1px solid $theme_button_background_color !important;
-	color:$theme_button_background_color !important;
-}
-.user_invite_tabs .invite_invite_btns > a *{
-	color:$theme_button_background_color !important;
-}
-.invite_invite_btns > a:hover{
-	background-color:$theme_button_background_color;
-	color:$theme_button_font_color !important;
-	text-decoration:none;
-}
-.invite_referral_field button{
-	position:absolute;
-	right:6px;
-	padding:0;
-	width:36px;
-	height:36px;
-	font-size:15px;
-}
-[dir="rtl"] .invite_referral_field button{
-  left:6px;
-	right:auto;
-}
-.invite_referral_field button *{
-	color:$theme_button_font_color !important;
-}
-@media (max-width:600px){
-	.invite_invite_friend{
-		flex-wrap:wrap;
-	}
-	.invite_referral_field{
-		flex:inherit;
-		width:100%;
-	}
-	.invite_invite_btns{
-		margin:10px 0 0 !important;
-	}
-	.invite_referral_field ._des{
-		padding:0 10px;
-	}
+.invite_firends_container_main .invite_tab_content_heading{
+	color:var(--theme-font-color);
 }
 /*INVITE FRIEND END*/
 #global_page_invite-index-inviteef{
@@ -806,7 +674,7 @@ body#global_page_invite-index-inviteef img{
 	margin-top:20px;
 }
 body#global_page_invite-index-inviteef a{
-	color:$theme_button_background_color;
+	color:var(--theme-button-background-color);
 	font-weight:600;
 }
 .invite_invite_form .global_form div.form-wrapper div#submit-element button{
@@ -824,7 +692,7 @@ body#global_page_invite-index-inviteef a{
 	text-align:center;
 	border-radius:5px;
 	background-color:transparent;
-	border-color:$theme_button_background_color !important;
+	border-color:var(--theme-button-background-color) !important;
 	transition:0.5s;
 	margin:0 2px;
 }
@@ -846,13 +714,13 @@ body#global_page_invite-index-inviteef a{
 	margin-right:0;
 }
 .manage_invite_table table td ._btn_icon i{
-	color:$theme_button_background_color !important;
+	color:var(--theme-button-background-color) !important;
 }
 .manage_invite_table table td ._btn_icon:hover{
-	background-color:$theme_button_background_color;
+	background-color:var(--theme-button-background-color);
 }
 .manage_invite_table table td ._btn_icon:hover i{
-  color:$theme_button_font_color !important;
+  color:var(--theme-button-font-color) !important;
 }
 .invite_manage_search  .global_form_box > div{
 	width:33.33%;

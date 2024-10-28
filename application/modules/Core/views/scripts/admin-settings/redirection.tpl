@@ -17,7 +17,7 @@
 </div>
 
 <script type="text/javascript">
-  scriptJquery(window).ready(function() {
+  en4.core.runonce.add(function() {
     hideShowLogout('<?php echo Engine_Api::_()->getApi('settings', 'core')->getSetting('core.after.logout', 3); ?>');
     hideShowLogin('<?php echo Engine_Api::_()->getApi('settings', 'core')->getSetting('core.after.login', 4); ?>');
     hideShowSignup('<?php echo Engine_Api::_()->getApi('settings', 'core')->getSetting('core.after.signup', 4); ?>');

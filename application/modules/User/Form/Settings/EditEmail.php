@@ -3,8 +3,8 @@
 /**
  * SocialEngineSolutions
  *
- * @category   Application_Sespage
- * @package    Sespage
+ * @category   Application_User
+ * @package    User
  * @copyright  Copyright 2017-2018 SocialEngineSolutions
  * @license    http://www.socialenginesolutions.com/license/
  * @version    $Id: Delete.php  2018-04-23 00:00:00 SocialEngineSolutions $

@@ -48,7 +48,7 @@ class User_Widget_ProfileFriendsController extends Engine_Content_Widget_Abstrac
     $this->view->friends = $friends = $paginator = Zend_Paginator::factory($select);  
 
     // Set item count per page and current page number
-    $paginator->setItemCountPerPage($this->_getParam('itemCountPerPage', 5));
+    $paginator->setItemCountPerPage($this->_getParam('itemCountPerPage', 10));
     $paginator->setCurrentPageNumber($this->_getParam('page', 1));
 
     // Get stuff

@@ -24,6 +24,7 @@ class User_Form_Settings_Password extends Engine_Form
     // @todo replace fake values with real values
     $this->setTitle('Change Password')
       ->setAction(Zend_Controller_Front::getInstance()->getRouter()->assemble(array()))
+      ->setAttrib('class', 'global_form form_submit_ajax')
       ;
 
     // Init old password

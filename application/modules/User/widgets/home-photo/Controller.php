@@ -52,5 +52,7 @@ class User_Widget_HomePhotoController extends Engine_Content_Widget_Abstract {
       $friendUsers[$friendUser->getIdentity()] = $friendUser;
     }
     $this->view->friendUsers = $friendUsers;
+
+    $this->view->options = $this->_getParam('options', array('coverphoto', 'recentfriends', 'username'));
   }
 }

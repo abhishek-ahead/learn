@@ -42,7 +42,7 @@
     }
 	}
 
-  scriptJquery(document).ready(function() {
+  en4.core.runonce.add(function() {
     if(document.getElementById('core_followenable'))
       enableFollow(document.getElementById('core_followenable').value);
     

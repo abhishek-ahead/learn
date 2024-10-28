@@ -13,7 +13,7 @@
 
 <div id='core_search_widget'>
   <?php if($this->search_check):?>
-    <div id="searchform" class="global_form_box">
+    <div id="searchform" class="global_form_box core_search_form">
       <?php echo $this->form->setAttrib('class', '')->render($this) ?>
     </div>
   </div>

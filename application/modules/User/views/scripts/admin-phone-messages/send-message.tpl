@@ -10,8 +10,6 @@
  * @author     John
  */
 ?>
-<?php $this->headScript()->appendFile($this->layout()->staticBaseUrl.'externals/autocompleter/autocomplete.js'); ?>
-
 <div class='global_form_popup'> 
   <?php echo $this->formFilter->render($this) ?> 
 </div>
@@ -22,6 +20,7 @@
   var maxRecipients = 1;
   
   function removeFromToValue(id, elmentValue, element) {
+    id = `${id}` 
     var toValues = $(elmentValue).value;
     var toValueArray = toValues.split(",");
     var toValueIndex = "";
@@ -58,7 +57,7 @@
     }, ['memberlevel'])
   });
 
-  scriptJquery(document).on('change','#type',function(e){
+  AttachEventListerSE('change','#type',function(e){
     var value = scriptJquery(this).val();
     if(value == 'memberlevel'){
       scriptJquery('#sendto-wrapper').show();
@@ -75,7 +74,7 @@
   });
   
   scriptJquery('#type').trigger('change');
-  scriptJquery(document).on('change','#sendto',function(e){
+  AttachEventListerSE('change','#sendto',function(e){
     var value = scriptJquery(this).val();
     if(value == 'specific'){
       scriptJquery('#user-wrapper').show();

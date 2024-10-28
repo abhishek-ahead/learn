@@ -31,7 +31,7 @@
 <script type="text/javascript">
   hashSign = '#';
   
-  scriptJquery(document).ready(function(e){
+  en4.core.runonce.add(function() {
     showFooterNote('<?php echo $enablefooter;?>');
   });
   

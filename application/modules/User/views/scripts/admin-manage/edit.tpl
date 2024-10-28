@@ -14,11 +14,7 @@
 $settings = Engine_Api::_()->getApi('settings', 'core'); 
 $otpsms_signup_phonenumber = $settings->getSetting('otpsms.signup.phonenumber', 0);
 
-if(!empty($otpsms_signup_phonenumber)) {
-  $this->headLink()->appendStylesheet($this->layout()->staticBaseUrl."externals/selectize/css/normalize.css");
-  $headScript = new Zend_View_Helper_HeadScript();
-  $headScript->appendFile($this->layout()->staticBaseUrl.'externals/selectize/js/selectize.js');
-  
+if(!empty($otpsms_signup_phonenumber)) {  
   $defaultCountry = !empty($this->user->country_code) ? $this->user->country_code : Engine_Api::_()->getApi('settings', 'core')->getSetting('otpsms.default.countries','US');
   $getCountry = Engine_Api::_()->getDbTable('countries', 'core')->getCountry($defaultCountry);
   if(!empty($getCountry)) {
@@ -35,7 +31,7 @@ if(!empty($otpsms_signup_phonenumber)) {
     <?php if($this->user->phone_number) { ?>
       currentPhoneNumber = '<?php echo $this->user->phone_number; ?>';
     <?php } ?>
-    scriptJquery(document).ready(function() {
+    en4.core.runonce.add(function() {
       scriptJquery('#phone_number-element').prepend(scriptJquery('#settings_country_code').html());
       scriptJquery('#settings_country_code').remove();
       

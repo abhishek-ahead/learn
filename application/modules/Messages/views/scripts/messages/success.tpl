@@ -10,5 +10,6 @@
  * @author     John
  */
 ?>
-
-<?php echo $this->translate('Your message has been sent successfully.') ?>
+<div class="layout_content p-3">
+  <div class="success_msg"><?php echo $this->translate('Your message has been sent successfully.') ?>
+</div>

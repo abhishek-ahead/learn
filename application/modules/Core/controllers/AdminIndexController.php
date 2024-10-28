@@ -22,6 +22,12 @@ class Core_AdminIndexController extends Core_Controller_Action_Admin {
     if( !Engine_Api::_()->getApi('settings', 'core')->getSetting('core.general.site.url')) {
       Engine_Api::_()->getApi('settings', 'core')->setSetting('core.general.site.url', _ENGINE_SITE_URL);
     }
+    
+    //Feed Default installation
+    if (!Engine_Api::_()->getApi('settings', 'core')->getSetting('activity.pluginactivated')) {
+      include_once APPLICATION_PATH . "/application/modules/Activity/controllers/defaultsettings.php";
+      Engine_Api::_()->getApi('settings', 'core')->setSetting('activity.pluginactivated', 1);
+    }
 
     $table = Engine_Api::_()->getDbtable('users', 'user');
     $select = $table->select()
@@ -33,6 +39,8 @@ class Core_AdminIndexController extends Core_Controller_Action_Admin {
   public function changeEnvironmentModeAction()
   {
     if ($this->getRequest()->isPost() && $this->_getParam('environment_mode', false)) {
+      $environmentMode = $this->_getParam('environment_mode', false);
+      
       $global_settings_file = APPLICATION_PATH . '/application/settings/general.php';
       if (file_exists($global_settings_file)) {
           $g = include $global_settings_file;
@@ -63,7 +71,10 @@ class Core_AdminIndexController extends Core_Controller_Action_Admin {
               // it worked; continue.
           }
       }
-
+      if($environmentMode == "development"){
+        // create js and css file
+        Engine_Api::_()->core()->generateJsCss();
+      }
       if ($this->_getParam('environment_mode') != @$g['environment_mode']) {
           $g['environment_mode'] = $this->_getParam('environment_mode');
           $file_contents  = "<?php defined('_ENGINE') or die('Access Denied'); return ";
@@ -83,6 +94,9 @@ class Core_AdminIndexController extends Core_Controller_Action_Admin {
           $this->view->message = 'No change necessary';
           $this->view->success = true; // no change
       }
+
+      
+
     }
     $this->view->success = false;
   }

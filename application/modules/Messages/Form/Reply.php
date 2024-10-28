@@ -64,8 +64,11 @@ class Messages_Form_Reply extends Engine_Form
         ),
       ));
     }
+    $this->addElement('Hidden', 'fancyalbumuploadfileidsvideo', array(
+      'order' => 1000,
+    ));
     // init submit
-    $this->addElement('Button', 'submit', array(
+    $this->addElement('Button', 'reply_submit', array(
       'label' => 'Send Reply',
       'type' => 'submit',
       'ignore' => true

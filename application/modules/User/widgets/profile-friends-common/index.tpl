@@ -10,8 +10,6 @@
  * @author     John
  */
 ?>
-
-
 <ul>
   <?php foreach( $this->paginator as $user ): ?>
     <li><?php echo $this->htmlLink($user->getHref(), $this->itemBackgroundPhoto($user, 'thumb.icon', $user->getTitle()), array('title'=>$user->getTitle())) ?></li>

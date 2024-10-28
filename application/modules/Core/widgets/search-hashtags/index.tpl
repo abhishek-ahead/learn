@@ -11,5 +11,7 @@
  */
 ?>
 <?php if( $this->form ): ?>
-  <?php echo $this->form->render($this) ?>
+  <div class="sidebar_search_form core_search_form">
+    <?php echo $this->form->render($this) ?>
+  </div>
 <?php endif ?>

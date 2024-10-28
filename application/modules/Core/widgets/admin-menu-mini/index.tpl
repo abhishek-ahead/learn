@@ -113,7 +113,7 @@
 				</li>
 				<?php if( 1 !== engine_count($this->languageNameList) ): ?>
           <li>
-            <?php $selectedLanguage = $this->translate()->getLocale(); ?>
+            <?php $selectedLanguage = !empty($_COOKIE['en4_language']) ? $_COOKIE['en4_language'] : Engine_Api::_()->getApi('settings', 'core')->getSetting('core.locale.locale', 'en'); //$this->translate()->getLocale(); ?>
             <?php $isLanguageExist = Engine_Api::_()->getDbTable('languages', 'core')->isLanguageExist($selectedLanguage); ?>
             <?php if($isLanguageExist) {
               $languageItem = Engine_Api::_()->getItem('core_language', $isLanguageExist);
@@ -126,7 +126,7 @@
               <?php if($path) { ?>
                 <img src="<?php echo $path; ?>" alt="img" class="dBlock" data-bs-toggle="tooltip" data-bs-placement="bottom" title="<?php echo $this->translate("Language") ?>">
               <?php } else { ?>
-                <span><?php echo $this->translate($languageItem->name) ?></span>	
+                <span><?php echo $languageItem->name; ?></span>	
               <?php } ?>
             </a>
             <ul class="dropdown-menu">
@@ -186,14 +186,14 @@
 	});
 
 	//Menu Toggle
-	scriptJquery(document).ready(function(){
+	en4.core.runonce.add(function() {
 		scriptJquery(".admin_menu_setting_button a").click(function(){
 			scriptJquery(".admin_menu_setting").toggleClass("active");
 		});
 	});
 
 	// Submenu Dropdown
-	scriptJquery(document).ready(function(){
+	en4.core.runonce.add(function() {
 		var menuElement = scriptJquery('.global_header_left').find('.menu_core_admin_main').parent();
 		menuElement.addClass('menu_link');
 		var submenu = scriptJquery('.main_menu_submenu > li > .active');
@@ -205,7 +205,7 @@
 		scriptJquery('.navigation').children().eq(0).find ('a').removeClass('toggled_menu')
 		scriptJquery('.menu_link.active').find('ul').show();
 	});
-	scriptJquery(document).on('click', '.toggled_menu', function () {
+	AttachEventListerSE('click', '.toggled_menu', function () {
 		if(scriptJquery(this).hasClass('active')){
 			scriptJquery(this).removeClass('active')
 			scriptJquery(this).parent().find('ul').slideUp()

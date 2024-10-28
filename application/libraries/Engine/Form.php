@@ -140,7 +140,7 @@ class Engine_Form extends Zend_Form
      */
     public function __construct($options = null)
     {
-        $this->setAttrib('class', 'global_form');
+        $this->setAttrib('class', 'form_submit_ajax global_form');        
         $this->setAction($_SERVER['REQUEST_URI']);
         self::enableForm($this);
         parent::__construct($options);

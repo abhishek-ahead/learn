@@ -239,6 +239,7 @@ class Zend_Form implements Iterator, Countable, Zend_Validate_Interface
         $this->init();
 
         $this->loadDefaultDecorators();
+
     }
 
     /**
@@ -665,8 +666,22 @@ class Zend_Form implements Iterator, Countable, Zend_Validate_Interface
      * @param  mixed $value
      * @return Zend_Form
      */
-    public function setAttrib($key, $value)
+    public function setAttrib($key, $value,$isAttribs = false)
     {
+        //SE from Submit ajax work
+        //if($key == 'class' && empty($_GET['format'])) {
+        if($key == 'class') {
+            if(!empty($this->_attribs[$key])) {
+                $class = explode(' ', $this->_attribs[$key]);
+                $class = array_merge($class, explode(' ', $value));
+                $class = array_unique($class);
+                $this->_attribs[$key] = implode(' ', $class);
+                return $this;
+            }
+        }
+        if($isAttribs && $key == "class") {
+            $value = $value.' form_submit_ajax';
+        }
         $key = (string) $key;
         $this->_attribs[$key] = $value;
         return $this;
@@ -681,7 +696,7 @@ class Zend_Form implements Iterator, Countable, Zend_Validate_Interface
     public function addAttribs(array $attribs)
     {
         foreach ($attribs as $key => $value) {
-            $this->setAttrib($key, $value);
+            $this->setAttrib($key, $value,true);
         }
         return $this;
     }
@@ -761,6 +776,8 @@ class Zend_Form implements Iterator, Countable, Zend_Validate_Interface
      */
     public function setAction($action)
     {
+        $action = str_replace('getContentOnly=true', '', $action);
+        $action = trim($action, '&');
         return $this->setAttrib('action', (string) $action);
     }
 
@@ -2316,6 +2333,13 @@ class Zend_Form implements Iterator, Countable, Zend_Validate_Interface
             return false;
         }
 
+        //Form submit using ajax
+        if(!empty($_POST['isFormAjaxPost'])) {
+          $validateFields = Engine_Api::_()->core()->validateFormFields($this);
+          if(is_countable($validateFields) && engine_count($validateFields)){
+            echo json_encode(array('status' => false, 'error_message' => $validateFields));die;
+          }
+        }
         return $valid;
     }
 
@@ -2397,9 +2421,13 @@ class Zend_Form implements Iterator, Countable, Zend_Validate_Interface
      * @return Zend_Form
      */
     public function addErrorMessage($message)
-    {
-        $this->_errorMessages[] = (string) $message;
-        return $this;
+    {   
+      if(!empty($_POST['isFormAjaxPost'])) {
+        $errors[] = array('errorMessage' => (string) $message);
+        echo json_encode(array('status' => false, 'error_message' => $errors));die;
+      }
+      $this->_errorMessages[] = (string) $message;
+      return $this;
     }
 
     /**

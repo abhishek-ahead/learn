@@ -52,31 +52,33 @@
 </script>
 <div class="user_profile_friends row" id="user_profile_followers">
   <?php foreach( $this->paginator as $member ): ?>
-    <div class="col-sm-6" id="user_followers_<?php echo $member->getIdentity() ?>">
-      <div class="user_profile_friends_inner">
-        <div class="user_profile_friends_left">
-          <div class="user_profile_friends_img">
-            <?php echo $this->htmlLink($member->getHref(), $this->itemBackgroundPhoto($member, 'thumb.profile'), array('class' => 'profile_friends_icon')) ?>
-          </div>   
-          <div class="profile_friends_content">
-            <div class="_title">
-              <?php echo $this->htmlLink($member->getHref(), $member->getTitle()) ?>
-            </div> 
-            <span class="_username">
-              <?php echo $this->translate("@%s", $member->username) ?>
-            </span>
+    <?php if($member->getIdentity()) { ?>
+      <div class="col-sm-6 user_profile_friends_item" id="user_followers_<?php echo $member->getIdentity() ?>">
+        <div class="user_profile_friends_inner">
+          <div class="user_profile_friends_left">
+            <div class="user_profile_friends_img">
+              <?php echo $this->htmlLink($member->getHref(), $this->itemBackgroundPhoto($member, 'thumb.profile'), array('class' => 'profile_friends_icon')) ?>
+            </div>   
+            <div class="profile_friends_content">
+              <div class="_title">
+                <?php echo $this->htmlLink($member->getHref(), $member->getTitle()) ?>
+              </div> 
+              <span class="_username">
+                <?php echo $this->translate("@%s", $member->username) ?>
+              </span>
+            </div>
+          </div>
+          <div class="user_profile_friends_right">
+            <?php if($this->viewer()->getIdentity() && $member->getIdentity() != $this->viewer()->getIdentity()) { ?>
+              <?php echo $this->partial('_followmembers.tpl', 'user', array('subject' => $member)); ?>
+            <?php } ?>
           </div>
         </div>
-        <div class="user_profile_friends_right">
-          <?php if($member->getIdentity() != $this->viewer()->getIdentity()) { ?>
-            <?php echo $this->partial('_followmembers.tpl', 'user', array('subject' => $member)); ?>
-          <?php } ?>
-        </div>
       </div>
-    </div>
+    <?php } ?>
   <?php endforeach ?>
 </div>
-<div class="user_profile_friends_pagination">
+<div class="profile_paginator">
   <div id="user_profile_followers_previous" class="paginator_previous">
     <?php echo $this->htmlLink('javascript:void(0);', $this->translate('Previous'), array(
       'onclick' => '',

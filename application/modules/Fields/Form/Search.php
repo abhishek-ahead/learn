@@ -129,11 +129,11 @@ class Fields_Form_Search extends Engine_Form
           if(!$this->_jQueryLoaded){
               $view = Zend_Registry::isRegistered('Zend_View') ? Zend_Registry::get('Zend_View') : null;
               if($view) {
-                  $baseURL = Zend_Registry::get('StaticBaseUrl');
-                  $view->headLink()->appendStylesheet($baseURL."externals/selectize/css/normalize.css");
-                  $headScript = new Zend_View_Helper_HeadScript();
-                  //$headScript->prependFile($baseURL.'externals/jQuery/jquery.min.js');
-                  $headScript->appendFile($baseURL.'externals/selectize/js/selectize.js');
+                  // $baseURL = Zend_Registry::get('StaticBaseUrl');
+                  // $view->headLink()->appendStylesheet($baseURL."externals/selectize/css/normalize.css");
+                  // $headScript = new Zend_View_Helper_HeadScript();
+                  // //$headScript->prependFile($baseURL.'externals/jQuery/jquery.min.js');
+                  // $headScript->appendFile($baseURL.'externals/selectize/js/selectize.js');
               }
           }
       }

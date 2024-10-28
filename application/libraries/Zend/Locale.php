@@ -1973,6 +1973,18 @@ class Zend_Locale
         if (is_array($locale)) {
             return '';
         }
+        
+        //SE hack
+        if($locale === null) {
+           //Admin case
+           $urlLocale = explode('/locale/', $_SERVER['REDIRECT_URL']);
+           if(isset($urlLocale[1]) && !empty($urlLocale[1])) {
+            $locale = $urlLocale[1];
+           } else {
+            //User end case
+            $locale = 'default';
+           }
+        }
 
         if (empty(self::$_auto) === true) {
             self::$_browser     = self::getBrowser();

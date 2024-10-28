@@ -2,7 +2,7 @@
   'package' => array(
     'type' => 'external',
     'name' => 'jscolor',
-    'version' => '6.7.0',
+    'version' => '7.0.0',
     'revision' => '$Revision: 9747 $',
     'path' => 'externals/jscolor',
     'repository' => 'socialengine.com',

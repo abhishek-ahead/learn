@@ -48,7 +48,6 @@ class Core_AdminManageCommentsController extends Core_Controller_Action_Admin {
             ->setIntegrityCheck(false)
             ->from($tableName)
             ->joinLeft($userTableName, "$tableName.poster_id = $userTableName.user_id", 'displayname')
-            ->where('resource_id <> ?', 0)
             ->where('resource_type IN (?)', $itemTypes);
 
     // Process form
@@ -71,16 +70,16 @@ class Core_AdminManageCommentsController extends Core_Controller_Action_Admin {
     $this->view->assign($values);
     
     if (!empty($_GET['commented_by']))
-      $select->where($userTableName . '.displayname LIKE ?', '%' . $_GET['commented_by'] . '%');
+      $select->where($userTableName . '.displayname LIKE ?', $_GET['commented_by'] . '%');
 
     if (!empty($_GET['body']))
-      $select->where($tableName . ".body LIKE ?", '%' . $_GET['body'] . '%');
+      $select->where($tableName . ".body LIKE ?", $_GET['body'] . '%');
       
     if(!empty($_GET['comment_id']))
       $select->where($tableName . ".comment_id = ?", $_GET['comment_id']);
       
     if(!empty($_GET['resource_type']))
-      $select->where($tableName . ".resource_type LIKE ?", '%' . $_GET['resource_type'] . '%');
+      $select->where($tableName . ".resource_type LIKE ?", $_GET['resource_type'] . '%');
       
     $date_from = !empty($_GET['date']['date_from']) ? date("Y-m-d", strtotime($_GET['date']['date_from'])) : '';
     $date_to = !empty($_GET['date']['date_to']) ? date("Y-m-d", strtotime($_GET['date']['date_to'])) : '';
@@ -231,10 +230,10 @@ class Core_AdminManageCommentsController extends Core_Controller_Action_Admin {
     $this->view->assign($values);
     
     if (!empty($_GET['commented_by']))
-      $select->where($userTableName . '.displayname LIKE ?', '%' . $_GET['commented_by'] . '%');
+      $select->where($userTableName . '.displayname LIKE ?', $_GET['commented_by'] . '%');
 
     if (!empty($_GET['body']))
-      $select->where($tableName . ".body LIKE ?", '%' . $_GET['body'] . '%');
+      $select->where($tableName . ".body LIKE ?", $_GET['body'] . '%');
       
     if(!empty($_GET['comment_id']))
       $select->where($tableName . ".comment_id = ?", $_GET['comment_id']);

@@ -107,7 +107,7 @@ class Payment_AdminSettingsController extends Core_Controller_Action_Admin {
       $select->where($tableName . ".currency_id = ?", $_GET['currency_id']);
 
     if (!empty($_GET['title']))
-      $select->where($tableName . ".title LIKE ?", '%' . $_GET['title'] . '%');
+      $select->where($tableName . ".title LIKE ?", $_GET['title'] . '%');
 
     if(!empty($_GET['code']))
       $select->where($tableName . ".code = ?", $_GET['code']);

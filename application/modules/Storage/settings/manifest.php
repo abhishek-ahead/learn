@@ -14,7 +14,7 @@ return array(
   'package' => array(
     'type' => 'module',
     'name' => 'storage',
-    'version' => '6.7.0',
+    'version' => '7.0.0',
     'revision' => '$Revision: 10267 $',
     'path' => 'application/modules/Storage',
     'repository' => 'socialengine.com',

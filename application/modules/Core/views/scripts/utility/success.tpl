@@ -9,14 +9,19 @@
  * @version    $Id: success.tpl 9747 2012-07-26 02:08:08Z john $
  * @author     John
  */
-?>
+?> 
 
 <div>
   <?php if( $this->parentRefresh ): // Refresh parent window (for smoothboxes) ?>
     <script type="text/javascript">
       setTimeout(function()
       {
-        parent.window.location.reload( false );
+        if(!scriptJquery("body").hasClass("admin")){
+          parent.loadAjaxContentApp(parent.window.location.href);
+          parent.Smoothbox.close();
+        }else{
+          parent.window.location.reload( false );
+        }
       }, <?php echo ( $this->parentRefresh === true ? 1000 : $this->parentRefresh ); ?>);
     </script>
   <?php endif; ?>
@@ -25,7 +30,12 @@
     <script type="text/javascript">
       setTimeout(function()
       {
-        parent.window.location.href = '<?php echo $this->parentRedirect ?>';
+        if(!scriptJquery("body").hasClass("admin")){
+          parent.loadAjaxContentApp('<?php echo $this->parentRedirect ?>');
+          parent.Smoothbox.close();
+        }else{
+         parent.window.location.href = '<?php echo $this->parentRedirect ?>';
+        }
       }, <?php echo ( empty($this->parentRedirectTime) ? 1000 : $this->parentRedirectTime ); ?>);
     </script>
   <?php endif; ?>
@@ -43,7 +53,12 @@
     <script type="text/javascript">
       setTimeout(function()
       {
-        window.location.href = '<?php echo $this->redirect ?>';
+        if(!scriptJquery("body").hasClass("admin")){
+          parent.loadAjaxContentApp('<?php echo $this->redirect ?>');
+          parent.Smoothbox.close();
+        }else{
+         window.location.href = '<?php echo $this->redirect ?>';
+        }
       }, <?php echo ( isset($this->redirectTime) ? $this->redirectTime : 500 ); ?>);
     </script>
   <?php endif; ?>

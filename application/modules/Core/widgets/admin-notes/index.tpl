@@ -48,7 +48,7 @@
 </div>
 <script type="application/javascript">
   
-  scriptJquery(document).on('submit','#core_admin_notes',function(e){
+  AttachEventListerSE('submit','#core_admin_notes',function(e){
     e.preventDefault();
     
     if(!scriptJquery('#core_admin_overlay_content').length)

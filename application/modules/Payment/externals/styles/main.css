@@ -1,26 +1,26 @@
 
-/* $Id:main.css 9191 2011-08-20 00:00:03Z john $ */
+
 /*PAYMENT FORM*/
 /*SignUp Payment Page*/
 .signup_subscriptions_plans .layout_page_user_signup_index .layout_core_content{
 	width:100%;
 }
 .payment_subscription_plans > div{
-	max-width:600px;
+	max-width:37.5rem;
 	float:none !important;
 	margin:auto;
-	border-width:1px;
-	border-radius:10px;
+	border-width:0.0625rem;
+	border-radius:0.625rem;
 	padding:0.8em;
 }
 .payment_subscription_plans div > h3{
-	background-color:$theme_list_background_color_alt;
+	background-color:var(--theme-list-background-color-alt);
 	border-width:0 !important;
-	border-radius:5px !important;
+	border-radius:0.3125rem !important;
 	font-weight:bold;
 	box-shadow:inherit !important;
 	padding:0.6em 0.5em !important;
-	margin:0 0 10px !important;
+	margin:0 0 0.625rem !important;
 	text-align:center !important;
 }
 .payment_subscription_plans > div > div > h3 + p{
@@ -32,7 +32,7 @@
 	max-width:100% !important;
 }
 .payment_subscription_plans ul.form-errors{
-	margin:0 0 10px;
+	margin:0 0 0.625rem;
 }
 .payment_subscription_plans .form-wrapper .form-label{
 	display:none;
@@ -52,32 +52,32 @@
 	opacity:0;
 }
 .payment_subscription_plans .form-element .form-options-wrapper li label{
-	padding:10px;
-	border-width:1px;
-	border-radius:10px;
-	margin:0 0 15px;
+	padding:0.625rem;
+	border-width:0.0625rem;
+	border-radius:0.625rem;
+	margin:0 0 0.9375rem;
 	width:100%;
 }
 .payment_subscription_plans .form-element .form-options-wrapper li label:after{
 	content:"";
-	border:1px solid $theme_border_color;
+	border:0.0625rem solid var(--theme-border-color);
 	border-radius:50%;
 	position:absolute;
-	top:10px;
-	right:10px;
-	height:24px;
-	width:24px;
+	top:0.625rem;
+	right:0.625rem;
+	height:1.5rem;
+	width:1.5rem;
 }
 .payment_subscription_plans .form-element .form-options-wrapper li input:checked + label{
-	border-color:$theme_button_background_color;
+	border-color:var(--theme-button-background-color);
 }
 .payment_subscription_plans .form-element .form-options-wrapper li input:checked + label:after{
-	content:"\\f00c";
-	background-color:$theme_button_background_color;
-	border-color:$theme_button_background_color;
+	content:"\f00c";
+	background-color:var(--theme-button-background-color);
+	border-color:var(--theme-button-background-color);
 	font-family:'Font Awesome 6 Free';
 	font-weight:700;
-	color:$theme_button_font_color;
+	color:var(--theme-button-font-color);
 	display:flex;
 	align-items:center;
 	justify-content:center;
@@ -93,8 +93,8 @@
 	padding:.8em;
 }
 .payment_subscription_plans .plan_details{
-	border-radius:10px;
-	border-width:1px;
+	border-radius:0.625rem;
+	border-width:0.0625rem;
 	padding:0.625rem;
 	margin-bottom:1rem;
 }
@@ -106,22 +106,22 @@
 	padding:0;
 }
 .payment_subscription_plans .plan_details > p + p{
-	border-top-width:1px;
+	border-top-width:0.0625rem;
 	border-top-style:dashed;
-	margin-top:10px;
-	padding-top:10px;
+	margin-top:0.625rem;
+	padding-top:0.625rem;
 }
 /* PAYMENT SUBSCRIBE PLAN */
 .payment_subscribe_plan > ul{
 	display:flex;
 	flex-wrap:wrap;
-	margin:0 -10px;
+	margin:0 -0.625rem;
 }
 .payment_subscribe_plan > ul > li{
 	box-sizing:border-box;
 	text-align:center;
 	width:100%;
-	padding:0 10px;
+	padding:0 0.625rem;
 }
 .layout_middle .payment_subscribe_plan > ul > li{
 	max-width:33.33%;
@@ -130,35 +130,35 @@
 	justify-content:center;
 }
 .payment_subscribe_plan > ul > li ._cont{
-	padding:10px;
-	border-radius:10px 10px 0 0;
+	padding:0.625rem;
+	border-radius:0.625rem 0.625rem 0 0;
 }
 .layout_middle .payment_subscribe_plan > ul > li ._cont{
-	border-radius:10px;
-	border-width:1px;
+	border-radius:0.625rem;
+	border-width:0.0625rem;
 }
 .plan_box ._title{
 	text-align:center;
 	font-weight:bold;
-	margin-bottom:10px;
-	font-size:22px;
+	margin-bottom:0.625rem;
+	font-size:1.375rem;
 }
 .plan_box ._desc{
 	text-align:center;
 	max-width:90%;
 	margin:auto;
-	margin-bottom:20px;
+	margin-bottom:1.25rem;
 }
 .layout_middle .payment_subscribe_plan > ul > li ._cont > ul{
-	margin:0 -10px;
+	margin:0 -0.625rem;
 }
 .plan_box ul > li{
-	padding:10px;
-	border-top-width:1px;
+	padding:0.625rem;
+	border-top-width:0.0625rem;
 	text-align:center;
 }
 .plan_box ul > li b{
-	margin-top:5px;
+	margin-top:0.3125rem;
 	display:block;
 }
 .payment_subscribe_plan > ul > li button{
@@ -173,33 +173,33 @@
 }
 /*PAYMENT PROCESS*/
 .payment_process_gateway{
-	border-width:1px;
-	border-radius:10px;
-	max-width:600px;
-	margin:50px auto;
+	border-width:0.0625rem;
+	border-radius:0.625rem;
+	max-width:37.5rem;
+	margin:3.125rem auto;
 	padding:0.8em;
 }
 .payment_process_gateway form > h3{
-	background-color:$theme_list_background_color_alt;
+	background-color:var(--theme-list-background-color-alt);
 	border-width:0 !important;
-	border-radius:5px !important;
+	border-radius:0.3125rem !important;
 	font-weight:bold;
 	box-shadow:inherit !important;
 	padding:0.6em 0.5em !important;
-	margin:0 0 10px !important;
+	margin:0 0 0.625rem !important;
 	text-align:center !important;
 }
 .payment_process_gateway_buttons{
-	border-top:1px dashed $theme_border_color;
-	margin-top:15px;
-  padding-top:10px;
+	border-top:0.0625rem dashed var(--theme-border-color);
+	margin-top:0.9375rem;
+  padding-top:0.625rem;
 }
 .payment_process_gateway_buttons > div{
-	margin-top:10px;
+	margin-top:0.625rem;
 }
 .payment_process_gateway_buttons > div button{
 	padding:0;
-  height:45px;
+  height:2.8125rem;
 	margin:0 auto;
 	display:flex;
 	align-items:center;
@@ -207,26 +207,26 @@
 	width:100%;
 }
 .payment_process_gateway_buttons > div button img{
-	margin-right:10px;
-	width:24px;
+	margin-right:0.625rem;
+	width:1.5rem;
 }
 [dir="rtl"] .payment_process_gateway_buttons > div button img{
-	margin-left:10px;
+	margin-left:0.625rem;
 	margin-right:0;
 }
 .payment_process_loading{
 	text-align:center;
-	padding:100px 0;
+	padding:6.25rem 0;
 }
 .payment_process_loading span{
 	display:block;
-	margin-top:15px;
+	margin-top:0.9375rem;
 }
 .payment_process_message{
-	padding:100px 0;
+	padding:6.25rem 0;
 }
 .payment_process_message_icon{
-	font-size:50px;
+	font-size:3.125rem;
 }
 .payment_process_message_success .payment_process_message_icon{
 	color:#1db575;
@@ -238,11 +238,11 @@
 	color:#e6bc1b;
 }
 .payment_process_message_title{
-	font-size:25px;
-	margin-top:20px;
+	font-size:1.5625rem;
+	margin-top:1.25rem;
 }
 .payment_process_message_btn{
-	margin-top:20px;
+	margin-top:1.25rem;
 }
 /*PAYMENT TABS*/
 .user_setting_global_form .manage_table{
@@ -253,14 +253,14 @@
   background-color:#1e1e1e !important;
 }
 .payment_tabs_wrapper{
-	padding:15px !important;
+	padding:0.9375rem !important;
 }
 .payment_tabs_wrapper .tabs{
-	margin:0 0 15px !important;
+	margin:0 0 0.9375rem !important;
 }
 /*TRANSACTION PAGE*/
 .payment_transaction_history h3{
-	margin:0 0 10px;
+	margin:0 0 0.625rem;
 	padding:0;
 }
 .payment_icon_view:before,
@@ -269,72 +269,78 @@
 	font-weight:700;
 }
 .payment_icon_view:before{
-	content:"\\f06e";
+	content:"\f06e";
 }
 .payment_icon_attachment:before{
-	content:"\\f0c6";
+	content:"\f0c6";
 }
 .payment_transaction_details_popup{
-	margin:15px 0 0 15px;
-	width:350px;
+	margin:0.625rem;
 }
-.payment_transaction_details_popup h3{
-	padding:0 0 5px;
+.payment_transaction_detail_headline{
+	border-bottom-width:0.0625rem;
+	padding: 0 0 0.625rem;
+}
+.payment_transaction_detail_headline h3{
+	font-weight: var(--theme-font-weight-bold);
+	padding:0;
+	margin:0;
 }
 .payment_transaction_details_popup tr{
-	border-top-width:1px;
-	border-top-style:dashed;
+	border-bottom-width:0.0625rem;
+	border-bottom-style:dashed;
 	vertical-align:top;
 }
 .payment_transaction_details_popup td{
-	padding:10px 0;
+	padding:0.625rem 0;
 	width:50%;
 }
 .payment_transaction_details_popup td:last-child{
-	padding-left:10px;
+	padding-left:0.625rem;
 	word-break:break-all;
 }
 [dir="rtl"] .payment_transaction_details_popup td:last-child{
 	padding-left:0;
-	padding-right:10px;
+	padding-right:0.625rem;
 }
 /*SUBSCRIPTIONS TABLE CSS START HERE*/
 .my_subscription_plan_head{
 	display:flex;
 	align-items:center;
 	justify-content:flex-start;
-	margin-bottom:15px;
+	margin-bottom:0.9375rem;
 }
 .my_subscription_plan_head h3{
-	margin:0px 15px 0px 0px;
+	margin:0 0.9375rem 0 0;
 	padding:0;
 	flex:1;
 }
 [dir="rtl"] .my_subscription_plan_head h3{
-	margin-right:10px;
-	margin-left:0px;
+	margin-right:0.625rem;
+	margin-left:0;
 }
 .my_subscription_plan_head div > .btn{
-	border-color:$theme_button_background_color !important;
-	color:$theme_button_background_color !important;
-	padding:5px 12px;
-	font-size:0.95em;
+	border-color:var(--theme-button-background-color) !important;
+	color:var(--theme-button-background-color) !important;
+	padding:0.5rem 0.75rem;
+	font-size:0.875rem;
+	line-height:normal;
 }
 .my_subscription_plan_head div > .btn:hover{
-	border-color:$theme_button_background_color !important;
-	color:$theme_button_font_color !important;
-	background-color:$theme_button_background_color !important;	
+	border-color:var(--theme-button-background-color) !important;
+	color:var(--theme-button-font-color) !important;
+	background-color:var(--theme-button-background-color) !important;	
 }
 .plan_active_details{
 	display:flex;
 	align-items:center;
 	flex-wrap:wrap;
 	justify-content:space-between;
-	border-radius:10px;
-	padding:12px !important;
+	border-radius:0.625rem;
+	padding:0.75rem !important;
 	width:100%;
-	margin:10px 0 20px;
-	border-width:1px;
+	margin:0.625rem 0 1.25rem;
+	border-width:0.0625rem;
 }
 .plan_active_details_inner{
 	width:100%;
@@ -344,7 +350,7 @@
 }
 .plan_active_details_inner_title h5{
 	margin-bottom:0;
-	color:$theme_headline_color;
+	color:var(--theme-headline-color);
 }
 .plan_active_details_inner > ul{
 	display:flex;
@@ -352,26 +358,26 @@
 	justify-content:flex-start;
 	flex-wrap:wrap;
 	width:100%;
-  margin:0 -5px;
+  margin:0 -0.3125rem;
 }
 .plan_active_details_inner > ul > li{
 	width:25%;
-	padding:10px 5px 0;
+	padding:0.625rem 0.3125rem 0;
 }
 .plan_active_details_inner > ul > li > span{
 	display:block;
-	margin-bottom:5px;
-	color:$theme_font_color_light;
+	margin-bottom:0.3125rem;
+	color:var(--theme-font-color-light);
 }
 .plan_active_details_inner > ul > li > h6{
-  color:$theme_headline_color;
+  color:var(--theme-headline-color);
 	margin-bottom:0;
 }
 .payment_subscription_plans_table{
 	width:100%;
 	margin:0 auto;
 	text-align:center;
-	border-radius:20px;
+	border-radius:1.25rem;
 	overflow:hidden;
 }
 .dark_mode .payment_subscription_plans_table{
@@ -387,11 +393,11 @@
  color:#000 !important;
 }
 .payment_subscription_plans_table_header{
-	padding:30px 20px;
-	background-color:$theme_list_background_color_alt;
+	padding:1.875rem 1.25rem;
+	background-color:var(--theme-list-background-color-alt);
 }
 .payment_subscription_plans_overlap .payment_subscription_plans_table_header{
-	padding-bottom:50px;
+	padding-bottom:3.125rem;
 }
 .light_mode .payment_subscription_plans_table .payment_subscription_plans_table_header{
 	background-color:#fff !important;
@@ -407,14 +413,14 @@
 }
 .payment_subscription_plans_table_heading{
 	font-size:2em;
-	margin-bottom:8px;
+	margin-bottom:0.5rem;
 	text-align:center;
-	letter-spacing:1px;
+	letter-spacing:0.0625rem;
 	font-weight:bold;
 	line-height:140%;
 }
 .payment_subscription_plans_table_des{
-	margin-bottom:20px;
+	margin-bottom:1.25rem;
 	text-align:center;
 	line-height:180%;
 	font-size:1em;
@@ -423,32 +429,32 @@
 	display:flex;
 	justify-content:center;
 	flex-wrap:wrap;
-	margin:50px 0px 0px;
-	padding-bottom:25px;
+	margin:3.125rem 0rem 0rem;
+	padding-bottom:1.5625rem;
 }
 .payment_subscription_plans_overlap .payment_subscription_plans_table_header + .payment_subscription_plans_listing{
-	margin-top:-28px;
+	margin-top:-1.75rem;
 }
 .payment_subscription_plans_listing_item{
-	padding-bottom:30px;
+	padding-bottom:1.875rem;
 	width:32%;
-  margin:0 5px 20px;
+  margin:0 0.3125rem 1.25rem;
 }
 .payment_subscription_plans_listing_item.heighlighted{
 	padding-bottom:0;
-	top:-30px;	
+	top:-1.875rem;	
 	z-index:1;
 	position:relative;
 }
 .payment_subscription_plans_listing_item article{
-	border-width:1px;
+	border-width:0.0625rem;
 	position:relative;
-	padding:12px;
-	border-radius:20px;
+	padding:0.75rem;
+	border-radius:1.25rem;
 	height:100%;
 	display:flex;
 	flex-direction:column;
-	background-color:$theme_list_background_color;
+	background-color:var(--theme-list-background-color);
 }
 .dark_mode .payment_subscription_plans_listing_item article{
   background-color:#646464 !important;
@@ -457,14 +463,14 @@
   background-color:#ffffff !important;
 }
 .payment_subscription_plans_listing_item.heighlighted article{
-	border-width:4px;
-	border-color:$theme_button_background_color;
+	border-width:0.25rem;
+	border-color:var(--theme-button-background-color);
 }
 .payment_subscription_plans_listing_top{
-	background-color:$theme_list_background_color_alt;
-	padding:20px 15px;
-	border-radius:20px;
-	min-height:120px;
+	background-color:var(--theme-list-background-color-alt);
+	padding:1.25rem 0.9375rem;
+	border-radius:1.25rem;
+	min-height:7.5rem;
 	display:flex;
 	align-items:center;
 	justify-content:center;
@@ -480,14 +486,14 @@
 .payment_subscription_plans_listing_img{
 	background-size:cover;
 	background-position:center;
-	height:80px;
-	width:80px;
-	margin:0 auto 10px;
+	height:5rem;
+	width:5rem;
+	margin:0 auto 0.625rem;
 }
 .payment_subscription_plans_listing_title span{
 	display:block;
 	font-size:1.5em;
-	padding:0 10px 10px;
+	padding:0 0.625rem 0.625rem;
 	text-align:center;
 	font-weight:600;
 }
@@ -504,7 +510,7 @@
 	font-size:1.4em;
 	vertical-align:middle;
 	font-weight:600;
-	color:$theme_button_background_color;
+	color:var(--theme-button-background-color);
 }
 .payment_subscription_plans_listing_content .price sup{
 	font-size:1.2em;    
@@ -527,16 +533,16 @@
 	text-transform:capitalize;
 }
 .payment_subscription_plans_listing_hint{
-	border-bottom-width:0px;
+	border-bottom-width:0;
 	font-style:normal;
 	font-size:95%;
 	text-align:center;
-	min-height:70px;
+	min-height:4.375rem;
 	display:flex;
 	align-items:center;
 	justify-content:center;
 	flex-direction:column;
-	padding:8px 0;
+	padding:0.5rem 0;
 	text-align:center !important;
 }
 /*Features*/
@@ -550,12 +556,12 @@ ul.payment_subscription_plans_listing_features{
 	text-align:center !important;
 }
 .payment_subscription_plans_listing_features li{
-	border-bottom-width:1px;
+	border-bottom-width:0.0625rem;
 	border-bottom-style:dashed;
-	height:60px;
-	padding:6px 0;
+	height:3.75rem;
+	padding:0.375rem 0;
 	overflow:hidden;
-	margin:0px;
+	margin:0;
 	display:flex;
 	align-items:center;
 	justify-content:flex-start;
@@ -566,28 +572,28 @@ ul.payment_subscription_plans_listing_features{
 	text-align:center !important;
 }
 .payment_subscription_plans_listing_features li .payment_font_icon{
-	margin-right:6px;
+	margin-right:0.375rem;
 	vertical-align:middle;
-	width:20px;
-	height:20px;
+	width:1.25rem;
+	height:1.25rem;
 	display:flex;
 	align-items:center;
 	justify-content:center;
 	position:relative;
 	z-index:1;
-	color:$theme_button_background_color;
-	font-size:12px;
+	color:var(--theme-button-background-color);
+	font-size:0.75rem;
 }
 [dir="rtl"] .payment_subscription_plans_listing_features li .payment_font_icon{
-	margin-right:0px;
-	margin-left:6px;
+	margin-right:0;
+	margin-left:0.375rem;
 }
 .payment_subscription_plans_listing_features li .payment_font_icon::after{
 	content:'';
 	width:100%;
 	height:100%;
 	border-radius:50%;
-	background-color:$theme_button_background_color;
+	background-color:var(--theme-button-background-color);
 	display:block;
 	position:absolute;
 	left:0;
@@ -597,12 +603,12 @@ ul.payment_subscription_plans_listing_features{
 	opacity:0.1;
 }
 .payment_subscription_plans_listing_features li .payment_custom_tip_show{
-	margin-left:8px;
+	margin-left:0.5rem;
 	cursor:pointer;
 }
 [dir="rtl"] .payment_subscription_plans_listing_features li .payment_custom_tip_show{
 	margin-left:0;
-	margin-right:8px;
+	margin-right:0.5rem;
 }
 .payment_subscription_plans_listing_features li span{
 	overflow:hidden;
@@ -611,10 +617,10 @@ ul.payment_subscription_plans_listing_features{
 	display:flex;
 	align-items:center;
 	overflow-y:auto;
-	margin-right:5px;
+	margin-right:0.3125rem;
 }
 [dir="rtl"] .payment_subscription_plans_listing_features li span{
-	margin-left:5px;
+	margin-left:0.3125rem;
 	margin-right:0;
 }
 .payment_subscription_plans_listing_features.iscenter li span{
@@ -624,14 +630,14 @@ ul.payment_subscription_plans_listing_features{
 	background-color:transparent;
 }
 .payment_subscription_plans_listing_features li span::-webkit-scrollbar{
-	width:0px;
+	width:0;
 	background-color:transparent;
 }
 .payment_subscription_plans_listing_features li span::-webkit-scrollbar-thumb{
 	background-color:transparent;
 }
 .payment_subscription_plans_listing_features li .mCSB_dragger{
-	min-height:10px !important;
+	min-height:0.625rem !important;
 }
 .payment_subscription_plans_listing_features.iscenter li,
 .payment_subscription_plans_listing_features.iscenter li .mCSB_container{
@@ -640,64 +646,70 @@ ul.payment_subscription_plans_listing_features{
 /*Footer Button*/
 .payment_subscription_plans_listing_footer{
 	position:relative;
-	padding:20px 10px 0;
+	padding:1.25rem 0.625rem 0;
 	text-align:center !important;
 	margin-top:auto;
 }
 .payment_subscription_plans_listing_footer input{
-	margin-top:10px;
+	margin-top:0.625rem;
 	opacity:0;
 	position:absolute;
 	visibility:hidden;
 }
-.payment_subscription_plans_listing_footer a{
-	background-color:$theme_button_background_color;
-	border-radius:50px;
-  color:$theme_button_font_color !important;
+.payment_subscription_plans_listing_footer > a{
+	border-radius:3.125rem;
 	display:inline-flex;
 	align-items:center;
   justify-content:center;
-	font-size:14px;
+	font-size:0.875rem;
 	font-weight:600;
 	position:relative;
-	height:50px;
+	height:3.125rem;
 	margin:0 auto;
 	text-decoration:none;
 	text-align:center;
-	padding:0 30px;
+	padding:0 1.875rem;
 	transition:0.5s;
 }
-.payment_subscription_plans_listing_footer:hover a{
-	background-color:$theme_button_background_color;
-	color:$theme_button_font_color !important;
+.payment_subscription_plans_listing_footer:hover > a{
 	text-decoration:none;
+}
+.payment_subscription_plans_listing_footer .error_msg{
+	font-size: var(--theme-font-size-small);
+	color: var(--theme-font-color) !important;
+}
+.payment_subscription_plans_listing_footer .error_msg a{
+	color: var(--theme-link-color) !important;
+}
+.payment_subscription_plans_listing_footer .error_msg:before{
+	display:none !important;
 }
 /*Ribbon*/
 .payment_subscription_plans_listing_label{
   position:absolute;
   top:0;
   right:0;
-  width:110px;
-  height:110px;
+  width:6.875rem;
+  height:6.875rem;
   overflow:hidden;
 }
 .payment_subscription_plans_listing_label div{
-  background-color:$theme_button_background_color;
-	color:$theme_button_font_color;
-  font-size:15px;
+  background-color:var(--theme-button-background-color);
+	color:var(--theme-button-font-color);
+  font-size:0.9375rem;
   font-weight:bold;
   text-align:center;
   text-transform:uppercase;
   position:relative;
-  padding:5px 10px;
-	top:18px;
-  width:158px;
+  padding:0.3125rem 0.625rem;
+	top:1.125rem;
+  width:9.875rem;
 }
 .payment_subscription_plans_listing_label.left{
 	left:0
 }
 .payment_subscription_plans_listing_label.left > div{
-  left:-45px;
+  left:-2.8125rem;
   -webkit-transform:rotate(-45deg) translate3d(0, 0, 0);
   -moz-transform:rotate(-45deg) translate3d(0, 0, 0);
   -ms-transform:rotate(-45deg) translate3d(0, 0, 0);
@@ -707,7 +719,7 @@ ul.payment_subscription_plans_listing_features{
 	right:0;
 }
 .payment_subscription_plans_listing_label.right > div{
-  left:-8px;
+  left:-0.5rem;
   -webkit-transform:rotate(45deg) translate3d(0, 0, 0);
   -moz-transform:rotate(45deg) translate3d(0, 0, 0);
   -ms-transform:rotate(45deg) translate3d(0, 0, 0);
@@ -716,7 +728,7 @@ ul.payment_subscription_plans_listing_features{
 /*SUBSCRIPTIONS TABLE CSS END HERE*/
 /*NOTE CSS START HERE*/
 .payment_subscription_plans_listing_note{
-	padding:20px 0;
+	padding:1.25rem 0;
 }
 .payment_rich_content{
 	overflow:hidden;
@@ -725,22 +737,22 @@ ul.payment_subscription_plans_listing_features{
 .payment_rich_content ul,
 .payment_rich_content ol{
 	line-height:150%;
-	margin-bottom:10px;
+	margin-bottom:0.625rem;
 }
 .payment_rich_content ul{
 	list-style:disc;
 }
 .payment_rich_content ul,
 .payment_rich_content ol{
-	padding-left:20px;
+	padding-left:1.25rem;
 }
 [dir="rtl"] .payment_rich_content ul,
 [dir="rtl"] .payment_rich_content ol{
 	padding-left:0;
-	padding-right:20px;
+	padding-right:1.25rem;
 }
 .payment_rich_content img{
-	margin:5px;
+	margin:0.3125rem;
 	max-width:100%;
 	height:auto;
 }
@@ -769,13 +781,13 @@ ul.payment_subscription_plans_listing_features{
 }
 @media only screen and (max-width:600px){
 	.plan_active_details{
-		padding:12px !important;
-		margin:12px 0 6px;
+		padding:0.75rem !important;
+		margin:0.75rem 0 0.375rem;
 	}
 	.plan_active_details_inner strong{
 		flex:inherit;
 		display:block;
-		margin:5px 0 0 !important;
+		margin:0.3125rem 0 0 !important;
 	}
 	.plan_active_details_inner > ul > li{
 		width:100%;
@@ -783,7 +795,7 @@ ul.payment_subscription_plans_listing_features{
 }	
 @media only screen and (max-width:480px){
 	.payment_subscription_plans_table_header{
-		padding:15px;
+		padding:0.9375rem;
 	}
 	.payment_subscription_plans_table_heading{
 		font-size:1.5em;
@@ -800,6 +812,54 @@ ul.payment_subscription_plans_listing_features{
 	}
 	.my_subscription_plan_head div{
 		width:100%;
-		margin-top:12px;
+		margin-top:0.75rem;
 	}	
+}
+/*Wallet Page*/
+.wallet_form_settings_right{
+	flex:1;
+}
+.wallet_form_settings_left p{
+	font-weight:600;
+	font-size:1.6rem;
+}
+.wallet_form_settings_right > span{
+	margin-right:0.625rem;
+}
+.wallet_form_payment_option .modal-body .form-elements ._txt{
+	margin:auto;
+	text-align:center !important;
+}
+.modal_close_btn {
+	font-size:1.25rem;
+	color:var(--theme-font-color);
+}
+.add_balance_section{
+	border-bottom-width:0.0625rem;
+	font-size:1.4rem;
+	margin:0 1.25rem;
+}
+.add_balance_section span{
+  font-weight:600;
+}
+ .add_balance_section input{
+	width:100%;
+	color:var(--theme-font-color);
+}
+ .add_balance_section input::placeholder{
+	color:var(--theme-font-color);
+ }
+.add_balance_section input:focus-visible{
+  outline:0;
+}
+.wallet_form_payment_inner .form-wrapper{
+	margin:0.625rem auto 0;
+	width:100%;
+}
+.wallet_form_payment_inner .form-wrapper button{
+	color:var(--theme-font-color);
+}
+.wallet_form_payment_inner .form-wrapper button img{
+	width:1.25rem;
+	height:1.25rem;
 }

@@ -14,7 +14,7 @@ return array(
   'package' => array(
     'type' => 'module',
     'name' => 'invite',
-    'version' => '6.7.0',
+    'version' => '7.0.0',
     'revision' => '$Revision: 10194 $',
     'path' => 'application/modules/Invite',
     'repository' => 'socialengine.com',

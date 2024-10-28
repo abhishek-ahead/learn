@@ -1,21 +1,16 @@
 <?php
-/**
- * SocialEngine
+
+ /**
+ * socialnetworking.solutions
  *
- * @category   Application_Core
+ * @category   Application_Modules
  * @package    Activity
- * @copyright  Copyright 2006-2020 Webligo Developments
- * @license    http://www.socialengine.com/license/
- * @version    $Id: Item.php 9747 2012-07-26 02:08:08Z john $
- * @author     John
+ * @copyright  Copyright 2014-2020 Ahead WebSoft Technologies Pvt. Ltd.
+ * @license    https://socialnetworking.solutions/license/
+ * @version    $Id: Item.php 2017-01-12  00:00:00 socialnetworking.solutions $
+ * @author     socialnetworking.solutions
  */
 
-/**
- * @category   Application_Core
- * @package    Activity
- * @copyright  Copyright 2006-2020 Webligo Developments
- * @license    http://www.socialengine.com/license/
- */
 class Activity_Model_Helper_Item extends Activity_Model_Helper_Abstract
 {
   /**
@@ -26,7 +21,7 @@ class Activity_Model_Helper_Item extends Activity_Model_Helper_Abstract
    * @param string $href (OPTIONAL)
    * @return string
    */
-  public function direct($item, $text = null, $href = null)
+  public function direct($item, $text = null, $href = null,$separator = ' &rarr; ')
   {
     $item = $this->_getItem($item, false);
 
@@ -35,9 +30,9 @@ class Activity_Model_Helper_Item extends Activity_Model_Helper_Abstract
     {
       return false;
     }
-
-    if( !isset($text) )
-    {
+    
+    $translate = Zend_Registry::get('Zend_Translate');
+    if( !isset($text) ) {
       $text = $item->getTitle();
     }
 
@@ -56,8 +51,9 @@ class Activity_Model_Helper_Item extends Activity_Model_Helper_Abstract
     }
     
     return '<a '
-      . 'class="feed_item_username" '
+      . 'class="feed_item_username core_tooltip" '
       . ( $href ? 'href="'.$href.'"' : '' )
+      . ($href ? 'data-src="'.$item->getGuid().'"' : '')
       . '>'
       . $text
       . '</a>';

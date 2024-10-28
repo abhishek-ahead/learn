@@ -60,12 +60,12 @@ class User_AdminLoginsController extends Core_Controller_Action_Admin
     if( !empty($values['displayname']) ) {
       $usersTable = Engine_Api::_()->getDbtable('users', 'user');
       $usersSelect = $usersTable->select()->from($usersTable, 'user_id')
-        ->where('displayname LIKE ?', '%' . $values['displayname'] . '%')
-        ->orWhere('username LIKE ?', '%' . $values['displayname'] . '%');
+        ->where('displayname LIKE ?', $values['displayname'] . '%')
+        ->orWhere('username LIKE ?', $values['displayname'] . '%');
       $select->where('user_id IN ?', $usersSelect);
     }
     if( !empty($values['email']) ) {
-      $select->where('email LIKE ?', '%' . $values['email'] . '%');
+      $select->where('email LIKE ?', $values['email'] . '%');
     }
     
     if( !empty($values['phone_number']) ) {

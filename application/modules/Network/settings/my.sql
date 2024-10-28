@@ -34,15 +34,15 @@ CREATE TABLE `engine4_network_networks` (
 -- Dumping data for table `engine4_network_networks`
 --
 
-INSERT IGNORE INTO `engine4_network_networks` (`title`, `field_id`, `pattern`, `assignment`) VALUES
-('North America', 0, NULL, 0),
-('South America', 0, NULL, 0),
-('Europe', 0, NULL, 0),
-('Asia', 0, NULL, 0),
-('Africa', 0, NULL, 0),
-('Australia', 0, NULL, 0),
-('Antarctica', 0, NULL, 0)
-;
+-- INSERT IGNORE INTO `engine4_network_networks` (`title`, `field_id`, `pattern`, `assignment`) VALUES
+-- ('North America', 0, NULL, 0),
+-- ('South America', 0, NULL, 0),
+-- ('Europe', 0, NULL, 0),
+-- ('Asia', 0, NULL, 0),
+-- ('Africa', 0, NULL, 0),
+-- ('Australia', 0, NULL, 0),
+-- ('Antarctica', 0, NULL, 0)
+-- ;
 
 
 -- --------------------------------------------------------

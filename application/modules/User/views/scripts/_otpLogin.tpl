@@ -18,7 +18,7 @@ $this->headTranslate(array(
 <div id="otp-wrapper" class="form-wrapper">
   <div id="otp-label" class="form-label"></div>
   <div id="otp-element" class="form-element">
-    <span class="sesbasic_text_light"><?php echo $this->translate("Or"); ?></span> <a href="javascript:void(0);" class="sendOtpsms" onClick="sendOptsms(this,'<?php echo $this->emailFieldName; ?>')"><?php echo $this->translate("Send OTP"); ?></a>
+    <span class="font_color_light"><?php echo $this->translate("Or"); ?></span> <a href="javascript:void(0);" class="sendOtpsms" onClick="sendOptsms(this,'<?php echo $this->emailFieldName; ?>')"><?php echo $this->translate("Send OTP"); ?></a>
 		<img class="_loadingimg" src="application/modules/Core/externals/images/loading.gif" alt="Loading" style="display:none;">
   </div>
 </div>
@@ -73,7 +73,7 @@ $this->headTranslate(array(
     });
   }
 
-  scriptJquery(document).on('click','.otpsms_back_form',function(e){
+  AttachEventListerSE('click','.otpsms_back_form',function(e){
     var parentElem = scriptJquery(this).parent().parent();
     parentElem.find('.otpsms_form_back').hide();
     parentElem.find('#otpsms_signup_verify, #otpsms_login_verify').hide();

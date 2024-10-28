@@ -51,6 +51,7 @@ class Activity_Form_Admin_Settings_Emoticon_Update extends Engine_Form
     $this->addElement('File', 'Filedata', array(
       'label' => 'Choose a emoticon',
       'destination' => APPLICATION_PATH . '/application/modules/Activity/externals/emoticons/images',
+      'accept' => 'image/*',
       'validators' => array(
         array('Extension', false, 'jpg,png,gif,jpeg,webp'),
       ),

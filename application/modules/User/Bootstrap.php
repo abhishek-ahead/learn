@@ -25,11 +25,7 @@ class User_Bootstrap extends Engine_Application_Bootstrap_Abstract
     // Add view helper and action helper paths
     $this->initViewHelperPath();
     $this->initActionHelperPath();
-
-    // Add main user javascript
-    //$headScript = new Zend_View_Helper_HeadScript();
-    //$headScript->appendFile('application/modules/User/externals/scripts/core.js');
-
+		
     // Get viewer
     $viewer = Engine_Api::_()->user()->getViewer();
 		if($viewer->getIdentity() && $viewer->level_id != 1 && !empty($_FILES)) {

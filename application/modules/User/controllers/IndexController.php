@@ -155,13 +155,57 @@ class User_IndexController extends Core_Controller_Action_Standard
 
     // Contruct query
     $select = $table->select()
-      //->setIntegrityCheck(false)
+      ->setIntegrityCheck(false)
       ->from($userTableName)
       ->joinLeft($searchTableName, "`{$searchTableName}`.`item_id` = `{$userTableName}`.`user_id`", null)
       //->group("{$userTableName}.user_id")
       ->where("{$userTableName}.search = ?", 1)
       ->where("{$userTableName}.enabled = ?", 1);
+      
+    //Location search
+    $primaryId = current($table->info("primary"));
+    
+    $tableLocationName = Engine_Api::_()->getDbtable('locations', 'core')->info('name');
+    $location = $this->_getParam('location', '');
+    $lat = $this->_getParam('lat', '');
+    $lng = $this->_getParam('lng', '');
+    $miles = $this->_getParam('miles', 50);
+    
+    $enablesigupfields = (array) json_decode(Engine_Api::_()->getApi('settings', 'core')->getSetting('user.signup.enablesigupfields', '["confirmpassword","dob","gender","profiletype","timezone","language","location"]'));
+    
+    //Location Based search
+    if(Engine_Api::_()->getApi('settings', 'core')->getSetting('enableglocation', 0) && isset($enablesigupfields) && engine_in_array('location', $enablesigupfields)) {
 
+      if(Engine_Api::_()->getApi('settings', 'core')->getSetting('enableglocation', 0) == 2 && !empty($location)) {
+        $select->where($userTableName . '.location LIKE ?', $location . '%');
+      } else if(Engine_Api::_()->getApi('settings', 'core')->getSetting('enableglocation', 0) == 1) {
+
+        if(empty($lat) && empty($lng) && !empty($_COOKIE['location_data'])) {
+          $location = $_COOKIE['location_data'];
+          $lat = $_COOKIE['location_lat'];
+          $lng = $_COOKIE['location_lng'];
+          $miles = 50;
+        }
+
+        if(!empty($lat) && !empty($lng) && !empty($location) && $lat != 'undefined') {
+
+          //This is the maximum distance (in miles) away from $origLat, $origLon in which to search
+          $dist = !empty($miles) ? $miles : 50;
+
+          $searchType = !empty(Engine_Api::_()->getApi('settings', 'core')->getSetting('core.search.type', 1)) ? 3956 : 6371;
+
+          $origLat = $lat;
+          $origLon = $lng;
+
+          $asinSort = array('lat', 'lng', 'distance' => new Zend_Db_Expr(($searchType . " * 2 * ASIN(SQRT( POWER(SIN(($origLat - abs(lat))*pi()/180/2),2) + COS($origLat*pi()/180 )*COS(abs(lat)*pi()/180) *POWER(SIN(($origLon-lng)*pi()/180/2),2)))")));
+          $select->joinLeft($tableLocationName, $tableLocationName . '.resource_id = ' . $userTableName . '.'.$primaryId .' AND ' . $tableLocationName . '.resource_type = "user" ', $asinSort);
+          $select->where($tableLocationName . ".lng between ($origLon-$dist/abs(cos(radians($origLat))*69)) and ($origLon+$dist/abs(cos(radians($origLat))*69)) and " . $tableLocationName . ".lat between ($origLat-($dist/69)) and ($origLat+($dist/69))");
+          $select->order('distance');
+          $select->having("distance < $dist");
+        }
+      }
+    }
+    
     if( !empty($allBlockedUsers) ) {
       $select->where("user_id NOT IN (?)", $allBlockedUsers);
     }
@@ -239,11 +283,10 @@ class User_IndexController extends Core_Controller_Action_Standard
     $extraParamsObj = $this->_getParam('extraParamsObj', null);
     
     $type = $this->_getParam('type', null);
-    $sesdata = array();
+    $data = array();
     $users_table = Engine_Api::_()->getDbtable('users', 'user');
     $select = $users_table->select()
-                    //->where('user_id != ?', Engine_Api::_()->user()->getViewer()->getIdentity())
-                    ->where('displayname LIKE ? ', '%' . $this->_getParam('text') . '%');
+                    ->where('displayname LIKE ? ', $this->_getParam('text') . '%');
     if(!empty($type) && $type == 'phone') {
       $select->where('phone_number <> ?', '');
     }
@@ -264,19 +307,19 @@ class User_IndexController extends Core_Controller_Action_Standard
     foreach ($users as $user) {
       $user_icon_photo = $this->view->itemPhoto($user, 'thumb.icon');
       if(!empty($type) && $type == 'phonenumber') {
-        $sesdata[] = array(
+        $data[] = array(
           'id' => $user->user_id,
           'label' => $user->getTitle(false)  . ' - (+'.$user->country_code.'-' . $user->phone_number .')',
           'photo' => $user_icon_photo
         );
       } else {
-        $sesdata[] = array(
+        $data[] = array(
             'id' => $user->user_id,
             'label' => $user->getTitle(false),
             'photo' => $user_icon_photo
         );
       }
     }
-    return $this->_helper->json($sesdata);
+    return $this->_helper->json($data);
   }
 }

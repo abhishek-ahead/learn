@@ -61,7 +61,7 @@
             $getMenuItem = Engine_Api::_()->getApi('menus', 'core')->getMenuItem(array('module' => $item->name, 'menu' => 'core_admin_main_plugins'));
             $params = $getMenuItem->params;
           ?>
-          <tr data-name="<?php echo $this->translate(strtolower($manifest_file['package']['title'])) ?>" class="plugins">
+          <tr data-name="<?php echo strtolower($manifest_file['package']['title']); ?>" class="plugins">
             <td>
               <div class="admin_active_btn">
                 <div class="admin_active_btn_left">

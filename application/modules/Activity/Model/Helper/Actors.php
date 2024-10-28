@@ -1,26 +1,20 @@
 <?php
-/**
- * SocialEngine
+
+ /**
+ * socialnetworking.solutions
  *
- * @category   Application_Core
+ * @category   Application_Modules
  * @package    Activity
- * @copyright  Copyright 2006-2020 Webligo Developments
- * @license    http://www.socialengine.com/license/
- * @version    $Id: Actors.php 9747 2012-07-26 02:08:08Z john $
- * @author     John
+ * @copyright  Copyright 2014-2020 Ahead WebSoft Technologies Pvt. Ltd.
+ * @license    https://socialnetworking.solutions/license/
+ * @version    $Id: Actors.php 2017-01-12  00:00:00 socialnetworking.solutions $
+ * @author     socialnetworking.solutions
  */
 
-/**
- * @category   Application_Core
- * @package    Activity
- * @copyright  Copyright 2006-2020 Webligo Developments
- * @license    http://www.socialengine.com/license/
- */
-class Activity_Model_Helper_Actors extends Activity_Model_Helper_Abstract
-{
-  public function direct($subject, $object = false)
-  {
-    $separator = ' &rarr; ';
+class Activity_Model_Helper_Actors extends Activity_Model_Helper_Abstract {
+
+  public function direct($subject, $object = false, $separator = ' &rarr; ') {
+  
     $pageSubject = Engine_Api::_()->core()->hasSubject() ? Engine_Api::_()->core()->getSubject() : null;
 
     $subject = $this->_getItem($subject, false);
@@ -31,17 +25,18 @@ class Activity_Model_Helper_Actors extends Activity_Model_Helper_Abstract
     {
       return false;
     }
-
-    $attribs = array('class' => 'feed_item_username');
-
-    if( null === $pageSubject ) {
-      return $subject->toString($attribs) . $separator . $object->toString($attribs);
+    
+    $attribs = array('class' => 'feed_item_username core_tooltip');
+    if($subject->getGuid() == $object->getGuid()){
+      return $subject->toString(array_merge($attribs,array('data-src'=>$subject->getGuid())));
+    }else if( null === $pageSubject ) {
+      return $subject->toString(array_merge($attribs,array('data-src'=>$subject->getGuid()))) . $separator . $object->toString(array_merge($attribs,array('data-src'=>$object->getGuid())));
     } else if( $pageSubject->isSelf($subject) ) {
-      return $subject->toString($attribs) . $separator . $object->toString($attribs);
+      return $subject->toString(array_merge($attribs,array('data-src'=>$subject->getGuid()))) . $separator . $object->toString(array_merge($attribs,array('data-src'=>$object->getGuid())));
     } else if( $pageSubject->isSelf($object) ) {
-      return $subject->toString($attribs);
+      return $subject->toString(array_merge($attribs,array('data-src'=>$subject->getGuid())));
     } else {
-      return $subject->toString($attribs) . $separator . $object->toString($attribs);
+      return $subject->toString(array_merge($attribs,array('data-src'=>$subject->getGuid()))) . $separator . $object->toString(array_merge($attribs,array('data-src'=>$object->getGuid())));
     }
   }
 }

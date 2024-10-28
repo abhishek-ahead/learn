@@ -73,13 +73,13 @@ class User_AdminManageController extends Core_Controller_Action_Admin
       $select->where('user_id = ?', $values['user_id'] );
     }
     if( !empty($values['displayname']) ) {
-      $select->where('displayname LIKE ?', '%' . $values['displayname'] . '%');
+      $select->where('displayname LIKE ?', $values['displayname'] . '%');
     }
     if( !empty($values['username']) ) {
-      $select->where('username LIKE ?', '%' . $values['username'] . '%');
+      $select->where('username LIKE ?', $values['username'] . '%');
     }
     if( !empty($values['email']) ) {
-      $select->where('email LIKE ?', '%' . $values['email'] . '%');
+      $select->where('email LIKE ?', $values['email'] . '%');
     }
     if( !empty($values['country_code']) ) {
       $select->where('country_code =?', $values['country_code']);
@@ -748,13 +748,13 @@ class User_AdminManageController extends Core_Controller_Action_Admin
     $select->order(( !empty($values['order']) ? $values['order'] : 'verificationrequest_id' ) . ' ' . ( !empty($values['order_direction']) ? $values['order_direction'] : 'DESC' ));
 
     if( !empty($values['displayname']) ) {
-      $select->where($userTableName.'.displayname LIKE ?', '%' . $values['displayname'] . '%');
+      $select->where($userTableName.'.displayname LIKE ?', $values['displayname'] . '%');
     }
     if( !empty($values['username']) ) {
-      $select->where($userTableName.'.username LIKE ?', '%' . $values['username'] . '%');
+      $select->where($userTableName.'.username LIKE ?', $values['username'] . '%');
     }
     if( !empty($values['email']) ) {
-      $select->where($userTableName.'.email LIKE ?', '%' . $values['email'] . '%');
+      $select->where($userTableName.'.email LIKE ?', $values['email'] . '%');
     }
     if( !empty($values['level_id']) ) {
       $select->where($userTableName.'.level_id = ?', $values['level_id'] );

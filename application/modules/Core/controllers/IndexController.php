@@ -267,8 +267,59 @@ class Core_IndexController extends Core_Controller_Action_Standard {
       echo false;die;
     }
     $mode = $this->_getParam('mode','');
-    $theme = $this->_getParam('theme','elpis');
+    $theme = $this->_getParam('theme','harmony');
     $_SESSION['mode_theme'] = $mode;
     echo true;die;
+  }
+
+  public function detectLocationAction() {
+		$this->view->cookiedata = Engine_Api::_()->getApi('location', 'core')->getUserLocationBasedCookieData();
+  }
+  
+  public function updateSettingsAction() {
+  
+    $locale = $this->_getParam('locale');
+    $admin = $this->_getParam('admin', false);
+    $language = $this->_getParam('language');
+    $return = $this->_getParam('return', $this->_helper->url->url(array(), 'default', true));
+    $viewer = Engine_Api::_()->user()->getViewer();
+
+    if( !empty($locale) ) {
+      try {
+        $locale = Zend_Locale::findLocale($locale);
+      } catch( Exception $e ) {
+        $locale = null;
+      }
+    }
+    if( !empty($language) ) {
+      try {
+        $language = Zend_Locale::findLocale($language);
+      } catch( Exception $e ) {
+        $language = null;
+      }
+    }
+
+    if(  $language && !$locale ) $locale = $language;
+    if( !$language &&  $locale ) $language = $locale;
+
+    if( $language && $locale ) {
+      
+      // Set as cookie
+      setcookie('en4_language', $language, array('expires' => time() + (86400*365), 'path' => '/','samesite' => 'Lax'));
+      setcookie('en4_locale', $locale, array('expires' => time() + (86400*365), 'path' => '/','samesite' => 'Lax'));
+      // Set as database
+      if( $viewer && $viewer->getIdentity() ) {
+        $viewer->locale = $locale;
+        $viewer->language = $language;
+        $viewer->save();
+      }
+    }
+//     if(!$admin) {
+//       return $this->_helper->redirector->gotoUrl($return, array('prependBase' => false));
+//     } else {
+//       echo true;die;
+//     }
+    
+    echo json_encode(array('status' => true, 'message' => $this->view->translate("Settings Saved Successfully.")));die;
   }
 }

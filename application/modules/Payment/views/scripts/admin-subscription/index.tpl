@@ -136,10 +136,17 @@
             <?php echo ( $user ? $user->__toString() : '<i>' . $this->translate('Deleted Member') . '</i>' ) ?>
           </td>
           <td class='admin_table_centered admin_payment_package'>
-            <?php if( $package ): ?>
+            <?php if( $package && $item->resource_type != 'payment_verificationpackage'): ?>
               <a href='<?php echo $this->url(array('module' => 'payment', 'controller' => 'package', 'action' => 'edit', 'package_id' => $package->package_id)) ?>'>
                 <?php echo $this->translate($package->title) ?>
               </a>
+            <?php elseif( $package && $item->resource_type == 'payment_verificationpackage'): ?>
+              <?php $verficationPackage = Engine_Api::_()->getItem($item->resource_type, $item->resource_id); ?>
+              <?php if($verficationPackage) { ?>
+                <?php echo $this->translate($level->title); ?>
+              <?php } else { ?>
+                <?php echo "---"; ?>
+              <?php } ?>
             <?php else: ?>
               <i><?php echo $this->translate('Missing Plan') ?></i>
             <?php endif ?>

@@ -453,6 +453,7 @@ to Facebook. To do so, create an Application through the
 
 "Step %d:  Add Your Photo";"Step %d:  Add Your Photo"
 "Step %d: Create Profile";"Step %d: Create Profile"
+"USER_FORM_ADMIN_SIGNUP_FIELDS_DESCRIPTION";"In the next step of the signup process the member will fill out their profile field information.  Click <a href='%s'>here</a> to edit field settings."
 
 "Yes, include the ""Invite Friends"" step during signup.";"Yes, include the ""Invite Friends"" step during signup."
 "_ACTIVITY_ACTIONTYPE_TAGGED";"Tagged"
@@ -565,7 +566,7 @@ http://[host][object_link]
 [footer]"
 
 # notify_tagged
-"_EMAIL_NOTIFY_TAGGED_TITLE";"Tagged"
+"_EMAIL_NOTIFY_TAGGED_TITLE";"When someone tags you in photos."
 "_EMAIL_NOTIFY_TAGGED_DESCRIPTION";"This email is sent to the member when someone tags them."
 "_EMAIL_NOTIFY_TAGGED_SUBJECT";"You have Been Tagged"
 "_EMAIL_NOTIFY_TAGGED_BODY";"[header]
@@ -1312,3 +1313,8 @@ http://[host][sender_link]
 "Select user from below auto suggest box which you want to make test user to login via OTP on your site. Note: Only those users will show here who have entered phone numbers in their account.";"Select user from below auto suggest box which you want to make test user to login via OTP on your site. Note: Only those users will show here who have entered phone numbers in their account."
 "Test OTP Code";"Test OTP Code"
 "Enter the 6 digit OTP which will be used by the test user to login via OTP on your site.";"Enter the 6 digit OTP which will be used by the test user to login via OTP on your site."
+
+"pagetitle-payment-wallet-settings";"Wallet"
+"{item:$subject} has added a new cover photo.";"{item:$subject} has added a new cover photo."
+"{item:$subject} has added a new profile photo: {body:$body}";"{item:$subject} has added a new profile photo: {body:$body}"
+"Set a Status";"Set a Status"

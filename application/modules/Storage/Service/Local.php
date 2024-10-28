@@ -58,7 +58,12 @@ class Storage_Service_Local extends Storage_Service_Abstract
   // Accessors
   public function map(Storage_Model_File $model)
   {
-    return Engine_Api::_()->getApi('settings', 'core')->getSetting('core.general.site.url') ? (Engine_Api::_()->getApi('settings', 'core')->getSetting('core.general.site.url') . '/' .$model->storage_path) : rtrim($this->getBaseUrl(), '/') . '/' . $model->storage_path;
+    // Make url
+    if( !$this->_baseUrl ) {
+      return Engine_Api::_()->getApi('settings', 'core')->getSetting('core.general.site.url') ? (Engine_Api::_()->getApi('settings', 'core')->getSetting('core.general.site.url') . '/' .$model->storage_path) : rtrim($this->getBaseUrl(), '/') . '/' . $model->storage_path;
+    } else {
+      return rtrim($this->getBaseUrl(), '/') . '/' . $model->storage_path;
+    }
   }
 
   public function store(Storage_Model_File $model, $file)

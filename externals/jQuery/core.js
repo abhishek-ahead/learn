@@ -609,3 +609,345 @@ function htmlspecialchars_decode (string, quote_style) {
 }
 
 OverText.instances = [];
+
+
+// Auto complete / Auto suggest
+
+AutocompleterRequestJSON = function (field_name, url, hiddenFunction, extraParams, customParams) {
+  scriptJquery('#'+field_name).parent().addClass('acWrap');
+  scriptJquery('#'+field_name).parent().append('<div class="acBox"></div>');
+  scriptJquery('#'+field_name).autocomplete({
+    source: function (request, response) {
+			var extraParamsObj = {};
+			if(extraParams) {
+				if(typeof extraParams != 'object') {
+					extraParams = [extraParams];
+				}
+				extraParams.forEach(item => {
+					extraParamsObj[item] = scriptJquery('#'+item).val();
+				});
+			}
+      scriptJquery.ajax({
+        type: "POST",
+        url: url,
+          data: {
+            text: scriptJquery('#'+field_name).val(),
+						...extraParamsObj,
+            //type: "user-all"
+          },
+          success: function( data ) {  
+            response(data);
+          },
+          dataType: 'json',
+          minLength: 1,
+          delay: 500
+      });
+    },
+    select : function(event, ui) {
+      var label = ui.item.label;
+      scriptJquery('#'+field_name).val(label.replace(/(<([^>]+)>)/ig,""));
+      hiddenFunction(ui.item);
+      return false;
+    }
+  }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+    if(customParams && customParams.class)
+    ul.addClass(customParams.class); //Ul custom class here
+    if(item.photo) {
+      return scriptJquery( "<li></li>" ).data("item.autocomplete", item).append(item.photo + '<span>' + item.label + '</span>').appendTo(ul); 
+    } else if(item.icon) {
+      return scriptJquery( "<li></li>" ).data("item.autocomplete", item).append(item.icon + '<span>' + item.label + '</span>').appendTo(ul);  
+    }
+  }
+}
+
+//Ajax Smoothbox 
+
+//Prevent javascript error before the content has loaded
+var executetimesmoothbox = false;
+
+//Add ajaxsmoothbox to href elements that have a class of .ajaxsmoothbox
+AttachEventListerSE('click','.ajaxsmoothbox',function(event){
+	event.preventDefault();
+	ajaxsmoothboxopen(this);
+});
+
+function ajaxsmoothboxopen(obj) {
+  
+	if(!scriptJquery('.ajaxsmoothbox_main').length) {
+
+    scriptJquery.crtEle('div', {
+      'id': 'ajaxsmoothbox_overlay',
+      'class': 'ajaxsmoothbox_overlay'
+    }).appendTo(document.body);
+    
+		scriptJquery.crtEle('div', {
+      'id': 'ajaxsmoothbox_main',
+      'class': 'ajaxsmoothbox_main'
+    }).appendTo(document.body);
+    
+		scriptJquery("#ajaxsmoothbox_main").html('<div class="ajaxsmoothbox_container" id="ajaxsmoothbox_container"><div class="ajaxsmoothbox_loading"></div></div>');
+    
+    if(scriptJquery(obj).data('addclass')){
+      scriptJquery('#ajaxsmoothbox_container').addClass(scriptJquery(obj).data('addclass'));
+    }
+    loaddefaultcontent();
+	}
+	// display the box for the elements href
+	ajaxsmoothboxshow(obj);
+	return false;
+}
+
+//esc key close
+scriptJquery(document).on('keyup', function (e) {
+  if(scriptJquery('#'+e.target.id).prop('tagName') == 'INPUT' || scriptJquery('#'+e.target.id).prop('tagName') == 'TEXTAREA' || !scriptJquery('#ajaxsmoothbox_container').length)
+    return true;
+  //ESC key close
+  if (e.keyCode === 27) {
+    ajaxsmoothboxclose();return false; 
+  }
+});
+
+scriptJquery(document).on('click','.ajaxsmoothbox_main',function(e){
+  if (e.target !== this)
+    return;
+	ajaxsmoothboxclose();
+});
+
+function loaddefaultcontent(){
+	var htmlElement = document.getElementsByTagName("html")[0];
+  htmlElement.style.overflow = 'hidden';
+	scriptJquery("#ajaxsmoothbox_container").css({
+		left: ((scriptJquery(window).width() - 300 ) / 2) + 'px',
+		top: ((scriptJquery(window).height() - 100 ) / 2) + 'px',
+		display: "block"
+	});	
+}
+
+var Ajaxsmoothbox = {
+		javascript : [],
+		css : [],
+}
+
+// called when the user clicks on a ajaxsmoothbox link
+function ajaxsmoothboxshow(obj) {
+    if(obj){
+      //initialize blank array value
+      Ajaxsmoothbox.javascript = Array();
+      Ajaxsmoothbox.css = [];
+      var url = scriptJquery(obj).attr('href');
+      if(url == 'javascript:;' || scriptJquery(obj).hasClass('open'))
+        url = scriptJquery(obj).attr('data-url');
+      var params = scriptJquery(obj).attr('rel');
+      var requestSmoothbox = scriptJquery.ajax({
+      dataType: 'html',
+      url: url,
+      method: 'get',
+      data: {
+        format: 'html',
+        params:params,
+        typesmoothbox:'ajaxsmoothbox'
+      },
+      evalScripts: true,
+      success: function(responseHTML) {
+        executeCssJavascriptFiles(responseHTML);
+      }
+    });
+  }
+}
+
+function ajaxsmoothboxExecuteCode(responseHTML,prevWidth){
+  if(typeof ajaxsmoothboxcallbackBefore == 'function')
+		ajaxsmoothboxcallbackBefore(responseHTML);
+
+	responseHTML = '<a title="'+en4.core.language.translate("Close")+'" class="ajaxsmoothbox_close_btn fas fa-times" href="javascript:;" onclick="javascript:ajaxsmoothboxclose();"></a>'+responseHTML;
+	scriptJquery('#ajaxsmoothbox_container').html(responseHTML);	
+	//execute code at run once
+	if(!executetimesmoothbox){
+		executetimesmoothboxTimeinterval = 10;	
+	}
+	setTimeout(function(){en4.core.runonce.trigger(); }, executetimesmoothboxTimeinterval);
+	resizeajaxsmoothbox(prevWidth);
+}
+
+function ajaxsmoothboxclose(){
+	scriptJquery('.ajaxsmoothbox_main').remove();
+	scriptJquery('#ajaxsmoothbox_overlay').remove();
+	var htmlElement = document.getElementsByTagName("html")[0];
+	htmlElement.style.overflow = '';
+	executetimesmoothbox = false;
+  ajaxsmoothboxcallback = function () {};
+  ajaxsmoothboxcallbackBefore = function () {};
+  if(typeof ajaxsmoothboxcallbackclose == 'function')
+		ajaxsmoothboxcallbackclose();
+}
+
+function resizeajaxsmoothbox(prevWidth) {
+
+ var linkClose = '<a title="'+en4.core.language.translate("Close")+'" class="ajaxsmoothbox_close_btn fas fa-times" href="javascript:;" onclick="javascript:ajaxsmoothboxclose();"></a>';
+ scriptJquery('#ajaxsmoothbox_container').prepend(linkClose);
+ var windowheight = scriptJquery(window).height();
+ var objHeight =	scriptJquery('#ajaxsmoothbox_container').height();
+ var windowwidth= scriptJquery(window).width();
+ var objWidth=	scriptJquery('#ajaxsmoothbox_container').width();
+ if(objHeight >= windowheight){
+  var top = '10'; 
+ } else if(objHeight <= windowheight){
+  var top = (windowheight - objHeight)/2;		 
+ }
+ var width = scriptJquery('#ajaxsmoothbox_container').find('div').first().width();
+ var	setwidth= width /2 ;
+ scriptJquery("#ajaxsmoothbox_container").animate({
+		top: top+'px',
+		width: width+'px',
+		left: (((scriptJquery(window).width() ) / 2) - setwidth) + 'px',
+ },0,function() {
+    if(typeof ajaxsmoothboxcallback == 'function')
+		  ajaxsmoothboxcallback();
+    // Animation complete.
+  });
+}
+
+var successLoad;
+function executeCssJavascriptFiles(responseHTML) {
+	var jsCount = Ajaxsmoothbox.javascript.length;
+	var cssCount = Ajaxsmoothbox.css.length;
+	//store the total file so we execute all required function after css and js load.
+	var totalFiles = jsCount + cssCount;
+	successLoad= 0;
+	var isLoaded = 0;
+	var prevWidth = scriptJquery('#ajaxsmoothbox_container').width();
+	if(jsCount == cssCount){
+		isLoaded = 1;
+		ajaxsmoothboxExecuteCode(responseHTML,prevWidth);
+	}
+	//execute jsvascript files
+	for(var i=0;i < jsCount;i++){
+			Asset.javascript(Ajaxsmoothbox.javascript[i], {
+			onLoad: function(e) {
+				successLoad++;
+				if (successLoad === totalFiles){
+				    isLoaded = 1;
+					ajaxsmoothboxExecuteCode(responseHTML,prevWidth);
+				}
+			}});
+	}
+		//execute css files
+	for(var i=0;i < cssCount;i++){
+			Asset.css(Ajaxsmoothbox.css[i], {
+			onLoad: function() {
+				successLoad++;
+				if (successLoad === totalFiles){
+				    isLoaded = 1;
+					ajaxsmoothboxExecuteCode(responseHTML,prevWidth);
+				}
+			}});
+	}
+	if(!isLoaded){
+	    ajaxsmoothboxExecuteCode(responseHTML,prevWidth);
+	}
+}
+
+
+function ajaxsmoothboxDialoge(html) {  
+	if(!scriptJquery('.ajaxsmoothbox_main').length){
+    scriptJquery.crtEle('div', {
+      'id': 'ajaxsmoothbox_overlay',
+      'class': 'ajaxsmoothbox_overlay'
+    }).appendTo(document.body);
+    
+    scriptJquery.crtEle('div', {
+      'id': 'ajaxsmoothbox_main',
+      'class': 'ajaxsmoothbox_main'
+    }).appendTo(document.body);
+
+		document.getElementById("ajaxsmoothbox_main").innerHTML = '<div class="ajaxsmoothbox_container" id="ajaxsmoothbox_container"><div class="sesbasic_loading_container"></div></div>';
+    loaddefaultcontent();
+    executeCssJavascriptFiles("<div class='sesbasic_smoothbox_view_number'><div class='_header'>"+en4.core.language.translate("Phone Number")+"</div><div class='_cont'>" + html + "</div></div>");
+	}
+	// display the box for the elements href
+	return false;
+}
+
+//Ajax Smoothbox 
+
+
+/* Modifided script from the simple-page-ordering plugin */
+var ajaxurl;
+var type_id;
+scriptJquery(function($) {
+  scriptJquery('table.widefat.admin_table_order tbody th, table.admin_table_order tbody tr').css('cursor','move');
+  scriptJquery("table.admin_table_order").sortable({
+		items: 'tbody tr:not(.inline-edit-row)',
+		cursor: 'move',
+		axis: 'y',
+		forcePlaceholderSize: true,
+		helper: function (e, item) {
+			return item.clone();
+		},
+		opacity: .3,
+		placeholder: 'product-cat-placeholder',
+		scrollSensitivity: 40,
+		start: function(event, ui) {
+			ui.placeholder.html(ui.item.html());
+			if ( ! ui.item.hasClass('alternate') ) ui.item.css( 'background-color', '#ffffff' );
+			ui.item.children('td,th').css('border-bottom-width','0');
+			ui.item.css( 'outline', '1px solid #aaa' );
+		},
+		stop: function(event, ui) {
+			ui.item.removeAttr('style');
+			ui.item.css('cursor','move');
+			ui.item.children('td,th').css('border-bottom-width','1px');
+		},
+		update: function(event, ui) {
+			$('table.admin_table_order tbody th, table.widefat tbody td').css('cursor','default');
+			//$("table.admin_table_order tbody").sortable('disable');
+			var termid = ui.item.find('.check-column').val();	// this post id
+			var termparent = ui.item.find('.parent').html(); 	// post parent
+
+			var prevtermid = ui.item.prev().find('.check-column').val();
+			var nexttermid = ui.item.next().find('.check-column').val();
+			
+			// can only sort in same tree
+			var prevtermparent = undefined;
+			if ( prevtermid != undefined ) {
+				var prevtermparent = ui.item.prev().find('.parent').html();
+				if ( prevtermparent != termparent) prevtermid = undefined;
+			}
+
+			var nexttermparent = undefined;
+			if ( nexttermid != undefined ) {
+				nexttermparent = ui.item.next().find('.parent').html();
+				if ( nexttermparent != termparent) nexttermid = undefined;
+			}
+			// if previous and next not at same tree level, or next not at same tree level and the previous is the parent of the next, or just moved item beneath its own children
+			if ( ( prevtermid == undefined && nexttermid == undefined ) || ( nexttermid == undefined && nexttermparent == prevtermid ) || ( nexttermid != undefined && prevtermparent == termid ) ) {
+				$("table.admin_table_order").sortable('cancel');
+				return;
+			}
+			var categoryorder = "";
+			scriptJquery(".ui-sortable tbody tr").each(function(i) {
+        if (categoryorder=='')
+          categoryorder = scriptJquery(this).attr('data-id');
+        else
+          categoryorder += "," + scriptJquery(this).attr('data-id');
+      });
+			// show spinner
+      var imageURL = en4.core.baseUrl+"application/modules/Core/externals/images/large-loading.gif";
+			ui.item.find('.check-column').hide().after('<img alt="processing" src="'+imageURL+'" class="waiting" style="margin-left: 6px;" />');
+			// go do the sorting stuff via ajax
+      $.post( ajaxurl, {id: termid, nextid: nexttermid,categoryorder:categoryorder, type_id: type_id}, function(response){
+        scriptJquery('table.admin_table_order tbody th, table.admin_table_order tbody td').css('cursor','move');
+				//$("table.admin_table_order tbody").sortable('enable');
+				if ( response == 'children' ) window.location.reload();
+				else {
+					ui.item.find('.check-column').show().siblings('img').remove();
+				}
+			});
+			// fix cell colors
+      scriptJquery( 'table.admin_table_order tbody tr' ).each(function(){
+				 scriptJquery(this).css('cursor','move');
+			});
+		}
+	});
+
+});

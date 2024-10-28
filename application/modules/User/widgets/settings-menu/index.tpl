@@ -10,7 +10,6 @@
  * @author     Steve
  */
 ?>
-<?php $this->headScript()->appendFile($this->layout()->staticBaseUrl . 'externals/jQuery/sticky-sidebar.js'); ?>
 <div class="user_setting_menu">
   <ul>
     <li class="user_menu_heading"><?php echo $this->translate("Edit My Profile"); ?></li>
@@ -37,21 +36,8 @@
 </div>
 
 <script type="application/javascript">
-  	scriptJquery(document).ready(function(){
+  	en4.core.runonce.add(function() {
 		var htmlElement = scriptJquery("#global_wrapper");
 		htmlElement.addClass('user_settings_page');
 	});
-</script>
-
-<script>
-  if (matchMedia('only screen and (min-width: 768px)').matches) { 
-  scriptJquery(document).ready(function() {
-    var sidebar = new StickySidebar('.layout_left', {
-        containerSelector: '.user_setting_main_page_main',
-        innerWrapperSelector: '.theiaStickySidebar',
-        topSpacing: 20,
-        bottomSpacing: 20
-      });
-  });
-}
 </script>

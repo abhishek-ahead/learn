@@ -136,55 +136,57 @@
     if( !isset($this->friendUsers[$membership->resource_id]) ) continue;
     $member = $this->friendUsers[$membership->resource_id];
     ?>
-    <div class="col-sm-6" id="user_friend_<?php echo $member->getIdentity() ?>">
-      <div class="user_profile_friends_inner">
-        <div class="user_profile_friends_left">
-          <div class="user_profile_friends_img">
-            <?php echo $this->htmlLink($member->getHref(), $this->itemBackgroundPhoto($member, 'thumb.profile'), array('class' => 'profile_friends_icon')) ?>
-          </div>
-          <div class="profile_friends_content">
-            <div class="_title">
-              <?php echo $this->htmlLink($member->getHref(), $member->getTitle()) ?>
-            </div>  
-            <span class="member_status_text"><?php echo $this->getHelper('getActionContent')->smileyToEmoticons($member->status); ?></span>
-            <?php if( $this->viewer()->isSelf($this->subject()) && Engine_Api::_()->getApi('settings', 'core')->getSetting('user.friends.lists')): // BEGIN LIST CODE ?>
-              <div class="profile_friends_lists" id="user_friend_lists_<?php echo $member->user_id ?>">
-                <div id="pulldown_toggle" class="pulldown" style="display:inline-block;" onClick="toggleFriendsPulldown(event, this, '<?php echo $member->user_id ?>');">
-                   <a class="add_list_btn" href="javascript:void(0);"><?php echo $this->translate('Add to list') ?></a>
-                  <div class="pulldown_contents_wrapper">
-                    <div class="pulldown_contents">
-                      <ul>
-                        <?php foreach( $this->lists as $list ):
-                          $inList = engine_in_array($list->list_id, (array)@$this->listsByUser[$member->user_id]);
-                          ?>
-                          <li class="<?php echo ( $inList !== false ? 'friend_list_joined' : 'friend_list_unjoined' ) ?> user_profile_friend_list_<?php echo $list->list_id ?>" onclick="handleFriendList(event, scriptJquery(this), '<?php echo $member->user_id ?>', '<?php echo $list->list_id ?>');">
-                            <span>
-                              <a href="javascript:void(0);" onclick="deleteFriendList(event, <?php echo $list->list_id ?>);">x</a>
-                            </span>
-                            <div>
-                              <?php echo $list->title ?>
-                            </div>
+    <?php if($member->getIdentity()) { ?>
+      <div class="col-sm-6 user_profile_friends_item" id="user_friend_<?php echo $member->getIdentity() ?>">
+        <div class="user_profile_friends_inner">
+          <div class="user_profile_friends_left">
+            <div class="user_profile_friends_img">
+              <?php echo $this->htmlLink($member->getHref(), $this->itemBackgroundPhoto($member, 'thumb.profile'), array('class' => 'profile_friends_icon')) ?>
+            </div>
+            <div class="profile_friends_content">
+              <div class="_title">
+                <?php echo $this->htmlLink($member->getHref(), $member->getTitle()) ?>
+              </div>  
+              <span class="member_status_text"><?php echo $this->getHelper('getActionContent')->smileyToEmoticons($member->status); ?></span>
+              <?php if( $this->viewer()->isSelf($this->subject()) && Engine_Api::_()->getApi('settings', 'core')->getSetting('user.friends.lists')): // BEGIN LIST CODE ?>
+                <div class="profile_friends_lists" id="user_friend_lists_<?php echo $member->user_id ?>">
+                  <div id="pulldown_toggle" class="pulldown" style="display:inline-block;" onClick="toggleFriendsPulldown(event, this, '<?php echo $member->user_id ?>');">
+                     <a class="add_list_btn" href="javascript:void(0);"><?php echo $this->translate('Add to list') ?></a>
+                    <div class="pulldown_contents_wrapper">
+                      <div class="pulldown_contents">
+                        <ul>
+                          <?php foreach( $this->lists as $list ):
+                            $inList = engine_in_array($list->list_id, (array)@$this->listsByUser[$member->user_id]);
+                            ?>
+                            <li class="<?php echo ( $inList !== false ? 'friend_list_joined' : 'friend_list_unjoined' ) ?> user_profile_friend_list_<?php echo $list->list_id ?>" onclick="handleFriendList(event, scriptJquery(this), '<?php echo $member->user_id ?>', '<?php echo $list->list_id ?>');">
+                              <span>
+                                <a href="javascript:void(0);" onclick="deleteFriendList(event, <?php echo $list->list_id ?>);">x</a>
+                              </span>
+                              <div>
+                                <?php echo $list->title ?>
+                              </div>
+                            </li>
+                          <?php endforeach; ?>
+                          <li>
+                            <input id="new_list" type="text" placeholder="<?php echo $this->translate('New list...') ?>" onclick="new Event(event).preventDefault();" onkeypress="createFriendList(event, scriptJquery(this), '<?php echo $member->user_id ?>');" />
                           </li>
-                        <?php endforeach; ?>
-                        <li>
-                          <input id="new_list" type="text" placeholder="<?php echo $this->translate('New list...') ?>" onclick="new Event(event).preventDefault();" onkeypress="createFriendList(event, scriptJquery(this), '<?php echo $member->user_id ?>');" />
-                        </li>
-                      </ul>
+                        </ul>
+                      </div>
                     </div>
-                  </div>
-                </div>  
-              </div>
-            <?php endif; // END LIST CODE ?>            
-        </div>
-        <div class="user_profile_friends_right">
-          <?php echo $this->userFriendship($member) ?>
+                  </div>  
+                </div>
+              <?php endif; // END LIST CODE ?>            
+            </div>
+          </div>
+          <div class="user_profile_friends_right">
+            <?php echo $this->userFriendship($member) ?>
+          </div>
         </div>
       </div>
-      </div>
-    </div>
+    <?php } ?>
   <?php endforeach ?>
 </div>
-<div class="user_profile_friends_pagination">
+<div class="profile_paginator">
   <div id="user_profile_friends_previous" class="paginator_previous">
     <?php echo $this->htmlLink('javascript:void(0);', $this->translate('Previous'), array(
       'onclick' => '',

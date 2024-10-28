@@ -37,7 +37,7 @@
   </div>
 </div>
 <script type="text/javascript">
-  scriptJquery(document).ready(function() {
+  en4.core.runonce.add(function() {
     scriptJquery('#password-element').append('<div id="passwordroutine" class="password_checker"><div id="passwordroutine_length"></div><div class="d-flex justify-content-between align-content-center"><div id="passwordroutine_text" class="font_small"><?php echo $this->translate("Write your password...")?></div><div id="password-hint"><i class="fas fa-info-circle" data-bs-container="body" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="<?php echo $this->translate('Password must be at least 6 characters and contain one upper and one lower case letter, one number and one special character.'); ?>" data-bs-original-title="" title=""></i></div></div></div>');
 
   });

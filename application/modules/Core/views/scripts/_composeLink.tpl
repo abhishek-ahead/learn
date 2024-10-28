@@ -10,10 +10,6 @@
  * @author     John
  */
 ?>
-
-<?php $this->headScript()
-    ->appendFile($this->layout()->staticBaseUrl . 'application/modules/Core/externals/scripts/composer_link.js'); ?>
-
 <script type="text/javascript">
   en4.core.runonce.add(function() {
     try {

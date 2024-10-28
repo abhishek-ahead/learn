@@ -69,7 +69,14 @@ function selectAll(obj){
               <tr>
                 <td ><input name='modify_<?php echo $item->getIdentity();?>' value='<?php echo $item->getIdentity();?>' type='checkbox' class='checkbox'></td>
                 <td data-label="<?php echo $this->translate("ID") ?>"><?php echo $item->getIdentity() ?></td>
-                <td data-label="<?php echo $this->translate("Activity") ?>"><?php echo $this->getActionContent($item)?></td>
+                <td data-label="<?php echo $this->translate("Activity") ?>">
+                  <?php $contentData = $this->getContent($item, array('resource_id' => $item->resource_id, 'resource_type' => $item->resource_type)); ?>
+                  <?php if (!empty($contentData[1])) { ?>
+                   <?php echo $contentData[1]; ?>
+                  <?php } else { ?>
+                    <?php echo $this->getActionContent($item)?>
+                  <?php } ?>
+                </td>
                 <td class="admin_table_options" data-label="<?php echo $this->translate("Posted Date") ?>">
                   <?php echo $this->timestamp($item->date) ?>
                 </td>

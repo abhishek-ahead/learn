@@ -36,22 +36,30 @@
     <?php echo $this->headStyle()->toString()."\n" ?>
 
     <?php // SCRIPTS ?>
-    <?php
+    <?php 
       $appBaseHref = str_replace('install/', '', $this->url(array(), 'default', true));
       $appBaseUrl = rtrim(str_replace('\\', '/', dirname($this->baseUrl())), '/');
       $this->headScript()
-        ->prependFile($appBaseUrl . '/externals/smoothbox/smoothbox4.js')
-        ->prependFile($appBaseUrl . '/externals/jQuery/core.js')
+        ->prependFile($appBaseUrl . '/externals/jQuery/jquery.min.js')
         ->prependFile($appBaseUrl . '/externals/jQuery/jquery-ui.js')
-        ->prependFile($appBaseUrl . '/externals/jQuery/jquery.min.js');
         
-			$this->headScript()->prependFile($appBaseUrl . '/application/modules/Core/externals/scripts/admin/layoutchoo.js')
+        ->prependFile($appBaseUrl . '/externals/jQuery/core.js')
+        ->prependFile($appBaseUrl . '/externals/smoothbox/smoothbox4.js');
+        
+			$this->headScript()->prependFile($appBaseUrl . '/application/modules/Core/externals/scripts/admin/adminlayout.js')
           ->prependFile($appBaseUrl . '/application/modules/Core/externals/scripts/admin/layout.js')
-          ->prependFile($appBaseUrl . '/application/modules/Core/externals/scripts/admin/adminlayout.js');
+          ->prependFile($appBaseUrl . '/application/modules/Core/externals/scripts/admin/layoutchoo.js')
+          ;
     ?>
+		
+
+    <script>
+      var dateFormatCalendar = "";
+    </script>
     <?php echo $this->headScript()->toString()."\n" ?>
+	<script type="text/javascript" src="<?php echo $appBaseUrl . '/application/modules/Core/externals/scripts/core.js' ?>"></script>
   </head>
-  <body>
+  <body class="admin">
       <?php if( empty($this->layout()->hideIdentifiers) ): ?>
         <div class='topbar_wrapper'>
           <?php if( $this->layout()->inInstall ): ?>

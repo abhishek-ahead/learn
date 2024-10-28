@@ -74,6 +74,7 @@ class Payment_Form_Subscription_TransactionFilter extends Engine_Form {
       if(!$gateway->enabled) continue;
       $multiOptions[$gateway->gateway_id] = $gateway->title;
     }
+    $multiOptions[3000] = "Wallet";
     $this->addElement('Select', 'gateway_id', array(
       'label' => 'Gateway',
       'multiOptions' => $multiOptions,

@@ -44,7 +44,7 @@ class Core_Form_Admin_ManageComments_Filter extends Engine_Form {
     ));
     
     $this->addElement('Text', 'body', array(
-      'label' => 'Comment',
+      'label' => 'COMMENT',
       'decorators' => array(
         'ViewHelper',
         array('Label', array('tag' => null, 'placement' => 'PREPEND')),

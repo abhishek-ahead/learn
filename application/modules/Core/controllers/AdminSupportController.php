@@ -81,10 +81,10 @@ class Core_AdminSupportController extends Core_Controller_Action_Admin {
       $select->where($tableName . ".ticket_id = ?", $_GET['ticket_id']);
     
     if (!empty($_GET['posted_by']))
-      $select->where($userTableName . '.displayname LIKE ?', '%' . $_GET['posted_by'] . '%');
+      $select->where($userTableName . '.displayname LIKE ?', $_GET['posted_by'] . '%');
 
     if (!empty($_GET['subject']))
-      $select->where($tableName . ".subject LIKE ?", '%' . $_GET['subject'] . '%');
+      $select->where($tableName . ".subject LIKE ?", $_GET['subject'] . '%');
       
     $date_from = !empty($_GET['date']['date_from']) ? date("Y-m-d", strtotime($_GET['date']['date_from'])) : '';
     $date_to = !empty($_GET['date']['date_to']) ? date("Y-m-d", strtotime($_GET['date']['date_to'])) : '';

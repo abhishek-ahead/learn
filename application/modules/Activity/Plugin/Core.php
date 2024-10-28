@@ -16,8 +16,17 @@
  * @copyright  Copyright 2006-2020 Webligo Developments
  * @license    http://www.socialengine.com/license/
  */
-class Activity_Plugin_Core
-{
+class Activity_Plugin_Core extends Zend_Controller_Plugin_Abstract {
+
+	public function onRenderLayoutDefault($event, $mode = null) {
+	
+    if( defined('_ENGINE_ADMIN_NEUTER') && _ENGINE_ADMIN_NEUTER ) return;
+	}
+
+	public function onRenderLayoutDefaultSimple($event) {
+    return $this->onRenderLayoutDefault($event,'simple');
+  }
+  
   public function onActivityActionCreateAfter($event) {
     if (empty(Engine_Api::_()->getApi('settings', 'core')->getSetting('activity.composer.options'))) {
       return;
@@ -223,6 +232,22 @@ class Activity_Plugin_Core
         ));
       }
     }
+    
+    //
+    $event->addResponse(array(
+      'type' => 'friend',
+      'data' => Engine_Api::_()->user()->getViewer()->getIdentity(),
+    ));
+    // Members Lists
+    if( $user ) {
+      $data = Engine_Api::_()->getDbTable('actions', 'activity')->getListsIds();
+      if( !empty($data) ) {
+        $event->addResponse(array(
+          'type' => 'members_list',
+          'data' => $data,
+        ));
+      }
+    }
 
     // Network
     if( $user && ($subject || engine_in_array($content, array('networks', 'everyone'))) ) {
@@ -276,18 +301,20 @@ class Activity_Plugin_Core
     // Get object parent
     $objectParent = null;
     if( $object instanceof User_Model_User ) {
-      if($object->getType() == 'album_photo') {
+      if($object && $object->getType() == 'album_photo') {
         $objectParent = $object->getOwner();
       } else {
         $objectParent = $object;
       }
     } else {
       try {
-        if($object->getType() == 'album_photo') {
-          $objectParent = $object->getOwner();
-          $object = $object->getParent();
-        } else {
-          $objectParent = $object->getParent();
+        if($object) {
+          if($object->getType() == 'album_photo') {
+            $objectParent = $object->getOwner();
+            $object = $object->getParent();
+          } else {
+            $objectParent = $object->getParent();
+          }
         }
       } catch( Exception $e ) {
       }
@@ -376,7 +403,7 @@ class Activity_Plugin_Core
     }
 
     // Everyone
-    if( $content == 'everyone' && (Engine_Api::_()->authorization()->context->isAllowed($object, 'everyone', 'view') || $object->getType() == 'activity_action') ) {
+    if( $content == 'everyone' && ($object && $object->getType() == 'activity_action') ) {
       $event->addResponse(array(
         'type' => 'everyone',
         'identity' => 0
@@ -412,5 +439,4 @@ class Activity_Plugin_Core
     $activityApi = Engine_Api::_()->getDbtable('actions', 'activity');
     $activityApi->removeActivities($poster, $commentedItem, 'comment_' . $commentedItem->getType());
   }
-
 }

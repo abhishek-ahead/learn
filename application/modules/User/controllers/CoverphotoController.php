@@ -1,359 +1,208 @@
 <?php
-/**
- * SocialEngine
- *
- * @category   Application_Core
- * @package    User
- * @copyright  Copyright 2006-2020 Webligo Developments
- * @license    http://www.socialengine.com/license/
- * @version    $Id: CoverphotoController.php 9747 2012-07-26 02:08:08Z john $
- * @author     John
- */
 
-/**
- * @category   Application_Core
- * @package    User
- * @copyright  Copyright 2006-2020 Webligo Developments
- * @license    http://www.socialengine.com/license/
- */
-class User_CoverphotoController extends Core_Controller_Action_Standard {
+class User_CoverphotoController extends Core_Controller_Action_Standard
+{
 
-  public function getCoverPhotoAction() {
-    $viewer = Engine_Api::_()->user()->getViewer();
-    $this->view->user = $user = Engine_Api::_()->getItem('user', $this->_getParam("user_id"));
-    $this->view->can_edit = $can_edit = (int) $user->authorization()->isAllowed($viewer, 'edit');
-
-    $this->view->photo = $photo = Engine_Api::_()->getItem('storage_file', $user->coverphoto);
-    $this->view->topPosition = 0;
-    $this->view->uploadDefaultCover = $uploadDefaultCover = 0;
-    $this->view->level_id = $level_id = 0;
-    if ($viewer->getIdentity() && $viewer->level_id == 1 && $user->getOwner()->isSelf($viewer)) {
-      $this->view->uploadDefaultCover = $uploadDefaultCover = $this->_getParam("uploadDefaultCover", 0);
-      $this->view->level_id = $level_id = $this->_getParam("level_id", 0);
-    }
-    if ($photo && empty($uploadDefaultCover)) {
-      $coverPhotoParams = is_array($user->coverphotoparams) ? $user->coverphotoparams : (!empty($user->coverphotoparams) ? Zend_Json_Decoder::decode($user->coverphotoparams): '');
-      if(!empty($coverPhotoParams))
-        $this->view->topPosition = $coverPhotoParams['top'];
-      else 
-        $this->view->topPosition = 0;
-    } else {
-      $coverPhotoParams = Zend_Json_Decoder::decode(Engine_Api::_()->getApi("settings", "core")->getSetting(
-        "usercoverphoto.preview.level.params.$user->level_id",
-        Zend_Json_Encoder::encode(array('top' => '0', 'left' => 0))
-      ));
-      $this->view->topPosition = $coverPhotoParams['top'];
-    }
+  public function indexAction()
+  {
+    $this->view->someVar = 'someVal';
   }
 
-  public function getMainPhotoAction() {
-    $viewer = Engine_Api::_()->user()->getViewer();
-    $this->view->user = $user = Engine_Api::_()->getItem('user', $this->_getParam("user_id"));
-    $this->view->uploadDefaultCover = 0;
-    $this->view->auth = $user->authorization()->isAllowed($viewer, 'view');
-    $this->view->userNavigation = Engine_Api::_()->getApi('menus', 'core')->getNavigation('user_profile');
-    $this->view->editIcon = 0;
-    if($user->getOwner()->isSelf($viewer)){
-      $this->view->editIcon = 1;
-    }
-    if ($viewer->getIdentity() && $viewer->level_id == 1 && $user->getOwner()->isSelf($viewer)) {
-      $this->view->uploadDefaultCover = $uploadDefaultCover = $this->_getParam("uploadDefaultCover", 0);
-    }
-    $this->view->can_edit = $can_edit = $user->authorization()->isAllowed($viewer, 'edit');
-    $this->view->photo = $photo = Engine_Api::_()->getItem('storage_file', $user->coverphoto);
-    $this->view->level_id = $level_id = $this->_getParam("level_id", $user->getOwner()->level_id);
+  public function removeProfilePhotoAction()
+  {
   }
 
-  public function resetCoverPhotoPositionAction() {
-    if (!$this->_helper->requireUser()->isValid()) {
+  public function confirmationAction()
+  {
+  }
+
+  public function editCoverphotoAction()
+  {
+    $user_id = $this->_getParam('user_id', '0');
+    if ($user_id == 0)
       return;
-    }
+    $user = Engine_Api::_()->getItem('user', $user_id);
+    if (!$user)
+      return;
+    $art_cover = $user->coverphoto;
+    if (isset($_FILES['Filedata']))
+      $data = $_FILES['Filedata'];
+    else if (isset($_FILES['webcam']))
+      $data = $_FILES['webcam'];
+    try {
+      $type = 'cover';
 
-    $viewer = Engine_Api::_()->user()->getViewer();
-    $user_id = $this->_getParam("user_id");
-    $this->view->user = $user = Engine_Api::_()->getItem('user', $user_id);
-    $this->view->uploadDefaultCover = $uploadDefaultCover = 0;
-    $this->view->level_id = 0;
-    if ($viewer->getIdentity() && $viewer->level_id == 1 && $user->getOwner()->isSelf($viewer)) {
-      $this->view->uploadDefaultCover = $uploadDefaultCover = $this->_getParam("uploadDefaultCover", 0);
-      $this->view->level_id = $level_id = $this->_getParam("level_id", 0);
-    }
-    if (!$uploadDefaultCover) {
-      $this->view->can_edit = $can_edit = (int) $user->authorization()->isAllowed($viewer, 'edit');
-      if (empty($can_edit)) {
-        return;
+      if(!empty($art_cover)) {
+        if (empty(Engine_Api::_()->getDbTable('modules', 'core')->isModuleEnabled('album'))) {
+          $this->whenRemove($user, "coverphoto", $art_cover);
+
+          //Delete feed
+          Engine_Api::_()->getDbtable('actions', 'activity')->delete(array('type =?' => 'cover_photo_update', "subject_id =?" => $user->getIdentity(), "object_type =? " => $user->getType(), "object_id = ?" => $user->getIdentity()));
+        }
+      }
+      
+      if (Engine_Api::_()->getDbtable('modules', 'core')->isModuleEnabled('album')) {
+        $album = $this->getSpecialAlbum($user, $type);
+
+        $photoTable = Engine_Api::_()->getItemTable('photo');
+        $photo = $photoTable->createRow();
+        $photo->setFromArray(
+          array(
+            'owner_type' => 'user',
+            'owner_id' => $user->getIdentity()
+          )
+        );
+        $photo->save();
+        $user = $this->setCoverPhoto($data, $user);
+        if (isset($photo->order))
+          $photo->order = $photo->photo_id;
+        $photo->album_id = $album->album_id;
+        $photo->file_id = $user->coverphoto;
+        $photo->save();
+        if (!$album->photo_id) {
+          $album->photo_id = $photo->getIdentity();
+          $album->save();
+        }
+      } else {
+        $user = $this->setCoverPhoto($data, $user);
+        $photo = Engine_Api::_()->getItem('storage_file', $user->coverphoto);
       }
 
-      $this->view->photo = $photo = Engine_Api::_()->getItem('storage_file', $user->coverphoto);
-      if (empty($uploadDefaultCover)) {
-        $user->coverphotoparams = Zend_Json_Encoder::encode($this->_getParam('position', array('top' => '0', 'left' => 0)));
+      $position = $this->_getParam('position', null);
+      if (!empty($position)) {
+        $user->coverphotoparams = Zend_Json_Encoder::encode(array('top' => str_replace('px', '', $position), 'left' => 0));
+        $user->save();
+      } else {
+        $user->coverphotoparams = Zend_Json_Encoder::encode(array('top' => 0, 'left' => 0));
         $user->save();
       }
-    } else {
-      $postionParams = Zend_Json_Encoder::encode($this->_getParam('position', array('top' => '0', 'left' => 0)));
-      Engine_Api::_()->getApi("settings", "core")
-        ->setSetting("usercoverphoto.preview.level.params.$level_id", $postionParams);
+
+      // Insert Activity
+      $action = Engine_Api::_()->getDbtable('actions', 'activity')->addActivity($user, $user, 'cover_photo_update');
+
+      // Hooks to enable albums to work
+      if ($action) {
+        if (Engine_Api::_()->getDbtable('modules', 'core')->isModuleEnabled('album')) {
+          $event = Engine_Hooks_Dispatcher::_()
+            ->callEvent(
+              'onUserPhotoUpload',
+              array(
+                'user' => $user,
+                'file' => $photo,
+                'type' => 'cover',
+              )
+            );
+          $attachment = $event->getResponse();
+        }
+
+        if (empty($attachment)) {
+          $attachment = $photo;
+        }
+
+        Engine_Api::_()->getDbtable('actions', 'activity')->attachActivity($action, $attachment);
+      }
+
+      // Authorizations
+      $auth = Engine_Api::_()->authorization()->context;
+      $auth->setAllowed($photo, 'everyone', 'view', true);
+      $auth->setAllowed($photo, 'everyone', 'comment', true);
+    } catch (Exception $e) {
+      throw $e;
     }
+    echo json_encode(array('status' => "true", 'src' => Engine_Api::_()->storage()->get($user->coverphoto)->getPhotoUrl('')));
     die;
   }
 
-  public function chooseFromAlbumsAction() {
-    if (!$this->_helper->requireUser()->isValid()) {
+  //remove cover photo action
+  public function removeCoverAction()
+  {
+    $user_id = $this->_getParam('user_id', '0');
+    if ($user_id == 0)
       return;
-    }
 
-    $this->_helper->layout->setLayout('default-simple');
-    $viewer = Engine_Api::_()->user()->getViewer();
-    $this->view->photoType = $photoType = $this->_getParam('photoType', 'cover');
-    $this->view->user = $user = Engine_Api::_()->getItem('user', $this->_getParam("user_id"));
-    if ($photoType == 'cover') {
-      $this->view->can_edit = $can_edit = (int) $user->authorization()->isAllowed($viewer, 'edit');
-      if (!$can_edit) {
-        return $this->_forward('requireauth', 'error', 'core');
+    $user = Engine_Api::_()->getItem('user', $user_id);
+    if (!$user)
+      return;
+
+    if (isset($user->coverphoto) && $user->coverphoto > 0) {
+      
+      if (!empty(Engine_Api::_()->getDbTable('modules', 'core')->isModuleEnabled('album'))) {
+        Engine_Api::_()->getDbtable('photos', 'album')->delete(array('owner_id =?' => $user->getIdentity(), "file_id =?" => $user->coverphoto));
       }
+      
+      $this->whenRemove($user, "coverphoto");
+
+      //Delete feed
+      Engine_Api::_()->getDbtable('actions', 'activity')->delete(array('type =?' => 'cover_photo_update', "subject_id =?" => $user->getIdentity(), "object_type =? " => $user->getType(), "object_id = ?" => $user->getIdentity()));
+
+      $user->coverphoto = 0;
+      $user->coverphotoparams = Zend_Json_Encoder::encode(array('top' => '0', 'left' => 0));
+      $user->save();
     }
 
-    $this->view->recentAdded = $recentAdded = $this->_getParam("recent", false);
-    $this->view->album_id = $album_id = $this->_getParam("album_id");
-    $paginator = '';
-    if ($album_id) {
-      $this->view->album = $album = Engine_Api::_()->getItem('album', $album_id);
-      $this->view->paginator = $paginator = Engine_Api::_()->getItemTable('album_photo')->getPhotoPaginator(array('album' => $album));
-    } elseif ($recentAdded) {
-      $select = Engine_Api::_()->getItemTable('album')->getAlbumSelect(array('owner' => $user));
-      $albums = $select->query()->fetchAll(Zend_Db::FETCH_COLUMN);
-      $paginator = $this->getPhotoPaginator($albums);
-    } else {
-      $paginator = Engine_Api::_()->getItemTable('album')->getAlbumPaginator(array('owner' => $user));
-    }
-    $this->view->paginator = $paginator;
+    $viewer = $user;
+    if ($viewer->getIdentity() == 0)
+      $level = Engine_Api::_()->getDbtable('levels', 'authorization')->getPublicLevel()->level_id;
+    else
+      $level = $user;
+
+    $defaultCoverPhoto = Engine_Api::_()->authorization()->getPermission($level, 'user', 'coverphoto');
+    if ($defaultCoverPhoto != 0 || $defaultCoverPhoto != '')
+      $defaultCoverPhoto = Engine_Api::_()->core()->getFileUrl($defaultCoverPhoto);
+
+    echo json_encode(array('status' => 1, 'src' => $defaultCoverPhoto));
+    die;
   }
 
-  public function uploadCoverPhotoAction() {
-    if (!$this->_helper->requireUser()->isValid()) {
-      return;
-    }
-
-    $this->_helper->layout->setLayout('default-simple');
-    if (!$this->_helper->requireUser()->checkRequire()) {
-      $this->view->status = false;
-      $this->view->error = Zend_Registry::get('Zend_Translate')->_('Max file size limit exceeded.');
-      return;
-    }
-
-    $viewer = Engine_Api::_()->user()->getViewer();
-    $this->view->uploadDefaultCover = $uploadDefaultCover = 0;
-    $this->view->photoType = $photoType = $this->_getParam('photoType', 'cover');
-    $user = Engine_Api::_()->getItem('user', $this->_getParam('user_id'));
-    $this->view->level_id = $level_id = 0;
-    if ($viewer->getIdentity() && $viewer->level_id == 1 && $user->getOwner()->isSelf($viewer)) {
-      $this->view->uploadDefaultCover = $uploadDefaultCover = $this->_getParam("uploadDefaultCover", 0);
-      $this->view->level_id = $level_id = $this->_getParam("level_id", 0);
-    }
-
-    if ($photoType == 'cover') {
-      if (!$uploadDefaultCover) {
-        $this->view->can_edit = $can_edit = (int) $user->authorization()->isAllowed($viewer, 'edit');
-
-        if (!$can_edit) {
-          return $this->_forward('requireauth', 'error', 'core');
-        }
-        $this->view->form = $form = new User_Form_CoverPhoto_Cover();
+  protected function whenRemove($user, $deleteType = null, $art_cover = 0)
+  {
+    if (!empty($user[$deleteType])) {
+      if(!empty($art_cover)) {
+        $file = Engine_Api::_()->getItem('storage_file', $art_cover);
       } else {
-        $this->view->form = $form = new User_Form_CoverPhoto_Cover();
+        $file = Engine_Api::_()->getItem('storage_file', $user[$deleteType]);
       }
-    } else {
-      $this->view->form = $form = new User_Form_CoverPhoto_Cover();
-      $form->setTitle('Upload Profile Picture');
-      $form->setAttrib('name', 'Upload a Profile Picture');
-      $form->Filedata->setLabel('Choose a profile picture.');
-    }
-
-    if (empty($uploadDefaultCover)) {
-      $file = '';
-      $photo = null;
-      $alreadyHasCover = false;
-      $photo_id = $this->_getParam('photo_id');
-      if ($photo_id) {
-        $photo = Engine_Api::_()->getItem('album_photo', $photo_id);
-        $album = Engine_Api::_()->getItem('album', $photo->album_id);
-
-        if ($album && ($album->type == 'cover' || $album->type == 'profile')) {
-          $alreadyHasCover = true;
+      if($file) {
+        $getParentChilds = $file->getChildren($file->getIdentity());
+        foreach ($getParentChilds as $child) {
+          // remove child file.
+          $this->unlinkFile(APPLICATION_PATH . DIRECTORY_SEPARATOR . $child['storage_path']);
+          // remove child directory.
+          $childPhotoDir = $this->getDirectoryPath($child['storage_path']);
+          $this->removeDir($childPhotoDir);
+          // remove child row from db.
+          $child->remove();
         }
-        if ($photo->file_id && !$alreadyHasCover) {
-          $photo = Engine_Api::_()->getItemTable('storage_file')->getFile($photo->file_id);
-        }
-      }
-
-      if (empty($photo_id) || empty($photo)) {
-        if (!$this->getRequest()->isPost() || !$form->isValid($this->getRequest()->getPost())) {
-          return;
-        }
-      }
-
-      if ($form->Filedata->getValue() !== null || $photo || $alreadyHasCover) {
-
-        $db = Engine_Db_Table::getDefaultAdapter();
-        $db->beginTransaction();
-        try {
-          if (!$alreadyHasCover) {
-            if ($photo) {
-              if ($photoType == 'cover') {
-                $user = $this->setCoverPhoto($photo, $user);
-              } else {
-                $user = $this->setMainPhoto($photo, $user);
-              }
-            } else {
-              if ($photoType == 'cover') {
-                $user = $this->setCoverPhoto($form->Filedata, $user);
-                $photo = Engine_Api::_()->getItem('storage_file', $user->coverphoto);
-              } else {
-                $user = $this->setMainPhoto($form->Filedata, $user);
-                $photo = Engine_Api::_()->getItem('storage_file', $user->photo_id);
-              }
-            }
-          }
-          if ($photoType == 'cover') {
-            $actionType = 'cover_photo_update';
-            $type = 'cover';
-            $user->coverphoto = $photo->file_id;
-          } else {
-            $actionType = 'profile_photo_update';
-            $type = 'profile';
-            $user->photo_id = $photo->file_id;
-          }
-          $user->coverphotoparams = Zend_Json_Encoder::encode($this->_getParam('position', array('top' => 0, 'left' => 0)));
-          $user->save();
-
-          // Insert Activity
-          $action = Engine_Api::_()->getDbtable('actions', 'activity')->addActivity($user, $user, $actionType);
-          // Hooks to enable albums to work
-          if ($action) {
-            $event = Engine_Hooks_Dispatcher::_()
-              ->callEvent('onUserPhotoUpload', array(
-              'user' => $user,
-              'file' => $photo,
-              'type' => $type,
-              ));
-
-            $attachment = $event->getResponse();
-            if (empty($attachment)) {
-              $attachment = $photo;
-            }
-
-            Engine_Api::_()->getDbtable('actions', 'activity')->attachActivity($action, $attachment);
-          }
-          $this->view->status = true;
-          $db->commit();
-        } catch (Exception $e) {
-          $db->rollBack();
-          return $this->exceptionWrapper($e, $form, $db);
-        }
-      }
-    } else {
-      if (!$form->isValid($this->getRequest()->getPost())) {
-        return;
-      }
-      if ($form->Filedata->getValue() !== null) {
-        $values = $form->getValues();
-        $this->setCoverPhoto($form->Filedata, null, $level_id);
-        $this->view->status = true;
-      }
-    }
-  }
-
-  public function removeCoverPhotoAction() {
-    if (!$this->_helper->requireUser()->isValid()) {
-      return;
-    }
-
-    $this->view->uploadDefaultCover = $uploadDefaultCover = 0;
-    $this->view->level_id = $level_id = 0;
-    $this->view->photoType = $photoType = $this->_getParam('photoType', 'cover');
-    $viewer = Engine_Api::_()->user()->getViewer();
-    $user = Engine_Api::_()->getItem('user', $this->_getParam('user_id'));
-    if ($viewer->getIdentity() && $viewer->level_id == 1 && $user->getOwner()->isSelf($viewer)) {
-      $this->view->uploadDefaultCover = $uploadDefaultCover = $this->_getParam("uploadDefaultCover", 0);
-      $this->view->level_id = $level_id = $this->_getParam("level_id", 0);
-    }
-
-    if ($photoType == 'cover' && empty($uploadDefaultCover)) {
-      $this->view->can_edit = $can_edit = (int) $user->authorization()->isAllowed($viewer, 'edit');
-      if (!$can_edit) {
-        return $this->_forward('requireauth', 'error', 'core');
-      }
-    }
-
-    $coreSettingsApi = Engine_Api::_()->getApi("settings", "core");
-    $preview_id = $coreSettingsApi->getSetting("usercoverphoto.preview.level.id.$level_id");
-    if (!$this->getRequest()->isPost()) {
-      return;
-    }
-
-    if ($photoType == 'cover') {
-      if (empty($uploadDefaultCover)) {
-        $this->whenRemove($user,"coverphoto");
-        $user->coverphoto = 0;
-        $user->coverphotoparams = Zend_Json_Encoder::encode(array('top' => '0', 'left' => 0));
-      } else {
-        $coreSettingsApi->setSetting("usercoverphoto.preview.level.id.$level_id", 0);
-        $postionParams = Zend_Json_Encoder::encode(array('top' => '0', 'left' => 0));
-        $coreSettingsApi->setSetting("usercoverphoto.preview.level.params.$level_id", $postionParams);
-        $file = Engine_Api::_()->getItem('storage_file', $preview_id);
+        // remove parent file.
+        $this->unlinkFile(APPLICATION_PATH . DIRECTORY_SEPARATOR . $file['storage_path']);
+        // remove directory.
+        $parentPhotoDir = $this->getDirectoryPath($file['storage_path']);
+        $this->removeDir($parentPhotoDir);
         if ($file) {
-          $file->delete();
+          // remove parent form db.
+          $file->remove();
         }
       }
-    } else {
-      $this->whenRemove($user,"photo_id");
-      //Remove user photo
-      if($photoType == 'profile') {
-        $file = Engine_Api::_()->getItem('storage_file', $user['photo_id']);
-        if($file->parent_type == 'user') {
-					$getParentChilds = $file->getChildren($file->getIdentity());
-					foreach ($getParentChilds as $child) {
-						// remove child file.
-						$this->unlinkFile(APPLICATION_PATH . DIRECTORY_SEPARATOR . $child['storage_path']);
-						// remove child directory.
-						$childPhotoDir = $this->getDirectoryPath($child['storage_path']);
-						$this->removeDir($childPhotoDir);
-						// remove child row from db.
-						$child->remove();
-					}
-					// remove parent file.
-					$this->unlinkFile(APPLICATION_PATH . DIRECTORY_SEPARATOR . $file['storage_path']);
-					// remove directory.
-					$parentPhotoDir = $this->getDirectoryPath($file['storage_path']);
-					$this->removeDir($parentPhotoDir);
-					if ($file) {
-						// remove parent form db.
-						$file->remove();
-					}
-        }
-      }
-      $user->photo_id = 0;
     }
-    $user->save();
-
-    $this->_forward('success', 'utility', 'core', array(
-        'smoothboxClose' => 10,
-        'parentRefresh' => 10,
-        'messages' => array(Zend_Registry::get('Zend_Translate')->_(''))
-    ));
+  }
+  protected function getDirectoryPath($storage_path)
+  {
+    return APPLICATION_PATH . DIRECTORY_SEPARATOR . str_replace(basename($storage_path), "", $storage_path);
   }
 
-  private function getPhotoPaginator($album_ids) {
-    if (empty($album_ids)) {
-      return;
+  protected function removeDir($dirPath)
+  {
+    if (@is_dir($dirPath)) {
+      @rmdir($dirPath);
     }
-
-    $select = Engine_Api::_()->getDbtable('photos', 'album')->select();
-    $select->where('album_id in (?)', $album_ids)->order('order DESC');
-    return Zend_Paginator::factory($select);
   }
 
-  private function setCoverPhoto($photo, $user, $level_id = null)
+  protected function unlinkFile($filePath)
+  {
+    @unlink($filePath);
+  }
+
+  public function setCoverPhoto($photo, $user)
   {
     if ($photo instanceof Zend_Form_Element_File) {
       $file = $photo->getFileName();
@@ -371,20 +220,25 @@ class User_CoverphotoController extends Core_Controller_Action_Standard {
     } else if (is_string($photo) && file_exists($photo)) {
       $file = $photo;
       $fileName = $photo;
+      $unlink = false;
     } else {
       throw new User_Model_Exception('invalid argument passed to setPhoto');
     }
+    $name = basename($file);
+    $extension = ltrim(strrchr($fileName, '.'), '.');
+    $base = rtrim(substr(basename($fileName), 0, strrpos(basename($fileName), '.')), '.');
 
     if (!$fileName) {
       $fileName = $file;
     }
-
-    $name = basename($file);
-    $extension = ltrim(strrchr($fileName, '.'), '.');
-    $base = rtrim(substr(basename($fileName), 0, strrpos(basename($fileName), '.')), '.');
-    $path = APPLICATION_PATH . DIRECTORY_SEPARATOR . 'temporary';
-
     $filesTable = Engine_Api::_()->getDbtable('files', 'storage');
+    $path = APPLICATION_PATH . DIRECTORY_SEPARATOR . 'temporary';
+    $params = array(
+      'parent_type' => $user->getType(),
+      'parent_id' => $user->getIdentity(),
+      'user_id' => $user->user_id,
+      'name' => $fileName,
+    );
     // Resize image (main)
     $mainPath = $path . DIRECTORY_SEPARATOR . $base . '_m.' . $extension;
     $image = Engine_Image::factory();
@@ -392,211 +246,503 @@ class User_CoverphotoController extends Core_Controller_Action_Standard {
       ->resize(1600, 1600)
       ->write($mainPath)
       ->destroy();
-
-    if (!empty($user)) {
-      $params = array(
-        'parent_type' => $user->getType(),
-        'parent_id' => $user->getIdentity(),
-        'user_id' => $user->getIdentity(),
-        'name' => basename($fileName),
-      );
-
-      try {
-        $iMain = $filesTable->createFile($mainPath, $params);
-				// if user coverphoto column is empty.
-				if(!empty($user['coverphoto'])){
-					$file = Engine_Api::_()->getItem('storage_file', $user['coverphoto']);
-					if($file) {
-						Engine_Api::_()->storage()->deleteExternalsFiles($file->file_id);
-						$file->delete();
-					}
-				}
-        $user->coverphoto = $iMain->file_id;
-        $user->save();
-      } catch (Exception $e) {
-        @unlink($mainPath);
-        if ($e->getCode() == Storage_Model_DbTable_Files::SPACE_LIMIT_REACHED_CODE
-          && Engine_Api::_()->getDbtable('modules', 'core')->isModuleEnabled('album')) {
-          throw new Album_Model_Exception($e->getMessage(), $e->getCode());
-        } else {
-          throw $e;
-        }
-      }
-      @unlink($mainPath);
-      if (!empty($tmpRow)) {
-        $tmpRow->delete();
-      }
-      return $user;
-    } else {
-      try {
-        $iMain = $filesTable->createSystemFile($mainPath);
-        // Remove temp files
-        @unlink($mainPath);
-      } catch (Exception $e) {
-        @unlink($mainPath);
-        if ($e->getCode() == Storage_Model_DbTable_Files::SPACE_LIMIT_REACHED_CODE
-          && Engine_Api::_()->getDbtable('modules', 'core')->isModuleEnabled('album')) {
-          throw new Album_Model_Exception($e->getMessage(), $e->getCode());
-        } else {
-          throw $e;
-        }
-      }
-      Engine_Api::_()->getApi("settings", "core")
-        ->setSetting("usercoverphoto.preview.level.id.$level_id", $iMain->file_id);
-      return $user;
-    }
-  }
-
-  private function setMainPhoto($photo, $user) {
-  
-    if ($photo instanceof Zend_Form_Element_File) {
-      $file = $photo->getFileName();
-      $fileName = $file;
-    } else if ($photo instanceof Storage_Model_File) {
-      $file = $photo->temporary();
-      $fileName = $photo->name;
-    } else if ($photo instanceof Core_Model_Item_Abstract && !empty($photo->file_id)) {
-      $tmpRow = Engine_Api::_()->getItem('storage_file', $photo->file_id);
-      $file = $tmpRow->temporary();
-      $fileName = $tmpRow->name;
-    } else if (is_array($photo) && !empty($photo['tmp_name'])) {
-      $file = $photo['tmp_name'];
-      $fileName = $photo['name'];
-    } else if (is_string($photo) && file_exists($photo)) {
-      $file = $photo;
-      $fileName = $photo;
-    } else {
-      throw new User_Model_Exception('invalid argument passed to setPhoto');
-    }
-
-    if (!$fileName) {
-      $fileName = $file;
-    }
-
-    $name = basename($file);
-    $extension = ltrim(strrchr($fileName, '.'), '.');
-    $base = rtrim(substr(basename($fileName), 0, strrpos(basename($fileName), '.')), '.');
-    $path = APPLICATION_PATH . DIRECTORY_SEPARATOR . 'temporary';
-    $params = array(
-      'parent_type' => $user->getType(),
-      'parent_id' => $user->getIdentity(),
-      'user_id' => $user->getIdentity(),
-      'name' => basename($fileName),
-    );
-
-    // Save
-    $filesTable = Engine_Api::_()->getDbtable('files', 'storage');
-    $coreSettings = Engine_Api::_()->getApi('settings', 'core');
-
-    // Resize image (main)
-    $mainPath = $path . DIRECTORY_SEPARATOR . $base . '_m.' . $extension;
-    $image = Engine_Image::factory();
-    $image->open($file)
-      ->resize(720, 720)
-      ->write($mainPath)
-      ->destroy();
-      
-    // Resize image (icon)
-    $squarePath = $path . DIRECTORY_SEPARATOR . $base . '_is.' . $extension;
-    $image = Engine_Image::factory();
-    $image->open($file);
-
-    $size = min($image->height, $image->width);
-    $x = ($image->width - $size) / 2;
-    $y = ($image->height - $size) / 2;
-
-    $image->resample($x, $y, $size, $size, 48, 48)
-      ->write($squarePath)
-      ->destroy();
-        // Store
+    // Store
     try {
       $iMain = $filesTable->createFile($mainPath, $params);
-      $iSquare = $filesTable->createFile($squarePath, $params);
-      $iMain->bridge($iSquare, 'thumb.icon');
+    } catch (Exception $e) {
+      @unlink($file);
       // Remove temp files
       @unlink($mainPath);
-      @unlink($squarePath);
-    } catch (Exception $e) {
-        // Remove temp files
-      @unlink($mainPath);
-      @unlink($squarePath);
       // Throw
-      if ($e->getCode() == Storage_Model_DbTable_Files::SPACE_LIMIT_REACHED_CODE &&
-        Engine_Api::_()->getDbtable('modules', 'core')->isModuleEnabled('album')) {
-        throw new Album_Model_Exception($e->getMessage(), $e->getCode());
+      if ($e->getCode() == Storage_Model_DbTable_Files::SPACE_LIMIT_REACHED_CODE) {
+        throw new User_Model_Exception($e->getMessage(), $e->getCode());
       } else {
         throw $e;
       }
     }
+    if (!isset($unlink))
+      @unlink($file);
+    // Remove temp files
+    @unlink($mainPath);
+    // Update row
+    $user->modified_date = date('Y-m-d H:i:s');
+    $user->coverphoto = $iMain->file_id;
+    $user->save();
+    // Delete the old file?
     if (!empty($tmpRow)) {
       $tmpRow->delete();
     }
-    
-		// if user photo_id column is empty.
-		if(!empty($user['photo_id'])){
-			$file = Engine_Api::_()->getItem('storage_file', $user['photo_id']);
-			$getParentChilds = $file->getChildren($file->getIdentity());
-			foreach ($getParentChilds as $child) {
-				// remove child file.
-				$this->unlinkFile(APPLICATION_PATH . DIRECTORY_SEPARATOR . $child['storage_path']);
-				// remove child directory.
-				$childPhotoDir = $this->getDirectoryPath($child['storage_path']);
-				$this->removeDir($childPhotoDir);
-				// remove child row from db.
-				$child->remove();
-			}
-			// remove parent file.
-			$this->unlinkFile(APPLICATION_PATH . DIRECTORY_SEPARATOR . $file['storage_path']);
-			// remove directory.
-			$parentPhotoDir = $this->getDirectoryPath($file['storage_path']);
-			$this->removeDir($parentPhotoDir);
-			if ($file) {
-				// remove parent form db.
-				$file->remove();
-			}
-		}
-
-    $user->photo_id = $iMain->file_id;
-    $user->save();
     return $user;
   }
 
-  protected function getDirectoryPath($storage_path){
-    return APPLICATION_PATH . DIRECTORY_SEPARATOR . str_replace(basename($storage_path),"",$storage_path);
+  public function uploadMainAction()
+  {
+    if (!Engine_Api::_()->core()->hasSubject()) {
+      // Can specifiy custom id
+      $user_id = $this->_getParam('user_id', null);
+      $subject = null;
+      if (null === $user_id) {
+        echo json_encode(array('status' => "error"));
+        die;
+      } else {
+        $subject = Engine_Api::_()->getItem('user', $user_id);
+        Engine_Api::_()->core()->setSubject($subject);
+      }
+    }
+
+    $user = Engine_Api::_()->core()->getSubject();
+
+    if (!$this->getRequest()->isPost()) {
+      echo json_encode(array('status' => "error"));
+      die;
+    }
+
+    if (empty(Engine_Api::_()->getDbTable('modules', 'core')->isModuleEnabled('album'))) {
+      $this->whenRemove($user, "photo_id");
+
+      //Delete feed
+      Engine_Api::_()->getDbtable('actions', 'activity')->delete(array('type =?' => 'profile_photo_update', "subject_id =?" => $user->getIdentity(), "object_type =? " => $user->getType(), "object_id = ?" => $user->getIdentity()));
+    }
+
+    // Uploading a new photo
+    if (isset($_FILES['webcam']['tmp_name']) && $_FILES['webcam']['tmp_name'] != '') {
+      $db = $user->getTable()->getAdapter();
+      $db->beginTransaction();
+
+      try {
+        $userUp = $user->setPhoto($_FILES['webcam']);
+
+        $iMain = Engine_Api::_()->getItem('storage_file', $user->photo_id);
+
+        // Insert activity
+        $action = Engine_Api::_()->getDbtable('actions', 'activity')->addActivity(
+          $user,
+          $user,
+          'profile_photo_update'
+        );
+
+        // Hooks to enable albums to work
+        if ($action) {
+          if (Engine_Api::_()->getDbtable('modules', 'core')->isModuleEnabled('album')) {
+            $event = Engine_Hooks_Dispatcher::_()
+              ->callEvent(
+                'onUserPhotoUpload',
+                array(
+                  'user' => $user,
+                  'file' => $iMain,
+                )
+              );
+            $attachment = $event->getResponse();
+          } else if (Engine_Api::_()->getDbtable('modules', 'core')->isModuleEnabled('ealbum')) {
+            $event = Engine_Hooks_Dispatcher::_()
+              ->callEvent(
+                'onUserProfilePhotoUpload',
+                array(
+                  'user' => $user,
+                  'file' => $iMain,
+                )
+              );
+            $attachment = $event->getResponse();
+          }
+
+          if (!$attachment)
+            $attachment = $iMain;
+
+          // We have to attach the user himself w/o album plugin
+          Engine_Api::_()->getDbtable('actions', 'activity')->attachActivity($action, $attachment);
+        }
+
+        $db->commit();
+        $file = Engine_Api::_()->getItemTable('storage_file')->getFile($userUp->photo_id, '');
+        echo json_encode(array('status' => "true", 'src' => $file->map()));
+        die;
+      }
+      // If an exception occurred within the image adapter, it's probably an invalid image
+      catch (Engine_Image_Adapter_Exception $e) {
+        $db->rollBack();
+        echo json_encode(array('status' => "error"));
+        die;
+      }
+    }
+    echo json_encode(array('status' => "false"));
+    die;
+  }
+  public function repositionCoverAction()
+  {
+    $user_id = $this->_getParam('user_id', '0');
+    if ($user_id == 0)
+      return;
+    $user = Engine_Api::_()->getItem('user', $user_id);
+    if (!$user)
+      return;
+
+    $position = $this->_getParam('position', '0');
+
+    if (!empty($position)) {
+      $user->coverphotoparams = Zend_Json_Encoder::encode(array('top' => str_replace('px', '', $position), 'left' => 0));
+      $user->save();
+    } else {
+      $user->coverphotoparams = Zend_Json_Encoder::encode(array('top' => 0, 'left' => 0));
+      $user->save();
+    }
+    echo json_encode(array('status' => "1"));
+    die;
   }
 
-  protected function removeDir($dirPath){
-    if(@is_dir($dirPath)){
-     @rmdir($dirPath);
-   }
+  public function removeMainAction()
+  {
+    $user_id = $this->_getParam('user_id', '0');
+    if ($user_id == 0)
+      return;
+
+    $user = Engine_Api::_()->getItem('user', $user_id);
+    if (!$user)
+      return;
+
+    if (isset($user->photo_id) && $user->photo_id > 0) {
+
+      if (!empty(Engine_Api::_()->getDbTable('modules', 'core')->isModuleEnabled('album'))) {
+        Engine_Api::_()->getDbTable('photos', 'album')->delete(array('owner_id =?' => $user->getIdentity(), "file_id =?" => $user->photo_id));
+      }
+
+      //Delete feed
+      Engine_Api::_()->getDbtable('actions', 'activity')->delete(array('type =?' => 'profile_photo_update', "subject_id =?" => $user->getIdentity(), "object_type =? " => $user->getType(), "object_id = ?" => $user->getIdentity()));
+
+      $this->whenRemove($user, "photo_id");
+
+      $user->photo_id = 0;
+      $user->save();
+    }
+
+    if (!$user->getPhotoUrl('')) {
+      $imgurl = 'application/modules/User/externals/images/nophoto_user_thumb_profile.png';
+    } else
+      $imgurl = $user->getPhotoUrl();
+
+    echo json_encode(array('status' => "true", 'src' => $imgurl));
+    die;
   }
 
-  protected function unlinkFile($filePath){
-    @unlink($filePath);
+  //upload existing photo
+  public function uploadExistingphotoAction()
+  {
+    $id = $this->_getParam('id', null);
+    if (!$id) {
+      echo json_encode(array('status' => "error"));
+      die;
+    }
+    if (Engine_Api::_()->getDbtable('modules', 'core')->isModuleEnabled('ealbum')) {
+      $photo = Engine_Api::_()->getItem('album_photo', $id);
+    } else {
+      $photo = Engine_Api::_()->getItem('photo', $id);
+    }
+    $user_id = $this->_getParam('user_id', null);
+    if (null == $user_id) {
+      echo json_encode(array('status' => "error"));
+      die;
+    }
+    $user = Engine_Api::_()->getItem('user', $user_id);
+    // Process
+    $db = $user->getTable()->getAdapter();
+    $db->beginTransaction();
+
+    try {
+      // Get the owner of the photo
+      $photoOwnerId = null;
+      if (isset($photo->user_id)) {
+        $photoOwnerId = $photo->user_id;
+      } else if (isset($photo->owner_id) && (!isset($photo->owner_type) || $photo->owner_type == 'user')) {
+        $photoOwnerId = $photo->owner_id;
+      }
+
+      // if it is from your own profile album do not make copies of the image
+      if (Engine_Api::_()->getDbtable('modules', 'core')->isModuleEnabled('ealbum')) {
+
+        $albumModel = 'Ealbum_Model_Album';
+        $photoModel = 'Ealbum_Model_Photo';
+      } else {
+        $albumModel = 'Album_Model_Album';
+        $photoModel = 'Album_Model_Photo';
+      }
+      if (
+        $photo instanceof $photoModel &&
+        ($photoParent = $photo->getParent()) instanceof $albumModel &&
+        $photoParent->owner_id == $photoOwnerId &&
+        $photoParent->type == 'profile'
+      ) {
+
+        // ensure thumb.icon and thumb.profile exist
+        $newStorageFile = Engine_Api::_()->getItem('storage_file', $photo->file_id);
+        $filesTable = Engine_Api::_()->getDbtable('files', 'storage');
+        if ($photo->file_id == $filesTable->lookupFile($photo->file_id, 'thumb.profile')) {
+          try {
+            $tmpFile = $newStorageFile->temporary();
+            $image = Engine_Image::factory();
+            $image->open($tmpFile)
+              ->resize(200, 400)
+              ->write($tmpFile)
+              ->destroy();
+            $iProfile = $filesTable->createFile(
+              $tmpFile,
+              array(
+                'parent_type' => $user->getType(),
+                'parent_id' => $user->getIdentity(),
+                'user_id' => $user->getIdentity(),
+                'name' => basename($tmpFile),
+              )
+            );
+            $newStorageFile->bridge($iProfile, 'thumb.profile');
+            @unlink($tmpFile);
+          } catch (Exception $e) {
+            echo json_encode(array('status' => "error"));
+            die;
+          }
+        }
+        if ($photo->file_id == $filesTable->lookupFile($photo->file_id, 'thumb.icon')) {
+          try {
+            $tmpFile = $newStorageFile->temporary();
+            $image = Engine_Image::factory();
+            $image->open($tmpFile);
+            $size = min($image->height, $image->width);
+            $x = ($image->width - $size) / 2;
+            $y = ($image->height - $size) / 2;
+            $image->resample($x, $y, $size, $size, 48, 48)
+              ->write($tmpFile)
+              ->destroy();
+            $iSquare = $filesTable->createFile(
+              $tmpFile,
+              array(
+                'parent_type' => $user->getType(),
+                'parent_id' => $user->getIdentity(),
+                'user_id' => $user->getIdentity(),
+                'name' => basename($tmpFile),
+              )
+            );
+            $newStorageFile->bridge($iSquare, 'thumb.icon');
+            @unlink($tmpFile);
+          } catch (Exception $e) {
+            echo json_encode(array('status' => "error"));
+            die;
+          }
+        }
+
+        // Set it
+        $user->photo_id = $photo->file_id;
+        $user->save();
+
+        // Insert activity
+        // @todo maybe it should read "changed their profile photo" ?
+        $action = Engine_Api::_()->getDbtable('actions', 'activity')
+          ->addActivity(
+            $user,
+            $user,
+            'profile_photo_update',
+            '{item:$subject} changed their profile photo.'
+          );
+        if ($action) {
+          // We have to attach the user himself w/o ealbum plugin
+          Engine_Api::_()->getDbtable('actions', 'activity')
+            ->attachActivity($action, $photo);
+        }
+        $db->commit();
+        echo json_encode(array('status' => "true", 'src' => Engine_Api::_()->storage()->get($user->photo_id)->getPhotoUrl('')));
+        die;
+      }
+
+      // Otherwise copy to the profile album
+      else {
+        $userUp = $user->setPhoto($photo);
+
+        // Insert activity
+        $action = Engine_Api::_()->getDbtable('actions', 'activity')
+          ->addActivity(
+            $user,
+            $user,
+            'profile_photo_update'
+          );
+
+        // Hooks to enable albums to work
+        $newStorageFile = Engine_Api::_()->getItem('storage_file', $user->photo_id);
+        if (Engine_Api::_()->getDbtable('modules', 'core')->isModuleEnabled('album')) {
+          $event = Engine_Hooks_Dispatcher::_()
+            ->callEvent(
+              'onUserPhotoUpload',
+              array(
+                'user' => $user,
+                'file' => $newStorageFile,
+              )
+            );
+        } else if (Engine_Api::_()->getDbtable('modules', 'core')->isModuleEnabled('ealbum')) {
+          $event = Engine_Hooks_Dispatcher::_()
+            ->callEvent(
+              'onUserProfilePhotoUpload',
+              array(
+                'user' => $user,
+                'file' => $newStorageFile,
+              )
+            );
+        }
+
+        $attachment = $event->getResponse();
+        if (!$attachment) {
+          $attachment = $newStorageFile;
+        }
+
+        if ($action) {
+          // We have to attach the user himself w/o album plugin
+          Engine_Api::_()->getDbtable('actions', 'activity')
+            ->attachActivity($action, $attachment);
+        }
+      }
+
+      $db->commit();
+      echo json_encode(array('status' => "true", 'src' => Engine_Api::_()->storage()->get($userUp->photo_id)->getPhotoUrl('')));
+      die;
+    }
+    // Otherwise it's probably a problem with the database or the storage system (just throw it)
+    catch (Exception $e) {
+      $db->rollBack();
+      echo json_encode(array('status' => "error"));
+      die;
+    }
+    echo json_encode(array('status' => "error"));
+    die;
   }
 
-  protected function whenRemove($user,$deleteType = null){
-		if(!empty($user[$deleteType])){
-			$file = Engine_Api::_()->getItem('storage_file', $user[$deleteType]);
-			$getParentChilds = $file->getChildren($file->getIdentity());
-			foreach ($getParentChilds as $child) {
-				// remove child file.
-				$this->unlinkFile(APPLICATION_PATH . DIRECTORY_SEPARATOR . $child['storage_path']);
-				// remove child directory.
-				$childPhotoDir = $this->getDirectoryPath($child['storage_path']);
-				$this->removeDir($childPhotoDir);
-				// remove child row from db.
-				$child->remove();
-			}
-			// remove parent file.
-			$this->unlinkFile(APPLICATION_PATH . DIRECTORY_SEPARATOR . $file['storage_path']);
-			// remove directory.
-			$parentPhotoDir = $this->getDirectoryPath($file['storage_path']);
-			$this->removeDir($parentPhotoDir);
-			if ($file) {
-				// remove parent form db.
-				$file->remove();
-			}
-		}
+  //update cover photo function from existing photos
+  public function uploadexistingcoverphotoAction()
+  {
+
+    $id = $this->_getParam('id', null);
+    $user_id = $this->_getParam('user_id', null);
+    $photo = Engine_Api::_()->getItem('photo', $id);
+    $user = Engine_Api::_()->getItem('user', $user_id);
+    $newStorageFile = Engine_Api::_()->getItem('storage_file', $photo->file_id);
+    $newStorageFile = $newStorageFile->temporary();
+    if (isset($newStorageFile))
+      $data = $newStorageFile;
+
+    try {
+      $type = 'cover';
+      $album = $this->getSpecialAlbum($user, $type);
+
+      $photoTable = Engine_Api::_()->getItemTable('photo');
+      $photo = $photoTable->createRow();
+      $photo->setFromArray(
+        array(
+          'owner_type' => 'user',
+          'owner_id' => $user->getIdentity()
+        )
+      );
+      $photo->save();
+      $user = $this->setCoverPhoto($data, $user);
+      if (isset($photo->order))
+        $photo->order = $photo->photo_id;
+      $photo->album_id = $album->album_id;
+      $photo->file_id = $user->coverphoto;
+      $photo->save();
+      if (!$album->photo_id) {
+        $album->photo_id = $photo->getIdentity();
+        $album->save();
+      }
+
+      // Insert Activity
+      $action = Engine_Api::_()->getDbtable('actions', 'activity')->addActivity($user, $user, 'cover_photo_update');
+      // Hooks to enable albums to work
+      if ($action) {
+        $event = Engine_Hooks_Dispatcher::_()
+          ->callEvent(
+            'onUserPhotoUpload',
+            array(
+              'user' => $user,
+              'file' => $photo,
+              'type' => 'cover',
+            )
+          );
+
+        $attachment = $event->getResponse();
+        if (empty($attachment)) {
+          $attachment = $photo;
+        }
+
+        Engine_Api::_()->getDbtable('actions', 'activity')->attachActivity($action, $attachment);
+      }
+
+      // Authorizations
+      $auth = Engine_Api::_()->authorization()->context;
+      $auth->setAllowed($photo, 'everyone', 'view', true);
+      $auth->setAllowed($photo, 'everyone', 'comment', true);
+    } catch (Exception $e) {
+      throw $e;
+    }
+    echo json_encode(array('status' => "true", 'src' => Engine_Api::_()->storage()->get($user->coverphoto)->getPhotoUrl('')));
+    die;
+  }
+
+  public function existingAlbumphotosAction()
+  {
+    $page = $this->_getParam('page', 1);
+    $this->view->album_id = $album_id = isset($_POST['id']) ? $_POST['id'] : 0;
+    if ($album_id == 0) {
+      echo "";
+      die;
+    }
+    $paginator = $this->view->paginator = Engine_Api::_()->user()->getPhotoSelect(array('album_id' => $album_id, 'pagNator' => true));
+    $limit = 12;
+    $paginator->setItemCountPerPage($limit);
+    $paginator->setCurrentPageNumber($page);
+    $this->view->page = $page;
+  }
+
+  public function existingPhotosAction()
+  {
+    $page = $this->_getParam('page', 1);
+    $this->view->coverphoto = isset($_POST['cover']) ? $_POST['cover'] : 'profile';
+    $paginator = $this->view->paginator = $this->getUserAlbum();
+    $this->view->limit = $limit = 12;
+    $paginator->setItemCountPerPage($limit);
+    $this->view->page = $page;
+    $paginator->setCurrentPageNumber($page);
+  }
+
+  public function getSpecialAlbum(User_Model_User $user, $type = 'cover')
+  {
+    $table = Engine_Api::_()->getItemTable('album');
+    $select = $table->select()
+      ->where('owner_type = ?', $user->getType())
+      ->where('owner_id = ?', $user->getIdentity())
+      ->where('type = ?', $type)
+      ->order('album_id ASC')
+      ->limit(1);
+    $album = $table->fetchRow($select);
+    // Create wall photos album if it doesn't exist yet
+    if (null === $album) {
+      $translate = Zend_Registry::get('Zend_Translate');
+      $album = $table->createRow();
+      $album->owner_type = 'user';
+      $album->owner_id = $user->getIdentity();
+      $album->title = $translate->_(ucfirst($type) . ' Photos');
+      $album->type = $type;
+      $album->search = 1;
+      //approve setting work
+      $album->approved = Engine_Api::_()->authorization()->getAdapter('levels')->getAllowed('album', $user, 'approve');
+      $album->save();
+      // Authorizations
+      $auth = Engine_Api::_()->authorization()->context;
+      $auth->setAllowed($album, 'everyone', 'view', true);
+      $auth->setAllowed($album, 'everyone', 'comment', true);
+    }
+    return $album;
+  }
+
+  public function getUserAlbum()
+  {
+    $viewer = Engine_Api::_()->user()->getViewer();
+    $table = Engine_Api::_()->getItemTable('album');
+    $select = $table->select()
+      ->from($table->info('name'))
+      ->where('owner_id =?', $viewer->getIdentity())
+      ->order('type DESC');
+    return Zend_Paginator::factory($select);
   }
 }

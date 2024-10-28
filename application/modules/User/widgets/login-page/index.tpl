@@ -29,7 +29,7 @@
         Smoothbox.open('<?php echo $this->fbUrl ?>');
       }
       var redirectPostFbLogin = function() {
-        window.location.href = window.location;
+        window.proxyLocation.href = window.location;
         Smoothbox.close();
       }
     </script>

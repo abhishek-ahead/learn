@@ -26,6 +26,8 @@
       scriptJquery(this).data('smoothboxed', true);
       scriptJquery(this).on('click', function(event)
       {
+        if(scriptJquery(this).attr('href') == 'javascript:;' || scriptJquery(this).attr('href') == 'javascript:void(0)' || scriptJquery(this).attr('href') == 'javascript:void(0);')
+          return;
         event.preventDefault(); // Maybe move this to after next line when done debugging
         Smoothbox.open(scriptJquery(this));
       });
@@ -36,6 +38,8 @@
     if( this.instance )
     {
       this.instance.close();
+      scriptJquery('html').removeClass('overflow-hidden');
+      scriptJquery('body').removeClass('overflow-hidden');
     }
   },
   open : function(spec, options)
@@ -585,6 +589,10 @@ class Iframe extends Modal{
       } else {
         this.doAutoResize();
       }
+      if(!scriptJquery('body').hasClass('admin')) {
+        scriptJquery('html').addClass('overflow-hidden');
+        scriptJquery('body').addClass('overflow-hidden');
+      }
     }.bind(bind));
     this.content.appendTo(this.window);
   }
@@ -684,7 +692,7 @@ class Modal_String extends Modal{
   } 
 }
 Smoothbox.Modal.String = Modal_String;
-})();
+
 window.addEventListener('DOMContentLoaded', function()
 {
   Smoothbox.bind();
@@ -694,3 +702,5 @@ window.addEventListener('load', function()
 {
   Smoothbox.bind();
 })
+})();
+

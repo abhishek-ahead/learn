@@ -12,6 +12,6 @@
 ?>
 
 <span>-</span>
-	<span class="timestamp" title="<?php echo $this->lastEditedDate ?>">
+<span class="timestamp" title="<?php echo $this->lastEditedDate ?>">
 	<?php echo $this->translate('edited') ?>
 </span>

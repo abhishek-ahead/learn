@@ -124,25 +124,19 @@
     
     var post_max_size = '<?php echo Engine_Api::_()->core()->convertPHPSizeToBytes(ini_get('upload_max_filesize')); ?>';
     var max_photo_upload_limit = 50;
-    var photo_upload_text = "<?php echo $this->translate('Max upload of %s allowed.', 50); ?>";
+    
+    var photo_upload_text = "<?php echo $this->string()->escapeJavascript($this->translate('Max upload of %s allowed.', 50)); ?>";
     var dateFormatCalendar = "<?php echo Engine_Api::_()->core()->dateFormatCalendar(); ?>";
   </script>
-  <link rel="stylesheet" href="<?php echo $staticBaseUrl . 'externals/font-awesome/css/all.min.css'; ?>">
-  <link rel="stylesheet" href="<?php echo $staticBaseUrl . 'externals/jQuery/jquery-ui.css'; ?>">
+  
+  <link rel="stylesheet" href="<?php echo $staticBaseUrl . 'externals/font-awesome/css/all.min.css?c='.$counter; ?>">
+  <link href="<?php echo $staticBaseUrl . 'externals/bootstrap/css/bootstrap.css?c='.$counter; ?>" media="screen" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="<?php echo $staticBaseUrl . 'externals/jQuery/jquery-ui.css?c='.$counter; ?>">
+  <script type="text/javascript" src="<?php echo $staticBaseUrl . 'externals/jQuery/jquery.min.js?c='.$counter ?>"></script>
+  <script type="text/javascript" src="<?php echo $staticBaseUrl . 'externals/jQuery/jquery-ui.js?c='.$counter ?>"></script>
+  <script type="text/javascript" src="<?php echo $staticBaseUrl . 'externals/bootstrap/js/bootstrap.js?c='.$counter ?>"></script>
+  <script type="text/javascript" src="<?php echo $staticBaseUrl . 'externals/scripts/script.js?c='.$counter ?>"></script>
   <?php
-    $this->headScript()
-      ->prependFile($staticBaseUrl . 'externals/smoothbox/smoothbox4.js')
-      ->prependFile($staticBaseUrl . 'externals/mdetect/mdetect.js')
-      ->prependFile($staticBaseUrl . 'application/modules/User/externals/scripts/core.js')
-      ->prependFile($staticBaseUrl . 'application/modules/Core/externals/scripts/core.js');
-    if(engine_in_array($request->getActionName(), array('admin-content', 'widget'))) {
-      $this->headScript()->prependFile($staticBaseUrl . 'application/modules/Core/externals/scripts/admin/layoutchoo.js')
-          ->prependFile($staticBaseUrl . 'application/modules/Core/externals/scripts/admin/layout.js')
-          ->prependFile($staticBaseUrl . 'application/modules/Core/externals/scripts/admin/adminlayout.js');
-    }
-    $this->headScript()->prependFile($staticBaseUrl . 'externals/jQuery/core.js')
-      ->prependFile($staticBaseUrl . 'externals/jQuery/jquery-ui.js')
-      ->prependFile($staticBaseUrl . 'externals/jQuery/jquery.min.js');
     // Process
     foreach( $this->headScript()->getContainer() as $dat ) {
       if( !empty($dat->attributes['src']) ) {
@@ -155,6 +149,13 @@
     }
   ?>
   <?php echo $this->headScript()->toString()."\n" ?>
+  <?php if(engine_in_array($request->getActionName(), array('admin-content', 'widget'))) { ?>
+    <?php if(0) { ?>
+    <script type="text/javascript" src="<?php echo $staticBaseUrl . 'application/modules/Core/externals/scripts/admin/layoutchoo.js?c='.$counter ?>"></script>
+    <?php } ?>
+    <script type="text/javascript" src="<?php echo $staticBaseUrl . 'application/modules/Core/externals/scripts/admin/adminlayout.js?c='.$counter; ?>"></script>
+    <script type="text/javascript" src="<?php echo $staticBaseUrl . 'application/modules/Core/externals/scripts/admin/layout.js?c='.$counter; ?>"></script>
+  <?php } ?>
   <script type="text/javascript">
     var $ = scriptJquery;
   </script>
@@ -168,7 +169,7 @@
     }
   </style>
 </head>
-<body id="global_page_<?php echo $identity ?>" class="smoothbox_body">
+<body id="global_page_<?php echo $identity ?>" class="smoothbox_body admin">
   <span id="global_content_simple">
     <?php echo $this->layout()->content ?>
   </span>

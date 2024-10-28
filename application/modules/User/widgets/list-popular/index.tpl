@@ -10,30 +10,27 @@
  * @author     John
  */
 ?>
-
-<div class="generic_list_wrapper">
-    <ul class="generic_list_widget">
-      <?php foreach( $this->paginator as $user ): ?>
-        <li>
-          <?php echo $this->htmlLink($user->getHref(), $this->itemBackgroundPhoto($user, 'thumb.icon', $user->getTitle()), array('class' => 'popularmembers_thumb')) ?>
-          <div class='popularmembers_info'>
-            <div class='popularmembers_name member_name'>
-              <?php echo $this->htmlLink($user->getHref(), $user->getTitle()) ?>
-            </div>
-            <?php if(Engine_Api::_()->getApi('settings', 'core')->getSetting('user.friends.eligible', 2)) { ?>
-              <div class='popularmembers_friends'>
-                <?php echo $this->translate(array('%s friend', '%s friends', $user->member_count),$this->locale()->toNumber($user->member_count)) ?>
-              </div>
-            <?php } ?>
+<ul class="sidebar_list users_sidebar_list">
+  <?php foreach( $this->paginator as $user ): ?>
+    <li class="sidebar_list_item">
+      <div class="sidebar_list_item_thumb">
+        <?php echo $this->htmlLink($user->getHref(), $this->itemBackgroundPhoto($user, 'thumb.icon', $user->getTitle())) ?>
+      </div>
+      <div class='sidebar_list_item_info'>
+        <div class='sidebar_list_item_title member_name'>
+          <?php echo $this->htmlLink($user->getHref(), $user->getTitle()) ?>
+        </div>
+        <?php if(Engine_Api::_()->getApi('settings', 'core')->getSetting('user.friends.eligible', 2)) { ?>
+          <div class='sidebar_list_item_owner'>
+            <span><?php echo $this->translate(array('%s friend', '%s friends', $user->member_count),$this->locale()->toNumber($user->member_count)) ?></span>
           </div>
-        </li>
-      <?php endforeach; ?>
-    </ul>
-    
-    <?php if( $this->paginator->getPages()->pageCount > 1 ): ?>
-      <?php echo $this->partial('_widgetLinks.tpl', 'core', array(
-        'url' => $this->url(array('action' => 'browse'), 'user_general', true),
-        'param' => array('orderby' => 'member_count')
-        )); ?>
-    <?php endif; ?>
-</div>
+        <?php } ?>
+      </div>
+    </li>
+  <?php endforeach; ?>
+  <?php //if( $this->paginator->getPages()->pageCount > 1 ): ?>
+    <li class="sidebar_list_item_more">
+      <?php echo $this->partial('_widgetLinks.tpl', 'core', array('url' => $this->url(array('action' => 'browse'), 'user_general', true), 'param' => array('orderby' => 'member_count'))); ?>
+    </li>
+  <?php //endif; ?>
+</ul>

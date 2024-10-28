@@ -25,9 +25,12 @@ class User_Form_Search extends Fields_Form_Search
     $this->getDisplayNameElement();
     $this->getAdditionalOptionsElement();
 
+
     parent::init();
 
     $this->loadDefaultDecorators();
+    $this->setAttribs(array('class' => 'global_form_box field_search_criteria'));
+
     $this->setMethod('get');
     $this->getDecorator('HtmlTag')->setOption('class', 'browsemembers_criteria');
   }
@@ -101,6 +104,36 @@ class User_Form_Search extends Fields_Form_Search
     //     array('HtmlTag', array('tag' => 'li'))
     //   ),
     // ));
+    
+    $enablesigupfields = (array) json_decode(Engine_Api::_()->getApi('settings', 'core')->getSetting('user.signup.enablesigupfields', '["confirmpassword","dob","gender","profiletype","timezone","language","location"]'));
+    
+    if(isset($enablesigupfields) && engine_in_array('location', $enablesigupfields) && Engine_Api::_()->getApi('settings', 'core')->getSetting('enableglocation', 0)) {
+      
+      $cookiedata = Engine_Api::_()->getApi('location', 'core')->getUserLocationBasedCookieData();
+      //Location
+      $this->addElement('Text', 'location', array(
+        'label' => 'Location',
+        'filters' => array(
+          new Engine_Filter_Censor(),
+          new Engine_Filter_HtmlSpecialChars(),
+        ),
+        'value' => !empty($cookiedata['location']) ? $cookiedata['location'] : '',
+      ));
+      
+      if(Engine_Api::_()->getApi('settings', 'core')->getSetting('enableglocation', 0) == 1) {
+        $this->addElement('Hidden', 'lat', array('order' => 3000, 'value' => !empty($cookiedata['lat']) ? $cookiedata['lat'] : ''));
+        $this->addElement('Hidden', 'lng', array('order' => 3001, 'value' => !empty($cookiedata['lng']) ? $cookiedata['lng'] : ''));
+        
+        $this->addElement('Select', 'miles', array(
+          'label' => !empty(Engine_Api::_()->getApi('settings', 'core')->getSetting('core.search.type', 1)) ? 'Miles' : 'Kilometer',
+          'allowEmpty' => true,
+          'required' => false,
+          'multiOptions' => array('0' => '', '1' => '1', '5' => '5', '10' => '10', '20' => '20', '50' => '50', '100' => '100', '200' => '200', '500' => '500', '1000' => '1000'),
+          'value' => 1000,
+          'registerInArrayValidator' => false,
+        ));
+      }
+    }
     //return $this->displayname;
   }
 

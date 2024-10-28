@@ -53,11 +53,11 @@
                 }).join('&');
             }
 
-            scriptJquery( window ).load(function() {
+            en4.core.runonce.add(function() {
               var url = '<?php echo $this->transactionUrl ?>';
               var data = <?php echo Zend_Json::encode($this->transactionData) ?>;
 
-              window.location.href= url +jsonToQueryString(data);
+              loadAjaxContentApp(url +jsonToQueryString(data));
             });
           </script>
         <?php } ?>

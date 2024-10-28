@@ -72,6 +72,16 @@ class Payment_Form_Admin_Settings_Global extends Engine_Form
       'value' => $settings->getSetting('payment.currencyapikey'),
     ));
     $this->getElement('currencyapikey')->getDecorator('Description')->setOptions(array('placement' => 'PREPEND', 'escape' => false));
+    
+    $this->addElement('Select', 'enablewallet', array(
+      'label' => 'Enable Wallet',
+      'description' => "Do you want enable wallet feature for payments on your website?",
+      'multiOptions' => array(
+        '1' => 'Yes',
+        '0' => 'No'
+      ),
+      'value' => $settings->getSetting("payment.enablewallet",1),
+    ));
 
     $this->addElement('Button', 'execute', array(
       'label' => 'Save Changes',

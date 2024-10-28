@@ -34,6 +34,7 @@ class User_Form_Admin_Avatar_Create extends Engine_Form {
           'required' => $re,
           'label' => 'Avatar Image',
           'description' => 'Choose the Avatar image you want to upload on your website.',
+          'accept' => 'image/*',
       ));
       $this->file->addValidator('Extension', false, 'gif, GIF, png, PNG, jpg, JPG, JPEG, jpeg, webp');
     }

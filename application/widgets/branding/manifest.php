@@ -12,7 +12,7 @@ return array(
   'package' => array(
     'type' => 'widget',
     'name' => 'branding',
-    'version' => '6.7.0',
+    'version' => '7.0.0',
     'revision' => '$Revision: 9747 $',
     'path' => 'application/widgets/branding',
     'repository' => 'socialengine.com',
@@ -27,7 +27,7 @@ return array(
   // Backwards compatibility
   'type' => 'widget',
   'name' => 'branding',
-  'version' => '6.7.0',
+  'version' => '7.0.0',
   'revision' => '$Revision: 9747 $',
   'title' => 'SocialEngine Branding',
   'description' => 'Displays a "powered by SocialEngine" link.',

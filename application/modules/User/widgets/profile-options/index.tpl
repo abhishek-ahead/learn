@@ -11,7 +11,7 @@
  */
 ?>
 
-<div id='profile_options'>
+<div id='profile_options' class="quicklinks">
   <?php // This is rendered by application/modules/core/views/scripts/_navIcons.tpl
     echo $this->navigation()
       ->menu()

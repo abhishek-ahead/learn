@@ -44,13 +44,13 @@ of <?php echo $this->totalItemCount; ?>
 <?php endif; ?>
 
 <!-- Last page link -->
-<?php if (isset($this->next)): ?>
-  <a href="<?php echo $this->url(array('page' => $this->last)); ?>">
-    <?php echo $this->translate('Last') ?>
+<!-- <?php // if (isset($this->next)): ?>
+  <a href="<?php // echo $this->url(array('page' => $this->last)); ?>">
+    <?php // echo $this->translate('Last') ?>
   </a>
-<?php else: ?>
-  <span class="disabled"><?php echo $this->translate('Last') ?></span>
-<?php endif; ?>
+<?php // else: ?>
+  <span class="disabled"><?php // echo $this->translate('Last') ?></span>
+<?php // endif; ?> -->
 
 </div>
 <?php endif; ?>

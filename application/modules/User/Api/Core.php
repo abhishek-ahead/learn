@@ -441,7 +441,6 @@ class User_Api_Core extends Core_Api_Abstract
             ->query()
             ->fetchColumn();
   }
-  
   public function getMutualFriendCount($subject, $viewer) {
     $friendsTable = Engine_Api::_()->getDbtable('membership', 'user');
     $friendsName = $friendsTable->info('name');
@@ -469,5 +468,32 @@ class User_Api_Core extends Core_Api_Abstract
     $usersTable = Engine_Api::_()->getItemTable('user');
     $select = $usersTable->select()->from($usersTable->info('name'), new Zend_Db_Expr('COUNT(user_id)'))->where('user_id IN(?)', $uids);
     return $select->query()->fetchColumn();
+  }
+
+  public function getPhotoSelect($params = array())
+  {
+    $table = Engine_Api::_()->getItemTable('photo');
+    $select = $table->select();
+    
+    if( !empty($params['album']) && $params['album'] instanceof Ealbum_Model_Album ) {
+      $select->where('album_id = ?', $params['album']->getIdentity());
+    } else if( !empty($params['album_id']) && is_numeric($params['album_id']) ) {
+      $select->where('album_id = ?', $params['album_id']);
+    }
+    
+    if( !isset($params['order']) ) {
+      $select->order('order ASC');
+    } else if( is_string($params['order']) ) {
+      $select->order($params['order']);
+    }
+
+    if(empty($params['pagNator'])){
+      if(isset($params['limit_data'])){
+        $select->limit($params['limit_data']);
+        return $table->fetchAll($select);
+      } else
+        return $table->fetchAll($select);
+    } else
+        return Zend_Paginator::factory($select);		
   }
 }

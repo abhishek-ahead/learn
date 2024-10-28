@@ -12,14 +12,13 @@
 ?>
 
 <script type="text/javascript">
-  parent.scriptJquery('#activity-item-<?php echo $this->action_id ?>').remove();
-  setTimeout(function()
-  {
+  parent.document.getElementById('activity-item-<?php echo $this->action_id ?>').destroy();
+  setTimeout(function () {
     parent.Smoothbox.close();
-  }, <?php echo ( $this->smoothboxClose === true ? 1000 : $this->smoothboxClose ); ?>);
+  }, <?php echo ($this->smoothboxClose === true ? 1000 : $this->smoothboxClose); ?>);
 </script>
 
 
-  <div class="global_form_popup_message">
-    <?php echo $this->message ?>
-  </div>
+<div class="global_form_popup_message">
+  <?php echo $this->message ?>
+</div>

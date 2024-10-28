@@ -10,6 +10,7 @@
  * @author     John
  */
 ?>
+<?php echo $this->partial('_location.tpl', 'core', array('item' => $this->user, 'modulename' => 'user')); ?>
 <div class="generic_layout_container layout_top">
   <div class="generic_layout_container layout_middle">
     <?php echo $this->content()->renderWidget('user.user-setting-cover-photo'); ?>
@@ -35,7 +36,7 @@
         ));
       ?>
       <script type="text/javascript">
-        scriptJquery(document).ready(function() {
+        en4.core.runonce.add(function() {
           en4.user.buildFieldPrivacySelector(
             scriptJquery('.global_form *[data-field-id]'),
           );

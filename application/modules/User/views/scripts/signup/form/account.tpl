@@ -11,10 +11,6 @@
  */
 ?>
 <?php
-$this->headLink()->appendStylesheet($this->layout()->staticBaseUrl."externals/selectize/css/normalize.css");
-$headScript = new Zend_View_Helper_HeadScript();
-$headScript->appendFile($this->layout()->staticBaseUrl.'externals/selectize/js/selectize.js');
-
 $settings = Engine_Api::_()->getApi('settings', 'core'); 
 $otpsms_signup_phonenumber = $settings->getSetting('otpsms.signup.phonenumber', 0);
 
@@ -30,6 +26,7 @@ $this->headTranslate(array(
   'Weak', 'Strong', 'Write your password...','Sign Up', 'Token Expired'
 ));
 ?>
+<?php echo $this->partial('_location.tpl', 'core', array('modulename' => 'user')); ?>
 <style>
   #signup_account_form #name-wrapper,#submit_signup, #submit_signup-wrapper{
     display: none;
@@ -48,7 +45,7 @@ $this->headTranslate(array(
           '<span id="profile_address_text"><?php echo $this->translate('yourname') ?></span>');
       scriptJquery('#profile_address').html(profile_address);
 
-      scriptJquery(document).on('keyup','#username', function() {
+      AttachEventListerSE('keyup','#username', function() {
         var text = '<?php echo $this->translate('yourname') ?>';
         if( this.value != '' ) {
           text = this.value;
@@ -68,13 +65,17 @@ $this->headTranslate(array(
   });
 
   var formCheck = false;
-  scriptJquery(document).on('submit', '#signup_account_form', function(e) {
+  function submitSignupForm(e, obj) {
     if(!formCheck) {
       e.preventDefault();
 
       // Check if all required fields are filled out
-      var formData = new FormData(this);
-      scriptJquery('#submit').html('<i class="fas fa-spinner fa-spin"></i>');
+      var formObj = scriptJquery(obj);
+      var formData = new FormData(obj);
+      var submitButtonLabel = formObj.find('button[type=submit]').html();
+      formObj.find('button[type=submit]').html('<i class="fas fa-spinner fa-spin"></i>');
+      formObj.find('button[type=submit]').attr("disabled",true);
+      //scriptJquery('#submit').html('<i class="fas fa-spinner fa-spin"></i>');
       var url = en4.core.baseUrl + 'signup';
       (scriptJquery.ajax({
         url : url,
@@ -84,6 +85,19 @@ $this->headTranslate(array(
         processData: false,
         cache: false,
         data: formData,
+        error : function(response) {
+          submitAjaxRequestSend = null;
+          if(scriptJquery(response.responseText).find('#global_content').length > 0) {
+            var searchGlobalContent = scriptJquery(response.responseText).find('#global_content').html();
+            if(searchGlobalContent) {
+              scriptJquery('#global_content').html(searchGlobalContent);
+              if(scriptJquery('#global_content').find('form'))
+                scriptJquery('#global_content').find('form').removeClass('form_submit_ajax').addClass('signup_account_form');
+            }
+          }
+          formObj.find('button[type=submit]').removeAttr("disabled");
+          formObj.find('button[type=submit]').html(submitButtonLabel);
+        },
         success : function(response) {
           if(response.status) {
             formCheck = true;
@@ -94,12 +108,16 @@ $this->headTranslate(array(
               grecaptcha.execute("<?php echo @$spamSettings['recaptchapublicv3']; ?>", {action: 'submit'}).then(function(token) {
                 // Add your logic to submit to your backend server here.
                 scriptJquery('#recaptchaResponse').val(token);
-                scriptJquery('#submit_signup').trigger('click');
+                loadAjaxContentApp(response.redirectFullURL,false,"full");  
+                //scriptJquery('#submit_signup').trigger('click');
               });
-            } else {
-              scriptJquery('#submit_signup').trigger('click');
+            } else if(response.redirectFullURL) {
+              loadAjaxContentApp(response.redirectFullURL,false,"full");
+              //scriptJquery('#submit_signup').trigger('click');
             }
           } else {
+            formObj.find('button[type=submit]').removeAttr("disabled");
+            formObj.find('button[type=submit]').html(submitButtonLabel);
             scriptJquery('#submit').html('<?php echo $this->string()->escapeJavascript($this->translate("Sign Up")) ; ?>');
             if(scriptJquery('#form_errors').length)
               scriptJquery('#form_errors').remove();
@@ -120,7 +138,7 @@ $this->headTranslate(array(
               grecaptcha.execute("<?php echo @$spamSettings['recaptchapublicv3']; ?>", {action: 'submit'}).then(function(token) {
                 // Add your logic to submit to your backend server here.
                 scriptJquery('#recaptchaResponse').val(token);
-                scriptJquery('#submit_signup').trigger('click');
+                //scriptJquery('#submit_signup').trigger('click');
               });
             }
           }
@@ -130,11 +148,18 @@ $this->headTranslate(array(
     } else {
       return true;
     }
+  }
+  
+  AttachEventListerSE('submit', '#signup_account_form', function(e) {
+    submitSignupForm(e, this);
+  });
+  AttachEventListerSE('submit', '.signup_account_form', function(e) {
+    submitSignupForm(e, this);
   });
   
   <?php if( $settings->getSetting('user.signup.enabletwostep', 0) == 1 || !empty($otpsms_signup_phonenumber)) { ?>
   
-    scriptJquery(document).ready(function() {
+    en4.core.runonce.add(function() {
       <?php if(!empty($otpsms_signup_phonenumber)) { ?>
         scriptJquery('#email-element').prepend(scriptJquery('#signup_country_code').html());
         scriptJquery('#signup_country_code').remove();
@@ -194,7 +219,7 @@ $this->headTranslate(array(
         scriptJquery('#country_code').hide();
       <?php } ?>
 
-      scriptJquery(scriptJquery('#signup_pop_wrap').html()).appendTo('body');
+      scriptJquery(scriptJquery('#signup_pop_wrap').html()).appendTo('#append-script-data');
       scriptJquery('#signup_pop_wrap').remove();
       if(scriptJquery('#country_code').val())
         scriptJquery('#countrycode').val(scriptJquery('#country_code').val());
@@ -205,7 +230,7 @@ $this->headTranslate(array(
       <?php } ?>
     });
 
-    scriptJquery(document).on('blur', '#email', function(e) {
+    AttachEventListerSE('blur', '#email', function(e) {
     
       if(scriptJquery('#verifed_text').length == 0) {
         scriptJquery("#verify_email").remove();
@@ -255,7 +280,7 @@ $this->headTranslate(array(
       }));
     }
 
-    scriptJquery(document).on('keyup', '#email', function(e) {
+    AttachEventListerSE('keyup', '#email', function(e) {
       var emailVal = scriptJquery("#email").val();
       //if(emailVal === '') {
         scriptJquery("#verify_email").remove();
@@ -316,7 +341,7 @@ $this->headTranslate(array(
     }
     
     
-    scriptJquery(document).on('click', '#verify_email', function(e){
+    AttachEventListerSE('click', '#verify_email', function(e){
       sendEmailCode();
     });
 
@@ -364,15 +389,15 @@ $this->headTranslate(array(
       scriptJquery('#send_signup_form').hide();
     }
     
-    scriptJquery(document).on('click', '#verify_otp', function(e){
+    AttachEventListerSE('click', '#verify_otp', function(e){
       validateTwoStepCode();
     });
     
-    scriptJquery(document).on('click', '#resend_otp', function(e){
+    AttachEventListerSE('click', '#resend_otp', function(e){
       resendOtpCode();
     });
     
-    scriptJquery(document).on('change', '#country_code', function(e){
+    AttachEventListerSE('change', '#country_code', function(e){
       var item = scriptJquery(this);
       scriptJquery('#countrycode').val(item.val());
     });
@@ -411,7 +436,7 @@ $this->headTranslate(array(
 
 
   if(typeof loginSignupPlaceHolderActive != 'undefined') {
-    scriptJquery (document).ready(function(e){
+    en4.core.runonce.add(function() {
       scriptJquery ('#signup_account_form input,#signup_account_form input[type=email], #signup_account_form select').each(
         function(index){
           var input = scriptJquery (this);

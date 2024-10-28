@@ -42,7 +42,7 @@ class Activity_View_Helper_GetActionContent extends Zend_View_Helper_Abstract
     ) {
       $content = $this->replaceHashTags($content);
     }
-
+    $content =  $this->stringsToURLStrings($content);
     return $content;
   }
 
@@ -103,8 +103,11 @@ class Activity_View_Helper_GetActionContent extends Zend_View_Helper_Abstract
     }
     $newString .= $string;
     return $newString;
+  } 
+  protected function stringsToURLStrings($stringBody){
+    $pattern = '@(http(s)?://)?(([a-zA-Z])([-\w]+\.)+([^\s\.]+[^\s]*)+[^,.\s])@';
+    return preg_replace($pattern, '<a href="http$2://$3" target="_blank">$0</a>', $stringBody);
   }
-
   private function getHashtagLink($hashtag)
   {
     $view = Zend_Registry::get('Zend_View');

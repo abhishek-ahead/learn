@@ -139,21 +139,24 @@ class User_Installer extends Engine_Package_Installer_Module
             $dir_contents = scandir( $PathFile );
             foreach ( $dir_contents as $file ) {
               if ( ($file !== '.') && ($file !== '..') && ($file !== 'index.html')) {
-                $languageName = $languages[$file];
+                $languageName = @$languages[$file];
                 $select = new Zend_Db_Select($db);
                 $select_content = $select
                     ->from('engine4_core_languages')
                     ->where('code =?', $file)
                     ->limit(1);
-                $language_id = $select_content->query()->fetchObject()->language_id;
-                if(empty($language_id) && !empty($languageName)) {
-                  $db->insert('engine4_core_languages', array(
-                    'code' => $file,
-                    'name' => $languageName,
-                    'fallback' => $file,
-                  ));
-                  $languageId = $db->lastInsertId();
-                  $db->query("UPDATE  `engine4_core_languages` SET  `order` =  '".$languageId."' WHERE  `engine4_core_languages`.`language_id` ='".$languageId."' LIMIT 1");
+                $languageObject = $select_content->query()->fetchObject();
+                if($languageObject) {
+                    $language_id = $languageObject->language_id;
+                    if(empty($language_id) && !empty($languageName)) {
+                      $db->insert('engine4_core_languages', array(
+                        'code' => $file,
+                        'name' => $languageName,
+                        'fallback' => $file,
+                      ));
+                      $languageId = $db->lastInsertId();
+                      $db->query("UPDATE  `engine4_core_languages` SET  `order` =  '".$languageId."' WHERE  `engine4_core_languages`.`language_id` ='".$languageId."' LIMIT 1");
+                    }
                 }
               }
             }

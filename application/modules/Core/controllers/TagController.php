@@ -20,14 +20,14 @@ class Core_TagController extends Core_Controller_Action_Standard
 {
   public function init()
   {
-    /*
+    /*df
     $subject = $this->_getParam('subject');
     if( is_string($subject) )
     {
       $subject = Engine_Api::_()->getItemByGuid($guid);
     }
     if( $subject instanceof Core_Model_Item_Abstract && $subject->getIdentity() )
-    {
+    {  
       Engine_Api::_()->core()->setSubject($subject);
     }
      */
@@ -45,7 +45,7 @@ class Core_TagController extends Core_Controller_Action_Standard
       throw new Engine_Exception('whoops! doesn\'t support tagging');
     }
     
-    // GUID tagging
+    // GUID tagging d
     if( null !== ($guid = $this->_getParam('guid')) )
     {
       $tag = Engine_Api::_()->getItemByGuid($this->_getParam('guid'));

@@ -10,6 +10,30 @@
  * @author     John Boehr <j@webligo.com>
  */
 ?>
+<?php if($this->user && Engine_Api::_()->getApi('settings', 'core')->getSetting("payment.enablewallet",1)) { ?>
+  <?php if($this->user->wallet_amount == 0) { ?>
+    <div class="tip">
+      <span>
+        <?php echo $this->translate("You don't have enough balance to subscribe paid plans, please first recharge your  "); ?><a href="<?php echo $this->url(array("module" => 'payment', 'controller' => 'settings', 'action' => 'wallet'), 'default', true); ?>" target="_blank"><?php echo $this->translate(" wallet"); ?>.</a>
+      </span>
+    </div>
+  <?php } else { ?>
+    <div class="tip">
+      <span>
+        <?php echo $this->translate("Current balance: "); ?><?php echo $this->user->wallet_amount ? Engine_Api::_()->payment()->getCurrencyPrice($this->user->wallet_amount,'','','') : 0.00; ?>
+      </span>
+    </div>
+  <?php } ?>
+
+  <?php if($this->user) { ?>
+    <?php $currentSubscriptionFirstPlan = Engine_Api::_()->getDbTable('subscriptions', 'payment')->currentSubscriptionFirstPlan($this->user); 
+    if($currentSubscriptionFirstPlan) {
+      $packagesTable = Engine_Api::_()->getDbtable('packages', 'payment');
+      $currentFirstPackage = $packagesTable->fetchRow(array('package_id = ?' => $currentSubscriptionFirstPlan->package_id));
+    }
+    ?>
+  <?php } ?>
+<?php } ?>
 <?php $settings = Engine_Api::_()->getApi('settings', 'core'); ?>
 <form method="post" id="signup" name="signup" action="<?php echo $this->escape($this->form->getAction()) ?>" enctype="application/x-www-form-urlencoded">
   <div class="payment_subscription_plans_table <?php echo $settings->getSetting('payment.overlap', 1) ? 'payment_subscription_plans_overlap' : ''; ?>" 
@@ -25,9 +49,13 @@
         <p class="payment_subscription_plans_table_des" style="color:<?php echo $settings->getSetting('payment.header.txtclr',""); ?> ;"><?php echo $this->translate("Please select a subscription plan from the list below."); ?></p>
       </div>
     <?php } ?>
+    
     <div class="payment_subscription_plans_listing">
       <?php foreach($this->form->getPackages() as $package): ?>
         <?php if($this->currentPackage && $package->package_id == $this->currentPackage->package_id ) { continue; } ?>
+
+        <?php if($currentSubscriptionFirstPlan && $currentSubscriptionFirstPlan->status == 'initial' && $currentFirstPackage && $package->package_id != $currentFirstPackage->package_id ) { continue; } ?>
+
         <?php $column = json_decode($package->packagestyles); ?>
         <div class="payment_subscription_plans_listing_item<?php if(!empty($column->show_highlight)): ?> heighlighted <?php endif;?>" style="width:<?php echo isset($column->column_width) && is_numeric($column->column_width) ? $column->column_width.'px' : $this->width ?>; <?php if(isset($column->column_margin) && $column->column_margin):?>margin-left:<?php echo $column->column_margin - 4;?>px;margin-right:<?php echo $column->column_margin;?>px;<?php endif;?>">
           <article style="background-color:#<?php echo isset($column->column_row_color) && $column->column_row_color ? $column->column_row_color : '';?>;">
@@ -82,14 +110,6 @@
                     <span  style="color:#<?php echo $column->column_text_color;?> "><?php echo sprintf($this->translate('%1$s'),$typeStr); ?></span>
                   <?php } ?>
                 </p>
-                <!-- <p class="duration" style="color:#<?php // echo isset($column->column_text_color) && ($column->column_text_color) ? $column->column_text_color : ''; ?> !important">
-                  <?php // $typeStr = $this->translate(array($package->duration_type, $package->duration_type . 's', $package->duration)); ?>
-                  <?php // if($package->duration > 0) { ?>
-                    <span  style="color:#<?php // echo isset($column->column_text_color) && ($column->column_text_color) ? $column->column_text_color : ''; ?> "><?php // echo sprintf($this->translate('for %1$s %2$s'),$package->duration, $typeStr); ?></span>
-                  <?php // } else { ?>
-                    <span  style="color:#<?php // echo isset($column->column_text_color) && ($column->column_text_color) ? $column->column_text_color : ''; ?> "><?php // echo sprintf($this->translate('%1$s'),$typeStr); ?></span>
-                  <?php // } ?>
-                </p> -->
               </div>
             </div>
             <?php if($package->description) { ?>
@@ -123,8 +143,33 @@
               <?php } ?>
             </ul>
             <div class="payment_subscription_plans_listing_footer">
-              <input type="radio" name="package_id" id="package_id_<?php echo $package->package_id ?>" value="<?php echo $package->package_id ?>" />
-              <a href="javascript:;" class="payment_animation" onclick="onFormSubmit(<?php echo $package->package_id ?>)" style="background-color:#<?php echo isset($column->footer_bg_color) && $column->footer_bg_color ? $column->footer_bg_color : ''; ?>;color:#<?php echo isset($column->footer_text_color) && $column->footer_text_color ? $column->footer_text_color : ''; ?>"><?php echo $this->currentSubscription ? $this->translate("Upgrade") : $this->translate("Join Now"); ?></a>
+              <?php if($this->user && $this->user->wallet_amount > 0) { ?>
+                <?php if($this->user->wallet_amount >= $package->price) { ?>
+                  <input type="radio" name="package_id" id="package_id_<?php echo $package->package_id ?>" value="<?php echo $package->package_id ?>" />
+                  <a href="javascript:;" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#wallet_modal" onclick="onFormSubmit(<?php echo $package->package_id ?>)" style="background-color:#<?php echo isset($column->footer_bg_color) && $column->footer_bg_color ? $column->footer_bg_color : ''; ?>;color:#<?php echo isset($column->footer_text_color) && $column->footer_text_color ? $column->footer_text_color : ''; ?>"><?php echo $this->currentSubscription ? $this->translate("Upgrade") : $this->translate("Join Now"); ?></a>
+                <?php } else { ?>
+                  <p class="error_msg">
+                    <?php echo $this->translate("You don't have enough balance to subscribe this plan, please first recharge your  "); ?><a href="<?php echo $this->url(array("module" => 'payment', 'controller' => 'settings', 'action' => 'wallet'), 'default', true); ?>" target="_blank"><?php echo $this->translate(" wallet"); ?>.</a>
+                  </p>
+                  <a href="javascript:;" class="btn btn-primary disabled" style="background-color:#<?php echo isset($column->footer_bg_color) && $column->footer_bg_color ? $column->footer_bg_color : ''; ?>;color:#<?php echo isset($column->footer_text_color) && $column->footer_text_color ? $column->footer_text_color : ''; ?>"><?php echo $this->currentSubscription ? $this->translate("Upgrade") : $this->translate("Join Now"); ?></a>
+                <?php } ?>
+              <?php } else { ?>
+                <input type="radio" name="package_id" id="package_id_<?php echo $package->package_id ?>" value="<?php echo $package->package_id ?>" />
+
+                <?php if($this->user) { ?>
+                  <?php if($package->price == 0) { ?>
+                    <a href="javascript:;" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#wallet_modal" onclick="onFormSubmit(<?php echo $package->package_id ?>)" style="background-color:#<?php echo isset($column->footer_bg_color) && $column->footer_bg_color ? $column->footer_bg_color : ''; ?>;color:#<?php echo isset($column->footer_text_color) && $column->footer_text_color ? $column->footer_text_color : ''; ?>"><?php echo $this->currentSubscription ? $this->translate("Upgrade") : $this->translate("Join Now"); ?></a>
+                  <?php } else { ?>
+                    <a href="javascript:;" class="btn btn-primary disabled" style="background-color:#<?php echo isset($column->footer_bg_color) && $column->footer_bg_color ? $column->footer_bg_color : ''; ?>;color:#<?php echo isset($column->footer_text_color) && $column->footer_text_color ? $column->footer_text_color : ''; ?>"><?php echo $this->currentSubscription ? $this->translate("Upgrade") : $this->translate("Join Now"); ?></a>
+                  <?php } ?>
+                <?php } else { ?>
+                  <?php if($package->price == 0) { ?>
+                    <a href="javascript:;" class="btn btn-primary" onclick="onFormSubmit(<?php echo $package->package_id ?>)" style="background-color:#<?php echo isset($column->footer_bg_color) && $column->footer_bg_color ? $column->footer_bg_color : ''; ?>;color:#<?php echo isset($column->footer_text_color) && $column->footer_text_color ? $column->footer_text_color : ''; ?>"><?php echo $this->currentSubscription ? $this->translate("Upgrade") : $this->translate("Join Now"); ?></a>
+                  <?php } else { ?>
+                    <a href="javascript:;" class="btn btn-primary" onclick="onFormSubmit(<?php echo $package->package_id ?>)" style="background-color:#<?php echo isset($column->footer_bg_color) && $column->footer_bg_color ? $column->footer_bg_color : ''; ?>;color:#<?php echo isset($column->footer_text_color) && $column->footer_text_color ? $column->footer_text_color : ''; ?>"><?php echo $this->currentSubscription ? $this->translate("Upgrade") : $this->translate("Join Now"); ?></a>
+                  <?php } ?>
+                <?php } ?>
+              <?php } ?>
             </div>
             <?php if(isset($column->show_label) && $column->show_label): ?>
               <div class="<?php if(isset($column->label_position) && $column->label_position) : ?>payment_subscription_plans_listing_label right<?php else:?>payment_subscription_plans_listing_label left<?php endif;?>">
@@ -137,6 +182,36 @@
     </div>
   </div>
 </form>
+
+<!-- wallet Modal Poup -->
+<div id="wallet_modal_data">
+  <div class="modal fade wallet_modal" id="wallet_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"  aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content position-relative" id="pay_wallet_form">
+        <?php if($this->user) { ?>
+          <form action="<?php echo $this->escape($this->url(array('module'=> 'user','controller' => 'subscription', 'action' => 'choose', 'user_id' => $this->user->getIdentity()),'default',true)) ?>" method="post" id="wallet_payment" enctype="multipart/form-data">
+        <?php } else { ?>
+          <form action="<?php echo $this->escape($this->url(array('module'=> 'user','controller' => 'subscription', 'action' => 'choose'),'default',true)) ?>" method="post" id="wallet_payment" enctype="multipart/form-data">
+        <?php } ?>
+          <div class="modal-header">
+            <h1 class="modal-title fs-5"><?php echo $this->translate('Pay for Access') ?></h1>
+          </div>
+          <div class="modal-body">
+            <p class="mb-3"><?php echo $this->translate('You have selected an account type that requires recurring subscription payments. You will be taken to a secure checkout area where you can setup your subscription. Remember to continue back to our site after your purchase to sign in to your account.') ?></p>
+            <div style="display:none;" id="error_message" class="failed_msg mt-2"></div>
+          </div>
+          <div class="modal-footer">
+            <input type="hidden" name="selected_package_id" id="selected_package_id" />
+            <button type="button" id="wallet_cancel" class="btn btn-link" data-bs-dismiss="modal"><?php echo $this->translate("Cancel"); ?></button>
+            <button type="submit" id="submit" class="btn btn-primary"><?php echo $this->translate('Pay'); ?></button>
+          </div>
+        </form>
+        <div class="core_loading_cont_overlay" id="core_loading_cont_overlay" style="display:none;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <?php if($settings->getSetting('payment.footer.enable',1)) { ?>
   <div class="payment_subscription_plans_listing_note">
     <div class="payment_rich_content">
@@ -144,14 +219,66 @@
     </div>
   </div>
 <?php } ?>
-<script type="text/javascript">
-  function onFormSubmit(id) {
-    document.getElementById("package_id_"+id).checked = true;
-    scriptJquery("#signup").trigger('submit');
-  }
-  var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-  var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-    return new bootstrap.Tooltip(tooltipTriggerEl)
+
+<script type='text/javascript'>
+  AttachEventListerSE('submit', '#wallet_payment', function(e) {
+    e.preventDefault();
+    scriptJquery("#core_loading_cont_overlay").show();
+    scriptJquery.ajax({
+      dataType: 'json',
+      url: en4.core.baseUrl + 'payment/subscription/choose',
+      method: 'post',
+      data: {
+        format: 'json',
+        user_id: '<?php echo $this->user ? $this->user->getIdentity() : 0; ?>',
+        package_id: scriptJquery('#selected_package_id').val(),
+      },
+      success: function(response) {
+        scriptJquery("#core_loading_cont_overlay").hide();
+        if(response.status) {
+          scriptJquery('#wallet_payment').hide();
+          scriptJquery('#pay_wallet_form').append("<div id='success_msg' class='success_msg success_msg m-2'><span>"+response.message+"</span></div>");
+          setTimeout(() => {
+            scriptJquery('#wallet_cancel').trigger('click');
+            scriptJquery('#pay_wallet_form').hide();
+            window.proxyLocation.reload("full");
+            // if(response.url) {
+            //   loadAjaxContentApp(response.url);
+            // } else {
+            //   loadAjaxContentApp(window.proxyLocation.href);
+            // }
+          }, 2000);
+        } else {
+          scriptJquery('#error_message').show().html(response.message);
+          setTimeout(() => {
+            if(response.url) {
+              loadAjaxContentApp(response.url);
+            }
+          }, 2000);
+        } 
+      }
+    });
   });
-  scriptJquery("#global_wrapper").addClass('signup_subscriptions_plans')
+
+  en4.core.runonce.add(function() {
+
+    scriptJquery(scriptJquery('#wallet_modal_data').html()).appendTo('#append-script-data');
+    scriptJquery('#wallet_modal_data').remove();
+
+    scriptJquery("#wallet_modal").on('hide.bs.modal', function(){
+      scriptJquery('#error_message').hide();
+      scriptJquery('#selected_package_id').val('');
+    });
+
+    scriptJquery("#global_wrapper").addClass('signup_subscriptions_plans');
+  });
+
+  function onFormSubmit(id) {
+    <?php if($this->user) { ?>
+      scriptJquery('#selected_package_id').val(id);
+    <?php } else { ?>
+      document.getElementById("package_id_"+id).checked = true;
+      scriptJquery("#signup").trigger('submit');
+    <?php } ?>
+  }
 </script>

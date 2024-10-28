@@ -1,0 +1,236 @@
+{
+  "type": "theme",
+  "name": "harmony",
+  "version": "7.0.0",
+  "revision": "10113",
+  "path": "application\/themes\/harmony",
+  "repository": null,
+  "sku": null,
+  "date": "Fri, 25 Oct 2024 04:39:32 +0000",
+  "title": "Harmony",
+  "description": "Harmony",
+  "thumb": "theme.jpg",
+  "developer": null,
+  "authors": [
+    "SocialEngine Core"
+  ],
+  "meta": {
+    "date": "Fri, 25 Oct 2024 04:39:32 +0000",
+    "title": "Harmony",
+    "description": "Harmony",
+    "developer": null,
+    "authors": [
+      "SocialEngine Core"
+    ],
+    "changeLog": null
+  },
+  "actions": [
+    "install",
+    "upgrade",
+    "refresh"
+  ],
+  "callback": {
+    "path": null,
+    "class": "Engine_Package_Installer_Theme",
+    "priority": 100
+  },
+  "dependencies": null,
+  "tests": [
+    
+  ],
+  "permissions": [
+    
+  ],
+  "structure": {
+    "application\/themes\/harmony": {
+      "type": "directory",
+      "path": "application\/themes\/harmony",
+      "structure": [
+        {
+          "path": "theme.css",
+          "dir": false,
+          "file": true,
+          "perms": "0644",
+          "size": 103,
+          "sha1": "7d2290a183b737e553c11d63fc960f3d22507d9a"
+        },
+        {
+          "path": "variables.css",
+          "dir": false,
+          "file": true,
+          "perms": "0644",
+          "size": 9621,
+          "sha1": "2af62c792d012a86b9f47db942f2d7b4096615ac"
+        },
+        {
+          "path": "main.css",
+          "dir": false,
+          "file": true,
+          "perms": "0644",
+          "size": 44331,
+          "sha1": "b53f1b5ce2f60ea104f40bd58ee5bae459e6cdfb"
+        },
+        {
+          "path": "fonts",
+          "dir": true,
+          "file": false,
+          "perms": "0755",
+          "size": 4096,
+          "sha1": null
+        },
+        {
+          "path": "fonts\/Inter-SemiBold.woff2",
+          "dir": false,
+          "file": true,
+          "perms": "0644",
+          "size": 106856,
+          "sha1": "59c640801bed5da6212ed378fc2ef4c61d51444b"
+        },
+        {
+          "path": "fonts\/uicons-regular-straight.woff",
+          "dir": false,
+          "file": true,
+          "perms": "0644",
+          "size": 190108,
+          "sha1": "232881ee8517ba73ccceb0362906aba28f9893d2"
+        },
+        {
+          "path": "fonts\/uicons-regular-straight.woff2",
+          "dir": false,
+          "file": true,
+          "perms": "0644",
+          "size": 146508,
+          "sha1": "989d87b4b65ca072f0e6ad4d6ccec4dd6302de69"
+        },
+        {
+          "path": "fonts\/Inter-Regular.woff",
+          "dir": false,
+          "file": true,
+          "perms": "0644",
+          "size": 149316,
+          "sha1": "c6f597a2b209a564719de459784011506e09798c"
+        },
+        {
+          "path": "fonts\/Inter-Medium.woff2",
+          "dir": false,
+          "file": true,
+          "perms": "0644",
+          "size": 106480,
+          "sha1": "1a440fadfe9e75355f2e36c22ecc5e8d6630aeb9"
+        },
+        {
+          "path": "fonts\/uicons-regular-rounded.eot",
+          "dir": false,
+          "file": true,
+          "perms": "0644",
+          "size": 645524,
+          "sha1": "8bb089ee31b9e21778eeec1f775acdfdf30bf9ec"
+        },
+        {
+          "path": "fonts\/Inter-Bold.woff",
+          "dir": false,
+          "file": true,
+          "perms": "0644",
+          "size": 159356,
+          "sha1": "98db5d4c22fe680a8a2f73249791f0a1f319da21"
+        },
+        {
+          "path": "fonts\/uicons-regular-straight.eot",
+          "dir": false,
+          "file": true,
+          "perms": "0644",
+          "size": 386744,
+          "sha1": "fac932ccfe549c3a6d459f7b85e0993446d58a1b"
+        },
+        {
+          "path": "fonts\/Inter-Medium.woff",
+          "dir": false,
+          "file": true,
+          "perms": "0644",
+          "size": 157864,
+          "sha1": "1de14b3b900502f89e816c8f716139ad2561b247"
+        },
+        {
+          "path": "fonts\/uicons-regular-rounded.woff2",
+          "dir": false,
+          "file": true,
+          "perms": "0644",
+          "size": 230060,
+          "sha1": "c5f1b1f0499684f7702939cccc3f87970d9d0848"
+        },
+        {
+          "path": "fonts\/uicons-regular-rounded.woff",
+          "dir": false,
+          "file": true,
+          "perms": "0644",
+          "size": 302440,
+          "sha1": "8e7d6183a80e84eaffd9f05f201233b081ce4e5c"
+        },
+        {
+          "path": "fonts\/Inter-Regular.woff2",
+          "dir": false,
+          "file": true,
+          "perms": "0644",
+          "size": 98668,
+          "sha1": "92492072aa23d8313824f7b277525f2f60f4e49c"
+        },
+        {
+          "path": "fonts\/Inter-Bold.woff2",
+          "dir": false,
+          "file": true,
+          "perms": "0644",
+          "size": 107124,
+          "sha1": "41315e813cf04f2097c7e894b269dec635003ab4"
+        },
+        {
+          "path": "fonts\/Inter-SemiBold.woff",
+          "dir": false,
+          "file": true,
+          "perms": "0644",
+          "size": 159076,
+          "sha1": "b1912c977e8d60132f8c59f98439f8293bebe4fd"
+        },
+        {
+          "path": "theme.jpg",
+          "dir": false,
+          "file": true,
+          "perms": "0644",
+          "size": 29334,
+          "sha1": "8b4595c590335274be5954490a7b91e4ac572ce1"
+        },
+        {
+          "path": "manifest.php",
+          "dir": false,
+          "file": true,
+          "perms": "0644",
+          "size": 1199,
+          "sha1": "e5ea299456283fb74dcf48b76833146647e66b63"
+        },
+        {
+          "path": "responsive.css",
+          "dir": false,
+          "file": true,
+          "perms": "0644",
+          "size": 16075,
+          "sha1": "96857dd3bc4c257e5aca0538be015c626aca8254"
+        },
+        {
+          "path": "harmony-custom.css",
+          "dir": false,
+          "file": true,
+          "perms": "0644",
+          "size": 30,
+          "sha1": "53384476e5ef395d178c3e7ae09189100270a6e1"
+        },
+        {
+          "path": "lineicon.css",
+          "dir": false,
+          "file": true,
+          "perms": "0644",
+          "size": 193877,
+          "sha1": "43f5069dbf3d98fcf381085582be319c91bfac9f"
+        }
+      ]
+    }
+  }
+}

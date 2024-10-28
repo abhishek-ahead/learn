@@ -27,8 +27,8 @@ if ($attachUserTags) {
   var composeCommentInstance;
   en4.core.runonce.add(function() {
     // Scroll to comment
-    if( window.location.hash != '' ) {
-      var hel = scriptJquery(window.location.hash);
+    if( window.proxyLocation.hash != '' ) {
+      var hel = scriptJquery(window.proxyLocation.hash);
       if( hel ) {
         window.scrollTo(hel);
       }

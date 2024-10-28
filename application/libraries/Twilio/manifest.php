@@ -2,7 +2,7 @@
   'package' => array(
     'type' => 'library',
     'name' => 'Twilio',
-    'version' => '6.7.0',
+    'version' => '7.0.0',
     'path' => 'application/libraries/Twilio',
     'repository' => 'socialengine.com',
     'title' => 'Twilio API',

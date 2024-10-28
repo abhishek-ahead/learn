@@ -14,7 +14,7 @@ return array(
   'package' => array(
     'type' => 'module',
     'name' => 'activity',
-    'version' => '6.7.0',
+    'version' => '7.0.0',
     'revision' => '$Revision: 10267 $',
     'path' => 'application/modules/Activity',
     'repository' => 'socialengine.com',
@@ -30,12 +30,12 @@ return array(
       ),
     ),
     'actions' => array(
-       'install',
-       'upgrade',
-       'refresh',
-       //'enable',
-       //'disable',
-     ),
+      'install',
+      'upgrade',
+      'refresh',
+      //'enable',
+      //'disable',
+    ),
     'callback' => array(
       'path' => 'application/modules/Activity/settings/install.php',
       'class' => 'Activity_Installer',
@@ -47,6 +47,18 @@ return array(
     'files' => array(
       'application/languages/en/activity.csv',
     ),
+  ),
+  //Load by default css / js file ---------------------------------------------------------------------
+  'loadDefault' => array(
+    "js" => array(
+      'application/modules/Activity/externals/scripts/composer.js',
+      'externals/jQuery/mention/jquery.mentionsInput.js',
+      'externals/jQuery/schedule/bootstrap.min.js',
+      'externals/jQuery/schedule/bootstrap-datetimepicker.min.js',
+    ),
+    'css' => array(
+      'application/modules/Activity/externals/styles/tooltip.css',
+    )
   ),
   // Hooks ---------------------------------------------------------------------
   'hooks' => array(
@@ -74,13 +86,55 @@ return array(
       'event' => 'onItemDeleteBefore',
       'resource' => 'Activity_Plugin_Core',
     ),
+    array(
+      'event' => 'onRenderLayoutDefault',
+      'resource' => 'Activity_Plugin_Core'
+    ),
+    array(
+      'event' => 'onRenderLayoutDefaultSimple',
+      'resource' => 'Activity_Plugin_Core'
+    ),
   ),
+  // Compose -------------------------------------------------------------------
+  'composer' => array(
+    'albumvideo' => array(
+      'script' => array('_composeAlbumVideo.tpl', 'activity'),
+      'plugin' => 'Activity_Plugin_AlbumVideoComposer',
+    ),
+    'activitylink' => array(
+      'script' => array('_composeLink.tpl', 'activity'),
+      'plugin' => 'Activity_Plugin_LinkComposer',
+      'auth' => array('core_link', 'create'),
+    ),
+    'fileupload' => array(
+      'script' => array('_composefileupload.tpl', 'activity'),
+      'plugin' => 'Activity_Plugin_FileuploadComposer',
+    ),
+    'buysell' => array(
+      'script' => array('_composebuysell.tpl', 'activity'),
+      'plugin' => 'Activity_Plugin_BuysellComposer',
+    ),
+    'activitytargetpost' => array(
+      'script' => array('_composetargetpost.tpl', 'activity'),
+    ),
+  ),
+
   // Items ---------------------------------------------------------------------
   'items' => array(
     'activity_action',
     'activity_comment',
     'activity_like',
     'activity_notification',
+    'activity_background',
+    'activity_feeling',
+    'activity_feelingicon',
+    'activity_filterlist',
+    'activity_file',
+    'activity_buysell',
+    'activity_link',
+    'activity_emoji',
+    'activity_emojiicon',
+    'activity_attachment',
   ),
   // Routes --------------------------------------------------------------------
   'routes' => array(
@@ -92,12 +146,36 @@ return array(
         'action' => 'index',
       )
     ),
+    'activity_attachment_view' => array(
+      'route' => 'media/:action_id/*',
+      'defaults' => array(
+        'module' => 'activity',
+        'controller' => 'index',
+        'action' => 'attachmentview'
+      ),
+    ),
     'activity_view' => array(
       'route' => 'feed/:action_id/*',
       'defaults' => array(
         'module' => 'activity',
         'controller' => 'index',
         'action' => 'view'
+      ),
+    ),
+    'activity_onthisday' => array(
+      'route' => 'onthisday',
+      'defaults' => array(
+        'module' => 'activity',
+        'controller' => 'index',
+        'action' => 'onthisday'
+      ),
+    ),
+    'activity_sell' => array(
+      'route' => 'sell',
+      'defaults' => array(
+        'module' => 'activity',
+        'controller' => 'index',
+        'action' => 'sell'
       ),
     ),
   )

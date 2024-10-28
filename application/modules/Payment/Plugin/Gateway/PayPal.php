@@ -146,6 +146,7 @@ class Payment_Plugin_Gateway_PayPal extends Engine_Payment_Plugin_Abstract
         'CUSTOM' => $subscription->subscription_id,
         'INVNUM' => $params['vendor_order_id'],
         'ITEMAMT' => $price,
+        'SOLUTIONTYPE' => 'sole',
         'ITEMS' => array(
           array(
             'NAME' => $package->title,

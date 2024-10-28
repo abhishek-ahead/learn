@@ -16,7 +16,6 @@
 <script type="text/javascript">
   var fetchLevelSettings = function(level_id) {
     window.location.href = en4.core.baseUrl + 'admin/user/settings/level/id/' + level_id;
-    //alert(level_id);
   }
 </script>
 

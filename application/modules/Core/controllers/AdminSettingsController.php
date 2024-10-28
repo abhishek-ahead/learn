@@ -793,4 +793,37 @@ class Core_AdminSettingsController extends Core_Controller_Action_Admin
       ));
     }
   }
+
+  public function locationAction() {
+
+    $this->view->form = $form = new Core_Form_Admin_Settings_Location();
+    
+    if( _ENGINE_ADMIN_NEUTER ) {
+      $form->populate(array(
+          'core_mapApiKey' => '******',
+      ));
+    }
+
+    // Check post/valid
+    if (!$this->getRequest()->isPost()) {
+      return;
+    }
+    if (!$form->isValid($this->getRequest()->getPost())) {
+      return;
+    }
+
+    if($_POST['enableglocation'] == 1 && empty($_POST['core_mapApiKey'])) {
+      $form->addError($this->view->translate("Please enter Google Map API Key."));
+      $this->view->postParams = $_POST;
+      return;
+    }
+    
+    if ($this->getRequest()->isPost() && $form->isValid($this->_getAllParams())) {
+      $values = $form->getValues();
+      foreach ($values as $key => $value) {
+        Engine_Api::_()->getApi('settings', 'core')->setSetting($key, $value);
+      }
+      $form->addNotice('Your changes have been saved.');
+    }
+  }
 }

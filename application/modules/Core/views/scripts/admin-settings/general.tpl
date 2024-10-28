@@ -16,7 +16,7 @@
   <?php echo $this->form->render($this); ?>
 </div>
 <script>
-	scriptJquery(document).ready(function() {
+	en4.core.runonce.add(function() {
     loginLogs("<?php echo Engine_Api::_()->getApi('settings', 'core')->getSetting('core.general.enableloginlogs', '1'); ?>");
     hideShowMaintenance("<?php echo $this->maintenanceMode; ?>");
   });

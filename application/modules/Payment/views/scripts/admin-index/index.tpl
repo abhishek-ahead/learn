@@ -141,7 +141,7 @@
             <?php echo ( $user ? $user->__toString() : '<i>' . $this->translate('Deleted or Unknown Member') . '</i>' ) ?>
           </td>
           <td data-label="<?php echo $this->translate("Gateway") ?>">
-            <?php echo ( $gateway ? $gateway->title : '<i>' . $this->translate('Unknown Gateway') . '</i>' ) ?>
+            <?php echo ( $gateway ? $gateway->title : ($item->gateway_id == 3000 ? $this->translate("Wallet") : '<i>' . $this->translate('Unknown Gateway') . '</i>') ) ?>
           </td>
           <td data-label="<?php echo $this->translate("Type") ?>">
             <?php echo $this->translate(ucwords($item->type)) ?>

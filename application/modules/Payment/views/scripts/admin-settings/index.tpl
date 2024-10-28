@@ -13,7 +13,7 @@
 <?php echo $this->partial('_admin_breadcrumb.tpl', 'core', array('parentMenu' => "core_admin_main_monetization", 'parentMenuItemName' => 'core_admin_main_payment', 'childMenuItemName' => 'core_admin_main_payment_settings')); ?>
 
 <script type="text/javascript">
-  scriptJquery(document).ready(function() {
+  en4.core.runonce.add(function() {
     autoUpdateCurrency('<?php echo Engine_Api::_()->getApi('settings', 'core')->getSetting("payment.autoupdate",0); ?>');
   });
   

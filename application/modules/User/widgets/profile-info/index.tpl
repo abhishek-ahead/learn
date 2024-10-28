@@ -10,6 +10,7 @@
  * @author     John
  */
 ?>
+<?php $settings = Engine_Api::_()->getApi('settings', 'core'); ?>
 <div class="user_profile_info">
   <ul>
     <?php if( !empty($this->memberType)): ?>
@@ -78,6 +79,14 @@
         <?php echo $this->translate(Engine_Api::_()->getItem('authorization_level', $this->subject->level_id)->getTitle()); ?>
       </div>
     </li>
+    <?php $enablesigupfields = (array) json_decode(Engine_Api::_()->getApi('settings', 'core')->getSetting('user.signup.enablesigupfields', '["confirmpassword","dob","gender","profiletype","timezone","language","location"]')); ?>
+    <?php if(isset($enablesigupfields) && engine_in_array('dob', $enablesigupfields) && Engine_Api::_()->getApi('settings', 'core')->getSetting('enableglocation', 0) && !empty($this->subject->location)) { ?>
+      <li class="profile_location">
+        <div>
+          <a class="font_color" href="<?php echo 'http://maps.google.com/?q='.$this->subject->location; ?>" target="_blank"><?php echo $this->subject->location; ?></a>
+        </div>
+      </li>
+    <?php } ?>
     <?php if( $this->inviter ): ?>
         <li class="profile_invite">
           <div>

@@ -52,7 +52,7 @@ function selectAll(obj) {
 }
 
 <?php if( $this->openUser ): ?>
-scriptJquery(document).ready(function() {
+en4.core.runonce.add(function() {
   scriptJquery('#multimodify_form .admin_table_options a').each(function() {
     var el = scriptJquery(this);
     if( -1 < el.attr('href').indexOf('/edit/') ) {

@@ -25,14 +25,7 @@ class Engine_Form_Decorator_FormHTMLUpload extends Zend_Form_Decorator_Abstract
     }
     $element = $this->getElement();
     $view = $this->getElement()->getView();
-
-    $view->headScript()->appendFile(
-      $view->layout()->staticBaseUrl . 'externals/uploader/uploader.js'
-    );
-
-    $view->headLink()->appendStylesheet(
-      $view->layout()->staticBaseUrl . 'externals/uploader/uploader.css'
-    );
+ 
 
     $context = 'name="' . $element->getName() . '"';
     $context .= ' data-url="' . $element->url . '"';

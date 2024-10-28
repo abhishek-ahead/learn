@@ -39,11 +39,11 @@
           </li>
         </ul>
         <?php if($settings->getSetting('invite.enable', 1) && !empty($settings->getSetting('invite.signupenable', 0)) && Engine_Api::_()->getApi('settings', 'core')->getSetting('invite.referralforsingup', 1)) { ?>
-          <div class="invite_invite_friend">
-            <div class="invite_referral_field">
+          <div class="copy_link_container">
+            <div class="copy_link_field">
               <div class="_des font_color_light"><?php echo $this->translate("Referral Code"); ?></div>
               <input disabled="disabled" type="type" value="<?php echo $this->referral_code;?>" id="myreferralcode" />
-              <button class="copy_referral_code" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="<?php echo $this->translate("Copy");?>"><i class="far fa-copy"></i></button>
+              <button class="copy_link copy_referral_code" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="<?php echo $this->translate("Copy");?>"><i class="far fa-copy"></i></button>
             </div>
           </div>
         <?php } ?>
@@ -93,22 +93,22 @@
               </ul>
             <?php } ?>
             <?php if(Engine_Api::_()->getApi('settings', 'core')->getSetting('invite.referralforsingup', 1)) { ?>
-             <div class="invite_invite_friend_main">
+             <div class="invite_firends_container_main">
                 <h4 class="invite_tab_content_heading"><?php echo $this->translate("Share URL"); ?></h4>
-                <div class="invite_invite_friend">
-                  <div class="invite_referral_field">
+                <div class="copy_link_container">
+                  <div class="copy_link_field">
                   <div class="_des font_color_light"><?php echo $this->translate("Referral Link"); ?></div>
                     <input disabled="disabled" type="type" value="<?php echo $this->referral;?>" id="myreferrallink" />
-                    <button class="copy_referral" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="<?php echo $this->translate("Copy");?>"><i class="far fa-copy"></i></button>
+                    <button class="copy_link copy_referral" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="<?php echo $this->translate("Copy");?>"><i class="far fa-copy"></i></button>
                   </div>
-                  <div class="invite_invite_btns">
-                    <a href="javascript:void(0);" class="core_animation" id="referralLinkShare"><?php echo $this->translate("Share"); ?></a>
+                  <div class="copy_link_container_btn">
+                    <a href="javascript:void(0);" class="btn btn-primary" class="core_animation" id="referralLinkShare"><?php echo $this->translate("Share"); ?></a>
                   </div>
                 </div>
               </div>
               <script type="text/javascript">
                 // Referral Code Copy Button 
-                scriptJquery(document).on('click','.copy_referral',function (e) {
+                AttachEventListerSE('click','.copy_referral',function (e) {
                   if(scriptJquery('#myreferrallink').val().length) {
                     scriptJquery("<textarea/>").appendTo("body").val(scriptJquery('#myreferrallink').val()).select().each(function () {
                       document.execCommand('copy');
@@ -116,7 +116,7 @@
                     showSuccessTooltip('<i class="fas fa-check-circle"></i><span>'+('<?php echo $this->translate("Referral link copied successfully."); ?>')+'</span>');
                   }
                 });
-                scriptJquery(document).on('click','.copy_referral_code',function (e) {
+                AttachEventListerSE('click','.copy_referral_code',function (e) {
                   if(scriptJquery('#myreferralcode').val().length) {
                     scriptJquery("<textarea/>").appendTo("body").val(scriptJquery('#myreferralcode').val()).select().each(function () {
                       document.execCommand('copy');
@@ -285,7 +285,7 @@
       return re.test( email );
     }
 
-    scriptJquery(document).ready(function() {
+    en4.core.runonce.add(function() {
     
       scriptJquery('#invite_invite').submit(function(e) {
         e.preventDefault();
@@ -367,12 +367,12 @@
       window.open(url, "_popupWindow", 'height='+popup_height+',width='+popup_width+',location=no,menubar=no,resizable=no,status=no,toolbar=no');
     }
     
-    scriptJquery(document).on('submit', '#inviteImportIds', function(e){
+    AttachEventListerSE('submit', '#inviteImportIds', function(e){
       e.preventDefault();
       inviteUser();
     });
     
-    scriptJquery(document).on('submit', '#socialuploadfile', function(e){
+    AttachEventListerSE('submit', '#socialuploadfile', function(e){
       var socialEmails = scriptJquery('#socialMediaEmails').val();
       socialMediaEmails = scriptJquery.ajax({
         method: 'post',
@@ -387,7 +387,7 @@
         
           response = scriptJquery.parseJSON(responseHTML);
           if(response.status == 1) {
-            scriptJquery(response.message).appendTo('body');
+            scriptJquery(response.message).appendTo('#script-default-data');
             scriptJquery('#importsend_email').show();
             scriptJquery('#emailimport_content').show();
           }
@@ -407,7 +407,7 @@
       }
     }
 
-    scriptJquery(document).on('submit', '#csvuploadfile', function(e) {
+    AttachEventListerSE('submit', '#csvuploadfile', function(e) {
 
       e.preventDefault();
       var formData = new FormData();
@@ -438,7 +438,7 @@
           text = JSON.parse(response);
           if(text.status == 1) {
             scriptJquery(".select_file").find("input").val("");
-            scriptJquery(text.message).appendTo('body');
+            scriptJquery(text.message).appendTo('#script-default-data');
             scriptJquery('#importsend_email').show();
             scriptJquery('#emailimport_content').show();
             //scriptJquery('#contactImportData').html(text.message);

@@ -228,15 +228,15 @@ return array(
   ),
   array(
     'title' => 'Comments',
-    'description' => 'Shows the comments about an item.',
+    'description' => 'Shows the comments, replies, attachments in comments like photos, videos, emoticons & stickers as configured by you about an item.',
     'category' => 'Core',
     'type' => 'widget',
     'name' => 'core.comments',
     'defaultParams' => array(
-        'title' => 'Comments'
+      'title' => 'Comments'
     ),
     'requirements' => array(
-        'subject',
+      'subject',
     ),
   ),
   array(
@@ -456,5 +456,13 @@ return array(
         ),
       ),
     ),
+  ),
+  array(
+    'title' => 'My Location Detect',
+    'description' => '',
+    'category' => 'Core',
+    'type' => 'widget',
+    'name' => 'core.location-detect',
+    'autoEdit' => false,
   ),
 );

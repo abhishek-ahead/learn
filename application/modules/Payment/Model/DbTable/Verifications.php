@@ -18,7 +18,5 @@
  */
 
 class Payment_Model_DbTable_Verifications extends Engine_Db_Table {
-
   protected $_rowClass = 'Payment_Model_Verification';
-  
 }

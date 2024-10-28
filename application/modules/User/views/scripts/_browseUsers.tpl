@@ -36,11 +36,10 @@
     }
 
 ?>
-
-  <div class="row">
+  <div class="row browse_mambers">
     <?php foreach( $this->users as $user ): ?>
-      <div class="col-lg-3 col-md-6 grid_outer">
-        <div class="member_grid grid_wrapper">
+      <div class="col-lg-3 col-md-6 browse_mambers_list_item">
+        <article>
         <?php
           $showPhoto = false;
           $viewPrivacy = $user->view_privacy;
@@ -70,40 +69,40 @@
           } else {
             $profileImg = '<span class="bg_item_photo bg_thumb_profile bg_item_photo_user bg_item_nophoto bg_item_nophoto_private"></span>';
           }
-
         ?>
-        <?php echo $this->htmlLink($user->getHref(), $profileImg) ?>
-          <div class='browsemembers_results_info'>
-            <?php echo $this->htmlLink($user->getHref(), $user->getTitle()) ?>
-            <span>
-              <?php echo $user->status; ?>
-              <?php if( $user->status != "" ): ?>
-            </span>
-            <div>
-              <?php echo $this->timestamp($user->status_date) ?>
-            </div>
+          <div class="browse_mambers_list_item_thumb">
+            <?php echo $this->htmlLink($user->getHref(), $profileImg) ?>
+          </div>
+          <div class='browse_mambers_list_item_info'>
+            <div class="browse_mambers_list_item_name"><?php echo $this->htmlLink($user->getHref(), $user->getTitle(), array('class' => 'font_color')) ?></div>
+            <?php if(0 && $user->status != "" ): ?>
+              <div class="font_small">
+                <?php echo $user->status; ?>
+              </div>
+              <div class="font_small font_color_light">
+                <?php echo $this->timestamp($user->status_date) ?>
+              </div>
+            <?php endif; ?>
+            <?php if( isset($viewerId) && $viewerId != $user->getIdentity() ): ?>
+              <div class='browse_mambers_list_item_links'>
+                <div class="_friend"><?php echo $this->userFriendship($user, $this->viewer(), 'icon') ?></div>
+                <?php if(Engine_Api::_()->getApi('settings', 'core')->getSetting('core.followenable',1)  && !Engine_Api::_()->user()->getViewer()->isSelf($user)) { ?>
+                  <div class="_follow"><?php echo $this->partial('_followmembers.tpl', 'user', array('subject' => $user, 'iconType' => 'icon')); ?> </div>
+                <?php } ?>
+                <?php if(Engine_Api::_()->authorization()->getPermission($viewer, 'user', 'block') && !engine_in_array($user->getIdentity(), $this->blockedUserIds) ) :?>
+                  <div class="_block">
+                    <?php echo '<a href ="'. $this->url(array(
+                    'controller' => 'block',
+                    'action' => 'add',
+                    'user_id' => $user->getIdentity()
+                    ),'user_extended',true)
+                    . '" class = "btn btn-alt smoothbox" data-bs-toggle="tooltip" title="'. $this->translate("Block Member") . '"><i class="icon_user_block"></i></a>'; ?>
+                  </div>
+                <?php endif; ?>
+              </div>
             <?php endif; ?>
           </div>
-          <?php if( isset($viewerId) && $viewerId != $user->getIdentity() ): ?>
-            <div class='browsemembers_results_links'>
-              <?php echo $this->userFriendship($user) ?>
-              
-              <?php if(Engine_Api::_()->getApi('settings', 'core')->getSetting('core.followenable',1)  && !Engine_Api::_()->user()->getViewer()->isSelf($user)) { ?>
-                <?php echo $this->partial('_followmembers.tpl', 'user', array('subject' => $user)); ?> 
-              <?php } ?>
-              
-              <?php if(Engine_Api::_()->authorization()->getPermission($viewer, 'user', 'block') && !engine_in_array($user->getIdentity(), $this->blockedUserIds) ) :?>
-                <?php echo '<a href ="'. $this->url(array(
-                'controller' => 'block',
-                'action' => 'add',
-                'user_id' => $user->getIdentity()
-                ),'user_extended',true)
-                . '" class = "buttonlink icon_user_block smoothbox">'. $this->translate("Block Member") . '</a>'; ?>
-             <?php endif; ?>
-            </div>
-          <?php endif; ?>
-        <p class="half_border_bottom"></p>
-       </div>
+       </article>
      </div>
     <?php endforeach; ?>
   </div>

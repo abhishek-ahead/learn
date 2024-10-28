@@ -46,15 +46,7 @@ abstract class Activity_Model_Helper_Abstract
     return $this->_action;
   }
 
-  /**
-   * Accessor
-   * 
-   * @return string
-   */
-  public function direct($value, $noTranslate = false)
-  {
-    return '';
-  }
+  
 
   protected function _getItem($item, $throw = true)
   {
