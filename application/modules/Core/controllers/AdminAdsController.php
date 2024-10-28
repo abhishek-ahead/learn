@@ -19,8 +19,8 @@ class Core_AdminAdsController extends Core_Controller_Action_Admin
 {
     // Ad Campaign actions
 
-    public function indexAction()
-    {
+    public function indexAction()  
+    { 
         $this->view->navigation = $navigation = Engine_Api::_()->getApi('menus', 'core')->getNavigation('core_admin_main_ads', array(), 'core_admin_main_ads_manage');
         
         $this->view->viewer = $viewer = Engine_Api::_()->user()->getViewer();
@@ -33,11 +33,11 @@ class Core_AdminAdsController extends Core_Controller_Action_Admin
         //$paginator->setItemCountPerPage(1);
 
         // Build a list of statuses for each ad
-        $status = array();
+        $status = array();  
         foreach ($paginator as $item) {
             if (!$item->status) {
                 $status[$item->getIdentity()][] = $this->view->translate('Paused');
-            }
+            }  
             if (!$item->hasStarted()) {
                 $status[$item->getIdentity()][] = $this->view->translate('Not Started');
             }

@@ -19,22 +19,22 @@
 class User_AdminSettingsController extends Core_Controller_Action_Admin
 {
     public function indexAction()
-    {
+    {  
         return $this->_helper->redirector->gotoRoute(array(
             'route' => 'admin_default',
             'module' => 'authorization',
             'controller' => 'level',
             'action' => 'edit'
         ));
-    }
+    }  
 
     public function generalAction()
-    {
+    {  
 
     }
 
     public function emailsAction()
-    {
+    {  
         // Build the different email types
         $modules = Engine_Api::_()->getDbtable('modules', 'core')->getModulesAssoc();
 
@@ -53,18 +53,18 @@ class User_AdminSettingsController extends Core_Controller_Action_Admin
             } else {
                 $elementName = 'misc';
                 $category = 'Misc';
-            }
+            }  
 
             $emailTypesAssoc[$elementName]['category'] = $category;
             $emailTypesAssoc[$elementName]['types'][$type->type] = '_EMAIL_' . strtoupper($type->type) . '_TITLE';
             if( engine_in_array($type->type, $emailSettings) ) {
                 $emailSettingsAssoc[$elementName][] = $type->type;
-            }
+            }  
         }
 
         ksort($emailTypesAssoc);
 
-        $emailTypesAssoc = array_filter(array_merge(array(
+        $emailTypesAssoc = array_filter(array_merge(array(  
             'general' => array(),
             'misc' => array(),
         ), $emailTypesAssoc));
@@ -83,7 +83,7 @@ class User_AdminSettingsController extends Core_Controller_Action_Admin
             ));
         }
 
-        // init submit
+        // init submit  
         $form->addElement('Button', 'submit', array(
             'label' => 'Save Changes',
             'type' => 'submit',
@@ -91,7 +91,7 @@ class User_AdminSettingsController extends Core_Controller_Action_Admin
         ));
 
         // Check method
-        if( !$this->getRequest()->isPost() ) {
+        if( !$this->getRequest()->isPost() ) {  
             return;
         }
 
@@ -103,7 +103,7 @@ class User_AdminSettingsController extends Core_Controller_Action_Admin
         foreach( $form->getValues() as $key => $value ) {
             if( !is_array($value) ) continue;
 
-            foreach( $value as $skey => $svalue ) {
+            foreach( $value as $skey => $svalue ) {  
                 if( !isset($emailTypesAssoc[$key]['types'][$svalue]) ) {
                     continue;
                 }
@@ -116,7 +116,7 @@ class User_AdminSettingsController extends Core_Controller_Action_Admin
     }
 
     public function friendsAction()
-    {
+    {  
     
         $this->view->navigation = Engine_Api::_()->getApi('menus', 'core')->getNavigation('core_admin_main_settings_friends', array(), 'core_admin_main_friends');
         $form = new User_Form_Admin_Settings_Friends();
@@ -135,7 +135,7 @@ class User_AdminSettingsController extends Core_Controller_Action_Admin
         $form->saveValues();
         $form->addNotice('Your changes have been saved.');
       }
-    }
+    }  
     
     public function followAction() {
     
@@ -149,10 +149,10 @@ class User_AdminSettingsController extends Core_Controller_Action_Admin
         }
         $form->addNotice('Your changes have been saved.');
       }
-    }
+    }  
 
-    public function facebookAction()
-    {
+    public function facebookAction()  
+    {  
         $this->view->navigation = Engine_Api::_()->getApi('menus', 'core')->getNavigation('core_admin_main_socialmenus', array(), 'core_admin_main_facebook');
       
         $form = $this->view->form = new User_Form_Admin_Facebook();
@@ -163,7 +163,7 @@ class User_AdminSettingsController extends Core_Controller_Action_Admin
                 'appid' => '******',
                 'secret' => '******',
             ));
-        }
+        }  
         if( !$this->getRequest()->isPost() ) {
             return;
         }

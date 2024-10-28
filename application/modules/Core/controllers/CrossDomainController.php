@@ -19,7 +19,7 @@
 class Core_CrossDomainController extends Core_Controller_Action_Standard
 {
   public function indexAction()
-  {
+  {  
     $allowedHosts = array();
     
     // self
@@ -42,14 +42,14 @@ class Core_CrossDomainController extends Core_Controller_Action_Standard
         $allowedHosts[] = '*.' . $host;
         $allowedHosts[] = $host;
       }
-    }
+    }  
     
     // hooks
     $event = Engine_Hooks_Dispatcher::_()->callEvent('onGenerateCrossDomain');
     if( ($r = $event->getResponses()) && 
         is_array($r) ) {
       $allowedHosts += $r;
-    }
+    }  
     
     $this->view->allowedHosts = $allowedHosts;
     

@@ -16,35 +16,35 @@
  * @copyright  Copyright 2006-2020 Webligo Developments
  * @license    http://www.socialengine.com/license/
  */
-class User_SupportController extends Core_Controller_Action_User {
+class User_SupportController extends Core_Controller_Action_User {  
 
   protected $_user;
 
   public function init()
-  {
+  {  
     // Can specifiy custom id
     $id = $this->_getParam('id', null);
     $subject = null;
 
     if( null === $id )
-    {
+    {  
         if(!Engine_Api::_()->core()->hasSubject($subject)) {
             $subject = Engine_Api::_()->user()->getViewer();
             Engine_Api::_()->core()->setSubject($subject);
-        }
-    }
+        }  
+    }  
     else
     {
         $subject = Engine_Api::_()->getItem('user', $id);
-        Engine_Api::_()->core()->setSubject($subject);
+        Engine_Api::_()->core()->setSubject($subject);  
     }
 
     // Set up require's
     $this->_helper->requireUser();
     $this->_helper->requireSubject();
     $this->_helper->requireAuth()->setAuthParams(
-        $subject,
-        null,
+        $subject,  
+        null,   
         'edit'
     );
 
@@ -54,9 +54,9 @@ class User_SupportController extends Core_Controller_Action_User {
         ->initContext();
 
     $param = $this->_getParam('param', 0);
-  }
+  }  
 
-  public function indexAction() {
+  public function indexAction() {  
     
     $user = Engine_Api::_()->core()->getSubject();
     $this->view->user_id = $user->getIdentity();
@@ -65,7 +65,7 @@ class User_SupportController extends Core_Controller_Action_User {
     $page = $this->_getParam('page', 1);
 
     $table = Engine_Api::_()->getDbTable('tickets', 'core');
-    $tableName = $table->info('name');
+    $tableName = $table->info('name');  
     
     $userTable = Engine_Api::_()->getDbTable('users', 'user');
     $userTableName = $userTable->info('name');
@@ -81,11 +81,11 @@ class User_SupportController extends Core_Controller_Action_User {
     if( $formFilter->isValid($this->_getAllParams()) ) {
       $values = $formFilter->getValues();
     }
-
+ 
     foreach( $values as $key => $value ) {
       if( null === $value ) {
         unset($values[$key]);
-      }
+      }  
     }
 
     $values = array_merge(array(
