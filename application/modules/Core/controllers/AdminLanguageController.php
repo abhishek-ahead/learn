@@ -47,7 +47,7 @@ class Core_AdminLanguageController extends Core_Controller_Action_Admin
         $localeMultiOptions = array();
         foreach ($languageList as $key) {
             $dir = $this->_languagePath . '/' . $key;
-            if (!is_dir($dir)) {  
+            if (!is_dir($dir)) {    
                 continue;
             }
 
@@ -68,7 +68,7 @@ class Core_AdminLanguageController extends Core_Controller_Action_Admin
             } else {
                 $localeMultiOptions[$key] = $this->view->translate('Unknown')  . ' [' . $key . ']';
             }
-        }  
+        }    
 
         $this->view->customLocale = false;
         if (!isset($localeMultiOptions[$defaultLanguage])) {

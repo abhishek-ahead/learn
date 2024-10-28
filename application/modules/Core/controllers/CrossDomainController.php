@@ -44,12 +44,12 @@ class Core_CrossDomainController extends Core_Controller_Action_Standard
       }
     }  
     
-    // hooks
+    // hooks  
     $event = Engine_Hooks_Dispatcher::_()->callEvent('onGenerateCrossDomain');
     if( ($r = $event->getResponses()) && 
-        is_array($r) ) {
+        is_array($r) ) {  
       $allowedHosts += $r;
-    }  
+    }    
     
     $this->view->allowedHosts = $allowedHosts;
     

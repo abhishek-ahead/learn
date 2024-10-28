@@ -13,7 +13,7 @@
 
 <form method="post" class="global_form_popup">
   <div>
-    <?php if ($this->photoType == 'cover') : ?>
+    <?php if ($this->photoType == 'cover') : ?>  
       <?php if(empty($this->uploadDefaultCover)):?>
         <h3><?php echo $this->translate('Delete Cover Photo?'); ?></h3>
         <p><?php echo $this->translate("Are you sure you want to delete this cover photo?"); ?></p>

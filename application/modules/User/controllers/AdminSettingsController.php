@@ -131,10 +131,10 @@ class User_AdminSettingsController extends Core_Controller_Action_Admin
         }
         if( $values['maxfriends'] == 0 ||  $values['maxfriends'] == '') {
           return $form->addError('Please enter a valid integer value.');
-        }
+        }  
         $form->saveValues();
         $form->addNotice('Your changes have been saved.');
-      }
+      }  
     }  
     
     public function followAction() {
@@ -149,7 +149,7 @@ class User_AdminSettingsController extends Core_Controller_Action_Admin
         }
         $form->addNotice('Your changes have been saved.');
       }
-    }  
+    }   
 
     public function facebookAction()  
     {  

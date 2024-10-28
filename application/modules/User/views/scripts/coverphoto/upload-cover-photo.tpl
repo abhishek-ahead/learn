@@ -18,7 +18,7 @@
         if (li.html() === content) {
           li.html(newContent);
         }
-      }
+      }  
     );}
     document.addEventListener('DOMContentLoaded', function() {
       replaceError(

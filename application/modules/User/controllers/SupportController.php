@@ -54,7 +54,7 @@ class User_SupportController extends Core_Controller_Action_User {
         ->initContext();
 
     $param = $this->_getParam('param', 0);
-  }  
+  }   
 
   public function indexAction() {  
     
@@ -65,7 +65,7 @@ class User_SupportController extends Core_Controller_Action_User {
     $page = $this->_getParam('page', 1);
 
     $table = Engine_Api::_()->getDbTable('tickets', 'core');
-    $tableName = $table->info('name');  
+    $tableName = $table->info('name');    
     
     $userTable = Engine_Api::_()->getDbTable('users', 'user');
     $userTableName = $userTable->info('name');
@@ -85,7 +85,7 @@ class User_SupportController extends Core_Controller_Action_User {
     foreach( $values as $key => $value ) {
       if( null === $value ) {
         unset($values[$key]);
-      }  
+      }    
     }
 
     $values = array_merge(array(

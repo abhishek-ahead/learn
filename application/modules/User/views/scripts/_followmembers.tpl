@@ -11,9 +11,9 @@
  */
 ?>
 <?php
-$subject = $this->subject ? $this->subject : $subject;
+$subject = $this->subject ? $this->subject : $subject;  
 
-$followTable = Engine_Api::_()->getDbTable('follows', 'user');
+$followTable = Engine_Api::_()->getDbTable('follows', 'user');  
 $isFollow = $followTable->getFollowStatus($subject->user_id);
 
 $followClass = (!$isFollow) ? 'fa-check' : 'fa-times' ;
@@ -28,7 +28,7 @@ $iconType = $this->iconType ? $this->iconType : ' ';
   <a href='javascript:;' data-icontype="<?php echo $iconType; ?>" data-url='<?php echo $subject->getIdentity(); ?>' class='buttonlink user_follow user_follow_<?php echo $subject->getIdentity() ?> <?php echo $iconType; ?>'><i class='fa fa-times'></i><span><?php echo $this->translate('Following'); ?></span></a>
 <?php } else if($getFollowResourceStatus &&  $getFollowResourceStatus->user_approved == 0 && $getFollowResourceStatus->resource_approved == 1) { ?>
   <a href='javascript:;' data-icontype="<?php echo $iconType; ?>" data-url='<?php echo $subject->getIdentity(); ?>' class='buttonlink user_follow user_follow_<?php echo $subject->getIdentity(); ?> <?php echo $iconType; ?>' data-bs-toggle="tooltip" data-bs-title="<?php echo $this->translate('Cancel Follow Request'); ?>"><i class='fa fa-times'></i> <span><?php echo $this->translate('Requested'); ?></span></a>
-<?php } else if( $getFollowResourceStatus && $getFollowResourceStatus->user_approved == 0 && $getFollowResourceStatus->resource_approved == 1 ) { ?>
+<?php } else if( $getFollowResourceStatus && $getFollowResourceStatus->user_approved == 0 && $getFollowResourceStatus->resource_approved == 1 ) { ?>  
   <a href='javascript:;' data-icontype="<?php echo $iconType; ?>" data-url='<?php echo $subject->getIdentity(); ?>' class='buttonlink user_follow user_follow_<?php echo $subject->getIdentity(); ?> <?php echo $iconType; ?>'><i class='fa fa-times'  title='<?php echo $this->translate('Confirm'); ?>'></i> <span><?php echo $this->translate('Confirm'); ?></span></a>
 <?php } else if(empty($isFollow) && empty($getFollowResourceStatus)) { ?>
   <a href='javascript:;' data-icontype="<?php echo $iconType; ?>" data-url='<?php echo $subject->getIdentity(); ?>' class='buttonlink user_followers user_follow user_follow_<?php echo $subject->getIdentity(); ?> <?php echo $iconType; ?>'><i class='fa fa-check'></i> <span>

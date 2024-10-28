@@ -19,7 +19,7 @@
       <h3 class="mb-2">
         <?php echo $this->translate("Thanks for joining!") ?>
       </h3>
-      <p class="text-center mb-3">
+      <p class="text-center mb-3">  
         <?php
         if( !$this->verified || !$this->approved ) {
           echo $this->translate("Welcome! Once we have approved your account, you will be able to sign in.");

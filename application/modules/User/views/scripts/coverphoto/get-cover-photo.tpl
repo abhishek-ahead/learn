@@ -13,12 +13,12 @@
 
 <?php $levelId = $this->user->level_id;
   $userId = $this->user->user_id;
-   
+       
   $coverphoto = Engine_Api::_()->authorization()->getPermission($levelId, 'user', 'coverphoto');
   $coverphoto = $coverphoto ? Engine_Api::_()->core()->getFileUrl($coverphoto) : ''; 
   ?>
 <?php if (empty($this->uploadDefaultCover)) : ?>
-  <?php  if ($this->photo) : ?>
+  <?php if ($this->photo) : ?>
     <div class="profile_cover_photo cover_photo_wap b_dark">
       <?php echo $this->itemPhoto($this->photo, 'thumb.cover', '', array(
         'align' => 'left',
@@ -31,7 +31,7 @@
           <div class="cover_tip">
             <?php echo $this->translate("Drag to Reposition Cover Photo") ?>
           </div>
-        </div>
+        </div>  
       <?php endif;  ?>
     </div>
   <?php elseif (!empty($coverphoto)) : ?>

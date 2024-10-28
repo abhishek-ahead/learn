@@ -10,7 +10,7 @@
  * @author     Steve
  */
 ?>
-
+  
 <?php
   $facebookTable = Engine_Api::_()->getDbtable('facebook', 'user');
   $facebookApi = $facebookTable->getApi();
@@ -22,7 +22,7 @@
   // Not logged in
   if( !$facebookTable->isConnected() ) {
     return;
-  }
+  }  
   // Not logged into correct facebook account
   if( !$facebookTable->checkConnection() ) {
     return; 

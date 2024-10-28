@@ -30,7 +30,7 @@ class Core_AdminMenusController extends Core_Controller_Action_Admin
     $this->view->menus = $this->_menus = $menusTable->fetchAll($menusSelect);
 
     $this->_enabledModuleNames = Engine_Api::_()->getDbtable('modules', 'core')->getEnabledModuleNames();
-  }  
+  }   
      
   public function indexAction()
   {
