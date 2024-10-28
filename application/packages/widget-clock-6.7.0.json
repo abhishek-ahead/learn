@@ -1,0 +1,70 @@
+{
+  "type": "widget",
+  "name": "clock",
+  "version": "6.7.0",
+  "revision": "9747",
+  "path": "application\/widgets\/clock",
+  "repository": null,
+  "sku": null,
+  "date": "Fri, 13 Sep 2024 12:10:26 +0000",
+  "title": "Clock",
+  "description": "Displays a clock.",
+  "thumb": null,
+  "developer": null,
+  "authors": [
+    "SocialEngine Core"
+  ],
+  "meta": {
+    "date": "Fri, 13 Sep 2024 12:10:26 +0000",
+    "title": "Clock",
+    "description": "Displays a clock.",
+    "developer": null,
+    "authors": [
+      "SocialEngine Core"
+    ],
+    "changeLog": null
+  },
+  "actions": [
+    
+  ],
+  "callback": null,
+  "dependencies": null,
+  "tests": [
+    
+  ],
+  "permissions": [
+    
+  ],
+  "structure": {
+    "application\/widgets\/clock": {
+      "type": "directory",
+      "path": "application\/widgets\/clock",
+      "structure": [
+        {
+          "path": "index.tpl",
+          "dir": false,
+          "file": true,
+          "perms": "0644",
+          "size": 1927,
+          "sha1": "76691aaa75065839b1db61d8000aceaadd761de0"
+        },
+        {
+          "path": "manifest.php",
+          "dir": false,
+          "file": true,
+          "perms": "0644",
+          "size": 889,
+          "sha1": "9c523a70fa9431952cc91dad592d854551eb07ea"
+        },
+        {
+          "path": "Controller.php",
+          "dir": false,
+          "file": true,
+          "perms": "0644",
+          "size": 573,
+          "sha1": "af5a1f554e6a3c245cdba35ca67ff46ce43c0703"
+        }
+      ]
+    }
+  }
+}

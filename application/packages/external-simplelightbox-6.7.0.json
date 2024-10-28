@@ -1,0 +1,102 @@
+{
+  "type": "external",
+  "name": "simplelightbox",
+  "version": "6.7.0",
+  "revision": "9747",
+  "path": "externals\/simplelightbox",
+  "repository": null,
+  "sku": null,
+  "date": "Fri, 13 Sep 2024 12:10:20 +0000",
+  "title": "external",
+  "description": null,
+  "thumb": null,
+  "developer": null,
+  "authors": [
+    "SocialEngine Core"
+  ],
+  "meta": {
+    "date": "Fri, 13 Sep 2024 12:10:20 +0000",
+    "title": "external",
+    "description": null,
+    "developer": null,
+    "authors": [
+      "SocialEngine Core"
+    ],
+    "changeLog": null
+  },
+  "actions": [
+    
+  ],
+  "callback": null,
+  "dependencies": null,
+  "tests": [
+    
+  ],
+  "permissions": [
+    
+  ],
+  "structure": {
+    "externals\/simplelightbox": {
+      "type": "directory",
+      "path": "externals\/simplelightbox",
+      "structure": [
+        {
+          "path": "js",
+          "dir": true,
+          "file": false,
+          "perms": "0755",
+          "size": 4096,
+          "sha1": null
+        },
+        {
+          "path": "js\/simpleLightbox.js",
+          "dir": false,
+          "file": true,
+          "perms": "0644",
+          "size": 14361,
+          "sha1": "9fe01983942f6aa310f9bc47a7a04a1e3d39fa3a"
+        },
+        {
+          "path": "js\/slick.min.js",
+          "dir": false,
+          "file": true,
+          "perms": "0644",
+          "size": 42869,
+          "sha1": "2d933cb17a8e82d89f1152459a686d867fe3af31"
+        },
+        {
+          "path": "manifest.php",
+          "dir": false,
+          "file": true,
+          "perms": "0644",
+          "size": 443,
+          "sha1": "2a18b7fb9ccd156b93cefedacc1152f0be7b69c8"
+        },
+        {
+          "path": "css",
+          "dir": true,
+          "file": false,
+          "perms": "0755",
+          "size": 4096,
+          "sha1": null
+        },
+        {
+          "path": "css\/simpleLightbox.css",
+          "dir": false,
+          "file": true,
+          "perms": "0644",
+          "size": 6394,
+          "sha1": "6f6c746eb7e7054250e75edf87ec214612ae757b"
+        },
+        {
+          "path": "css\/slick.css",
+          "dir": false,
+          "file": true,
+          "perms": "0644",
+          "size": 1776,
+          "sha1": "a94a059b3178b4adec09e3281ace2819a30095a4"
+        }
+      ]
+    }
+  }
+}

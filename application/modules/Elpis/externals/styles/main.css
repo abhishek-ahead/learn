@@ -1,0 +1,111 @@
+/* LP MEMBERS */
+.elips_member_box{
+	border-radius:6px;
+	overflow:hidden;
+	border-width:1px;
+	margin-top:30px;
+}
+.elips_member_box *{
+  text-align:center !important;
+}
+.elips_member_box > a{
+	display:block;
+	width:100%;
+	height:150px;
+}
+.elips_member_box .name > a{
+	font-weight:bold;
+	word-break:break-word;
+}
+.elips_member_box .info{
+  padding:10px;
+}
+.elips_member_box .info .friends{
+  font-size:90%;
+}
+.elips_member_box{
+  background:$theme_list_background_color;	
+}
+/* LP BLOGS */
+.elpis_lp_blogs{
+  text-align:center !important;
+}
+.elpis_lp_blogs_inner{
+  margin-top:30px;
+}
+.elpis_lp_blogs_inner .blogs_lp_main{
+	position:relative;
+	height:350px;
+}
+.elpis_lp_blogs_inner .blogs_photo{
+	height:100%;
+}
+.elpis_lp_blogs_inner .blogs_photo > a{
+	width:100%;
+  height:100%;
+  display:block;
+  border-radius:10px;
+  overflow:hidden;
+}
+.elpis_lp_blogs_inner .info{
+	position:absolute;
+	top:50%;
+  transform:translate(0,-50%);
+	max-width:80%;
+	margin:auto;
+	display:block;
+	left:0;
+	right:0;
+}
+.elpis_lp_blogs_inner .info *{
+  text-align:center;	
+	color:#fff !important;
+}
+.elpis_lp_blogs_inner .blogs_photo span{
+	border:0;
+	background-blend-mode:overlay;
+	background-color:rgba(0,0,0,0.5);
+}
+.elpis_lp_blogs_inner .info .title{
+	font-size:1.6rem;
+	font-weight:600;
+  margin-bottom:4px;
+}
+.elpis_lp_blogs .viewlink{
+  float:none;
+  text-align:center;
+  display:inline-block;
+  margin:30px auto 0;
+  border-width:1px;
+  border-color:$theme_button_background_color;
+  color:$theme_button_background_color;
+  border-radius:50px;
+  padding:8px 18px;
+  font-size:0.95em;
+  transition:0.5s;
+}
+.elpis_lp_blogs .viewlink:hover{
+  background-color:$theme_button_background_color;
+  color:$theme_button_font_color;
+}
+@media(max-width:767px){
+ .elpis_lp_blogs_inner .blogs_lp_main{
+	 margin:20px;
+ }	
+}
+@media(min-width:768px){
+.elpis_lp_blogs_inner{
+	display:grid;
+	grid-template-columns:1fr 1fr;
+	grid-gap:10px;
+}
+}
+@media(min-width:768px) and (max-width:900px){
+ .elpis_lp_blogs_inner .blogs_lp_main,
+ .elpis_lp_blogs_inner .blogs_photo > a{
+	 height:30vh;	
+ }	
+ .elpis_lp_blogs_inner .info{
+   top:25%;
+ }
+}

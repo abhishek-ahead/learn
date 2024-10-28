@@ -1,0 +1,86 @@
+{
+  "type": "external",
+  "name": "Selectize",
+  "version": "6.7.0",
+  "revision": "9747",
+  "path": "externals\/selectize",
+  "repository": null,
+  "sku": null,
+  "date": "Fri, 13 Sep 2024 12:10:20 +0000",
+  "title": "external",
+  "description": null,
+  "thumb": null,
+  "developer": null,
+  "authors": [
+    "SocialEngine Core"
+  ],
+  "meta": {
+    "date": "Fri, 13 Sep 2024 12:10:20 +0000",
+    "title": "external",
+    "description": null,
+    "developer": null,
+    "authors": [
+      "SocialEngine Core"
+    ],
+    "changeLog": null
+  },
+  "actions": [
+    
+  ],
+  "callback": null,
+  "dependencies": null,
+  "tests": [
+    
+  ],
+  "permissions": [
+    
+  ],
+  "structure": {
+    "externals\/selectize": {
+      "type": "directory",
+      "path": "externals\/selectize",
+      "structure": [
+        {
+          "path": "js",
+          "dir": true,
+          "file": false,
+          "perms": "0755",
+          "size": 4096,
+          "sha1": null
+        },
+        {
+          "path": "js\/selectize.js",
+          "dir": false,
+          "file": true,
+          "perms": "0644",
+          "size": 47421,
+          "sha1": "8939fdad64ea25cab002d0a8edd6fbdb0557b0f1"
+        },
+        {
+          "path": "manifest.php",
+          "dir": false,
+          "file": true,
+          "perms": "0644",
+          "size": 430,
+          "sha1": "15072639f195d4b0200e60b6f757ea8fc6d97b35"
+        },
+        {
+          "path": "css",
+          "dir": true,
+          "file": false,
+          "perms": "0755",
+          "size": 4096,
+          "sha1": null
+        },
+        {
+          "path": "css\/normalize.css",
+          "dir": false,
+          "file": true,
+          "perms": "0644",
+          "size": 7716,
+          "sha1": "cce40264537821061dd20f50f4d1efbce6660829"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,805 @@
+
+/* $Id:main.css 9191 2011-08-20 00:00:03Z john $ */
+/*PAYMENT FORM*/
+/*SignUp Payment Page*/
+.signup_subscriptions_plans .layout_page_user_signup_index .layout_core_content{
+	width:100%;
+}
+.payment_subscription_plans > div{
+	max-width:600px;
+	float:none !important;
+	margin:auto;
+	border-width:1px;
+	border-radius:10px;
+	padding:0.8em;
+}
+.payment_subscription_plans div > h3{
+	background-color:$theme_list_background_color_alt;
+	border-width:0 !important;
+	border-radius:5px !important;
+	font-weight:bold;
+	box-shadow:inherit !important;
+	padding:0.6em 0.5em !important;
+	margin:0 0 10px !important;
+	text-align:center !important;
+}
+.payment_subscription_plans > div > div > h3 + p{
+	text-align:center !important;
+	margin:0;
+	font-size:1em !important;
+}
+.payment_subscription_plans p{
+	max-width:100% !important;
+}
+.payment_subscription_plans ul.form-errors{
+	margin:0 0 10px;
+}
+.payment_subscription_plans .form-wrapper .form-label{
+	display:none;
+}
+.payment_subscription_plans .form-wrapper .form-element{
+	min-width:100% !important;
+	max-width:100% !important;
+	width:100%;
+}
+.payment_subscription_plans .form-element .form-options-wrapper li{
+	position:relative;
+	overflow:hidden;
+}
+.payment_subscription_plans .form-element .form-options-wrapper li > input{
+	visibility:hidden;
+	position:absolute;
+	opacity:0;
+}
+.payment_subscription_plans .form-element .form-options-wrapper li label{
+	padding:10px;
+	border-width:1px;
+	border-radius:10px;
+	margin:0 0 15px;
+	width:100%;
+}
+.payment_subscription_plans .form-element .form-options-wrapper li label:after{
+	content:"";
+	border:1px solid $theme_border_color;
+	border-radius:50%;
+	position:absolute;
+	top:10px;
+	right:10px;
+	height:24px;
+	width:24px;
+}
+.payment_subscription_plans .form-element .form-options-wrapper li input:checked + label{
+	border-color:$theme_button_background_color;
+}
+.payment_subscription_plans .form-element .form-options-wrapper li input:checked + label:after{
+	content:"\\f00c";
+	background-color:$theme_button_background_color;
+	border-color:$theme_button_background_color;
+	font-family:'Font Awesome 6 Free';
+	font-weight:700;
+	color:$theme_button_font_color;
+	display:flex;
+	align-items:center;
+	justify-content:center;
+}
+.payment_subscription_plans #submit-wrapper #submit-label,
+.payment_subscription_plans #execute-wrapper #submit-label{
+	display:none;
+}
+.payment_subscription_plans #submit-wrapper button[type=submit],
+.payment_subscription_plans #execute-wrapper button[type=submit]{
+	display:block;
+	width:100%;
+	padding:.8em;
+}
+.payment_subscription_plans .plan_details{
+	border-radius:10px;
+	border-width:1px;
+	padding:0.625rem;
+	margin-bottom:1rem;
+}
+.payment_subscription_plans .plan_details > p{
+	max-width:100%;
+	display:flex;
+	justify-content:space-between;
+	margin:0;
+	padding:0;
+}
+.payment_subscription_plans .plan_details > p + p{
+	border-top-width:1px;
+	border-top-style:dashed;
+	margin-top:10px;
+	padding-top:10px;
+}
+/* PAYMENT SUBSCRIBE PLAN */
+.payment_subscribe_plan > ul{
+	display:flex;
+	flex-wrap:wrap;
+	margin:0 -10px;
+}
+.payment_subscribe_plan > ul > li{
+	box-sizing:border-box;
+	text-align:center;
+	width:100%;
+	padding:0 10px;
+}
+.layout_middle .payment_subscribe_plan > ul > li{
+	max-width:33.33%;
+}
+.layout_middle .payment_subscribe_plan > ul{
+	justify-content:center;
+}
+.payment_subscribe_plan > ul > li ._cont{
+	padding:10px;
+	border-radius:10px 10px 0 0;
+}
+.layout_middle .payment_subscribe_plan > ul > li ._cont{
+	border-radius:10px;
+	border-width:1px;
+}
+.plan_box ._title{
+	text-align:center;
+	font-weight:bold;
+	margin-bottom:10px;
+	font-size:22px;
+}
+.plan_box ._desc{
+	text-align:center;
+	max-width:90%;
+	margin:auto;
+	margin-bottom:20px;
+}
+.layout_middle .payment_subscribe_plan > ul > li ._cont > ul{
+	margin:0 -10px;
+}
+.plan_box ul > li{
+	padding:10px;
+	border-top-width:1px;
+	text-align:center;
+}
+.plan_box ul > li b{
+	margin-top:5px;
+	display:block;
+}
+.payment_subscribe_plan > ul > li button{
+	margin:auto !important;
+	display:block;
+}
+
+@media(max-width:767px){
+	.layout_middle .payment_subscribe_plan > ul > li{
+		max-width:100%;
+	}
+}
+/*PAYMENT PROCESS*/
+.payment_process_gateway{
+	border-width:1px;
+	border-radius:10px;
+	max-width:600px;
+	margin:50px auto;
+	padding:0.8em;
+}
+.payment_process_gateway form > h3{
+	background-color:$theme_list_background_color_alt;
+	border-width:0 !important;
+	border-radius:5px !important;
+	font-weight:bold;
+	box-shadow:inherit !important;
+	padding:0.6em 0.5em !important;
+	margin:0 0 10px !important;
+	text-align:center !important;
+}
+.payment_process_gateway_buttons{
+	border-top:1px dashed $theme_border_color;
+	margin-top:15px;
+  padding-top:10px;
+}
+.payment_process_gateway_buttons > div{
+	margin-top:10px;
+}
+.payment_process_gateway_buttons > div button{
+	padding:0;
+  height:45px;
+	margin:0 auto;
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	width:100%;
+}
+.payment_process_gateway_buttons > div button img{
+	margin-right:10px;
+	width:24px;
+}
+[dir="rtl"] .payment_process_gateway_buttons > div button img{
+	margin-left:10px;
+	margin-right:0;
+}
+.payment_process_loading{
+	text-align:center;
+	padding:100px 0;
+}
+.payment_process_loading span{
+	display:block;
+	margin-top:15px;
+}
+.payment_process_message{
+	padding:100px 0;
+}
+.payment_process_message_icon{
+	font-size:50px;
+}
+.payment_process_message_success .payment_process_message_icon{
+	color:#1db575;
+}
+.payment_process_message_fail .payment_process_message_icon{
+	color:#ce3037;
+}
+.payment_process_message_wait .payment_process_message_icon{
+	color:#e6bc1b;
+}
+.payment_process_message_title{
+	font-size:25px;
+	margin-top:20px;
+}
+.payment_process_message_btn{
+	margin-top:20px;
+}
+/*PAYMENT TABS*/
+.user_setting_global_form .manage_table{
+	white-space:nowrap;
+	overflow-x:auto;
+}
+.dark_mode .manage_table table th{
+  background-color:#1e1e1e !important;
+}
+.payment_tabs_wrapper{
+	padding:15px !important;
+}
+.payment_tabs_wrapper .tabs{
+	margin:0 0 15px !important;
+}
+/*TRANSACTION PAGE*/
+.payment_transaction_history h3{
+	margin:0 0 10px;
+	padding:0;
+}
+.payment_icon_view:before,
+.payment_icon_attachment:before{
+	font-family:'Font Awesome 6 Free';
+	font-weight:700;
+}
+.payment_icon_view:before{
+	content:"\\f06e";
+}
+.payment_icon_attachment:before{
+	content:"\\f0c6";
+}
+.payment_transaction_details_popup{
+	margin:15px 0 0 15px;
+	width:350px;
+}
+.payment_transaction_details_popup h3{
+	padding:0 0 5px;
+}
+.payment_transaction_details_popup tr{
+	border-top-width:1px;
+	border-top-style:dashed;
+	vertical-align:top;
+}
+.payment_transaction_details_popup td{
+	padding:10px 0;
+	width:50%;
+}
+.payment_transaction_details_popup td:last-child{
+	padding-left:10px;
+	word-break:break-all;
+}
+[dir="rtl"] .payment_transaction_details_popup td:last-child{
+	padding-left:0;
+	padding-right:10px;
+}
+/*SUBSCRIPTIONS TABLE CSS START HERE*/
+.my_subscription_plan_head{
+	display:flex;
+	align-items:center;
+	justify-content:flex-start;
+	margin-bottom:15px;
+}
+.my_subscription_plan_head h3{
+	margin:0px 15px 0px 0px;
+	padding:0;
+	flex:1;
+}
+[dir="rtl"] .my_subscription_plan_head h3{
+	margin-right:10px;
+	margin-left:0px;
+}
+.my_subscription_plan_head div > .btn{
+	border-color:$theme_button_background_color !important;
+	color:$theme_button_background_color !important;
+	padding:5px 12px;
+	font-size:0.95em;
+}
+.my_subscription_plan_head div > .btn:hover{
+	border-color:$theme_button_background_color !important;
+	color:$theme_button_font_color !important;
+	background-color:$theme_button_background_color !important;	
+}
+.plan_active_details{
+	display:flex;
+	align-items:center;
+	flex-wrap:wrap;
+	justify-content:space-between;
+	border-radius:10px;
+	padding:12px !important;
+	width:100%;
+	margin:10px 0 20px;
+	border-width:1px;
+}
+.plan_active_details_inner{
+	width:100%;
+}
+.plan_active_details_inner_title{
+	width:100%;
+}
+.plan_active_details_inner_title h5{
+	margin-bottom:0;
+	color:$theme_headline_color;
+}
+.plan_active_details_inner > ul{
+	display:flex;
+	align-items:center;
+	justify-content:flex-start;
+	flex-wrap:wrap;
+	width:100%;
+  margin:0 -5px;
+}
+.plan_active_details_inner > ul > li{
+	width:25%;
+	padding:10px 5px 0;
+}
+.plan_active_details_inner > ul > li > span{
+	display:block;
+	margin-bottom:5px;
+	color:$theme_font_color_light;
+}
+.plan_active_details_inner > ul > li > h6{
+  color:$theme_headline_color;
+	margin-bottom:0;
+}
+.payment_subscription_plans_table{
+	width:100%;
+	margin:0 auto;
+	text-align:center;
+	border-radius:20px;
+	overflow:hidden;
+}
+.dark_mode .payment_subscription_plans_table{
+	background-color:#3b3b3b !important;
+}
+.light_mode .payment_subscription_plans_table{
+	background-color:#ffffff !important;
+}
+.dark_mode .payment_subscription_plans_table *{
+	color: #fff !important;
+}
+.light_mode .payment_subscription_plans_table *{
+ color:#000 !important;
+}
+.payment_subscription_plans_table_header{
+	padding:30px 20px;
+	background-color:$theme_list_background_color_alt;
+}
+.payment_subscription_plans_overlap .payment_subscription_plans_table_header{
+	padding-bottom:50px;
+}
+.light_mode .payment_subscription_plans_table .payment_subscription_plans_table_header{
+	background-color:#fff !important;
+}
+.dark_mode .payment_subscription_plans_table .payment_subscription_plans_table_header{
+	background-color:#2f2f2f !important;
+}
+.light_mode .payment_subscription_plans_table .payment_subscription_plans_table_header *{
+	color:#000 !important;
+}
+ .dark_mode .payment_subscription_plans_table .payment_subscription_plans_table_header *{
+	color:#fff !important;
+}
+.payment_subscription_plans_table_heading{
+	font-size:2em;
+	margin-bottom:8px;
+	text-align:center;
+	letter-spacing:1px;
+	font-weight:bold;
+	line-height:140%;
+}
+.payment_subscription_plans_table_des{
+	margin-bottom:20px;
+	text-align:center;
+	line-height:180%;
+	font-size:1em;
+}
+.payment_subscription_plans_listing{
+	display:flex;
+	justify-content:center;
+	flex-wrap:wrap;
+	margin:50px 0px 0px;
+	padding-bottom:25px;
+}
+.payment_subscription_plans_overlap .payment_subscription_plans_table_header + .payment_subscription_plans_listing{
+	margin-top:-28px;
+}
+.payment_subscription_plans_listing_item{
+	padding-bottom:30px;
+	width:32%;
+  margin:0 5px 20px;
+}
+.payment_subscription_plans_listing_item.heighlighted{
+	padding-bottom:0;
+	top:-30px;	
+	z-index:1;
+	position:relative;
+}
+.payment_subscription_plans_listing_item article{
+	border-width:1px;
+	position:relative;
+	padding:12px;
+	border-radius:20px;
+	height:100%;
+	display:flex;
+	flex-direction:column;
+	background-color:$theme_list_background_color;
+}
+.dark_mode .payment_subscription_plans_listing_item article{
+  background-color:#646464 !important;
+}
+.light_mode .payment_subscription_plans_listing_item article{
+  background-color:#ffffff !important;
+}
+.payment_subscription_plans_listing_item.heighlighted article{
+	border-width:4px;
+	border-color:$theme_button_background_color;
+}
+.payment_subscription_plans_listing_top{
+	background-color:$theme_list_background_color_alt;
+	padding:20px 15px;
+	border-radius:20px;
+	min-height:120px;
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	flex-direction:column;
+}
+.light_mode .payment_subscription_plans_listing_top{
+	background-color:#f5f5f5 !important;
+}
+.dark_mode .payment_subscription_plans_listing_top {
+	background-color: #505050 !important;
+}
+/*Top Content*/
+.payment_subscription_plans_listing_img{
+	background-size:cover;
+	background-position:center;
+	height:80px;
+	width:80px;
+	margin:0 auto 10px;
+}
+.payment_subscription_plans_listing_title span{
+	display:block;
+	font-size:1.5em;
+	padding:0 10px 10px;
+	text-align:center;
+	font-weight:600;
+}
+.payment_subscription_plans_listing_content{
+	position:relative;
+	text-align:center;
+}
+.payment_subscription_plans_listing_content .price{
+	position:relative;
+	display:inline-block;
+	line-height:200%;
+}
+.payment_subscription_plans_listing_content .price span{    
+	font-size:1.4em;
+	vertical-align:middle;
+	font-weight:600;
+	color:$theme_button_background_color;
+}
+.payment_subscription_plans_listing_content .price sup{
+	font-size:1.2em;    
+	vertical-align:super;
+}
+.payment_subscription_plans_listing_content .price sub{
+	font-size:1em;    
+	bottom:auto;
+	vertical-align:middle;
+	text-transform:capitalize;
+}
+.payment_subscription_plans_listing_content .duration{
+	font-size:1em; 
+	margin-bottom:0;
+}
+[dir="rtl"] .payment_subscription_plans_listing_content .duration{
+	text-align:center !important;
+}
+.payment_subscription_plans_listing_content .duration span{
+	text-transform:capitalize;
+}
+.payment_subscription_plans_listing_hint{
+	border-bottom-width:0px;
+	font-style:normal;
+	font-size:95%;
+	text-align:center;
+	min-height:70px;
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	flex-direction:column;
+	padding:8px 0;
+	text-align:center !important;
+}
+/*Features*/
+ul.payment_subscription_plans_listing_features{
+	list-style-type:none;
+	margin:0;
+	padding:0;
+	text-align:left;
+}
+.payment_subscription_plans_listing_features.iscenter{
+	text-align:center !important;
+}
+.payment_subscription_plans_listing_features li{
+	border-bottom-width:1px;
+	border-bottom-style:dashed;
+	height:60px;
+	padding:6px 0;
+	overflow:hidden;
+	margin:0px;
+	display:flex;
+	align-items:center;
+	justify-content:flex-start;
+	font-size:95%;
+}
+.payment_subscription_plans_listing_features.iscenter li{
+	justify-content:center;	
+	text-align:center !important;
+}
+.payment_subscription_plans_listing_features li .payment_font_icon{
+	margin-right:6px;
+	vertical-align:middle;
+	width:20px;
+	height:20px;
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	position:relative;
+	z-index:1;
+	color:$theme_button_background_color;
+	font-size:12px;
+}
+[dir="rtl"] .payment_subscription_plans_listing_features li .payment_font_icon{
+	margin-right:0px;
+	margin-left:6px;
+}
+.payment_subscription_plans_listing_features li .payment_font_icon::after{
+	content:'';
+	width:100%;
+	height:100%;
+	border-radius:50%;
+	background-color:$theme_button_background_color;
+	display:block;
+	position:absolute;
+	left:0;
+	right:0;
+	margin:auto;
+	z-index:0;
+	opacity:0.1;
+}
+.payment_subscription_plans_listing_features li .payment_custom_tip_show{
+	margin-left:8px;
+	cursor:pointer;
+}
+[dir="rtl"] .payment_subscription_plans_listing_features li .payment_custom_tip_show{
+	margin-left:0;
+	margin-right:8px;
+}
+.payment_subscription_plans_listing_features li span{
+	overflow:hidden;
+	flex:1;
+	height:100%;
+	display:flex;
+	align-items:center;
+	overflow-y:auto;
+	margin-right:5px;
+}
+[dir="rtl"] .payment_subscription_plans_listing_features li span{
+	margin-left:5px;
+	margin-right:0;
+}
+.payment_subscription_plans_listing_features.iscenter li span{
+	flex:inherit;
+}
+.payment_subscription_plans_listing_features li span::-webkit-scrollbar-track{
+	background-color:transparent;
+}
+.payment_subscription_plans_listing_features li span::-webkit-scrollbar{
+	width:0px;
+	background-color:transparent;
+}
+.payment_subscription_plans_listing_features li span::-webkit-scrollbar-thumb{
+	background-color:transparent;
+}
+.payment_subscription_plans_listing_features li .mCSB_dragger{
+	min-height:10px !important;
+}
+.payment_subscription_plans_listing_features.iscenter li,
+.payment_subscription_plans_listing_features.iscenter li .mCSB_container{
+	text-align:left;
+}
+/*Footer Button*/
+.payment_subscription_plans_listing_footer{
+	position:relative;
+	padding:20px 10px 0;
+	text-align:center !important;
+	margin-top:auto;
+}
+.payment_subscription_plans_listing_footer input{
+	margin-top:10px;
+	opacity:0;
+	position:absolute;
+	visibility:hidden;
+}
+.payment_subscription_plans_listing_footer a{
+	background-color:$theme_button_background_color;
+	border-radius:50px;
+  color:$theme_button_font_color !important;
+	display:inline-flex;
+	align-items:center;
+  justify-content:center;
+	font-size:14px;
+	font-weight:600;
+	position:relative;
+	height:50px;
+	margin:0 auto;
+	text-decoration:none;
+	text-align:center;
+	padding:0 30px;
+	transition:0.5s;
+}
+.payment_subscription_plans_listing_footer:hover a{
+	background-color:$theme_button_background_color;
+	color:$theme_button_font_color !important;
+	text-decoration:none;
+}
+/*Ribbon*/
+.payment_subscription_plans_listing_label{
+  position:absolute;
+  top:0;
+  right:0;
+  width:110px;
+  height:110px;
+  overflow:hidden;
+}
+.payment_subscription_plans_listing_label div{
+  background-color:$theme_button_background_color;
+	color:$theme_button_font_color;
+  font-size:15px;
+  font-weight:bold;
+  text-align:center;
+  text-transform:uppercase;
+  position:relative;
+  padding:5px 10px;
+	top:18px;
+  width:158px;
+}
+.payment_subscription_plans_listing_label.left{
+	left:0
+}
+.payment_subscription_plans_listing_label.left > div{
+  left:-45px;
+  -webkit-transform:rotate(-45deg) translate3d(0, 0, 0);
+  -moz-transform:rotate(-45deg) translate3d(0, 0, 0);
+  -ms-transform:rotate(-45deg) translate3d(0, 0, 0);
+  -o-transform:rotate(-45deg) translate3d(0, 0, 0);
+}
+.payment_subscription_plans_listing_label.right{
+	right:0;
+}
+.payment_subscription_plans_listing_label.right > div{
+  left:-8px;
+  -webkit-transform:rotate(45deg) translate3d(0, 0, 0);
+  -moz-transform:rotate(45deg) translate3d(0, 0, 0);
+  -ms-transform:rotate(45deg) translate3d(0, 0, 0);
+  -o-transform:rotate(45deg) translate3d(0, 0, 0);
+}
+/*SUBSCRIPTIONS TABLE CSS END HERE*/
+/*NOTE CSS START HERE*/
+.payment_subscription_plans_listing_note{
+	padding:20px 0;
+}
+.payment_rich_content{
+	overflow:hidden;
+}
+.payment_rich_content p,
+.payment_rich_content ul,
+.payment_rich_content ol{
+	line-height:150%;
+	margin-bottom:10px;
+}
+.payment_rich_content ul{
+	list-style:disc;
+}
+.payment_rich_content ul,
+.payment_rich_content ol{
+	padding-left:20px;
+}
+[dir="rtl"] .payment_rich_content ul,
+[dir="rtl"] .payment_rich_content ol{
+	padding-left:0;
+	padding-right:20px;
+}
+.payment_rich_content img{
+	margin:5px;
+	max-width:100%;
+	height:auto;
+}
+/*NOTE CSS END HERE*/
+@media only screen and (max-width:991px){
+	.plan_active_details_inner > ul > li{
+		width:33.33%;
+	}
+}
+@media only screen and (max-width:768px){
+	.payment_rich_content iframe{
+		width:100% !important;
+	}
+	.payment_subscription_plans_table{
+		flex-wrap:wrap;
+	}
+	.payment_subscription_plans_listing_item{
+		width:47%;
+	}
+	.payment_subscription_plans_listing_footer a{
+		margin-bottom:0;
+	}
+	.plan_active_details_inner > ul > li{
+		width:50%;
+	}
+}
+@media only screen and (max-width:600px){
+	.plan_active_details{
+		padding:12px !important;
+		margin:12px 0 6px;
+	}
+	.plan_active_details_inner strong{
+		flex:inherit;
+		display:block;
+		margin:5px 0 0 !important;
+	}
+	.plan_active_details_inner > ul > li{
+		width:100%;
+	}
+}	
+@media only screen and (max-width:480px){
+	.payment_subscription_plans_table_header{
+		padding:15px;
+	}
+	.payment_subscription_plans_table_heading{
+		font-size:1.5em;
+		font-weight:bold;
+	}
+	.payment_subscription_plans_listing_item{
+		width:100%;
+	}
+	.my_subscription_plan_head{
+		flex-wrap:wrap;
+	}
+	.my_subscription_plan_head h3{
+		margin:0 !important;
+	}
+	.my_subscription_plan_head div{
+		width:100%;
+		margin-top:12px;
+	}	
+}
