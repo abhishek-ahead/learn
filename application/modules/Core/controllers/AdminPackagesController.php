@@ -25,7 +25,7 @@ class Core_AdminPackagesController extends Core_Controller_Action_Admin
     if( !$viewer || !$viewer->getIdentity() ) {
       return $this->_helper->redirector->gotoRoute(array(), 'admin_default', true);
     }
-    $viewerLevel = Engine_Api::_()->getDbtable('levels', 'authorization')->find($viewer->level_id)->current();
+    $viewerLevel =  Engine_Api::_()->getDbtable('levels', 'authorization')->find($viewer->level_id)->current();
     if( null === $viewerLevel || $viewerLevel->flag != 'superadmin' ) {
       return $this->_helper->redirector->gotoRoute(array(), 'admin_default', true);
     }

@@ -19,7 +19,7 @@
 class Core_Form_Contact extends Engine_Form
 {
   public function init()
-  {
+  {  
     $this->setTitle('Contact Us')
       ->setDescription('_CORE_CONTACT_DESCRIPTION')
       ->setAttrib("class",'global_form')
@@ -31,7 +31,7 @@ class Core_Form_Contact extends Engine_Form
       'label' => 'Name',
       'required' => true,
       'notEmpty' => true,
-    ));
+    )); 
     
     $this->addElement('Text', 'email', array(
       'label' => 'Email Address',
@@ -52,8 +52,8 @@ class Core_Form_Contact extends Engine_Form
     if( $show_captcha && ($show_captcha > 1 || !Engine_Api::_()->user()->getViewer()->getIdentity() ) ) {
       $this->addElement('captcha', 'captcha', Engine_Api::_()->core()->getCaptchaOptions());
     }
-
-    $this->addElement('Button', 'submit', array(
+  
+    $this->addElement('Button', 'submit', array(  
       'label' => 'Send Message',
       'type' => 'submit',
       'ignore' => true

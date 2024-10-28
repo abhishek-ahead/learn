@@ -16,7 +16,7 @@
  * @copyright  Copyright 2006-2020 Webligo Developments
  * @license    http://www.socialengine.com/license/
  */
-class Core_AdminMessageController extends Core_Controller_Action_Admin
+class  Core_AdminMessageController extends Core_Controller_Action_Admin
 {
   public function mailAction()
   {
@@ -28,7 +28,7 @@ class Core_AdminMessageController extends Core_Controller_Action_Admin
       $form->target->setValue($level_ids);
     }
 
-    if( !$this->getRequest()->isPost() ) {
+    if(  !$this->getRequest()->isPost() ) {
       return;
     }
 
@@ -46,7 +46,7 @@ class Core_AdminMessageController extends Core_Controller_Action_Admin
       ->where('verified = ?', true)
       ->where('disable_adminemail = ?', '0'); // Do not email disabled members
 
-    $level_ids = $this->_getParam('target');
+    $level_ids  = $this->_getParam('target');
     if (is_array($level_ids) && !empty($level_ids)) {
       $select->where('level_id IN (?)', $level_ids);
     }

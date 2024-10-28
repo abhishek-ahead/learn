@@ -20,7 +20,7 @@ class Core_ConfirmController extends Engine_Controller_Action
 {
   public function confirmAction()
   {
-    $params = $this->getRequest()->getParams();
+    $params =  $this->getRequest()->getParams();
     $this->view->confirm_route = $params['confirm_route'];
     $this->view->deny_route = $params['deny_route'];
     $this->view->args = $params;

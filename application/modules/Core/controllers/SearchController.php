@@ -18,7 +18,7 @@
  */
 class Core_SearchController extends Core_Controller_Action_Standard
 {
-  public function indexAction()
+  public function indexAction()  
   {
     $searchApi = Engine_Api::_()->getApi('search', 'core');
 
@@ -30,7 +30,7 @@ class Core_SearchController extends Core_Controller_Action_Standard
       if (!$this->_helper->requireUser()->isValid()) {
         return;
       }
-    }
+    }  
 
     // Prepare form
     $this->view->form = $form = new Core_Form_Search();
