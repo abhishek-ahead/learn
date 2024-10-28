@@ -105,7 +105,7 @@
 
 <script type="application/javascript">
   
-  scriptJquery(document).on('submit','#core_ticket_reply',function(e){
+  AttachEventListerSE('submit','#core_ticket_reply',function(e){
     e.preventDefault();
     
     if(scriptJquery('#core_error_message').length)

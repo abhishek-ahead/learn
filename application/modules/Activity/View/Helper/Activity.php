@@ -1,21 +1,16 @@
 <?php
-/**
- * SocialEngine
+
+ /**
+ * socialnetworking.solutions
  *
- * @category   Application_Core
+ * @category   Application_Modules
  * @package    Activity
- * @copyright  Copyright 2006-2020 Webligo Developments
- * @license    http://www.socialengine.com/license/
- * @version    $Id: Activity.php 9799 2012-10-16 22:11:00Z matthew $
- * @author     John
+ * @copyright  Copyright 2014-2020 Ahead WebSoft Technologies Pvt. Ltd.
+ * @license    https://socialnetworking.solutions/license/
+ * @version    $Id: Activity.php 2017-01-12  00:00:00 socialnetworking.solutions $
+ * @author     socialnetworking.solutions
  */
 
-/**
- * @category   Application_Core
- * @package    Activity
- * @copyright  Copyright 2006-2020 Webligo Developments
- * @license    http://www.socialengine.com/license/
- */
 class Activity_View_Helper_Activity extends Zend_View_Helper_Abstract
 {
   public function activity(Activity_Model_Action $action = null, array $data = array(), $method = null, $show_all_comments = false)
@@ -24,29 +19,63 @@ class Activity_View_Helper_Activity extends Zend_View_Helper_Abstract
     {
       return '';
     }
-
+    if(empty($data['enabledModuleNames'])){
+      $data['enabledModuleNames'] = Engine_Api::_()->getDbTable('modules', 'core')->getEnabledModuleNames();
+    }
     $viewer = Engine_Api::_()->user()->getViewer();
     $activity_moderate = Engine_Api::_()->getDbtable('permissions', 'authorization')
-        ->getAllowed('user', $viewer->level_id, 'activity');
-
+        ->getAllowed('user', $viewer, 'activity');
     $form = new Activity_Form_Comment();
     $data = array_merge($data, array(
       'actions' => array($action),
       'commentForm' => $form,
-      'user_limit' => 1000,
-      'allow_delete' => 1,
+      'user_limit' => Engine_Api::_()->getApi('settings', 'core')->getSetting('activity_userlength'),
+      'allow_delete' => Engine_Api::_()->getApi('settings', 'core')->getSetting('activity_userdelete'),
       'activity_moderate' =>$activity_moderate,
       'viewAllComments' => $show_all_comments,
+      'ulInclude'=> empty($data['ulInclude']) ? true : false,
+      'onlyComment'=> empty($data['onlyComment']) ? true : false,
+      'userphotoalign' => !empty($data['userphotoalign']) ? $data['userphotoalign'] : 'left',
+      
     ));
-    
+
+//     $enabledModuleNames = Engine_Api::_()->getDbTable('modules', 'core')->getEnabledModuleNames();
+//     $view = Zend_Registry::isRegistered('Zend_View') ? Zend_Registry::get('Zend_View') : null;
+//     $module = Engine_Api::_()->getDbTable('actionTypes','activity')->getActionType($action->type);
+//     $moduleName = $module->module;
+// 
+//     foreach ($enabledModuleNames as $module){
+//       try{
+//           $attributionAllowed = Engine_Api::_()->$module()->isFeedAttributionAllowed($viewer,$view,$moduleName,$action);
+//           if($attributionAllowed){
+//             $data["isPageSubject"] = $attributionAllowed;
+//           }
+//       }catch(Exception $e){
+//         // silence
+//       }
+//     }
+
     if($method == 'update'){
-      return $this->view->partial(
-      '_activityComments.tpl',
-      'activity',
-      $data
-    );
-    }
-    else{
+       $type = !empty($data['type']) ? $data['type'] : '';
+       // If has a page, display oldest to newest
+        if( null !== ( @$page = $data['page']) ) {
+          $comments = $action->getComments('0',$page,$type);
+          $data['comments'] = $comments;
+          $data['page'] = $page;
+        } else {
+          // If not has a page, show the
+          $comments = $action->getComments(0,'zero',$type);
+          $data['comments'] = $comments;
+          $data['page'] = 0;
+        }
+        // echo "<pre>";var_dump($data);die;
+        return $this->view->partial(
+        '_activityComments.tpl',
+        'comment',
+        $data
+      );
+       
+    }else{
       return $this->view->partial(
         '_activityText.tpl',
         'activity',

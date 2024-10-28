@@ -20,6 +20,8 @@ class User_Model_DbTable_Online extends Engine_Db_Table
 {
   public function check(User_Model_User $user)
   {
+    return;
+    
     // No CLI
     if( 'cli' === PHP_SAPI ) {
       return;

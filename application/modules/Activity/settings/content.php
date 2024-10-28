@@ -13,41 +13,14 @@ return array(
   array(
     'title' => 'Activity Feed',
     'description' => 'Displays the activity feed.',
-    'category' => 'Core',
+    'category' => 'Activity',
     'type' => 'widget',
     'name' => 'activity.feed',
     'defaultParams' => array(
       'title' => 'What\'s New',
-      'max_photo' => '9',
     ),
-    'adminForm' => array(
-      'elements' => array(
-        array(
-          'Select', 'max_photo', array(
-            'label' => 'Maximum Photos displayed in Activity Feed',
-            'description' => 'Enter the maximum number of photos that you want to display as an attachment in the'
-            . ' activity feed when multiple photos are uploaded by a user. Photos exceeding this value can be viewed'
-            . ' by clicking the "+" thumbnail at the end of a photo stream in the activity feed.',
-            'value' => 8,
-            'multiOptions' => array(
-              0 => 0,
-              1 => 1,
-              2 => 2,
-              3 => 3,
-              4 => 4,
-              5 => 5,
-              6 => 6,
-              7 => 7,
-              8 => 8,
-              9 => 9,
-              10 => 10,
-              11 => 11,
-              12 => 12,
-            )
-          )
-        ),
-      )
-    ),
+    'autoEdit' => true,
+    'adminForm' => 'Activity_Form_Admin_Settings_FeedSettings',
   ),
   array(
     'title' => 'Requests',
@@ -62,4 +35,49 @@ return array(
       'viewer',
     ),
   ),
-) ?>
+  array(
+    'title' => 'Memories On This Day Banner',
+    'description' => 'Displays the banner on the Memories On This Day page.',
+    'category' => 'Activity',
+    'type' => 'widget',
+    'name' => 'activity.onthisday-banner',
+    'defaultParams' => array(
+      'title' => '',
+    ),
+    'autoEdit' => false,
+  ),
+	array(
+    'title' => 'Sell Something Page Widget',
+    'description' => 'Displays the selling items on sell page.',
+    'category' => 'Activity',
+    'type' => 'widget',
+    'name' => 'activity.sell-something',
+    'defaultParams' => array(
+      'title' => '',
+    ),
+    'autoEdit' => true,
+    'adminForm' => array(
+      'elements' => array(
+        array(
+          'Text',
+          'limit',
+          array(
+            'label' => 'How many buy sell content you want to show at a time in this widget? After the count you set below it will show View More button to load more items.',
+            'validators' => array(
+              array('Int', true),
+              array('GreaterThan', true, array(0)),
+            ),
+            'value'=>10,
+          ),
+        ),
+      ),
+    ),
+  ),
+  array(
+    'title' => 'View Photo / Video Information',
+    'description' => 'This widget displays the photo / video information on Activity Attachment View Page. You can place this widget on Activity Attachment View Page in sidebar.',
+    'category' => 'Activity',
+    'type' => 'widget',
+    'name' => 'activity.photo-video-info',
+  ),
+);

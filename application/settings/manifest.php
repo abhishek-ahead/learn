@@ -11,7 +11,7 @@ return array(
   'package' => array(
     'type' => 'core',
     'name' => 'base',
-    'version' => '6.7.0',
+    'version' => '7.0.0',
     'revision' => '$Revision: 10064 $',
     'path' => '/',
     'repository' => 'socialengine.com',

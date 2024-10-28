@@ -13,12 +13,6 @@
 <?php if(Engine_Api::_()->getApi('settings', 'core')->getSetting('core.general.recent.login', 1) && isset($_COOKIE['user_login_users']) && !empty ($_COOKIE['user_login_users'])) { ?>
   <?php $recent_login = Zend_Json::decode($_COOKIE['user_login_users']); ?>
   <?php if (engine_count($recent_login) > 0) { ?>
-    <?php $this->headScript()->appendFile($this->layout()->staticBaseUrl . 'externals/jQuery/owlcarousel/jquery.js'); ?>
-    <?php $this->headScript()->appendFile($this->layout()->staticBaseUrl . 'externals/jQuery/owlcarousel/owl.carousel.js'); ?>
-
-    <?php $this->headScript()->appendFile($this->layout()->staticBaseUrl .'application/modules/User/externals/scripts/core.js');?>
-    <?php $this->headScript()->appendFile($this->layout()->staticBaseUrl . 'externals/smoothbox/ajaxsmoothbox.js'); ?>
-    
     <div class="recent_login">
       <div class="recent_login_head">
         <?php echo $this->translate("Recent logins"); ?>

@@ -22,13 +22,11 @@
     </div>
   </div>
   <div class="generic_layout_container layout_middle user_setting_main_middle">
-    <div class="theiaStickySidebar">
+    <div>
       <div class="user_setting_global_form">
-        <div>
-          <h3><?php echo $this->translate("Transaction History"); ?></h3>
-          <p><?php echo $this->translate('Below you can view the transaction history of your orders towards membership payments. Entering criteria into the filter fields will help you find specific order.'); ?></p>
-        </div>
-        <div class="manage_search">
+        <h3><?php echo $this->translate("Transaction History"); ?></h3>
+        <p><?php echo $this->translate('Below you can view the transaction history of your orders towards membership payments. Entering criteria into the filter fields will help you find specific order.'); ?></p>
+        <div class="manage_search core_search_form">
           <?php echo $this->formFilter->render($this) ?>
         </div>
         <?php if( $this->paginator->getTotalItemCount() > 0 ): ?>
@@ -66,7 +64,11 @@
                         <?php } ?>
                       </td>
                       <td data-label="<?php echo $this->translate("Gateway") ?>">
-                        <?php echo ( $gateway ? $gateway->title : '<i>' . $this->translate('Unknown Gateway') . '</i>' ) ?>
+                        <?php if($item->gateway_id == 3000) { ?>
+                          <?php echo $this->translate("Wallet"); ?>
+                        <?php } else { ?>
+                          <?php echo ( $gateway ? $gateway->title : '<i>' . $this->translate('Unknown Gateway') . '</i>' ) ?>
+                        <?php } ?>
                       </td>
                       <td data-label="<?php echo $this->translate("Type") ?>">
                         <?php echo $this->translate(ucwords($item->type)) ?>

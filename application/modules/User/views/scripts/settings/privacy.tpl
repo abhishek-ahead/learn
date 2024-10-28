@@ -42,7 +42,7 @@
         </div>
         <script type="text/javascript">
         <!--
-        scriptJquery(document).ready(function() {
+        en4.core.runonce.add(function() {
           scriptJquery('#blockedUserList ul').appendTo(scriptJquery('#blockList-element'));
         });
         // -->

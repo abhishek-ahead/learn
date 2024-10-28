@@ -1,40 +1,33 @@
 <?php
-/**
- * SocialEngine
+
+ /**
+ * socialnetworking.solutions
  *
- * @category   Application_Core
+ * @category   Application_Modules
  * @package    Activity
- * @copyright  Copyright 2006-2020 Webligo Developments
- * @license    http://www.socialengine.com/license/
- * @version    $Id: Body.php 9747 2012-07-26 02:08:08Z john $
- * @author     John
+ * @copyright  Copyright 2014-2020 Ahead WebSoft Technologies Pvt. Ltd.
+ * @license    https://socialnetworking.solutions/license/
+ * @version    $Id: Body.php 2017-01-12  00:00:00 socialnetworking.solutions $
+ * @author     socialnetworking.solutions
  */
 
-/**
- * @category   Application_Core
- * @package    Activity
- * @copyright  Copyright 2006-2020 Webligo Developments
- * @license    http://www.socialengine.com/license/
- */
 class Activity_Model_Helper_Body extends Activity_Model_Helper_Abstract
 {
-    /**
-     * Body helper
-     *
-     * @param string $body
-     * @return string
-     */
-    public function direct($body, $noTranslate = false)
-    {
-        if (Zend_Registry::isRegistered('Zend_View')) {
-            $view = Zend_Registry::get('Zend_View');
-            $helper = $view->getHelper("viewMore");
-            $helper->setMaxLength(strlen($body));
-            $body = $helper->viewMore($body);
-        }
-
-        $body = Engine_Text_Emoji::decode($body);
-
-        return '<span class="feed_item_bodytext">' . $body . '</span>';
+  /**
+   * Body helper
+   * 
+   * @param string $body
+   * @return string
+   */
+  public function direct($body, $noTranslate = false,$separator = ' &rarr; ')
+  {
+    $explode = explode('|||||---|||++', $body);
+    if(!empty($explode[0]))
+      $body = $explode[0];
+    if( Zend_Registry::isRegistered('Zend_View')) {
+      $view = Zend_Registry::get('Zend_View');
+      $body = $view->viewMoreActivity($body);
     }
+    return 'BODYSTRING' . $body ;
+  }
 }

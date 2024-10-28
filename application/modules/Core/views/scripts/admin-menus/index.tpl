@@ -16,7 +16,7 @@
 
   var SortablesInstance;
 
-  scriptJquery(document).ready(function() {
+  en4.core.runonce.add(function() {
     scriptJquery('.item_label').mouseover(showPreview).mouseout(showPreview);
   });
 

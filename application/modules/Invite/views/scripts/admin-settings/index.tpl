@@ -26,7 +26,7 @@
 </div>
 <script type="text/javascript">
 
-  scriptJquery(document).ready(function() {
+  en4.core.runonce.add(function() {
     enableSignup('<?php echo Engine_Api::_()->getApi('settings', 'core')->getSetting("invite.enable", 1); ?>');
   });
   

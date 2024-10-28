@@ -54,150 +54,165 @@ class User_EditController extends Core_Controller_Action_User
 
     public function profileAction()
     {
-        $this->view->user = $user = Engine_Api::_()->core()->getSubject();
-        $this->view->viewer = $viewer = Engine_Api::_()->user()->getViewer();
-            
-        // Element: profile_type
-        $this->view->editProfileType = false;
-        $topStructure = Engine_Api::_()->fields()->getFieldStructureTop('user');
-        if( engine_count($topStructure) == 1 && $topStructure[0]->getChild()->type == 'profile_type' ) {
-          $profileTypeField = $topStructure[0]->getChild();
-          $options = $optionsIds = $profileTypeField->getOptions(array('profiletypeshow' => 1));
-          $options = $profileTypeField->getElementParams('user');
-          unset($options['options']['order']);
-          unset($options['options']['multiOptions']['']);
-          if($options['type'] == 'ProfileType') {
-            unset($options['options']['multiOptions']['5']);
-            unset($options['options']['multiOptions']['9']);
-          }
-          if( engine_count($options['options']['multiOptions']) > 1 ) { 
-            $this->view->editProfileType = true;
-          }
-        }
-  
-        // General form w/o profile type
-        $profileTypesArray = [];
-        $aliasedFields = $user->fields()->getFieldsObjectsByAlias();
-        $changeUserProfileType = Engine_Api::_()->getDbtable('values', 'authorization')->changeUsersProfileType($user);
-        $this->view->topLevelId = $topLevelId = 0;
-        $this->view->topLevelValue = $topLevelValue = null;
-        if (isset($aliasedFields['profile_type'])) {
-          $aliasedFieldValue = $aliasedFields['profile_type']->getValue($user);
-          $topLevelId = $aliasedFields['profile_type']->field_id;
-          $topLevelValue = (is_object($aliasedFieldValue) ? $aliasedFieldValue->value : null);
-          if (!$topLevelId || !$topLevelValue) {
-            $topLevelId = null;
-            $topLevelValue = null;
-          }
-          $this->view->topLevelId = $topLevelId;
-          $this->view->topLevelValue = $topLevelValue;
-        }
-
-        if ($changeUserProfileType) {
-          $profileTypesArray = Engine_Api::_()->getDbtable('mapProfileTypeLevels', 'authorization')
-            ->getMappedProfileTypeIds($user->level_id);
-            
-          $profileTypeValue = Engine_Api::_()->user()->getProfileFieldValue(array('user_id' => $user->getIdentity(), 'field_id' => 1));
+      $this->view->user = $user = Engine_Api::_()->core()->getSubject();
+      $this->view->viewer = $viewer = Engine_Api::_()->user()->getViewer();
           
-          if (!empty($profileTypeValue)) {
-            $this->view->topLevelId = $topLevelId = 1;
-            $this->view->topLevelValue = $topLevelValue = $profileTypeValue; //$profileTypesArray[0]['profile_type_id'];
-          }
+      // Element: profile_type
+      $this->view->editProfileType = false;
+      $topStructure = Engine_Api::_()->fields()->getFieldStructureTop('user');
+      if( engine_count($topStructure) == 1 && $topStructure[0]->getChild()->type == 'profile_type' ) {
+        $profileTypeField = $topStructure[0]->getChild();
+        $options = $optionsIds = $profileTypeField->getOptions(array('profiletypeshow' => 1));
+        $options = $profileTypeField->getElementParams('user');
+        unset($options['options']['order']);
+        unset($options['options']['multiOptions']['']);
+        if($options['type'] == 'ProfileType') {
+          unset($options['options']['multiOptions']['5']);
+          unset($options['options']['multiOptions']['9']);
         }
+        if( engine_count($options['options']['multiOptions']) > 1 ) { 
+          $this->view->editProfileType = true;
+        }
+      }
 
-        $params = [
-            'item' => Engine_Api::_()->core()->getSubject(),
-            'topLevelId' => $topLevelId,
-            'topLevelValue' => $topLevelValue,
-            'hasPrivacy' => true,
-            'privacyValues' => $this->getRequest()->getParam('privacy'),
-            'ajaxUrl'=>Zend_Controller_Front::getInstance()->getRouter()->assemble(array('action' => 'fields'),'user_general')
-        ];
-        if(!$this->getRequest()->isPost()){
-            $params['enableAjaxLoad'] = true;
-        } 
-        // Get form
-        $form = $this->view->form = new Fields_Form_Standard($params);
-        $form->populate($user->toArray());
+      // General form w/o profile type
+      $profileTypesArray = [];
+      $aliasedFields = $user->fields()->getFieldsObjectsByAlias();
+      $changeUserProfileType = Engine_Api::_()->getDbtable('values', 'authorization')->changeUsersProfileType($user);
+      $this->view->topLevelId = $topLevelId = 0;
+      $this->view->topLevelValue = $topLevelValue = null;
+      if (isset($aliasedFields['profile_type'])) {
+        $aliasedFieldValue = $aliasedFields['profile_type']->getValue($user);
+        $topLevelId = $aliasedFields['profile_type']->field_id;
+        $topLevelValue = (is_object($aliasedFieldValue) ? $aliasedFieldValue->value : null);
+        if (!$topLevelId || !$topLevelValue) {
+          $topLevelId = null;
+          $topLevelValue = null;
+        }
+        $this->view->topLevelId = $topLevelId;
+        $this->view->topLevelValue = $topLevelValue;
+      }
 
-        //Profile field auto populate work
-        $aliasValues = Engine_Api::_()->fields()->getFieldsValuesByAliasId($user);
-        $form->populate($aliasValues);
-
+      if ($changeUserProfileType) {
+        $profileTypesArray = Engine_Api::_()->getDbtable('mapProfileTypeLevels', 'authorization')
+          ->getMappedProfileTypeIds($user->level_id);
+          
+        $profileTypeValue = Engine_Api::_()->user()->getProfileFieldValue(array('user_id' => $user->getIdentity(), 'field_id' => 1));
+        
         if (!empty($profileTypeValue)) {
-          $form->addElement('Hidden', '0_0_1', array(
-            'value' => $profileTypeValue, //$profileTypesArray[0]['profile_type_id']
-          ));
+          $this->view->topLevelId = $topLevelId = 1;
+          $this->view->topLevelValue = $topLevelValue = $profileTypeValue; //$profileTypesArray[0]['profile_type_id'];
         }
+      }
 
-        if (empty($topLevelValue) && $changeUserProfileType) {
-          $profileTypes = Engine_Api::_()->getDbtable('options', 'authorization')->getAllProfileTypes();
-          
-          $profileTypeOptions = array('' => '');
-          foreach ($profileTypes as $profileType) {
-              if(in_array($profileType->option_id, array(5,9))) continue;
-              $profileTypeOptions[$profileType->option_id] = $profileType->label;
-          }
-          $form->getElement('0_0_1')->setMultiOptions($profileTypeOptions);
+      $params = [
+          'item' => Engine_Api::_()->core()->getSubject(),
+          'topLevelId' => $topLevelId,
+          'topLevelValue' => $topLevelValue,
+          'hasPrivacy' => true,
+          'privacyValues' => $this->getRequest()->getParam('privacy'),
+          'ajaxUrl'=>Zend_Controller_Front::getInstance()->getRouter()->assemble(array('action' => 'fields'),'user_general')
+      ];
+      if(!$this->getRequest()->isPost()){
+          $params['enableAjaxLoad'] = true;
+      } 
+      // Get form
+      $form = $this->view->form = new Fields_Form_Standard($params);
+      $form->setAttrib('class', 'global_form form_submit_ajax');
+      $form->populate($user->toArray());
+
+      //Profile field auto populate work
+      $aliasValues = Engine_Api::_()->fields()->getFieldsValuesByAliasId($user);
+      $form->populate($aliasValues);
+
+      if (!empty($profileTypeValue)) {
+        $form->addElement('Hidden', '0_0_1', array(
+          'value' => $profileTypeValue, //$profileTypesArray[0]['profile_type_id']
+        ));
+      }
+
+      if (empty($topLevelValue) && $changeUserProfileType) {
+        $profileTypes = Engine_Api::_()->getDbtable('options', 'authorization')->getAllProfileTypes();
+        
+        $profileTypeOptions = array('' => '');
+        foreach ($profileTypes as $profileType) {
+            if(in_array($profileType->option_id, array(5,9))) continue;
+            $profileTypeOptions[$profileType->option_id] = $profileType->label;
         }
+        $form->getElement('0_0_1')->setMultiOptions($profileTypeOptions);
+      }
+      
+      // If not post or form not valid, return
+      if( !$this->getRequest()->isPost() ) {
+          return;
+      }
 
-        if ($this->getRequest()->isPost() && $form->isValid($this->getRequest()->getPost())) {
-            $values = $form->getValues();
-            $form->saveValues();
+      if( !$form->isValid($this->getRequest()->getPost()) ) {
+        $validateFields = Engine_Api::_()->core()->validateFormFields($form);
+        if(is_countable($validateFields) && engine_count($validateFields)){
+          echo json_encode(array('status' => false, 'error_message' => $validateFields));die;
+        }
+      }
 
-            // Update display name
-            $aliasValues = Engine_Api::_()->fields()->getFieldsValuesByAlias($user);
-            $user->setDisplayName($aliasValues);
+      if ($this->getRequest()->isPost() && $form->isValid($this->getRequest()->getPost())) {
 
-            //Save values in users table
-            if( is_array($aliasValues) )
-            {
-              // Has only first
-              if( !empty($aliasValues['first_name']) )
-              {
-                $user->firstname = $aliasValues['first_name'];
-                $user->save();
-              }
-              // Has only last
-              if( !empty($aliasValues['last_name']) )
-              {
-                $user->lastname = $aliasValues['last_name'];
-                $user->save();
-              } 
-              //has only birthdate
-              if( !empty($aliasValues['gender']) )
-              {
-                $gender = Engine_Api::_()->user()->getOptionIdValue(array('option_id' => $aliasValues['gender']));
-                $user->gender = strtolower($gender);
-                $user->save();
-              }
-              //has only birthdate
-              if( !empty($aliasValues['birthdate']) )
-              {
-                $user->dob = $aliasValues['birthdate'];
-                $user->save();
-              }
-            }
-            
-            $user->modified_date = date('Y-m-d H:i:s');
+        $values = $form->getValues();
+        $form->saveValues();
+
+        // Update display name
+        $aliasValues = Engine_Api::_()->fields()->getFieldsValuesByAlias($user);
+        $user->setDisplayName($aliasValues);
+
+        //Save values in users table
+        if( is_array($aliasValues) )
+        {
+          // Has only first
+          if( !empty($aliasValues['first_name']) )
+          {
+            $user->firstname = $aliasValues['first_name'];
             $user->save();
-
-            // update networks
-            Engine_Api::_()->network()->recalculate($user);
-            
-            //Save General Information
-            // $user->firstname = $_POST['firstname'];
-            // $user->lastname = $_POST['lastname'];
-            // $user->dob = $_POST['dob'] ? $_POST['dob']['year'].'-'.$_POST['dob']['month'].'-'.$_POST['dob']['day'] : NULL;
-            // $user->gender = $_POST['gender'] ? $_POST['gender'] : NULL;
-            // $user->save();
-            // Update display name
-            // $user->setDisplayName(array('first_name' => $_POST['firstname'], 'last_name' => $_POST['lastname']));
-            // $user->save();
-            
-            $form->populate($user->toArray());
-            $form->addNotice(Zend_Registry::get('Zend_Translate')->_('Your changes have been saved.'));
+          }
+          // Has only last
+          if( !empty($aliasValues['last_name']) )
+          {
+            $user->lastname = $aliasValues['last_name'];
+            $user->save();
+          } 
+          //has only birthdate
+          if( !empty($aliasValues['gender']) )
+          {
+            $gender = Engine_Api::_()->user()->getOptionIdValue(array('option_id' => $aliasValues['gender']));
+            $user->gender = strtolower($gender);
+            $user->save();
+          }
+          //has only birthdate
+          if( !empty($aliasValues['birthdate']) )
+          {
+            $user->dob = $aliasValues['birthdate'];
+            $user->save();
+          }
         }
+        
+        $user->modified_date = date('Y-m-d H:i:s');
+        $user->save();
+
+        // update networks
+        Engine_Api::_()->network()->recalculate($user);
+        
+        //Save General Information
+        // $user->firstname = $_POST['firstname'];
+        // $user->lastname = $_POST['lastname'];
+        // $user->dob = $_POST['dob'] ? $_POST['dob']['year'].'-'.$_POST['dob']['month'].'-'.$_POST['dob']['day'] : NULL;
+        // $user->gender = $_POST['gender'] ? $_POST['gender'] : NULL;
+        // $user->save();
+        // Update display name
+        // $user->setDisplayName(array('first_name' => $_POST['firstname'], 'last_name' => $_POST['lastname']));
+        // $user->save();
+        
+        $form->populate($user->toArray());
+        $form->addNotice(Zend_Registry::get('Zend_Translate')->_('Your changes have been saved.'));
+        echo json_encode(array('status' => true, 'redirectURL' => '', 'success_message' => Zend_Registry::get('Zend_Translate')->_('Your changes have been saved.')));die;
+      }
     }
 
 
@@ -265,8 +280,7 @@ class User_EditController extends Core_Controller_Action_User
 							$iMain = Engine_Api::_()->getItem('storage_file', $user->photo_id);
 
 							// Insert activity
-							$action = Engine_Api::_()->getDbtable('actions', 'activity')->addActivity($user, $user, 'profile_photo_update',
-									'{item:$subject} added a new profile photo.');
+							$action = Engine_Api::_()->getDbtable('actions', 'activity')->addActivity($user, $user, 'profile_photo_update');
 
 							// Hooks to enable albums to work
 							if ($action) {
@@ -286,6 +300,8 @@ class User_EditController extends Core_Controller_Action_User
 							}
 
 							$db->commit();
+
+              return $this->_helper->redirector->gotoRoute(array('module' => 'user', 'controller' => 'edit', 'action' => 'photo', 'isURLFullLoad' => true), 'user_extended', true);
             } catch (Exception $e) {
                 return $this->exceptionWrapper($e, $form, $db);
             }
@@ -324,6 +340,8 @@ class User_EditController extends Core_Controller_Action_User
             // Remove temp files
             @unlink($iName);
             @unlink($pName);
+
+            return $this->_helper->redirector->gotoRoute(array('module' => 'user', 'controller' => 'edit', 'action' => 'photo', 'isURLFullLoad' => true), 'user_extended', true);
         }
         else {
             $storage = Engine_Api::_()->storage();
@@ -352,6 +370,8 @@ class User_EditController extends Core_Controller_Action_User
             $iProfile->store($pName);
 
             @unlink($pName);
+
+            return $this->_helper->redirector->gotoRoute(array('module' => 'user', 'controller' => 'edit', 'action' => 'photo', 'isURLFullLoad' => true), 'user_extended', true);
         }
     }
 
@@ -495,8 +515,7 @@ class User_EditController extends Core_Controller_Action_User
 
                 // Insert activity
                 $action = Engine_Api::_()->getDbtable('actions', 'activity')
-                    ->addActivity($user, $user, 'profile_photo_update',
-                        '{item:$subject} added a new profile photo.');
+                    ->addActivity($user, $user, 'profile_photo_update');
 
                 // Hooks to enable albums to work
                 $newStorageFile = Engine_Api::_()->getItem('storage_file', $user->photo_id);

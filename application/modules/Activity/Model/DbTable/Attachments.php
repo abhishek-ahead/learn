@@ -18,5 +18,23 @@
  */
 class Activity_Model_DbTable_Attachments extends Engine_Db_Table
 {
-  
+  protected $_rowClass = 'Activity_Model_Attachment';
+  public function getAttachmentId($type, $id) {
+    return $this->select()
+                ->from($this->info("name"),'action_id')
+                ->where('type =?', $type)
+                ->where('id =?', $id)
+                ->query()
+                ->fetchColumn();
+
+  }
+  public function attachmentId($type, $id) {
+    return $this->select()
+                ->from($this->info("name"),'attachment_id')
+                ->where('type =?', $type)
+                ->where('id =?', $id)
+                ->query()
+                ->fetchColumn();
+
+  }
 }

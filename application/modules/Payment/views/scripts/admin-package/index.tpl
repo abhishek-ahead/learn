@@ -163,7 +163,7 @@
               <?php endif ?>
             </td>
             <td>
-              <?php echo $this->locale()->toNumber($item->price, array('default_locale' => true)) ?>
+              <?php echo Engine_Api::_()->payment()->getCurrencyPrice($item->price, Engine_Api::_()->payment()->defaultCurrency()); //$this->locale()->toNumber($item->price, array('default_locale' => true)) ?>
             </td>
             <td class="nowrap">
               <?php echo $item->getPackageDescription(true) ?>
@@ -203,7 +203,7 @@
   scriptJquery('.core_admin_main_monetization').parent().addClass('active');
   scriptJquery('.core_admin_main_membership').addClass('active');
 
-  scriptJquery(document).ready(function() {
+  en4.core.runonce.add(function() {
     scriptJquery('#menu_list').addClass('sortable');
     var SortablesInstance = scriptJquery('#menu_list').sortable({
       stop: function( event, ui ) {

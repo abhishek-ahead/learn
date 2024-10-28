@@ -159,6 +159,7 @@ class Payment_Plugin_Gateway_Verification_PayPal extends Engine_Payment_Plugin_A
         'CUSTOM' => $params['vendor_order_id'], //$subscription->subscription_id,
         'INVNUM' => $params['vendor_order_id'],
         'ITEMAMT' => $price, //$package->price,
+        'SOLUTIONTYPE' => 'sole',
         'ITEMS' => array(
           array(
             'NAME' => $user->getTitle(false), //$package->title,

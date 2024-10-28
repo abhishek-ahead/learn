@@ -24,7 +24,7 @@
   scriptJquery('.core_admin_main_settings').parent().addClass('active');
   scriptJquery('.core_admin_main_otp').addClass('active');
 
-  scriptJquery(document).ready(function(){
+  en4.core.runonce.add(function() {
     scriptJquery("#selectall").click(function(){
       if(this.checked){
         scriptJquery('.checkbox').each(function(){

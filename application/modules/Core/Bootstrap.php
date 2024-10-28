@@ -35,7 +35,8 @@ class Core_Bootstrap extends Engine_Application_Bootstrap_Abstract
             iconv_set_encoding("input_encoding", "UTF-8");
             iconv_set_encoding("output_encoding", "UTF-8");
         }
-
+        error_reporting(E_ALL);
+        ini_set('display_errors', '1');
         // Production
         // production mode
         if (APPLICATION_ENV === 'production' && Engine_Server_Php::isMinimum(Engine_Server_Php::PHP_VERSION_5_3)) {
@@ -46,6 +47,7 @@ class Core_Bootstrap extends Engine_Application_Bootstrap_Abstract
           //error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
           error_reporting(E_ALL & ~E_NOTICE);
         }
+
     }
 
     public function run()
@@ -517,7 +519,7 @@ class Core_Bootstrap extends Engine_Application_Bootstrap_Abstract
             Zend_Session::setId($_POST['PHPSESSID']);
         }
         //}
-
+        
         //Zend_Session::start();
     }
 
@@ -592,6 +594,15 @@ class Core_Bootstrap extends Engine_Application_Bootstrap_Abstract
 
         // Add to local container and registry
         Zend_Registry::set('Zend_View', $view);
+
+        //add js and css content for initial load
+        if (APPLICATION_ENV == 'development') {
+            $filePath = APPLICATION_PATH.DIRECTORY_SEPARATOR.'externals'.DS.'scripts'.DS.'script.js';
+            if(!file_exists($filePath)){
+                Engine_Api::_()->core()->generateJsCss();
+            }
+        }
+
         return $view;
     }
 
@@ -735,6 +746,7 @@ class Core_Bootstrap extends Engine_Application_Bootstrap_Abstract
 
         // Check Locale
         $locale = Zend_Locale::findLocale();
+        
         // Make Sure Language Folder Exist
         $languageFolder = is_dir(APPLICATION_PATH . '/application/languages/' . $locale);
         if ($languageFolder === false) {
@@ -824,14 +836,14 @@ class Core_Bootstrap extends Engine_Application_Bootstrap_Abstract
 
         // Use CSV Translation Adapter
         else {
+            $language = (isset($_COOKIE['en4_language']) && !empty($_COOKIE['en4_language'])) ? $_COOKIE['en4_language'] : (Engine_Api::_()->getApi('settings', 'core')->getSetting('core.locale.locale', 'en') == 'auto' ? 'en' : Engine_Api::_()->getApi('settings', 'core')->getSetting('core.locale.locale', 'en'));
             $translate = new Zend_Translate(
                 'Engine_Translate_Adapter_Csv',
-                APPLICATION_PATH.'/application/languages',
+                APPLICATION_PATH.'/application/languages/'.$language,
                 null,
                 $params
             );
         }
-
 
         Zend_Registry::set('Zend_Translate', $translate);
 

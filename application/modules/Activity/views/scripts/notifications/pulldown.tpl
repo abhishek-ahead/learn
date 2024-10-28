@@ -42,8 +42,8 @@
         </div>
         <?php if($notification->type == 'friend_request') { ?>
           <div class="notification_item_buttons">
-            <a href="javascript:void(0);" class="button" type="submit" onclick='friendRequestSend("confirm", <?php echo $this->string()->escapeJavascript($notification->getSubject()->getIdentity()) ?>, <?php echo $notification->notification_id ?>, event)'><?php echo $this->translate('Add Friend');?></a>
-            <a href="javascript:void(0);" class="button" onclick='friendRequestSend("reject", <?php echo $this->string()->escapeJavascript($notification->getSubject()->getIdentity()) ?>, <?php echo $notification->notification_id ?>, event)'><?php echo $this->translate('Ignore Request');?></a>
+            <a href="javascript:void(0);" class="button btn btn-primary" type="submit" onclick='friendRequestSend("confirm", <?php echo $this->string()->escapeJavascript($notification->getSubject()->getIdentity()) ?>, <?php echo $notification->notification_id ?>, event)'><?php echo $this->translate('Add Friend');?></a>
+            <a href="javascript:void(0);" class="button  btn btn-alt" onclick='friendRequestSend("reject", <?php echo $this->string()->escapeJavascript($notification->getSubject()->getIdentity()) ?>, <?php echo $notification->notification_id ?>, event)'><?php echo $this->translate('Ignore Request');?></a>
           </div>
         <?php } ?>
       </div>

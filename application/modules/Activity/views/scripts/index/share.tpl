@@ -1,42 +1,54 @@
 <?php
-/**
- * SocialEngine
- *
- * @category   Application_Core
- * @package    Activity
- * @copyright  Copyright 2006-2020 Webligo Developments
- * @license    http://www.socialengine.com/license/
- * @version    $Id: share.tpl 9747 2012-07-26 02:08:08Z john $
- * @author     John
- */
-?>
 
-<div>
+ /**
+ * socialnetworking.solutions
+ *
+ * @category   Application_Modules
+ * @package    Activity
+ * @copyright  Copyright 2014-2020 Ahead WebSoft Technologies Pvt. Ltd.
+ * @license    https://socialnetworking.solutions/license/
+ * @version    $Id: share.tpl 2017-01-12 00:00:00 socialnetworking.solutions $
+ * @author     socialnetworking.solutions
+ */
+ 
+?>
+<?php $this->headLink()->appendStylesheet($this->layout()->staticBaseUrl . ''); ?>
+<div class="activity_share_popup">
   <?php echo $this->form->setAttrib('class', 'global_form_popup')->render($this) ?>
-  <div class="sharebox">
+  <div class="sharebox_attachment">
+   <?php if (!empty($this->action)){
+        $previousAction = '1';
+        $previousAttachment = '1';
+        $action = $this->action;
+        echo "<div class='activity_feed'><ul class='feed'>";
+        include('application/modules/Activity/views/scripts/_activity.tpl');
+        echo "</ul></div>";
+    }else{ ?>
     <?php if( $this->attachment->getPhotoUrl() ): ?>
-      <div class="sharebox_photo">
+      <div class="sharebox_attachment_img">
         <?php echo $this->htmlLink($this->attachment->getHref(), $this->itemPhoto($this->attachment, 'thumb.icon'), array('target' => '_parent')) ?>
       </div>
     <?php endif; ?>
-    <div class="sharebox_right_content">
-      <div class="sharebox_title">
-        <?php echo $this->htmlLink($this->attachment->getHref(), $this->attachment->getTitle(), array('target' => '_parent')) ?>
+    <div class="sharebox_attachment_content">
+      <div class="sharebox_attachment_title">
+        <?php echo $this->htmlLink($this->attachment->getHref(), $this->attachment->getTitle(), array('class' => 'font_color font_bold') , array('target' => '_parent')) ?>
       </div>
-      <div class="sharebox_description">
-        <?php echo Engine_Api::_()->core()->smileyToEmoticons($this->attachment->getDescription()); ?>
+      <div class="sharebox_attachment_desc">
+        <?php 
+          if($this->attachment->getType() == 'activity_action') {
+            $content =  $this->getContent($this->attachment);
+            echo $content[0].': '.$content[1];
+          }
+          else
+            echo $this->attachment->getDescription();
+       ?>
       </div>
     </div>
+    <?php } ?>
+    
   </div>
 </div>
 <script type="text/javascript">
-//<![CDATA[
-var toggleTwitterShareCheckbox;
-(function() {
-  toggleTwitterShareCheckbox = function(){
-      scriptJquery('span.composer_twitter_toggle').toggleClass('composer_twitter_toggle_active');
-      scriptJquery('input[name=post_to_twitter]').prop('checked', scriptJquery('span.composer_twitter_toggle').hasClass('composer_twitter_toggle_active'));
-  }
-})()
-//]]>
+scriptJquery('.sharebox_description > a').attr('href','javascript:;');
+scriptJquery('.sharebox_description').find('.core_tooltip').removeClass('core_tooltip');
 </script>

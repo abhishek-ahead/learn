@@ -1,4 +1,4 @@
-scriptJquery(document).on('click','#parent',function() {
+AttachEventListerSE('click','#parent',function() {
   if(scriptJquery('#parent').val() > 0)
     scriptJquery('#show_level').hide();
   else
@@ -81,7 +81,7 @@ function selectAll() {
   }
 }
 
-scriptJquery(document).on('click','#deletecategoryselected',function() {
+AttachEventListerSE('click','#deletecategoryselected',function() {
   var n = scriptJquery(".checkbox:checked").length;
   if(n>0){
     var confirmDelete = confirm(en4.core.language.translate("Are you sure you want to delete the selected categories?"));
@@ -127,7 +127,7 @@ scriptJquery(document).on('click','#deletecategoryselected',function() {
   }
 });
 
-scriptJquery(document).on('click','.deleteCat',function(){
+AttachEventListerSE('click','.deleteCat',function(){
   var id = scriptJquery(this).attr('data-url');
   var confirmDelete = confirm(en4.core.language.translate("Are you sure you want to delete the selected category?"));
   if(confirmDelete){
@@ -161,7 +161,7 @@ scriptJquery(document).on('click','.deleteCat',function(){
     });
   }
 });
-scriptJquery(document).on('click','.openSmoothbox',function(e){
+AttachEventListerSE('click','.openSmoothbox',function(e){
   var url = scriptJquery(this).attr('href');
   openSmoothBoxInUrl(url);
   return false;

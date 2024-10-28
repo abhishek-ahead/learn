@@ -29,25 +29,25 @@ class Core_Widget_AdminChartController extends Engine_Content_Widget_Abstract {
     
     $actionsSelect = $actionTable->select()
         ->from($actionTable->info('name'), array(new Zend_Db_Expr('"actions" AS type'), 'count(action_id) as total', 'date', 'DATE_FORMAT(date,"%Y-%m-%d") as hourtime'))
-        ->where("DATE(" . $actionTable->info('name') . ".date) between ('$endTime') and ('$currentTime')")
+        ->where("(" . $actionTable->info('name') . ".date) between ('$endTime') and ('$currentTime')")
         ->group("DATE_FORMAT(date,'%Y-%m-%d')");
     
     $viewSelect = $table->select()
         ->from($table->info('name'), array(new Zend_Db_Expr('"views" AS type'), 'SUM(value) as total', 'date', 'DATE_FORMAT(date,"%Y-%m-%d") as hourtime'))
         ->where('type = ?', 'core.views')
-        ->where("DATE(" . $table->info('name') . ".date) between ('$endTime') and ('$currentTime')")
+        ->where("(" . $table->info('name') . ".date) between ('$endTime') and ('$currentTime')")
         ->group("DATE_FORMAT(date,'%Y-%m-%d')");
         
     $commentSelect = $table->select()
         ->from($table->info('name'), array(new Zend_Db_Expr('"comments" AS type'), 'SUM(value) as total', 'date', 'DATE_FORMAT(date,"%Y-%m-%d") as hourtime'))
         ->where('type = ?', 'core.comments')
-        ->where("DATE(" . $table->info('name') . ".date) between ('$endTime') and ('$currentTime')")
+        ->where("(" . $table->info('name') . ".date) between ('$endTime') and ('$currentTime')")
         ->group("DATE_FORMAT(date,'%Y-%m-%d')");
         
     $signupSelect = $table->select()
         ->from($table->info('name'), array(new Zend_Db_Expr('"signup" AS type'), 'SUM(value) as total', 'date', 'DATE_FORMAT(date,"%Y-%m-%d") as hourtime'))
         ->where('type = ?', 'user.creations')
-        ->where("DATE(" . $table->info('name') . ".date) between ('$endTime') and ('$currentTime')")
+        ->where("(" . $table->info('name') . ".date) between ('$endTime') and ('$currentTime')")
         ->group("DATE_FORMAT(date,'%Y-%m-%d')");
     
     $dataSelect = $viewSelect . ' ' . 'UNION' . ' ' . $commentSelect . 'UNION' . ' ' . $signupSelect . ' ' . 'UNION' . ' ' . $actionsSelect;

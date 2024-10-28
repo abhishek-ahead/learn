@@ -36,7 +36,12 @@ class User_SignupController extends Core_Controller_Action_Standard
 
     // If the user is logged in, they can't sign up now can they?
     if( Engine_Api::_()->user()->getViewer()->getIdentity() ) {
-      return $this->_helper->redirector->gotoRoute(array(), 'default', true);
+      if(empty($_SERVER['HTTP_REFERER'])) {
+        return $this->_helper->redirector->gotoRoute(array(), 'default', true);
+      } else {
+        $url = $this->view->url(array(), 'default', true);
+        echo json_encode(array('status' => true, 'redirectFullURL' => $url, ''));die; 
+      }
     }
     
     $formSequenceHelper = $this->_helper->formSequence;
@@ -68,7 +73,8 @@ class User_SignupController extends Core_Controller_Action_Standard
           }
           // Redirect
           if( !empty($response['redirect']) ) {
-            return $this->_helper->redirector->gotoUrl($response['redirect'], array('prependBase' => false));
+            //return $this->_helper->redirector->gotoUrl($response['redirect'], array('prependBase' => false));
+            echo json_encode(array('status' => true, 'redirectFullURL' => $response['redirect'], ''));die; 
           }
         }
       }
@@ -102,14 +108,16 @@ class User_SignupController extends Core_Controller_Action_Standard
           
           Engine_Api::_()->user()->setViewer(null);
           Engine_Api::_()->user()->getAuth()->getStorage()->clear();
+          
+          Engine_Api::_()->user()->getAuth()->getStorage()->write($viewer->getIdentity());
 
           if( !empty($subscriptionSession->subscription_id) ) {
-            return $this->_helper->redirector->gotoRoute(array('module' => 'payment',
-              'controller' => 'subscription', 'action' => 'gateway'), 'default', true);
+            //$url = $this->view->url(array('module' => 'payment', 'controller' => 'subscription', 'action' => 'index'), 'default', true);
+            $url = $this->view->url(array('module' => 'user', 'controller' => 'wallet', 'action' => 'gateway'), 'default', true);
           } else {
-            return $this->_helper->redirector->gotoRoute(array('module' => 'payment',
-              'controller' => 'subscription', 'action' => 'index'), 'default', true);
+            $url = $this->view->url(array('module' => 'payment', 'controller' => 'subscription', 'action' => 'index'), 'default', true);
           }
+          echo json_encode(array('status' => true, 'redirectFullURL' => $url, ''));die; 
         }
       }
     }
@@ -142,19 +150,20 @@ class User_SignupController extends Core_Controller_Action_Standard
       }
       $viewer->save();
     }
-    
+
     //Redirection
+    $url = "";
     $afterSignup = Engine_Api::_()->getApi('settings', 'core')->getSetting('core.after.signup', 4);
     if($afterSignup == 4) {
-      return $this->_helper->_redirector->gotoRoute(array('action' => 'home'), 'user_general', true);
+      $url= $this->view->url(array('action' => 'home'), 'user_general',true);
     } else if($afterSignup == 3) {
-      return $this->_helper->redirector->gotoRoute(array('id' => $viewer->getIdentity()), 'user_profile', true);
+      $url= $this->view->url(array('id' => $viewer->getIdentity()), 'user_profile',true);
     } else if($afterSignup == 2) { 
-      return $this->_helper->redirector->gotoRoute(array('controller' => 'edit','action' => 'profile'), 'user_extended', true);
+      $url= $this->view->url(array('controller' => 'edit','action' => 'profile'), 'user_extended',true);
     } else if($afterSignup == 1) {
-      header('Location: '.Engine_Api::_()->getApi('settings', 'core')->getSetting('core.signupurl', ''));
+      $url= Engine_Api::_()->getApi('settings', 'core')->getSetting('core.signupurl', '');
     }
-    
+    echo json_encode(array('status' => true, 'redirectFullURL' => $url, ''));die; 
   }
 
   public function verifyAction()

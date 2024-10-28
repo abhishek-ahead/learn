@@ -52,7 +52,7 @@ class Activity_Model_Notification extends Core_Model_Item_Abstract//extends Engi
         'subject' => $this->getSubject(),
       )
     );
-    $content = $model->assemble($this->getTypeInfo()->body, $params);
+    $content = $model->assemble($this->getTypeInfo()->body, $params,false);
     return $content;
   }
 

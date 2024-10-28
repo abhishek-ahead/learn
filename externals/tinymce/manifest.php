@@ -2,7 +2,7 @@
   'package' => array(
     'type' => 'external',
     'name' => 'tinymce',
-    'version' => '6.7.0',
+    'version' => '7.0.0',
     'revision' => '$Revision: 10267 $',
     'path' => 'externals/tinymce',
     'repository' => 'socialengine.com',

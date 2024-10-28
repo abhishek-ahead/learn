@@ -22,12 +22,16 @@ class Payment_Api_Core extends Core_Api_Abstract {
     return ( $params[0] <= 0 || $params[1] == 'forever' );
   }
   
-  public function getPackageDescription($params = array(), $price = null) {
+  public function getPackageDescription($params = array(), $price = null, $extraParam = '') {
   
     $translate = Zend_Registry::get('Zend_Translate');
     $view = Zend_Registry::get('Zend_View');
     
-    $priceStr = $this->getCurrencyPrice($price,'','','');
+    if(!empty($extraParam) && $extraParam == 'wallet') {
+      $priceStr = $this->getCurrencyPrice($price, $this->getCurrentCurrency(),'','', $extraParam);
+    } else {
+      $priceStr = $this->getCurrencyPrice($price,'','','', $extraParam);
+    }
 
     // Plan is free
     if( $price == 0 ) {
@@ -122,7 +126,11 @@ class Payment_Api_Core extends Core_Api_Abstract {
   public function defaultCurrency() {
     return Engine_Api::_()->getApi('settings', 'core')->getSetting('payment.currency', 'USD');
   }
-  
+  public function getCurrencySymbol($currency = ''){
+    $defaultCurrency = $this->defaultCurrency();
+    $currencyData = Engine_Api::_()->getDbTable('currencies', 'payment')->getCurrency($defaultCurrency);
+    return $currencyData['symbol'];
+  }
   public function getCurrencySymbolValue($price, $currency = '', $change_rate = '') {
   
     $currentCurrency = !empty($_SESSION['current_currencyId']) ? $_SESSION['current_currencyId'] : (!empty($_COOKIE['current_currencyId']) ? $_COOKIE['current_currencyId'] : $currency );
@@ -140,18 +148,19 @@ class Payment_Api_Core extends Core_Api_Abstract {
   }
   
   // Return price with code and change rate param for payment history.
-  public function getCurrencyPrice($price = 0, $givenSymbol = '', $change_rate = '',$returnPrice = "") {
+  public function getCurrencyPrice($price = 0, $givenSymbol = '', $change_rate = '',$returnPrice = "", $extraParam = "") {
 
     $price = (float) $price;
     $defaultParams['precision'] = 2;
     if ($givenSymbol == '') {
       $defaultCurrency = $this->defaultCurrency();
-      if (isset($_COOKIE['current_currencyId']) && !empty($_COOKIE['current_currencyId']) && $_COOKIE['current_currencyId'] != $defaultCurrency) {
+      
+      if (isset($_COOKIE['current_currencyId']) && !empty($_COOKIE['current_currencyId']) && $_COOKIE['current_currencyId'] != $defaultCurrency && $_COOKIE['current_currencyId'] != 'undefined') {
         $changePrice = $this->getCurrencySymbolValue($price, '', $change_rate);
         $currency = $_COOKIE['current_currencyId'];
         if ($changePrice != '')
           $price = $changePrice;
-      } else if (isset($_SESSION['current_currencyId']) && !empty($_SESSION['current_currencyId']) && $_SESSION['current_currencyId'] != $defaultCurrency) {
+      } else if (isset($_SESSION['current_currencyId']) && !empty($_SESSION['current_currencyId']) && $_SESSION['current_currencyId'] != $defaultCurrency && $_SESSION['current_currencyId'] != 'undefined') {
         $changePrice = $this->getCurrencySymbolValue($price, '', $change_rate);
         $currency = $_SESSION['current_currencyId'];
         if ($changePrice != '')
@@ -165,7 +174,7 @@ class Payment_Api_Core extends Core_Api_Abstract {
       $currency = $givenSymbol;
     } else
       $currency = $givenSymbol;
-      
+
     if($returnPrice)
       return $price;
 
@@ -180,7 +189,10 @@ class Payment_Api_Core extends Core_Api_Abstract {
   }
   
   public function getCurrentCurrency() {
-    return !empty($_SESSION['current_currencyId']) ? $_SESSION['current_currencyId'] : (empty($_COOKIE['current_currencyId']) ? $this->defaultCurrency() : $_COOKIE['current_currencyId']);
+    $currentCurrency = !empty($_SESSION['current_currencyId']) ? $_SESSION['current_currencyId'] : (empty($_COOKIE['current_currencyId']) ? $this->defaultCurrency() : $_COOKIE['current_currencyId']);
+    if($currentCurrency == 'undefined') 
+      $currentCurrency = $this->defaultCurrency();
+    return $currentCurrency;
   }
   
   public function updateCurrencyValues() {
@@ -218,5 +230,45 @@ class Payment_Api_Core extends Core_Api_Abstract {
         break;
       }
     }
+  }
+
+  public function firsttimeSignupSubscription($user) {
+
+    $currentSubscriptionFirstPlan = Engine_Api::_()->getDbTable('subscriptions', 'payment')->currentSubscriptionFirstPlan($user); 
+    if($currentSubscriptionFirstPlan) {
+      $packagesTable = Engine_Api::_()->getDbtable('packages', 'payment');
+      $currentFirstPackage = $packagesTable->fetchRow(array('package_id = ?' => $currentSubscriptionFirstPlan->package_id));
+      if($currentSubscriptionFirstPlan && $currentSubscriptionFirstPlan->status == 'initial' && $currentFirstPackage) {
+        $ordersTable = Engine_Api::_()->getDbtable('orders', 'payment');
+        $ordersTable->insert(array(
+          'user_id' => $user->getIdentity(),
+          'gateway_id' => 3000,
+          'state' => 'pending',
+          'creation_date' => new Zend_Db_Expr('NOW()'),
+          'source_type' => 'payment_subscription',
+          'source_id' => $currentSubscriptionFirstPlan->subscription_id,
+        ));
+        $subsOrderId = $ordersTable->getAdapter()->lastInsertId();
+        $order = Engine_Api::_()->getItem('payment_order', $subsOrderId);
+
+        $this->_session = new Zend_Session_Namespace('Payment_Subscription');
+        $this->_session->current_currency = $currentCurrency = Engine_Api::_()->payment()->getCurrentCurrency();
+        $currencyData = Engine_Api::_()->getDbTable('currencies', 'payment')->getCurrency($currentCurrency);
+        $this->_session->change_rate = $currencyData->change_rate;
+
+        $status = $currentSubscriptionFirstPlan->onSubscriptionTransactionReturn($order);
+        if(($status == 'active' || $status == 'free')) {
+          $admins = Engine_Api::_()->user()->getSuperAdmins();
+          foreach($admins as $admin){
+            Engine_Api::_()->getApi('mail', 'core')->sendSystem($admin,'payment_subscription_transaction', array('gateway_type' => "Wallet", 'object_link' => 'http://' . $_SERVER['HTTP_HOST'] . Zend_Controller_Front::getInstance()->getRouter()->assemble(array('module'=>'payment'), 'admin_default', true)));
+          }
+        }
+        if (Engine_Api::_()->getDbtable('values', 'authorization')->changeUsersProfileType($user)) {
+          Engine_Api::_()->getDbtable('values', 'authorization')->resetProfileValues($this->_user);
+        }
+      }
+    }
+    //Subscriptin work for first time signup using paid plan
+    
   }
 }

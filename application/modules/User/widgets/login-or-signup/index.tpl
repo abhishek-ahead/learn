@@ -27,7 +27,7 @@
         Smoothbox.open('<?php echo $this->fbUrl ?>');
       }
       var redirectPostFbLogin = function() {
-        window.location.href = window.location;
+        window.proxyLocation.href = window.location;
         Smoothbox.close();
       }
     </script>
@@ -49,7 +49,7 @@
 <?php endif; ?>
 <script type="text/javascript">
   if(typeof loginSignupPlaceHolderActive != 'undefined') {
-    scriptJquery (document).ready(function(e) {
+    en4.core.runonce.add(function() {
       scriptJquery('#email-label').hide();
       scriptJquery('#password-label').hide();
       scriptJquery('#email').attr('placeholder',scriptJquery('#email-label').find('label').html());

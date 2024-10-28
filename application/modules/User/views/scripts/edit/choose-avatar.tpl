@@ -11,7 +11,7 @@
  */
 ?>
 <script>
-  scriptJquery(document).on('submit', '#user_avatar', function(e) {
+  AttachEventListerSE('submit', '#user_avatar', function(e) {
     e.preventDefault();
     addAvatar(this);
   });

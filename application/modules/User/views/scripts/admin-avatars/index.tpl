@@ -21,7 +21,7 @@
 
 <script type="text/javascript">
 
-  scriptJquery(document).ready(function() {
+  en4.core.runonce.add(function() {
     scriptJquery('#menu_list').addClass('sortable');
     var SortablesInstance = scriptJquery('#menu_list').sortable({
       stop: function( event, ui ) {

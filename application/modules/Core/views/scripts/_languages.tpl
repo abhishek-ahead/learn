@@ -11,19 +11,11 @@
 */
 
 ?>
-<?php $languageNameList = $this->languageNameList; ?>
 <?php if( 1 !== engine_count($this->languageNameList) ): ?>
-  <?php if(0) { ?>
-    <form method="post" action="<?php echo $this->url(array('controller' => 'utility', 'action' => 'locale'), 'default', true) ?>" style="display:inline-block" id="footer_language_<?php echo $this->identity; ?>">
-      <?php $selectedLanguage = $this->translate()->getLocale() ?>
-      <?php echo $this->formSelect('language', $selectedLanguage, array('onchange' => "setLanguage()"), $languageNameList) ?>
-      <?php echo $this->formHidden('return', $this->url()) ?>
-    </form>
-  <?php } ?>
 
-  <?php $selectedLanguage = $this->translate()->getLocale(); ?>
+  <?php $selectedLanguage = (isset($_COOKIE['en4_language']) && !empty($_COOKIE['en4_language'])) ? $_COOKIE['en4_language'] : ($this->viewer && !empty($this->viewer->getIdentity() && $this->viewer->language) ? $this->viewer->language : Engine_Api::_()->getApi('settings', 'core')->getSetting('core.locale.locale', 'en')); ?>
   <?php $isLanguageExist = Engine_Api::_()->getDbTable('languages', 'core')->isLanguageExist($selectedLanguage); ?>
-  <?php  if($isLanguageExist) { ?>
+  <?php if($isLanguageExist) { ?>
     <?php 
       $languageItem = Engine_Api::_()->getItem('core_language', $isLanguageExist);
       $path = '';
@@ -37,7 +29,7 @@
       <?php if($path) { ?>
         <img src="<?php echo $path; ?>" alt="img" data-bs-toggle="tooltip" data-bs-placement="bottom" title="<?php echo $this->translate("Language") ?>">
       <?php } ?>
-      <span><?php echo $this->translate($languageItem->name) ?></span>	
+      <span><?php echo $languageItem->name; ?></span>	
     </a>
     <ul class="dropdown-menu">
       <?php if( 1 !== engine_count($this->languageNameList) ): ?>
@@ -69,7 +61,7 @@
         return:'<?php echo $this->url(); ?>',
         admin: true,
       },function (response) {
-        location.reload();
+        proxyLocation.reload("full");
       });
       scriptJquery('#footer_language_<?php echo $this->identity; ?>').submit();
     }

@@ -24,7 +24,7 @@
           <form action="" method="post" id="remove_recentlogin_form" enctype="multipart/form-data">
             <input type="hidden" name="removeUserId" id="removeUserId" />
             <input type="hidden" name="redirectURL" id="redirectURL" value="<?php echo $_SERVER['REQUEST_URI']; ?>" />
-            <button type="button" class="btn-link" data-bs-dismiss="modal" onclick="closeRemoveUser();"><?php echo $this->translate("Cancel"); ?></button>
+            <button type="button" class="btn btn-link" data-bs-dismiss="modal" onclick="closeRemoveUser();"><?php echo $this->translate("Cancel"); ?></button>
             <button type="button" class="btn btn-primary" id="remove_account"><?php echo $this->translate('Remove Account'); ?></button>
           </form>
         </div>
@@ -34,8 +34,8 @@
   </div>
 </div>
 <script type="text/javascript">
-scriptJquery(document).ready(function() {
-  scriptJquery(scriptJquery('#remove_pop_wrap').html()).appendTo('body');
+en4.core.runonce.add(function() {
+  scriptJquery(scriptJquery('#remove_pop_wrap').html()).appendTo('#append-script-data');
   scriptJquery('#remove_pop_wrap').remove()
 });
 </script>

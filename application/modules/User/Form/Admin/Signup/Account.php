@@ -57,8 +57,9 @@ class User_Form_Admin_Signup_Account extends Engine_Form {
         'timezone' => "Timezone",
         'language' => "Language",
         'terms' => "Terms of Service (Require members to agree to your terms of service? You can modifying your terms of service by editing the _CORE_TERMS_OF_SERVICE language variable in the application/languages/en/core.csv file.)",
+        'location' => "Location",
       ),
-      'value' => json_decode($settings->getSetting('user.signup.enablesigupfields', '["confirmpassword","profiletype","timezone","language"]')),
+      'value' => json_decode($settings->getSetting('user.signup.enablesigupfields', '["confirmpassword","dob","gender","profiletype","timezone","language", "location"]')),
     ));
     
     // Element: username
@@ -108,6 +109,6 @@ class User_Form_Admin_Signup_Account extends Engine_Form {
       'ignore' => true,
     ));
     $this->populate($settings->getSetting('user_signup'));
-    $this->enablesigupfields->setValue(json_decode($settings->getSetting('user.signup.enablesigupfields', '["confirmpassword","profiletype","timezone","language"]')));
+    $this->enablesigupfields->setValue(json_decode($settings->getSetting('user.signup.enablesigupfields', '["confirmpassword","dob","gender","profiletype","timezone","language", "location"]')));
   }
 }

@@ -20,7 +20,7 @@
 <?php endif; ?>
 
 <script type="text/javascript">
-  scriptJquery(document).ready(function() {
+  en4.core.runonce.add(function() {
     scriptJquery('#step_list').addClass('sortable');
     var SortablesInstance = scriptJquery('#step_list').sortable({
       stop: function( event, ui ) {
@@ -66,26 +66,13 @@
 
 <div class='admin_signup_wrapper'>
   <div class='admin_signup_steps'>
-      <ul>
-        <?php  foreach( $this->steps as $step ):
-        if($step->class != "User_Plugin_Signup_Account")  
-          continue;
-        ?>
-          <li>
-            <a href='<?php echo $this->url(array('signup_id'=>$step->signup_id));?>'><?php echo $this->translate("ADMIN_SIGNUP_STEP_" . strtoupper($step->class)) ?></a>
-          </li>
-        <?php endforeach;?>
-      </ul>
-      <ul id="step_list">
-        <?php  foreach( $this->steps as $step ):
-        if($step->class == "User_Plugin_Signup_Account")  
-          continue;
-        ?>
-          <li class='sortable' id='step_<?php echo $step->signup_id ?>'>
-            <a href='<?php echo $this->url(array('signup_id'=>$step->signup_id));?>'><?php echo $this->translate("ADMIN_SIGNUP_STEP_" . strtoupper($step->class)) ?></a>
-          </li>
-        <?php endforeach;?>
-      </ul>
+    <ul id="step_list">
+      <?php  foreach( $this->steps as $step ): ?>
+        <li class='sortable' id='step_<?php echo $step->signup_id ?>'>
+          <a href='<?php echo $this->url(array('signup_id'=>$step->signup_id));?>'><?php echo $this->translate("ADMIN_SIGNUP_STEP_" . strtoupper($step->class)) ?></a>
+        </li>
+      <?php endforeach;?>
+    </ul>
   </div>
   <div class='admin_signup_settings'>
     <div class='form_elements'>

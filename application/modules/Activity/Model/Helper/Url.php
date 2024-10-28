@@ -1,21 +1,16 @@
 <?php
-/**
- * SocialEngine
+
+ /**
+ * socialnetworking.solutions
  *
- * @category   Application_Core
+ * @category   Application_Modules
  * @package    Activity
- * @copyright  Copyright 2006-2020 Webligo Developments
- * @license    http://www.socialengine.com/license/
- * @version    $Id: Url.php 9747 2012-07-26 02:08:08Z john $
- * @author     John
+ * @copyright  Copyright 2014-2020 Ahead WebSoft Technologies Pvt. Ltd.
+ * @license    https://socialnetworking.solutions/license/
+ * @version    $Id: Url.php 2017-01-12  00:00:00 socialnetworking.solutions $
+ * @author     socialnetworking.solutions
  */
 
-/**
- * @category   Application_Core
- * @package    Activity
- * @copyright  Copyright 2006-2020 Webligo Developments
- * @license    http://www.socialengine.com/license/
- */
 class Activity_Model_Helper_Url extends Activity_Model_Helper_Abstract
 {
   /**
@@ -25,7 +20,7 @@ class Activity_Model_Helper_Url extends Activity_Model_Helper_Abstract
    * @param string $innerHTML
    * @return string
    */
-  public function direct($params, $innerHTML)
+  public function direct($params, $innerHTML,$separator = ' &rarr; ')
   {
     // Passed an absolute url
     if( is_string($params) )

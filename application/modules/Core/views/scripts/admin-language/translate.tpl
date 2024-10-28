@@ -15,7 +15,7 @@
 <script type="text/javascript" src="http://www.google.com/jsapi"></script>
 <script type="text/javascript">
   google.load("language", "1");
-  scriptJquery(document).ready(function() {
+  en4.core.runonce.add(function() {
     google.language.getBranding(scriptJquery('.global_form')[0].find('h3'));//'branding');
   });
 </script>
@@ -52,7 +52,7 @@
         }
       }));
     }
-    scriptJquery(document).ready(function() {
+    en4.core.runonce.add(function() {
       (scriptJquery.crtEle('a', {
         'href' : 'javascript:void(0);',
         'html' : ,

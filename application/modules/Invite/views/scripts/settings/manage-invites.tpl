@@ -34,15 +34,15 @@
           </li>
         </ul>
         <?php if($settings->getSetting('invite.enable', 1) && !empty($settings->getSetting('invite.signupenable', 0)) && Engine_Api::_()->getApi('settings', 'core')->getSetting('invite.referralforsingup', 1)) { ?>
-          <div class="invite_invite_friend">
-            <div class="invite_referral_field">
+          <div class="copy_link_container">
+            <div class="copy_link_field">
               <div class="_des font_color_light"><?php echo $this->translate("Referral Code"); ?></div>
               <input type="type" value="<?php echo $this->referral_code;?>" id="myreferralcode" />
-              <button class="copy_referral_code" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="<?php echo $this->translate("Copy");?>"><i class="far fa-copy"></i></button>
+              <button class="copy_link copy_referral_code" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="<?php echo $this->translate("Copy");?>"><i class="far fa-copy"></i></button>
             </div>
           </div>
           <script type="text/javascript">
-            scriptJquery(document).on('click','.copy_referral_code',function (e) {
+            AttachEventListerSE('click','.copy_referral_code',function (e) {
               if(scriptJquery('#myreferralcode').val().length) {
                 scriptJquery("<textarea/>").appendTo("body").val(scriptJquery('#myreferralcode').val()).select().each(function () {
                   document.execCommand('copy');
@@ -63,7 +63,7 @@
         <!--<div class="mb-2">
           <a href='<?php //echo $this->url(array('module' => 'invite'), 'default', true) ?>' class="btn btn-primary"><i class="fa fa-envelope"></i><span><?php //echo $this->translate("Invite Your Friends") ?></span></a>
         </div>-->
-        <div class="manage_search invite_manage_search">
+        <div class="manage_search invite_manage_search core_search_form">
           <?php echo $this->formFilter->render($this) ?>
         </div>
         <?php if( $this->paginator->getTotalItemCount() > 0 ): ?>
@@ -181,7 +181,7 @@
   
   scriptJquery('.user_settings_invites ').parent().addClass('active');
 
-  scriptJquery(document).on('click','.invite_code',function (e) {
+  AttachEventListerSE('click','.invite_code',function (e) {
     scriptJquery("<textarea/>").appendTo("body").val(scriptJquery(this).attr('data-invite-url')).select().each(function () {
         document.execCommand('copy');
       }).remove();

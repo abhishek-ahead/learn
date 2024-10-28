@@ -72,7 +72,7 @@
   }
   
   <?php if( $this->openUser ): ?>
-    scriptJquery(document).ready(function() {
+    en4.core.runonce.add(function() {
       scriptJquery('#multimodify_form .admin_table_options a').each(function() {
         var el = scriptJquery(this);
         if( -1 < el.attr('href').indexOf('/edit/') ) {
@@ -82,7 +82,7 @@
     });
   <?php endif ?>
 
-  scriptJquery(document).ready(function(){
+  en4.core.runonce.add(function() {
     scriptJquery("input[name='approved'],input[name='disapproved'],input[name='enable'],input[name='disable'],input[name='delete']").on('click', function( event ) {
       event.preventDefault();
       var selectedItems = scriptJquery("input[name='selectedItems[]']");
@@ -215,7 +215,10 @@
                 <?php } ?>
                 <td data-label="<?php echo $this->translate("User Level") ?>" class="admin_table_centered nowrap">
                   <a href="<?php echo $this->url(array('module'=>'authorization','controller'=>'level', 'action' => 'edit', 'id' => $item->level_id)) ?>">
-                    <?php echo $this->translate(Engine_Api::_()->getItem('authorization_level', $item->level_id)->getTitle()) ?>
+                    <?php $level = Engine_Api::_()->getItem('authorization_level', $item->level_id); ?>
+                    <?php if($level) { ?>
+                      <?php echo $this->translate($level->getTitle()); ?>
+                    <?php } ?>
                   </a>
                 </td>
                 <td data-label="<?php echo $this->translate("Profile Type") ?>" class="admin_table_centered nowrap">

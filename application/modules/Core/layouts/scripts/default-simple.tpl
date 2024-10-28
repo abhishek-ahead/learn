@@ -9,10 +9,26 @@
  * @version    $Id: default-simple.tpl 10227 2014-05-16 22:43:27Z andres $
  * @author     John
  */
+if (APPLICATION_ENV == 'development') {
+  Engine_Api::_()->core()->generateJsCss();
+}
+
+$settings = Engine_Api::_()->getApi('settings', 'core');
+
+$themeFontSize = !empty($_SESSION['font_theme']) && $_SESSION['font_theme'] ? $_SESSION['font_theme'] : "";
+$htmlClass = "";
+
+$contrast_mode = $settings->getSetting('contrast.mode', 'dark_mode');
+$themeModeColor = !empty($_SESSION['mode_theme']) && $_SESSION['mode_theme'] ? $_SESSION['mode_theme'] : "";
+if($contrast_mode == 'dark_mode' && $themeModeColor == 'dark_mode') {
+  $htmlClass .= " ".$themeModeColor;
+} else if($contrast_mode == 'light_mode' && $themeModeColor == 'light_mode') {
+  $htmlClass .= " ".$themeModeColor;
+}
 ?>
 <?php echo $this->doctype()->__toString() ?>
 <?php $locale = $this->locale()->getLocale()->__toString(); $orientation = ( $this->layout()->orientation == 'right-to-left' ? 'rtl' : 'ltr' ); ?>
-<html id="smoothbox_window" xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $locale ?>" lang="<?php echo $locale ?>" dir="<?php echo $orientation ?>">
+<html id="smoothbox_window" xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $locale ?>" lang="<?php echo $locale ?>" dir="<?php echo $orientation ?>" class="<?php echo $htmlClass; ?>">
 <head>
   <base href="<?php echo rtrim($this->serverUrl($this->baseUrl()), '/'). '/' ?>" />
 
@@ -82,7 +98,9 @@
   <?php echo $this->headTitle()->toString()."\n" ?>
   <?php echo $this->headMeta()->toString()."\n" ?>
 
-  <link href="<?php echo $staticBaseUrl . 'externals/bootstrap/css/bootstrap.css'; ?>" media="screen" rel="stylesheet" type="text/css">
+  <link href="<?php echo $staticBaseUrl . 'externals/bootstrap/css/bootstrap.css?c='.$counter; ?>" media="screen" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="<?php echo $staticBaseUrl . 'externals/styles/styles.css?c='.$counter; ?>">
+
   <?php // LINK/STYLES ?>
   <?php $favicon = Engine_Api::_()->getApi('settings', 'core')->getSetting('core.site.favicon',false); ?>
   <?php
@@ -100,21 +118,25 @@
     
     foreach ($themes as $theme) {
       if (APPLICATION_ENV != 'development') {
-          if(isset($_SESSION['mode_theme']) && $_SESSION['mode_theme'] == 'dark_mode') {
-              $this->headLink()->prependStylesheet($staticBaseUrl . 'application/css.php?request=application/themes/' . $theme . '/dark-theme.css');
-          } else if(isset($_SESSION['mode_theme']) && $_SESSION['mode_theme'] == 'light_mode') {
-              $this->headLink()->prependStylesheet($staticBaseUrl . 'application/css.php?request=application/themes/' . $theme . '/light-theme.css'); 
-          } else{
-              $this->headLink()->prependStylesheet($staticBaseUrl . 'application/css.php?request=application/themes/' . $theme . '/theme.css'); 
-          }
+          // if(isset($_SESSION['mode_theme']) && $_SESSION['mode_theme'] == 'dark_mode') {
+          //     $this->headLink()->prependStylesheet($staticBaseUrl . 'application/themes/' . $theme . '/dark-theme.css');
+          // } else if(isset($_SESSION['mode_theme']) && $_SESSION['mode_theme'] == 'light_mode') {
+          //     $this->headLink()->prependStylesheet($staticBaseUrl . 'application/themes/' . $theme . '/light-theme.css'); 
+          // } else{
+
+              $this->headLink()->prependStylesheet($staticBaseUrl . 'application/themes/' . $theme . '/theme.css'); 
+          
+          // }
       } else {
-          if(isset($_SESSION['mode_theme']) && $_SESSION['mode_theme'] == 'dark_mode') {
-              $this->headLink()->prependStylesheet(rtrim($this->baseUrl(), '/') . '/application/css.php?request=application/themes/' . $theme . '/dark-theme.css');
-          } else if(isset($_SESSION['mode_theme']) && $_SESSION['mode_theme'] == 'light_mode') {
-              $this->headLink()->prependStylesheet(rtrim($this->baseUrl(), '/') . '/application/css.php?request=application/themes/' . $theme . '/light-theme.css');
-          } else{
-              $this->headLink()->prependStylesheet(rtrim($this->baseUrl(), '/') . '/application/css.php?request=application/themes/' . $theme . '/theme.css');
-          }
+          // if(isset($_SESSION['mode_theme']) && $_SESSION['mode_theme'] == 'dark_mode') {
+          //     $this->headLink()->prependStylesheet(rtrim($this->baseUrl(), '/') . '/application/themes/' . $theme . '/dark-theme.css');
+          // } else if(isset($_SESSION['mode_theme']) && $_SESSION['mode_theme'] == 'light_mode') {
+          //     $this->headLink()->prependStylesheet(rtrim($this->baseUrl(), '/') . '/application/themes/' . $theme . '/light-theme.css');
+          // } else{
+
+              $this->headLink()->prependStylesheet(rtrim($this->baseUrl(), '/') . '/application/themes/' . $theme . '/theme.css');
+          
+              // }
           
       }
   }
@@ -168,20 +190,45 @@
     }
     
     <?php echo $this->headScript()->captureEnd(Zend_View_Helper_Placeholder_Container_Abstract::PREPEND) ?>
+    
+    var post_max_size = '<?php echo Engine_Api::_()->core()->convertPHPSizeToBytes(ini_get('upload_max_filesize')); ?>';
+    var max_photo_upload_limit = 50;
+    var photo_upload_text = "<?php echo $this->string()->escapeJavascript($this->translate('Max upload of %s allowed.', 50)); ?>";
     var dateFormatCalendar = "<?php echo Engine_Api::_()->core()->dateFormatCalendar(); ?>";
   </script>
-  <link rel="stylesheet" href="<?php echo $staticBaseUrl . 'externals/jQuery/jquery-ui.css'; ?>">
-    <script type="text/javascript" src="<?php echo $staticBaseUrl . 'externals/jQuery/jquery.min.js'; ?> "></script>
-    <script type="text/javascript" src="<?php echo $staticBaseUrl . 'externals/jQuery/jquery-ui.js'; ?> "></script>
-    <script type="text/javascript" src="<?php echo $staticBaseUrl . 'externals/jQuery/core.js'; ?> "></script>
 
+  <link rel="stylesheet" href="<?php echo $staticBaseUrl . 'externals/jQuery/jquery-ui.css?c='.$counter; ?>">
+
+  <?php 
+        $counterCssKey = Engine_Api::_()->getApi('settings','core')->getSetting("core.styles.counter",0); 
+        if(!empty($counterCssKey)){ 
+            for($i = 1; $i <= $counterCssKey; $i++){ ?>
+                <link rel="stylesheet" href="<?php echo $staticBaseUrl . "externals/styles/styles_$i.css?c=".$counter ?>" />
+        <?php }
+        }
+    ?>
+
+    <?php 
+    //Load google map
+    if(Engine_Api::_()->getApi('settings', 'core')->getSetting('enableglocation', 0) == 1 && Engine_Api::_()->getApi('settings', 'core')->getSetting('core.mapApiKey', '')) { ?>
+      <script type="text/javascript" src="<?php echo 'https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=' . Engine_Api::_()->getApi('settings', 'core')->getSetting('core.mapApiKey', '').'&language='.$_COOKIE['en4_language'] ?>"></script>
+    <?php } ?>
+
+    <script type="text/javascript" src="<?php echo $staticBaseUrl . 'externals/jQuery/jquery.min.js?c='.$counter ?>"></script>
+    <script type="text/javascript" src="<?php echo $staticBaseUrl . 'externals/jQuery/jquery-ui.js?c='.$counter ?>"></script>
+    <script type="text/javascript" src="<?php echo $staticBaseUrl . 'externals/bootstrap/js/bootstrap.js?c='.$counter ?>"></script>
+    <script type="text/javascript" src="<?php echo $staticBaseUrl . 'externals/scripts/script.js?c='.$counter ?>"></script>
+
+    <?php 
+        $counterJsKey = Engine_Api::_()->getApi('settings','core')->getSetting("core.scripts.counter",0); 
+        if(!empty($counterJsKey)){ 
+            for($i = 1; $i <= $counterJsKey; $i++){  ?>
+                <script type="text/javascript" src="<?php echo $staticBaseUrl . "externals/scripts/script_$i.js?c=".$counter ?>"></script>
+            <?php }
+        } 
+    ?>
+  
   <?php
-    $this->headScript()
-      ->prependFile($staticBaseUrl . 'externals/smoothbox/smoothbox4.js')
-      ->prependFile($staticBaseUrl . 'application/modules/User/externals/scripts/core.js')
-      ->prependFile($staticBaseUrl . 'application/modules/Core/externals/scripts/core.js')
-      ->prependFile($staticBaseUrl . 'externals/bootstrap/js/bootstrap.js')
-      ->prependFile($staticBaseUrl . 'externals/mdetect/mdetect.js');
     // Process
     foreach( $this->headScript()->getContainer() as $dat ) {
       if( !empty($dat->attributes['src']) ) {
@@ -192,17 +239,22 @@
         }
       }
     }
-  ?>
+  ?> 
   <?php echo $this->headScript()->toString()."\n" ?>
 
   <script type="text/javascript">
     var $ = scriptJquery;
+    
+    var isGoogleKeyEnabled = <?php echo Engine_Api::_()->getApi('settings', 'core')->getSetting('enableglocation', 0) == 1 && Engine_Api::_()->getApi('settings', 'core')->getSetting('core.mapApiKey', '') ? 1 : 0; ?>;
+    
+    var isEnablegLocation = <?php echo Engine_Api::_()->getApi('settings', 'core')->getSetting('enableglocation', 0) ? 1 : 0; ?>;
+
     if(!!navigator.platform.match(/iPhone|iPod|iPad/)){ 
-      scriptJquery(document).on('focus', 'input, textarea', function(){
+      AttachEventListerSE('focus', 'input, textarea', function(){
         scriptJquery(parent.document.body).addClass('iskeyboard-enabled');
 
       });
-      scriptJquery(document).on('blur', 'input, textarea', function(){
+      AttachEventListerSE('blur', 'input, textarea', function(){
         scriptJquery(parent.document.body).removeClass('iskeyboard-enabled');
       });
     }
@@ -215,11 +267,14 @@
       margin: 0px;
     }
   </style>
+  <?php if ($request->getParam('format') !== 'smoothbox') { ?>
   <?php echo $headIncludes ?>
+  <?php } ?>
 </head>
 <body id="global_page_<?php echo $identity ?>">
   <span id="global_content_simple">
     <?php echo $this->layout()->content ?>
   </span>
+  <div id="append-script-data"></div>
 </body>
 </html>

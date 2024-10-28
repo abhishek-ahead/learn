@@ -23,7 +23,7 @@
   ?>	
 </div>
 <script type="text/javascript">
-  scriptJquery(document).ready(function() {
+  en4.core.runonce.add(function() {
     var el = scriptJquery('.admin_logs');
     if( el.length ) {
       el.scrollTop(0, el.offset().top);

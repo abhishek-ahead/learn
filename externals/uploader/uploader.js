@@ -24,7 +24,9 @@ Uploader = class {
     scriptJquery.crtEle('a', {
        id: "upload_file_link",
        class: self.options.uploadLinkClass,
-    }).html(self.options.uploadLinkTitle).click(function() {
+       href:"#"
+    }).html(self.options.uploadLinkTitle).click(function(e) {
+      e.preventDefault();
       self.uploadElement.trigger("click");
     }).appendTo(scriptJquery('#file-status'));
 

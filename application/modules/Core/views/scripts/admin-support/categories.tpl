@@ -21,11 +21,7 @@
   </div>
 <?php endif; ?>
 
-<?php 
-$this->headScript()->appendFile($this->layout()->staticBaseUrl . 'externals/jQuery/jquery-ui.js');
-$this->headScript()->appendFile($this->layout()->staticBaseUrl . 'externals/jQuery/odering.js'); 
-$this->headScript()->appendFile($this->layout()->staticBaseUrl . 'application/modules/Core/externals/scripts/admin/categories.js');
-?>
+<?php $this->headScript()->appendFile($this->layout()->staticBaseUrl . 'application/modules/Core/externals/scripts/admin/categories.js'); ?>
 <script type="application/javascript">
   ajaxurl = en4.core.baseUrl+"admin/core/support/change-order";
 </script>
@@ -79,7 +75,7 @@ $this->headScript()->appendFile($this->layout()->staticBaseUrl . 'application/mo
       <div class="admin-categories-listing">
       	<div id="error-message-category-delete"></div>
         <form id="multimodify_form" method="post" onsubmit="return multiModify();">
-          <table class='admin_table' style="width: 100%;">
+          <table class='admin_table admin_table_order' style="width: 100%;">
             <thead>
               <tr>
                 <th><input type="checkbox" onclick="selectAll()"  name="checkbox" /></th>

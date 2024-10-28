@@ -18,7 +18,7 @@
 ?>
 
 <script type="text/javascript">
-  var post_max_size = "<?php echo (int)(ini_get('post_max_size')); ?>";
+  var post_max_size = "<?php echo 10000000000; ?>";
   var uploadedFiles = [];
   var pendingExtraction = [];
   var currentlyUploading = false;
@@ -108,7 +108,7 @@
     }
   };
 
-  scriptJquery(document).ready(function() {
+  en4.core.runonce.add(function() {
     checkCanContinue();
     scriptJquery('#upload_file').each(function (el) {
     

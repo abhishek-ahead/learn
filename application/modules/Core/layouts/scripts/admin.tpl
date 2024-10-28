@@ -18,7 +18,9 @@
     <?php $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0');?>
    <?php // ALLOW HOOKS INTO META?>
     <?php echo $this->hooks('onRenderLayoutAdmin', $this) ?>
-
+    <script type="text/javascript">
+        isLoadedFromAjax = true;
+    </script>
     <?php // TITLE/META?>
     <?php
     $counter = (int) $this->layout()->counter;
@@ -122,38 +124,32 @@
         <?php echo $this->headScript()->captureEnd(Zend_View_Helper_Placeholder_Container_Abstract::PREPEND) ?>
         var dateFormatCalendar = "<?php echo Engine_Api::_()->core()->dateFormatCalendar(); ?>";
     </script>
-    <link rel="stylesheet" href="<?php echo $staticBaseUrl . 'externals/font-awesome/css/all.min.css'; ?>">
-    <link href="<?php echo $staticBaseUrl . 'externals/bootstrap/css/bootstrap.css'; ?>" media="screen" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="<?php echo $staticBaseUrl . 'externals/jQuery/jquery-ui.css'; ?>">
-    <script type="text/javascript" src="<?php echo $staticBaseUrl . 'externals/jQuery/jquery.min.js' ?>"></script>
-    <?php 
-    $this->headScript()
-        ->prependFile($staticBaseUrl . 'externals/smoothbox/smoothbox4.js')
-        ->prependFile($staticBaseUrl . 'externals/smoothbox/ajaxsmoothbox.js')
-        ->prependFile($staticBaseUrl . 'externals/mdetect/mdetect.js')
-        ->prependFile($staticBaseUrl . 'application/modules/User/externals/scripts/core.js')
-        ->prependFile($staticBaseUrl . 'application/modules/Core/externals/scripts/core.js')
-        ->prependFile($staticBaseUrl . 'externals/bootstrap/js/bootstrap.js');
-
-    $this->headScript()->prependFile($staticBaseUrl . 'externals/jQuery/core.js')
-        ->prependFile($staticBaseUrl . 'externals/jQuery/jquery-ui.js');
-
-    // Process
-    foreach ($this->headScript()->getContainer() as $dat) {
+    
+    <link rel="stylesheet" href="<?php echo $staticBaseUrl . 'externals/font-awesome/css/all.min.css?c='.$counter; ?>">
+    <link href="<?php echo $staticBaseUrl . 'externals/bootstrap/css/bootstrap.css?c='.$counter; ?>" media="screen" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="<?php echo $staticBaseUrl . 'externals/jQuery/jquery-ui.css?c='.$counter; ?>">
+    <script type="text/javascript" src="<?php echo $staticBaseUrl . 'externals/jQuery/jquery.min.js?c='.$counter ?>"></script>
+    <script type="text/javascript" src="<?php echo $staticBaseUrl . 'externals/jQuery/jquery-ui.js?c='.$counter ?>"></script>
+    <script type="text/javascript" src="<?php echo $staticBaseUrl . 'externals/bootstrap/js/bootstrap.js?c='.$counter ?>"></script>
+    <script type="text/javascript" src="<?php echo $staticBaseUrl . 'externals/scripts/script.js?c='.$counter ?>"></script>
+    
+    <?php
+      // Process
+      foreach ($this->headScript()->getContainer() as $dat) {
         if (!empty($dat->attributes['src'])) {
-            if (false === strpos($dat->attributes['src'], '?')) {
-                $dat->attributes['src'] .= '?c=' . $counter;
-            } else {
-                $dat->attributes['src'] .= '&c=' . $counter;
-            }
+          if (false === strpos($dat->attributes['src'], '?')) {
+              $dat->attributes['src'] .= '?c=' . $counter;
+          } else {
+              $dat->attributes['src'] .= '&c=' . $counter;
+          }
         }
-    }
+      }
     ?>
 
     <?php echo $this->headScript()->toString()."\n" ?>
     <?php if($request->getControllerName() == 'admin-content') { ?>
-    <script type="text/javascript" src="<?php echo $staticBaseUrl . 'application/modules/Core/externals/scripts/admin/adminlayout.js' ?>"></script>
-    <script type="text/javascript" src="<?php echo $staticBaseUrl . 'application/modules/Core/externals/scripts/admin/layout.js' ?>"></script>
+      <script type="text/javascript" src="<?php echo $staticBaseUrl . 'application/modules/Core/externals/scripts/admin/adminlayout.js?c='.$counter; ?>"></script>
+      <script type="text/javascript" src="<?php echo $staticBaseUrl . 'application/modules/Core/externals/scripts/admin/layout.js?c='.$counter; ?>"></script>
     <?php } ?>
     <script type="text/javascript">
       var $ = scriptJquery;
@@ -187,11 +183,11 @@
         }
         var post_max_size = '<?php echo Engine_Api::_()->core()->convertPHPSizeToBytes(ini_get('upload_max_filesize')); ?>';
         var max_photo_upload_limit = 50;
-        var photo_upload_text = "<?php echo $this->translate('Max upload of %s allowed.', 50); ?>";
+        var photo_upload_text = "<?php echo $this->string()->escapeJavascript($this->translate('Max upload of %s allowed.', 50)); ?>";
         //]]>
     </script>
 </head>
-<body id="global_page_<?php echo $identity ?>">
+<body id="global_page_<?php echo $identity ?>" class="admin">
 
 <div class="admin_panel_wrapper">
   <!-- TOP HEADER BAR -->

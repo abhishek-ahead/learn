@@ -15,13 +15,15 @@
   $coverphoto = $coverphoto ? Engine_Api::_()->core()->getFileUrl($coverphoto) : '';
 ?>
 <div class="profile_photos_cover_section">
-  <div class="profile_photos_cover_photo">
-    <?php if(!empty($this->photo)) { ?>
-      <img src="<?php echo $this->photo->getPhotoUrl('thumb.cover'); ?>" alt="profile img">
-    <?php } else if(!empty($coverphoto)) { ?>
-      <img src="<?php echo $coverphoto; ?>" alt="profile img">
-    <?php } ?>
-  </div>
+  <?php if(is_array($this->options) && engine_in_array('coverphoto', $this->options)) { ?>
+    <div class="profile_photos_cover_photo">
+      <?php if(!empty($this->photo)) { ?>
+        <img src="<?php echo $this->photo->getPhotoUrl('thumb.cover'); ?>" alt="profile img">
+      <?php } else if(!empty($coverphoto)) { ?>
+        <img src="<?php echo $coverphoto; ?>" alt="profile img">
+      <?php } ?>
+    </div>
+  <?php } ?>
   
   <div class="profile_photos_cover_photo_inner">
     <div class="profile_photo">
@@ -31,12 +33,12 @@
       <h4>
         <a href="<?php echo $this->viewer->getHref(); ?>"><?php echo $this->viewer->getTitle(); ?></a>
       </h4>
-      <?php if( Engine_Api::_()->getApi('settings', 'core')->getSetting('user.signup.username', 1)) { ?>
+      <?php if(is_array($this->options) && engine_in_array('username' , $this->options) && Engine_Api::_()->getApi('settings', 'core')->getSetting('user.signup.username', 1)) { ?>
         <span class="username"><?php echo '@'. $this->viewer->username; ?></span>
       <?php } ?>
     </div>
   </div>
-  <?php if(Engine_Api::_()->getApi('settings', 'core')->getSetting('user.friends.eligible', 2)) { ?>
+  <?php if(is_array($this->options) && engine_in_array('recentfriends', $this->options) && Engine_Api::_()->getApi('settings', 'core')->getSetting('user.friends.eligible', 2)) { ?>
     <div class="profile_cover_user_friend_main">
       <?php if($this->friends->getTotalItemCount() > 0) { ?>
         <h6><?php echo $this->translate("Recent Friends"); ?></h6>

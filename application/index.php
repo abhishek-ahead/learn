@@ -115,7 +115,7 @@ if (file_exists(APPLICATION_PATH_SET . DS . 'general.php')) {
       opcache_invalidate(APPLICATION_PATH_SET . DS . 'general.php');//Reset file cache
     $generalConfig = include APPLICATION_PATH_SET . DS . 'general.php';
 } else {
-    $generalConfig = array('environment_mode' => 'production');
+    $generalConfig = array('environment_mode' => 'development');
 }
 
   // maintenance mode
@@ -243,6 +243,40 @@ if (_ENGINE_R_MAIN) {
 // Main app
 else {
     $application->bootstrap();
+    // webview app changes
+    if(!empty($_REQUEST['device_id']) || !empty($_SESSION['device_api_id'])){
+    
+        // custom code
+        if(!empty($_REQUEST['device_id'])){
+            $_SESSION['device_api_id'] = $_REQUEST['device_id'];
+        }
+        if(!empty($_GET['device_id'])){
+            $_SESSION['device_api_id'] = $_GET['device_id'];
+        }
+        if(!empty($_GET['platform_id'])){
+            $_SESSION['platform_api_id'] = $_GET['platform_id'];
+        }
+        if(!empty($_SESSION['device_api_id'])){ 
+            $_REQUEST['auth_token'] = $_SESSION['device_api_id'];
+            $_REQUEST['device_udid'] = $_SESSION['device_api_id'];
+            $_REQUEST['device_uuid'] = $_SESSION['device_api_id'];
+        }
+        if(!empty($_SESSION['platform_api_id'])){
+            $_REQUEST['sesapi_platform'] = $_SESSION['platform_api_id'];
+            define('_SESAPI_PLATFORM_SERVICE', $_SESSION['platform_api_id']);
+        }
+        
+        if(!empty($_GET['location_title'])){
+            setcookie('sesbasic_location_data', $_GET['location_title'], time() + (86400 * 30), "/"); // 86400 = 1 day
+            setcookie('sesbasic_location_lat', $_GET['location_lat'], time() + (86400 * 30), "/"); // 86400 = 1 day
+            setcookie('sesbasic_location_lng', $_GET['location_lng'], time() + (86400 * 30), "/"); // 86400 = 1 day
+            header("Location:".str_replace('location_title','old_title',$_SERVER["REQUEST_URI"]));
+        }
+        
+        // end custom code
+    }
+
+
     $application->run();
 }
 

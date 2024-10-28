@@ -15,7 +15,7 @@
 </div>
 <script type="text/javascript">
 
-  scriptJquery(document).ready(function() {
+  en4.core.runonce.add(function() {
     showHideEmail("<?php echo Engine_Api::_()->getApi('settings', 'core')->getSetting('user.signup.adminemail', 0); ?>");
     showUserName("<?php echo Engine_Api::_()->getApi('settings', 'core')->getSetting('user.signup.username', 1); ?>");
   });

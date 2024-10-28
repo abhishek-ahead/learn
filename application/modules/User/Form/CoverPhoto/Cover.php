@@ -32,6 +32,7 @@ class User_Form_CoverPhoto_Cover extends Engine_Form {
       'validators' => array(
         array('Extension', false, 'jpg,png,gif,jpeg,webp'),
       ),
+      'accept' => 'image/*',
       'onchange' => 'javascript:uploadPhoto();'
     ));
   }

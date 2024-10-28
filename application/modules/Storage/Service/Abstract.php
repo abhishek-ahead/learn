@@ -79,6 +79,11 @@ abstract class Storage_Service_Abstract implements Storage_Service_Interface
         // $file is a key of $_FILES
         elseif (is_array($file)) {
             $info = $file;
+            // Try to get image info
+            if (function_exists('getimagesize') && ($imageinfo = getimagesize($info['tmp_name']))) {
+                $info['width'] = isset($imageinfo[0]) ? $imageinfo[0] : NULL;
+                $info['height'] = isset($imageinfo[1]) ? $imageinfo[1] : NULL;
+            }
         }
 
         // $file is a string
@@ -93,6 +98,8 @@ abstract class Storage_Service_Abstract implements Storage_Service_Interface
             // Try to get image info
             if (function_exists('getimagesize') && ($imageinfo = getimagesize($file))) {
                 $info['type'] = $imageinfo['mime'];
+                $info['width'] = isset($imageinfo[0]) ? $imageinfo[0] : NULL;
+                $info['height'] = isset($imageinfo[1]) ? $imageinfo[1] : NULL;
             }
         }
 

@@ -30,10 +30,6 @@ $otpsms_signup_phonenumber = $settings->getSetting('otpsms.signup.phonenumber', 
 $otpsms_login_options = $settings->getSetting('otpsms.login.options',0);
 
 if(!empty($otpsms_signup_phonenumber)) {
-  $this->headLink()->appendStylesheet($this->layout()->staticBaseUrl."externals/selectize/css/normalize.css");
-  $headScript = new Zend_View_Helper_HeadScript();
-  $headScript->appendFile($this->layout()->staticBaseUrl.'externals/selectize/js/selectize.js');
-
   $getCountry = Engine_Api::_()->getDbTable('countries', 'core')->getCountry(Engine_Api::_()->getApi('settings', 'core')->getSetting('otpsms.default.countries','US'));
   if(!empty($getCountry)) {
     $country = Engine_Api::_()->getItem('core_country', $getCountry);
@@ -42,7 +38,7 @@ if(!empty($otpsms_signup_phonenumber)) {
 ?>
 <?php if(!empty($otpsms_signup_phonenumber) && !empty($otpsms_login_options)) { ?>
   <script type="text/javascript">
-    scriptJquery(document).ready(function() {
+    en4.core.runonce.add(function() {
       scriptJquery('#email-element').prepend(scriptJquery('#login_country_code').html());
       scriptJquery('#login_country_code').remove();
       
@@ -99,7 +95,7 @@ if(!empty($otpsms_signup_phonenumber)) {
       });
     });
     
-    scriptJquery(document).on('keyup', '#email', function(e) {
+    AttachEventListerSE('keyup', '#email', function(e) {
       var emailVal = scriptJquery("#email").val();
       if(emailVal.match(/^\d+$/)) {
         scriptJquery('#country_code_element').show();
@@ -116,7 +112,7 @@ if(!empty($otpsms_signup_phonenumber)) {
 <?php } ?>
 <script type="text/javascript">
   if(typeof loginSignupPlaceHolderActive != 'undefined') {
-    scriptJquery (document).ready(function(e) {
+    en4.core.runonce.add(function() {
       scriptJquery('#email-label').hide();
       scriptJquery('#password-label').hide();
       scriptJquery('#email').attr('placeholder',scriptJquery('#email-label').find('label').html());

@@ -124,6 +124,10 @@ class Authorization_AdminLevelController extends Core_Controller_Action_Admin
           $permissions->level_id = $level->level_id;
           $permissions->save();
         }
+        
+        //Entry in the verification table when create new level
+        $dbInsert = Engine_Db_Table::getDefaultAdapter();
+        $dbInsert->query('INSERT IGNORE INTO `engine4_payment_verificationpackages` (`level_id`, `price`, `recurrence`, `recurrence_type`, `duration`, `duration_type`, `verified_icon`, `verified_tiptext`, `verified`) VALUES ("'.$level->level_id.'", 1, 0, "forever", 0, "forever", NULL, "Verified", 0);');
 
         // Commit
         $db->commit();
@@ -225,9 +229,9 @@ class Authorization_AdminLevelController extends Core_Controller_Action_Admin
       'messages_editor' => $messagesEditor,
     ));
 
-    $form->populate(array(
-      'activity_edit_time' => $permissionsTable->getAllowed('activity', $id, 'edit_time'),
-    ));
+    // $form->populate(array(
+    //   'activity_edit_time' => $permissionsTable->getAllowed('activity', $id, 'edit_time'),
+    // ));
 
     $form->getElement('title')->setValue($level->title);
 
@@ -283,8 +287,8 @@ class Authorization_AdminLevelController extends Core_Controller_Action_Admin
     $messageEditor = @$values['messages_editor'];
     unset($values['mesages_editor']);
 
-    $activityMaxEditTime = @$values['activity_edit_time'];
-    unset($values['activity_edit_time']);
+    // $activityMaxEditTime = @$values['activity_edit_time'];
+    // unset($values['activity_edit_time']);
 
     // coverphoto work
     unset($values['coverphoto_dummy']);
@@ -307,10 +311,11 @@ class Authorization_AdminLevelController extends Core_Controller_Action_Admin
       'editor' => $messageEditor,
     ), '', $nonBooleanSettings);
 
-    $nonBooleanSettings = array('edit_time');
-    $permissionsTable->setAllowed('activity', $level->level_id, array(
-      'edit_time' => $activityMaxEditTime,
-    ), '', $nonBooleanSettings);
+    // $nonBooleanSettings = array('edit_time');
+    // $permissionsTable->setAllowed('activity', $level->level_id, array(
+    //   'edit_time' => $activityMaxEditTime,
+    // ), '', $nonBooleanSettings);
+    
     // show changes saved message
     $form->addNotice('Your changes have been saved.');
   }

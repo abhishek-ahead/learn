@@ -22,6 +22,7 @@ class Core_Form_Contact extends Engine_Form
   {
     $this->setTitle('Contact Us')
       ->setDescription('_CORE_CONTACT_DESCRIPTION')
+      ->setAttrib("class",'global_form')
       #->setDescription('Thank you for trying out the SE4 Preview! We are using this live demonstration to find and resolve bugs more quickly as we continue to develop SE4. Please note that much of the functionality and front-end layout is still rough. The basic skin you see here will be one of several default skin choices available with SE4 when the final version is released. Our team sincerely appreciates your participation and feedback. Your message will be entered into our internal bug tracking system, so please do not expect a direct reply - although we may contact you with further questions if necessary. Once again, thanks!')
       ->setAction($_SERVER['REQUEST_URI'])
       ;

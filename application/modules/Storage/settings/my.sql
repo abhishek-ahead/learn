@@ -55,13 +55,14 @@ CREATE TABLE `engine4_storage_files` (
   `hash` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `resource_type` VARCHAR(128) NULL DEFAULT NULL, 
   `resource_id` INT(11) NULL DEFAULT NULL,
+  `height` INT(11) NULL DEFAULT NULL,
+  `width` INT(11) NULL DEFAULT NULL,
   PRIMARY KEY  (`file_id`),
   UNIQUE KEY  (`parent_file_id`,`type`),
   KEY `PARENT` (`parent_type`,`parent_id`),
   KEY `user_id` (`user_id`),
   KEY `service_id` (`service_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci ;
-
 
 -- --------------------------------------------------------
 

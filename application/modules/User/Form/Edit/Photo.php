@@ -47,6 +47,7 @@ class User_Form_Edit_Photo extends Engine_Form
         // array('Size', false, 612000),
         array('Extension', false, 'jpg,png,gif,jpeg,webp'),
       ),
+      'accept' => 'image/*',
       'data-function' => 'uploadSignupPhoto',
     ));
 

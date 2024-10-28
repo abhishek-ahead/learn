@@ -174,11 +174,8 @@ class Payment_Model_Subscription extends Core_Model_Item_Abstract
         $this->save();
         return $this;
     }
-
-
-
+    
     // Events
-
     public function clearStatusChanged()
     {
         $this->_statusChanged = null;
@@ -442,4 +439,198 @@ class Payment_Model_Subscription extends Core_Model_Item_Abstract
 
         return $this;
     }
+
+  /**
+   * Process return of subscription transaction
+   *
+   * @param Payment_Model_Order $order
+   * @param array $params
+   */
+  public function onSubscriptionTransactionReturn(Payment_Model_Order $order, array $params = array()) {
+    // Check that gateways match
+//     if( $order->gateway_id != $this->_gatewayInfo->gateway_id ) {
+//       throw new Engine_Payment_Plugin_Exception('Gateways do not match');
+//     }
+
+    // Get related info
+    $user = $order->getUser();
+    $subscription = $order->getSource();
+    $package = $subscription->getPackage();
+
+    //Change rate according to default currency and selected currency by member
+    $session = new Zend_Session_Namespace('Payment_Subscription');
+    $current_currency = $session->current_currency;
+    
+    if(empty($current_currency)) {
+      $transaction = Engine_Api::_()->getDbTable('transactions', 'payment')->getSubscriptionTransaction(array('user_id' => $subscription->user_id, 'subscription_id' => $subscription->getIdentity()));
+      if($transaction) {
+        $current_currency = $transaction->current_currency;
+      }
+    } else {
+      $currencyChangeRate = $session->change_rate;
+    }
+    if (empty($currencyChangeRate))
+      $currencyChangeRate = 1;
+    $defaultCurrency = Engine_Api::_()->payment()->defaultCurrency();
+
+    if ($current_currency != $defaultCurrency) {
+      $currencyData = Engine_Api::_()->getDbTable('currencies', 'payment')->getCurrency($current_currency);
+      $currencyChangeRate = $currencyData->change_rate;
+    }
+    $price = @round(($package->price * $currencyChangeRate), 2);
+
+    // Check subscription state
+    if($subscription->status == 'trial') {
+      return 'active';
+    } else if( $subscription->status == 'pending' ) {
+      return 'pending';
+    }
+
+    // Get payment state
+    $paymentStatus = 'okay';
+    $orderStatus = 'complete';
+
+    // Update order with profile info and complete status?
+    $currentCurrency = Engine_Api::_()->payment()->getCurrentCurrency();
+    $gateway_transaction_id = crc32(microtime() . $order->order_id);
+    
+    $order->state = $orderStatus;
+    $order->gateway_transaction_id = $gateway_transaction_id; //$rdata['PAYMENTINFO'][0]['TRANSACTIONID'];
+    $order->save();
+
+    // Insert transaction
+    $transactionsTable = Engine_Api::_()->getDbtable('transactions', 'payment');
+    $transactionsTable->insert(array(
+      'user_id' => $order->user_id,
+      'gateway_id' => $order->gateway_id,
+      'timestamp' => new Zend_Db_Expr('NOW()'),
+      'order_id' => $order->order_id,
+      'type' => 'payment',
+      'state' => $paymentStatus,
+      'gateway_transaction_id' => $gateway_transaction_id,
+      'amount' => $package->price, // @todo use this or gross (-fee)?
+      'currency' => $defaultCurrency, //this is default currency set by admin
+      'change_rate' => $currencyChangeRate, //currency change rate according to default currency
+      'current_currency' => $currentCurrency, //currency which is user paid
+    ));
+    $transaction_id = $transactionsTable->getAdapter()->lastInsertId();
+    $transaction = Engine_Api::_()->getItem('payment_transaction', $transaction_id);
+      
+    // Get benefit setting
+    $giveBenefit = true;
+    // Check payment status
+    if( $paymentStatus == 'okay' || ($paymentStatus == 'pending' && $giveBenefit) ) {
+
+      // Update subscription info
+      $subscription->gateway_id = $order->gateway_id;
+      $subscription->gateway_profile_id = $gateway_transaction_id;
+
+      // Payment success
+      $subscription->onPaymentSuccess();
+      
+      //Save subscription id in transaction id
+      $transaction->expiration_date = $subscription->expiration_date;
+      $transaction->subscription_id = $subscription->subscription_id;
+      $transaction->save();
+      
+      //save in subscription table table
+      if($order) {
+        $subscription->order_id = $order->order_id;
+        $subscription->resource_type = $order->source_type;
+        $subscription->resource_id = $order->source_id;
+        $subscription->save();
+      }
+      $user->wallet_amount = ($user->wallet_amount - $package->price);
+      $user->save();
+
+      // send notification
+      if( $subscription->didStatusChange() ) {
+        Engine_Api::_()->getApi('mail', 'core')->sendSystem($user, 'payment_subscription_active', array(
+          'subscription_title' => $package->title,
+          'subscription_description' => $package->description,
+          'subscription_terms' => $package->getPackageDescription(),
+          'object_link' => 'http://' . $_SERVER['HTTP_HOST'] . Zend_Controller_Front::getInstance()->getRouter()->assemble(array(), 'user_login', true),
+        ));
+      }
+      return 'active';
+    }
+    else if( $paymentStatus == 'pending' ) {
+
+      // Update subscription info
+      $subscription->gateway_id = $this->_session->gateway_id;
+      $subscription->gateway_profile_id = $gateway_transaction_id;
+
+      // Payment pending
+      $subscription->onPaymentPending();
+
+      // send notification
+      if( $subscription->didStatusChange() ) {
+        Engine_Api::_()->getApi('mail', 'core')->sendSystem($user, 'payment_subscription_pending', array(
+          'subscription_title' => $package->title,
+          'subscription_description' => $package->description,
+          'subscription_terms' => $package->getPackageDescription(),
+          'object_link' => 'http://' . $_SERVER['HTTP_HOST'] . Zend_Controller_Front::getInstance()->getRouter()->assemble(array(), 'user_login', true),
+        ));
+      }
+
+      return 'pending';
+    }
+    else if( $paymentStatus == 'failed' ) {
+      // Cancel order and subscription?
+      $order->onFailure();
+      $subscription->onPaymentFailure();
+      // Payment failed
+      echo json_encode(array('status' => false, 'message' => $this->view->translate('Your payment could not be completed. Please ensure there are sufficient available funds in your account.')));die;
+      //throw new Payment_Model_Exception('Your payment could not be completed. Please ensure there are sufficient available funds in your account.');
+    }
+    else {
+      // This is a sanity error and cannot produce information a user could use
+      // to correct the problem.
+      echo json_encode(array('status' => false, 'message' => $this->view->translate('There was an error processing your transaction. Please try again later.')));die;
+      //throw new Payment_Model_Exception('There was an error processing your transaction. Please try again later.');
+    }
+  }
+
+  //call using cron charged by wallet
+  public function onSubscriptionCharged($subscription) {
+
+    $user = Engine_Api::_()->getItem('user', $subscription->user_id);
+    if ($user->wallet_amount > 0) {
+      $package = $this->getPackage();
+      if($package->price > 0 && $user->wallet_amount > $package->price) {
+        try {
+          $order = Engine_Api::_()->getItem('payment_order', $subscription->order_id);
+          $status = $this->onSubscriptionTransactionReturn($order, array('subscription_id' => $subscription->getIdentity()));
+          if(($status == 'active' || $status == 'free')) {
+            $admins = Engine_Api::_()->user()->getSuperAdmins();
+            foreach($admins as $admin){
+              Engine_Api::_()->getApi('mail', 'core')->sendSystem($admin,'payment_subscription_transaction', array('gateway_type' => "Wallet", 'object_link' => 'http://' . $_SERVER['HTTP_HOST'] . Zend_Controller_Front::getInstance()->getRouter()->assemble(array('module'=>'payment'), 'admin_default', true)));
+            }
+          }
+        } catch( Payment_Model_Exception $e ) {
+          throw $e->getMessage();
+        }
+      } else {
+        $this->onCancel();
+        Engine_Api::_()->getApi('mail', 'core')->sendSystem($user, 'payment_subscription_cancelled', array(
+          'subscription_title' => $package->title,
+          'queue'=>false,
+          'subscription_description' => $package->description,
+          'subscription_terms' => $package->getPackageDescription(),
+          'object_link' => 'http://' . $_SERVER['HTTP_HOST'] .
+          Zend_Controller_Front::getInstance()->getRouter()->assemble(array(), 'user_login', true),
+        ));
+      }
+    } else if($subscription->didStatusChange()) {
+      $this->onCancel();
+      Engine_Api::_()->getApi('mail', 'core')->sendSystem($user, 'payment_subscription_cancelled', array(
+        'subscription_title' => $package->title,
+        'queue'=>false,
+        'subscription_description' => $package->description,
+        'subscription_terms' => $package->getPackageDescription(),
+        'object_link' => 'http://' . $_SERVER['HTTP_HOST'] .
+        Zend_Controller_Front::getInstance()->getRouter()->assemble(array(), 'user_login', true),
+      ));
+    }
+  }
 }

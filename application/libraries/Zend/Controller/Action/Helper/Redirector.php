@@ -222,6 +222,9 @@ class Zend_Controller_Action_Helper_Redirector extends Zend_Controller_Action_He
             }
             $url = $uri . '/' . ltrim($url, '/');
         }
+        if(!empty($_POST['isFormAjaxPost'])) {
+            echo json_encode(array('status' => true, 'redirectURL' => $url));die;
+        }
         $this->_redirectUrl = $url;
         $this->getResponse()->setRedirect($url, $this->getCode());
     }
@@ -316,8 +319,30 @@ class Zend_Controller_Action_Helper_Redirector extends Zend_Controller_Action_He
     public function setGotoRoute(array $urlOptions = array(), $name = null, $reset = false, $encode = true)
     {
         $router = $this->getFrontController()->getRouter();
+        $isURLFullLoad = false;
+        if(isset($urlOptions['isURLFullLoad']) && !empty($urlOptions['isURLFullLoad'])) {
+            $isURLFullLoad = true;
+            unset($urlOptions['isURLFullLoad']);
+        }
         $url    = $router->assemble($urlOptions, $name, $reset, $encode);
 
+        $isAjax = (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest');
+        
+        
+        if($isAjax){
+            if (strpos($url,'?') !== false) {
+                $url = $url.'&getContentOnly=1';
+            }else{
+                $url = $url.'?getContentOnly=1';
+            }
+        }
+
+        if(!empty($_POST['isFormAjaxPost']) && empty($isURLFullLoad)) {
+            echo json_encode(array('status' => true, 'redirectURL' => $url));die;
+        } else if(!empty($_POST['isFormAjaxPost']) && !empty($isURLFullLoad)) {
+            echo json_encode(array('status' => true, 'redirectFullURL' => $url));die;
+        }
+        
         $this->_redirect($url);
     }
 
@@ -365,6 +390,16 @@ class Zend_Controller_Action_Helper_Redirector extends Zend_Controller_Action_He
         // If relative URL, decide if we should prepend base URL
         if (!preg_match('|^[a-z]+://|', $url)) {
             $url = $this->_prependBase($url);
+        }
+
+        $isAjax = (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest');
+        
+        if($isAjax){
+            if (strpos($url,'?') !== false) {
+                $url = $url.'&getContentOnly=1';
+            }else{
+                $url = $url.'?getContentOnly=1';
+            }
         }
 
         $this->_redirect($url);

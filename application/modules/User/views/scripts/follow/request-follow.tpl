@@ -30,9 +30,9 @@
     <div class="notification_item_buttons">
       <?php $getFollowUserStatus = Engine_Api::_()->getDbTable('follows', 'user')->getFollowUserStatus($user->user_id); ?>
       
-      <a data-class="notifications_donotclose" data-notification-id="<?php echo $notification->getIdentity();?>" id="user_follow_accept_<?php echo $getFollowUserStatus['follow_id']; ?>" href='javascript:;' data-action="accept" data-follow_id="<?php echo $getFollowUserStatus['follow_id']; ?>" data-url='<?php echo $user->getIdentity(); ?>' class='button user_follow follow_accept_btn user_follow_<?php echo $user->getIdentity(); ?>'><?php echo $this->translate('Confirm'); ?></a>
+      <a data-class="notifications_donotclose" data-notification-id="<?php echo $notification->getIdentity();?>" id="user_follow_accept_<?php echo $getFollowUserStatus['follow_id']; ?>" href='javascript:;' data-action="accept" data-follow_id="<?php echo $getFollowUserStatus['follow_id']; ?>" data-url='<?php echo $user->getIdentity(); ?>' class='button btn btn-primary user_follow follow_accept_btn user_follow_<?php echo $user->getIdentity(); ?>'><?php echo $this->translate('Confirm'); ?></a>
       
-      <a data-class="notifications_donotclose" data-notification-id="<?php echo $notification->getIdentity();?>" id="user_follow_reject_<?php echo $getFollowUserStatus['follow_id']; ?>" href='javascript:;' data-action="reject" data-follow_id="<?php echo $getFollowUserStatus['follow_id']; ?>" data-url='<?php echo $user->getIdentity(); ?>' class='button user_follow follow_reject_btn user_follow_<?php echo $user->getIdentity(); ?>'><?php echo $this->translate('Delete'); ?></a>
+      <a data-class="notifications_donotclose" data-notification-id="<?php echo $notification->getIdentity();?>" id="user_follow_reject_<?php echo $getFollowUserStatus['follow_id']; ?>" href='javascript:;' data-action="reject" data-follow_id="<?php echo $getFollowUserStatus['follow_id']; ?>" data-url='<?php echo $user->getIdentity(); ?>' class='button btn btn-alt user_follow follow_reject_btn user_follow_<?php echo $user->getIdentity(); ?>'><?php echo $this->translate('Delete'); ?></a>
     </div>
   </div>
   <div class="notifications_item_delete">

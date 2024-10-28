@@ -64,6 +64,9 @@ class Payment_SettingsController extends Core_Controller_Action_User
               ->where('after_signup = ?', true)
               ->order('order ASC');
     $this->view->packages = $packages = $packagesTable->fetchAll($select);
+    if(engine_count($packages) == 0) {
+      return $this->_forward('requireauth', 'error', 'core');
+    }
 
     // Get current subscription and package
     $subscriptionsTable = Engine_Api::_()->getDbtable('subscriptions', 'payment');
@@ -143,6 +146,11 @@ class Payment_SettingsController extends Core_Controller_Action_User
         $transactionSelect->where("DATE(timestamp) >=?", $date_to);
 			if (!empty($date_from))
         $transactionSelect->where("DATE(timestamp) <=?", $date_from);	
+		}
+		
+		//Do not show wallet entry if wallet is not enabled
+		if(!Engine_Api::_()->getApi('settings', 'core')->getSetting("payment.enablewallet",1)) {
+      $transactionSelect->where('type <> ?', "wallet recharge");
 		}
     
     if( !empty($filterValues['order']) ) {
@@ -334,16 +342,40 @@ class Payment_SettingsController extends Core_Controller_Action_User
       return;
     }
     
-    $authorizationApi = Engine_Api::_()->authorization();
+    $this->view->package = $package = Engine_Api::_()->getDbTable('verificationpackages', 'payment')->getPackage(array('level_id' => $user->level_id));
     
-    $this->view->verified = $verified = $authorizationApi->getPermission($user, 'user', 'verified');
+    $this->view->verified = $verified = $package->verified;
     if(engine_in_array($verified, array(0,1))) {
       return $this->_forward('notfound', 'error', 'core');
     }
     
-    $this->view->price_verified = $authorizationApi->getPermission($user, 'user', 'price_verified');
-    $recurrence = $authorizationApi->getPermission($user, 'user', 'recurrence');
-    $this->view->recurrence = json_decode($recurrence);
+    $this->view->price_verified = $package->price;;
+    $this->view->recurrence = $package->recurrence;
+    $this->view->recurrence_type = $package->recurrence_type;
+    
+    $this->view->subscription = Engine_Api::_()->getDbTable('subscriptions', 'payment')->userCurrentSubscriptionPlan(array('user_id' => $user->getIdentity(), 'resource_type' => $package->getType(), 'resource_id' => $package->getIdentity()));
+  }
+  
+  public function walletAction() {
+  
+    $this->view->user = $user = Engine_Api::_()->core()->getSubject('user');
+
+    // Check if they are an admin or moderator (don't require subscriptions from them)
+    $level = Engine_Api::_()->getItem('authorization_level', $user->level_id);
+    if( engine_in_array($level->type, array('admin', 'moderator')) ) {
+      $this->view->isAdmin = true;
+      return;
+    }
+
+    $this->view->wallet = $wallet = 1;
+    if(!Engine_Api::_()->getApi('settings', 'core')->getSetting("payment.enablewallet",1)) {
+      return $this->_forward('notfound', 'error', 'core');
+    }
+
+    // Have any gateways or packages been added yet?
+    if(Engine_Api::_()->getDbtable('gateways', 'payment')->getEnabledGatewayCount() <= 0) {
+      return $this->_forward('notfound', 'error', 'core');
+    }
 
 		$gatewayTable = Engine_Api::_()->getDbtable('gateways', 'payment');
     $gatewaySelect = $gatewayTable->select()->where('enabled = ?', 1);
@@ -357,6 +389,6 @@ class Payment_SettingsController extends Core_Controller_Action_User
     }
     $this->view->gateways = $gatewayPlugins;
     
-    $this->view->transaction = Engine_Api::_()->getDbTable('transactions', 'payment')->getTransaction(array('user_id' => $user->getIdentity(), 'type' => 'payment verification'));
+    $this->view->transaction = Engine_Api::_()->getDbTable('transactions', 'payment')->getTransaction(array('user_id' => $user->getIdentity(), 'type' => 'wallet recharge'));
   }
 }

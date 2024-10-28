@@ -13,7 +13,7 @@ return array(
     'package' => array(
         'type' => 'module',
         'name' => 'core',
-        'version' => '6.7.0',
+        'version' => '7.0.0',
         'revision' => '$Revision: 10271 $',
         'path' => 'application/modules/Core',
         'repository' => 'socialengine.com',
@@ -86,16 +86,50 @@ return array(
     ),
     // Composer -------------------------------------------------------------------
     'composer' => array(
-        'link' => array(
-            'script' => array('_composeLink.tpl', 'core'),
-            'plugin' => 'Core_Plugin_Composer',
-            'auth' => array('core_link', 'create'),
-        ),
-        'tag' => array(
-            'script' => array('_composeTag.tpl', 'core'),
-            'plugin' => 'Core_Plugin_Composer',
-            'allowEdit' => 1,
-        ),
+//         'link' => array(
+//             'script' => array('_composeLink.tpl', 'core'),
+//             'plugin' => 'Core_Plugin_Composer',
+//             'auth' => array('core_link', 'create'),
+//         ),
+//         'tag' => array(
+//             'script' => array('_composeTag.tpl', 'core'),
+//             'plugin' => 'Core_Plugin_Composer',
+//             'allowEdit' => 1,
+//         ),
+    ),
+    //Load by default css / js file ---------------------------------------------------------------------
+    'loadDefault' => array(
+      "js" => array(
+        'externals/tinymce/tinymce.min.js',
+        'externals/selectize/js/selectize.js',
+        'externals/jQuery/wookmark.min.js',
+        'externals/jQuery/imagesloaded.pkgd.js',
+        'externals/jQuery/jquery.drag-n-crop.js',
+        'externals/jQuery/sticky-sidebar.js',
+        'externals/jQuery/owlcarousel/jquery.js',
+        'externals/jQuery/owlcarousel/owl.carousel.js',
+        'externals/mdetect/mdetect.js',
+        'externals/tagger/tagger.js',
+        'externals/jQuery/tooltip/jquery.tooltipster.js',
+        'application/modules/Core/externals/scripts/coverphoto.js',
+        'externals/uploader/uploader.js',
+        'externals/simplelightbox/js/slick.min.js',
+        'externals/simplelightbox/js/darkbox.js',
+//         'application/modules/Core/externals/scripts/composer_link.js',
+//         'application/modules/Core/externals/scripts/composer_tag.js',
+//         'application/modules/Core/externals/scripts/comments_composer.js',
+//         'application/modules/Core/externals/scripts/comments_composer_tag.js',
+//         'application/modules/Core/externals/scripts/composer.js',
+      ),
+      'css' => array(
+        'externals/selectize/css/normalize.css',
+        'externals/fancyupload/fancyupload.css',
+        'externals/jQuery/jquery.drag-n-crop.css',
+        'application/modules/Core/externals/styles/coverphoto.css',
+        'externals/uploader/uploader.css',
+        'externals/simplelightbox/css/slick.css',
+        'externals/simplelightbox/css/darkbox.css',
+      )
     ),
     // Hooks ---------------------------------------------------------------------
     'hooks' => array(
@@ -122,29 +156,7 @@ return array(
     ),
     // Items ---------------------------------------------------------------------
     'items' => array(
-        'core_ad',
-        'core_adcampaign',
-        'core_adphoto',
-        'core_banner',
-        'core_comment',
-        'core_geotag',
-        'core_link',
-        'core_like',
-        'core_list',
-        'core_list_item',
-        'core_page',
-        'core_report',
-        'core_mail_template',
-        'core_tag',
-        'core_tag_map',
-        'core_file',
-        'core_language',
-        'core_ticket',
-        'core_ticketreply',
-        'core_category',
-        'core_country',
-        'core_state',
-        'core_sitemap',
+        'core_ad', 'core_adcampaign', 'core_adphoto','core_banner','core_comment','core_geotag','core_link','core_like','core_list', 'core_list_item','core_page','core_report','core_mail_template', 'core_tag', 'core_tag_map','core_file','core_language','core_ticket','core_ticketreply','core_category','core_location','core_country','core_state','core_sitemap','core_recentlyviewitems', 'core_favourite',
     ),
     // Routes --------------------------------------------------------------------
     'routes' => array(
@@ -191,7 +203,15 @@ return array(
                 'action' => 'index'
             ),
             'reqs' => array(
-              'action' => '(index|resubmit)',
+                'action' => '(index|resubmit)',
+            ),
+        ),
+        'core_get_direction' => array(
+            'route' => 'directions/:action/*',
+            'defaults' => array(
+                'module' => 'core',
+                'controller' => 'location',
+                'action' => 'get-direction',
             ),
         ),
         'core_admin_seo' => array(

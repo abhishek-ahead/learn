@@ -301,6 +301,8 @@ class Zend_View_Helper_HeadScript extends Zend_View_Helper_Placeholder_Container
     {
         if ((!$value instanceof stdClass)
             || !isset($value->type)
+            // ajax SE load content
+            || (isset($value->attributes["src"]) && $value->attributes["src"] == "remove")
             || (!isset($value->source) && !isset($value->attributes)))
         {
             return false;
@@ -317,14 +319,20 @@ class Zend_View_Helper_HeadScript extends Zend_View_Helper_Placeholder_Container
      */
     public function append($value)
     {
+        
         if (!$this->_isValid($value)) {
             // require_once 'Zend/View/Exception.php';
             $e = new Zend_View_Exception('Invalid argument passed to append(); please use one of the helper methods, appendScript() or appendFile()');
             $e->setView($this->view);
             throw $e;
         }
-
-        return $this->getContainer()->append($value);
+        
+        if(isset($value->attributes["src"]) && strpos($_SERVER['REQUEST_URI'], '/install/') == false) {
+          if(substr($value->attributes["src"], -15) != "scripts/core.js")
+            return $this->getContainer()->append($value);
+        } else {
+          return $this->getContainer()->append($value);
+        }
     }
 
     /**
@@ -341,8 +349,12 @@ class Zend_View_Helper_HeadScript extends Zend_View_Helper_Placeholder_Container
             $e->setView($this->view);
             throw $e;
         }
-
-        return $this->getContainer()->prepend($value);
+        if(isset($value->attributes["src"]) && strpos($_SERVER['REQUEST_URI'], '/install/') == false) {
+          if(substr($value->attributes["src"], -15) != "scripts/core.js")
+            return $this->getContainer()->append($value);
+        } else {
+          return $this->getContainer()->append($value);
+        }
     }
 
     /**
@@ -489,6 +501,7 @@ class Zend_View_Helper_HeadScript extends Zend_View_Helper_Placeholder_Container
 
         $items = array();
         $this->getContainer()->ksort();
+        
         foreach ($this as $item) {
             if (!$this->_isValid($item)) {
                 continue;

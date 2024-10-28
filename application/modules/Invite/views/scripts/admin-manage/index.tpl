@@ -32,7 +32,7 @@
 
 <script type="text/javascript">
 
-  scriptJquery(document).ready(function(){
+  en4.core.runonce.add(function() {
     scriptJquery("#selectall").click(function(){
       if(this.checked){
         scriptJquery('.checkbox').each(function(){
@@ -91,7 +91,7 @@
     }));
   }
   
-  scriptJquery(document).on('click','.invite_code',function (e) {
+  AttachEventListerSE('click','.invite_code',function (e) {
     scriptJquery("<textarea/>").appendTo("body").val(scriptJquery(this).attr('data-invite-url')).select().each(function () {
         document.execCommand('copy');
     }).remove();

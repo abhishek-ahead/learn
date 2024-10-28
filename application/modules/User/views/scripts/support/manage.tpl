@@ -74,13 +74,13 @@
   </div>
 </div>
 <script type="application/javascript">
-  scriptJquery(document).on('submit','#core_ticket_reply',function(e){
+  AttachEventListerSE('submit','#core_ticket_reply',function(e){
     e.preventDefault();
     
     if(scriptJquery('#core_message_error_message').length)
       scriptJquery('#core_message_error_message').remove();
     if(scriptJquery('#description').val() == '') {
-      scriptJquery('#core_ticket_reply').before('<div id="core_message_error_message" class="core_message error_message d-flex align-items-center" id="core_error_message"><i class="fas fa-exclamation-triangle"></i><span>'+en4.core.language.translate('Please enter reply description.')+'</span></div>');
+      scriptJquery('#core_ticket_reply').before('<div id="core_message_error_message" class="error_msg d-flex align-items-center" id="core_error_message"><span>'+en4.core.language.translate('Please enter reply description.')+'</span></div>');
       return false;
     }
     
@@ -110,7 +110,7 @@
         if(data.status == 1) {
           if(scriptJquery('#core_success_message').length)
             scriptJquery('#core_success_message').remove();
-          scriptJquery('#core_ticket_reply').before('<div class="core_message success_message d-flex align-items-center" id="core_success_message"><i class="fas fa-check-circle"></i><span>'+en4.core.language.translate('Your reply has been sent successfully.')+'</span></div>');
+          scriptJquery('#core_ticket_reply').before('<div class="success_msg d-flex align-items-center" id="core_success_message"> <span>'+en4.core.language.translate('Your reply has been sent successfully.')+'</span></div>');
           //silence
           //scriptJquery("#core_ticket_reply")[0].reset();
           location.reload();

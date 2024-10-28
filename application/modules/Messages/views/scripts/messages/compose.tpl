@@ -10,12 +10,7 @@
  * @author     John
  */
 ?>
-<?php
-  $to = Zend_Controller_Front::getInstance()->getRequest()->getParam('to', 0);
-  $this->headLink()->appendStylesheet($this->layout()->staticBaseUrl."externals/selectize/css/normalize.css");
-  $headScript = new Zend_View_Helper_HeadScript();
-  $headScript->appendFile($this->layout()->staticBaseUrl.'externals/selectize/js/selectize.js');
-?>
+<?php $to = Zend_Controller_Front::getInstance()->getRequest()->getParam('to', 0); ?>
 <script type="text/javascript">
   var maxRecipients = <?php echo sprintf("%d", $this->maxRecipients) ?> || 10;
   en4.core.runonce.add(function() {
@@ -57,12 +52,6 @@
     });
   });
 </script>
-
-<?php
-$this->headScript()->appendFile($this->layout()->staticBaseUrl . 'externals/mdetect/mdetect' . ( APPLICATION_ENV != 'development' ? '.min' : '' ) . '.js')
-    ->appendFile($this->layout()->staticBaseUrl . 'application/modules/Core/externals/scripts/composer.js');
-?>
-
 <script type="text/javascript">
   var composeInstance;
   en4.core.runonce.add(function() {
@@ -71,7 +60,7 @@ $this->headScript()->appendFile($this->layout()->staticBaseUrl . 'externals/mdet
       'styles' : {
         'display' : 'none'
       }
-    }).insertAfter(scriptJquery('submit'), 'before');
+    }).insertAfter(scriptJquery('.compose_submit'), 'before');
     
     <?php if(!empty($to)) { ?>
       var mel = scriptJquery.crtEle('div', {
@@ -81,18 +70,21 @@ $this->headScript()->appendFile($this->layout()->staticBaseUrl . 'externals/mdet
     <?php } else { ?>
       var mel = scriptJquery.crtEle('div', {
         'id' : 'compose-menu'
-      }).insertAfter(scriptJquery('#submit'), 'after');
+      }).insertAfter(scriptJquery('.compose_submit'), 'after');
     <?php } ?>
-
-
+    activityDesign = 2;
+    counterLoopComposerItem = 1;
+    
+    scriptJquery('<div class="activity_post_media_options clearfix"><div id="activity_post_media_options_before"></div></div>').insertBefore(mel);
+    
     // @todo integrate this into the composer
     if ('<?php $id = Engine_Api::_()->user()->getViewer()->level_id;
     echo Engine_Api::_()->getDbtable('permissions', 'authorization')->getAllowed('messages', $id, 'editor');
          ?>' == 'plaintext' ) {
       //if( !Browser.Engine.trident && !DetectMobileQuick() && !DetectIpad() ) {
-        composeInstance = new Composer('#body', {
+        composeInstance = new Composer('body', {
           overText : false,
-          menuElement : mel,
+          menuElement : 'compose-menu',
           trayElement: tel,
           baseHref : '<?php echo $this->baseUrl() ?>',
           hideSubmitOnBlur : false,
@@ -107,6 +99,6 @@ $this->headScript()->appendFile($this->layout()->staticBaseUrl . 'externals/mdet
 <?php foreach( $this->composePartials as $partial ): ?>
   <?php echo $this->partial($partial[0], $partial[1]); ?>
 <?php endforeach; ?>
-<div class="messages_compose_popup">
+<div class="messages_compose_popup global_form_wrap">
   <?php echo $this->form->render($this) ?>
 </div>

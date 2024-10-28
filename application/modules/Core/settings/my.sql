@@ -217,13 +217,13 @@ INSERT INTO `engine4_core_content` (`content_id`, `page_id`, `type`, `name`, `pa
 (211, 2, 'widget', 'core.menu-social-sites', 200, 3, ''),
 
 /* Home */
-(300, 3, 'container', 'main', NULL, 1, ''),
-(312, 3, 'container', 'middle', 300, 2, ''),
-(320, 3, 'widget', 'core.landing-page-banner', 312, 1, '{"height":"550","title":"","nomobile":"0","name":"core.landing-page-banner"}'),
-(321, 3, 'widget', 'core.landing-page-features', 312, 2, '{"dummy1":null,"fe1img":"0","fe1heading":"Easy Login / Signup","fe1description":"You can easily sign up on our community or simply login, if you already have an account to get started !","dummy2":null,"fe2img":"0","fe2heading":"Post Content","fe2description":"Quickly start by posting your status updates, photos, videos, groups, blogs, classifieds, etc inside.","dummy3":null,"fe3img":"0","fe3heading":"Responsive","fe3description":"Our community is 100% responsive, so you can use it anywhere, & anytime from any device.","dummy4":null,"fe4img":"0","fe4heading":"Flexible","fe4description":"Our community is available 24x7, so you can use it as per your flexibility and requirement.","title":"Why Choose Us?","nomobile":"0","name":"core.landing-page-features"}'),
-(322, 3, 'widget', 'core.parallax', 312, 3, '{"bgphoto":"","heading":"Engage with people of your interests","height":"300","title":"","nomobile":"0","name":"core.parallax"}'),
-(323, 3, 'widget', 'elpis.landing-page-blogs', 312, 4, '{"title":"Explore Popular Blogs","popularType":"view","itemCountPerPage":"2","nomobile":"0","name":"elpis.landing-page-blogs"}'),
-(324, 3, 'widget', 'elpis.landing-page-members', 312, 5, '{"title":"Popular Members","name":"elpis.landing-page-members","itemCountPerPage":"12"}'),
+-- (300, 3, 'container', 'main', NULL, 1, ''),
+-- (312, 3, 'container', 'middle', 300, 2, ''),
+-- (320, 3, 'widget', 'core.landing-page-banner', 312, 1, '{"height":"550","title":"","nomobile":"0","name":"core.landing-page-banner"}'),
+-- (321, 3, 'widget', 'core.landing-page-features', 312, 2, '{"dummy1":null,"fe1img":"0","fe1heading":"Easy Login / Signup","fe1description":"You can easily sign up on our community or simply login, if you already have an account to get started !","dummy2":null,"fe2img":"0","fe2heading":"Post Content","fe2description":"Quickly start by posting your status updates, photos, videos, groups, blogs, classifieds, etc inside.","dummy3":null,"fe3img":"0","fe3heading":"Responsive","fe3description":"Our community is 100% responsive, so you can use it anywhere, & anytime from any device.","dummy4":null,"fe4img":"0","fe4heading":"Flexible","fe4description":"Our community is available 24x7, so you can use it as per your flexibility and requirement.","title":"Why Choose Us?","nomobile":"0","name":"core.landing-page-features"}'),
+-- (322, 3, 'widget', 'core.parallax', 312, 3, '{"bgphoto":"","heading":"Engage with people of your interests","height":"300","title":"","nomobile":"0","name":"core.parallax"}'),
+-- (323, 3, 'widget', 'elpis.landing-page-blogs', 312, 4, '{"title":"Explore Popular Blogs","popularType":"view","itemCountPerPage":"2","nomobile":"0","name":"elpis.landing-page-blogs"}'),
+-- (324, 3, 'widget', 'elpis.landing-page-members', 312, 5, '{"title":"Popular Members","name":"elpis.landing-page-members","itemCountPerPage":"12"}'),
 
 /* User Home */
 (400, 4, 'container', 'main', NULL, 1, ''),
@@ -232,10 +232,10 @@ INSERT INTO `engine4_core_content` (`content_id`, `page_id`, `type`, `name`, `pa
 (411, 4, 'container', 'right', 400, 2, ''),
 (412, 4, 'container', 'middle', 400, 3, ''),
 
-(420, 4, 'widget', 'user.home-photo', 410, 1, ''),
+(420, 4, 'widget', 'user.home-photo', 410, 1, '{"options":["coverphoto","recentfriends","username"],"title":"","nomobile":"0","name":"user.home-photo"}'),
 (421, 4, 'widget', 'user.home-links', 410, 2, ''),
-(422, 4, 'widget', 'user.list-online', 410, 3, '{"title":"%s Members Online"}'),
-(423, 4, 'widget', 'core.statistics', 410, 4, '{"title":"Network Stats"}'),
+-- (422, 4, 'widget', 'user.list-online', 410, 3, '{"title":"%s Members Online"}'),
+-- (423, 4, 'widget', 'core.statistics', 410, 4, '{"title":"Network Stats"}'),
 
 (430, 4, 'widget', 'activity.list-requests', 411, 1, '{"title":"Requests"}'),
 (431, 4, 'widget', 'user.list-signups', 411, 2, '{"title":"Newest Members"}'),
@@ -250,7 +250,7 @@ INSERT INTO `engine4_core_content` (`content_id`, `page_id`, `type`, `name`, `pa
 (510, 5, 'container', 'left', 500, 1, ''),
 (511, 5, 'container', 'middle', 500, 3, ''),
 
--- (520, 5, 'widget', 'user.profile-photo', 510, 1, ''),
+-- (520, 5, 'widget', 'user.profile-photo', 510, 1, '{"options":["coverphoto","recentfriends","username"],"title":"","nomobile":"0","name":"user.home-photo"}'),
 (521, 5, 'widget', 'user.profile-options', 510, 2, ''),
 (522, 5, 'widget', 'user.profile-friends-common', 510, 3, '{"title":"Mutual Friends"}'),
 (523, 5, 'widget', 'user.profile-info', 510, 4, '{"title":"Member Info"}'),
@@ -661,7 +661,7 @@ INSERT IGNORE INTO `engine4_core_menuitems` (`name`, `module`, `label`, `plugin`
 
 INSERT IGNORE INTO `engine4_core_menuitems` (`name`, `module`, `label`, `plugin`, `params`, `menu`, `enabled`, `custom`, `order`) VALUES
 ('core_social_site_facebook', 'core', 'Facebook', '', '{"uri": "javascript:void(0)","target":"_blank", "icon":"fa-facebook"}', 'core_social_sites', 0, 1, 1),
-('core_social_site_twitter', 'core', 'X', '', '{"uri": "javascript:void(0)","target":"_blank", "icon":"fa-twitter"}', 'core_social_sites', 0, 1, 2),
+('core_social_site_twitter', 'core', 'X', '', '{"uri": "javascript:void(0)","target":"_blank", "icon":"fa-brands fa-x-twitter"}', 'core_social_sites', 0, 1, 2),
 ('core_social_site_linkedin', 'core', 'Linkedin', '', '{"uri": "javascript:void(0)","target":"_blank", "icon":"fab fa-linkedin-in"}', 'core_social_sites', 0, 1, 3),
 ('core_social_site_youtube', 'core', 'Youtube', '', '{"uri": "javascript:void(0)","target":"_blank", "icon":"fa-youtube"}', 'core_social_sites', 0, 1, 4),
 ('core_social_site_pinterest', 'core', 'Pinterest', '', '{"uri": "javascript:void(0)","target":"_blank", "icon":"fa-brands fa-pinterest-p"}', 'core_social_sites', 0, 1, 5);
@@ -1030,7 +1030,7 @@ INSERT IGNORE INTO `engine4_core_settings` (`name`, `value`) VALUES
 ('core.thumbnails.main.width', '720'),
 ('core.thumbnails.main.height', '720'),
 ('core.thumbnails.main.mode', 'resize'),
-('core.thumbnails.profile.width', '200'),
+('core.thumbnails.profile.width', '400'),
 ('core.thumbnails.profile.height', '400'),
 ('core.thumbnails.profile.mode', 'resize'),
 ('core.thumbnails.normal.width', '140'),
@@ -1044,7 +1044,7 @@ INSERT IGNORE INTO `engine4_core_settings` (`name`, `value`) VALUES
 ('core.twitter.key', ''),
 ('core.twitter.secret', ''),
 ('user.support.links', 1),
-('elpis.changelanding', '1'),
+('harmony.changelanding', '1'),
 ('core.storelisting', '1'),
 ('core.newsupdates', '1'),
 ('core.general.enableloginlogs', '1'),
@@ -1208,7 +1208,7 @@ INSERT IGNORE INTO `engine4_core_themes` (`theme_id`, `name`, `title`, `descript
 (3, 'clean', 'Clean', '', 0),
 (4, 'modern', 'Modern', '', 0),
 (5, 'serenity', 'Serenity', '', 0),
-(6, 'elpis', 'Elpis', '', 1);
+(6, 'harmony', 'Harmony', '', 1);
 
 -- --------------------------------------------------------
 
@@ -6865,6 +6865,90 @@ CREATE TABLE IF NOT EXISTS `engine4_core_notificationrecipients` (
   KEY `object` (`object_type`, `object_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci ;
 
+INSERT IGNORE INTO `engine4_core_tasks` (`title`, `module`, `plugin`, `timeout`) VALUES
+('Storage', 'core', 'Core_Plugin_Task_Storage', 20);
+
+INSERT IGNORE INTO `engine4_core_menuitems` (`name`, `module`, `label`, `plugin`, `params`, `menu`, `submenu`, `order`) VALUES ('core_admin_main_settings_location', 'core', 'Location Settings', '', '{"route":"core_admin_settings","action":"location"}', 'core_admin_main_settings', '', 17);
+
+--
+-- Dumping data for table `engine4_core_locations`
+--
+DROP TABLE IF EXISTS `engine4_core_locations`;
+CREATE TABLE IF NOT EXISTS `engine4_core_locations` (
+  `location_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+  `resource_id` INT( 11 ) NOT NULL ,
+  `resource_type` VARCHAR( 65 ) NOT NULL DEFAULT 'activity_action',
+  `lat` VARCHAR(128) NULL DEFAULT NULL,
+  `lng` VARCHAR(128) NULL DEFAULT NULL,
+  `venue` VARCHAR(255) NULL,
+  `address` TEXT NULL,
+  `address2` TEXT NULL,
+  `city` VARCHAR(255) NULL,
+  `state` VARCHAR(255) NULL,
+  `zip` VARCHAR(255) NULL,
+  `country` VARCHAR(255) NULL,
+  `modified_date` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY `uniqueKey` (`resource_id`,`resource_type`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci AUTO_INCREMENT=1;
+
+DROP TABLE IF EXISTS `engine4_core_recentlyviewitems`;
+CREATE TABLE IF NOT EXISTS  `engine4_core_recentlyviewitems` (
+  `recentlyviewed_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+  `resource_id` INT NOT NULL ,
+  `resource_type` VARCHAR(128) NOT NULL DEFAULT "album",
+  `owner_id` INT NOT NULL ,
+  `creation_date` DATETIME NOT NULL,
+  UNIQUE KEY `uniqueKey` (`resource_id`,`resource_type`, `owner_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci AUTO_INCREMENT=1;
+
+DROP TABLE IF EXISTS `engine4_core_favourites`;
+CREATE TABLE IF NOT EXISTS `engine4_core_favourites` (
+  `favourite_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) unsigned NOT NULL,
+  `resource_type` varchar(128) NOT NULL,
+  `resource_id` int(11) NOT NULL,
+  `creation_date` DATETIME NOT NULL,
+  PRIMARY KEY (`favourite_id`),
+  KEY (`user_id`,`resource_type`,`resource_id`),
+  KEY (`resource_type`,`resource_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci AUTO_INCREMENT=1;
+
+DROP TABLE IF EXISTS `engine4_core_integratemodules`;
+CREATE TABLE IF NOT EXISTS `engine4_core_integratemodules` (
+  `integratemodule_id` int(11) unsigned NOT NULL auto_increment,
+  `module_name` varchar(128) NOT NULL,
+  `module_title` varchar(255) NOT NULL,
+  `content_type` varchar(128) NOT NULL,
+  `content_id` varchar(128) NOT NULL,
+  `enabled` tinyint(1) NOT NULL,
+  PRIMARY KEY (`integratemodule_id`),
+  UNIQUE KEY `content_type` (`content_type`,`content_id`),
+  KEY `module_name` (`module_name`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci AUTO_INCREMENT=1;
+
+INSERT IGNORE INTO `engine4_core_integratemodules` (`module_name`, `module_title`, `content_type`, `content_id`, `enabled`) VALUES 
+('album', 'Albums', 'album', 'album_id', 1),
+('blog', 'Blogs', 'blog', 'blog_id', 1),
+('bizlist', 'Business', 'bizlist', 'bizlist_id', 1),
+('classified', 'Classifieds', 'classified', 'classified_id', 1),
+('employment', 'Employment', 'employment', 'employment_id', 1),
+('event', 'Events', 'event', 'event_id', 1),
+('group', 'Groups', 'group', 'group_id', 1),
+('music', 'Music', 'music_albums', 'album_id', 1),
+('poll', 'Polls', 'poll', 'poll_id', 1),
+('travel', 'Travel', 'travel', 'travel_id', 1),
+('video', 'Videos', 'video', 'video_id', 1);
+
+DROP TABLE IF EXISTS `engine4_core_ratings`;
+CREATE TABLE IF NOT EXISTS `engine4_core_ratings` (
+  `rating_id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(9) unsigned NOT NULL,
+  `resource_id` int(11) NOT NULL,
+  `resource_type` varchar(128) NOT NULL,
+  `rating` tinyint(1) unsigned DEFAULT NULL,
+  PRIMARY KEY (`rating_id`),
+  UNIQUE KEY `resource_id` (`resource_id`,`resource_type`,`user_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci AUTO_INCREMENT=1;
 UPDATE `engine4_core_menuitems` SET `params` = '{"route":"admin_default","module":"network","controller":"manage","action":"settings"}' WHERE `engine4_core_menuitems`.`name` = "core_admin_main_manage_networks";
 
 INSERT IGNORE INTO `engine4_core_menuitems` (`name`, `module`, `label`, `plugin`, `params`, `menu`, `submenu`, `order`) VALUES 

@@ -18,7 +18,7 @@
  */
 class User_View_Helper_UserFriendship extends Zend_View_Helper_Abstract
 {
-  public function userFriendship($user, $viewer = null)
+  public function userFriendship($user, $viewer = null, $iconType = '')
   {
     if( null === $viewer ) {
       $viewer = Engine_Api::_()->user()->getViewer();
@@ -84,21 +84,30 @@ class User_View_Helper_UserFriendship extends Zend_View_Helper_Abstract
     } else {
       // two-way mode
       if( null === $row ) {
-        return $this->view->htmlLink(array('route' => 'user_extended', 'controller' => 'friends', 'action' => 'add', 'user_id' => $user->user_id), $this->view->translate('Add Friend'), array(
-          'class' => 'buttonlink smoothbox icon_friend_add'
-        ));
+       
+        if($iconType == 'icon') {
+          return "<a href='".$this->view->url(array('controller' => 'friends', 'action' => 'add', 'user_id' => $user->user_id), 'user_extended', true)."' class='btn btn-alt smoothbox' data-icontype='".$iconType ."' data-bs-toggle='tooltip' data-bs-title='".$this->view->translate('Add Friend')."'><i class='icon_friend_add'></i></a>";
+        } else {
+          return $this->view->htmlLink(array('route' => 'user_extended', 'controller' => 'friends', 'action' => 'add', 'user_id' => $user->user_id), $this->view->translate('Add Friend'), array('class' => 'buttonlink smoothbox icon_friend_add'));
+        }
       } else if( $row->user_approved == 0 ) {
-        return $this->view->htmlLink(array('route' => 'user_extended', 'controller' => 'friends', 'action' => 'cancel', 'user_id' => $user->user_id), $this->view->translate('Cancel Request'), array(
-          'class' => 'buttonlink smoothbox icon_friend_cancel'
-        ));
+        if($iconType == 'icon') {
+          return "<a href='".$this->view->url(array('controller' => 'friends', 'action' => 'cancel', 'user_id' => $user->user_id), 'user_extended', true)."' class='btn btn-alt smoothbox' data-icontype='".$iconType ."' data-bs-toggle='tooltip' data-bs-title='".$this->view->translate('Cancel Friend')."'><i class='icon_friend_cancel'></i></a>";
+        } else {
+          return $this->view->htmlLink(array('route' => 'user_extended', 'controller' => 'friends', 'action' => 'cancel', 'user_id' => $user->user_id), $this->view->translate('Cancel Request'), array('class' => 'buttonlink smoothbox icon_friend_cancel'));
+        }
       } else if( $row->resource_approved == 0 ) {
-        return $this->view->htmlLink(array('route' => 'user_extended', 'controller' => 'friends', 'action' => 'confirm', 'user_id' => $user->user_id), $this->view->translate('Accept Request'), array(
-          'class' => 'buttonlink smoothbox icon_friend_add'
-        ));
+        if($iconType == 'icon') {
+          return "<a href='".$this->view->url(array('controller' => 'friends', 'action' => 'confirm', 'user_id' => $user->user_id), 'user_extended', true)."' class='btn btn-alt smoothbox' data-icontype='".$iconType ."' data-bs-toggle='tooltip' data-bs-title='".$this->view->translate('Accept Friend')."'><i class='icon_friend_add'></i></a>";
+        } else {
+          return $this->view->htmlLink(array('route' => 'user_extended', 'controller' => 'friends', 'action' => 'confirm', 'user_id' => $user->user_id), $this->view->translate('Accept Request'), array('class' => 'buttonlink smoothbox icon_friend_add'));
+        }
       } else if( $row->active ) {
-        return $this->view->htmlLink(array('route' => 'user_extended', 'controller' => 'friends', 'action' => 'remove', 'user_id' => $user->user_id), $this->view->translate('Remove Friend'), array(
-          'class' => 'buttonlink smoothbox icon_friend_remove'
-        ));
+        if($iconType == 'icon') {
+          return "<a href='".$this->view->url(array('controller' => 'friends', 'action' => 'remove', 'user_id' => $user->user_id), 'user_extended', true)."' class='btn btn-alt smoothbox' data-icontype='".$iconType ."' data-bs-toggle='tooltip' data-bs-title='".$this->view->translate('Remove Friend')."'><i class='icon_friend_remove'></i></a>";
+        } else {
+          return $this->view->htmlLink(array('route' => 'user_extended', 'controller' => 'friends', 'action' => 'remove', 'user_id' => $user->user_id), $this->view->translate('Remove Friend'), array('class' => 'buttonlink smoothbox icon_friend_remove'));
+        }
       }
     }
 

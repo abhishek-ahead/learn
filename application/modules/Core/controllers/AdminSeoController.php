@@ -61,13 +61,13 @@ class Core_AdminSeoController extends Core_Controller_Action_Admin {
     $select->where('page_id NOT IN (?)', array(1,2));
 
     if (!empty($values['displayname']))
-      $select->where('displayname LIKE ?', '%' . $values['displayname'] . '%');
+      $select->where('displayname LIKE ?', $values['displayname'] . '%');
 
     if (!empty($values['title']))
-      $select->where('title LIKE ?', '%' . $values['title'] . '%');
+      $select->where('title LIKE ?', $values['title'] . '%');
 
     if (!empty($values['description']))
-      $select->where('description LIKE ?', '%' . $values['description'] . '%');
+      $select->where('description LIKE ?', $values['description'] . '%');
 
     $this->view->paginator = $paginator = Zend_Paginator::factory($select);
     $paginator->setItemCountPerPage(20);
@@ -275,7 +275,7 @@ class Core_AdminSeoController extends Core_Controller_Action_Admin {
     $select = Engine_Api::_()->getDbtable('sitemaps', 'core')->select();
 
     if (!empty($values['title']))
-      $select->where('title LIKE ?', '%' . $values['title'] . '%');
+      $select->where('title LIKE ?', $values['title'] . '%');
 
     if (isset($_GET['enabled']) && $_GET['enabled'] != '')
       $select->where('enabled = ?', $values['enabled']);

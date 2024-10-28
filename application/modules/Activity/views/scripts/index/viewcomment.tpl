@@ -14,14 +14,13 @@
  */
 ?>
 
-<?php if( !isset($this->form) ) return; ?>
-
-
+<?php if (!isset($this->form))
+  return; ?>
 <?php echo $this->translate("Comment:") ?>
 <?php echo $this->form->render($this) ?>
 
 <script type="text/javascript">
-//<![CDATA[
-document.getElementsByTagName('form')[0].style.display = 'block';
-//]]>
+  //<![CDATA[
+  document.getElementsByTagName('form')[0].style.display = 'block';
+  //]]>
 </script>

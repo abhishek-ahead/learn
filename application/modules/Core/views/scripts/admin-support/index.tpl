@@ -11,9 +11,6 @@
  */
 ?>
 <?php echo $this->partial('_admin_breadcrumb.tpl', 'core', array('parentMenu' => "core_admin_main_manage", 'childMenuItemName' => 'core_admin_main_manage_tickets')); ?>
-
-<?php $this->headScript()->appendFile($this->layout()->staticBaseUrl.'application/modules/Core/externals/scripts/create_edit_category.js'); ?>
-
 <?php if( engine_count($this->navigation) ): ?>
   <div class='tabs'>
     <?php echo $this->navigation()->menu()->setContainer($this->navigation)->render(); ?>
@@ -63,7 +60,7 @@
     }
   });
 
-  scriptJquery(document).ready(function(){
+  en4.core.runonce.add(function() {
     scriptJquery("#selectall").click(function(){
       if(this.checked){
         scriptJquery('.checkbox').each(function(){

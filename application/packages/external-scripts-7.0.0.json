@@ -1,0 +1,62 @@
+{
+  "type": "external",
+  "name": "scripts",
+  "version": "7.0.0",
+  "revision": "9747",
+  "path": "externals\/scripts",
+  "repository": null,
+  "sku": null,
+  "date": "Fri, 25 Oct 2024 04:39:25 +0000",
+  "title": "scripts",
+  "description": null,
+  "thumb": null,
+  "developer": null,
+  "authors": [
+    "SocialEngine Core"
+  ],
+  "meta": {
+    "date": "Fri, 25 Oct 2024 04:39:25 +0000",
+    "title": "scripts",
+    "description": null,
+    "developer": null,
+    "authors": [
+      "SocialEngine Core"
+    ],
+    "changeLog": null
+  },
+  "actions": [
+    
+  ],
+  "callback": null,
+  "dependencies": null,
+  "tests": [
+    
+  ],
+  "permissions": [
+    
+  ],
+  "structure": {
+    "externals\/scripts": {
+      "type": "directory",
+      "path": "externals\/scripts",
+      "structure": [
+        {
+          "path": "manifest.php",
+          "dir": false,
+          "file": true,
+          "perms": "0644",
+          "size": 423,
+          "sha1": "854bec53a3fd9fb6080ea2e13af90468cd8026e5"
+        },
+        {
+          "path": "index.html",
+          "dir": false,
+          "file": true,
+          "perms": "0644",
+          "size": 187,
+          "sha1": "50060ff9c1a03efb51b129d3b0ee84f0a0b4e761"
+        }
+      ]
+    }
+  }
+}

@@ -43,13 +43,13 @@
 </style>
 <script type="text/javascript">
 
-  scriptJquery(document).ready(function() {
-    scriptJquery(scriptJquery('#signup_pop_wrap').html()).appendTo('body');
+  en4.core.runonce.add(function() {
+    scriptJquery(scriptJquery('#signup_pop_wrap').html()).appendTo('#script-default-data');
     scriptJquery('#signup_pop_wrap').remove();
   });
   
   var formCheck = false;
-  scriptJquery(document).on('submit', '#user_form_settings_delete', function(e) {
+  AttachEventListerSE('submit', '#user_form_settings_delete', function(e) {
     if(!formCheck) {
       e.preventDefault();
       sendEmailCode();
@@ -113,6 +113,7 @@
         if(response.status) {
           document.getElementById('send_signup_form').innerHTML = "<div class='success_msg success_msg m-2''><span>"+response.message+"</span></div>";
           formCheck = true;
+          scriptJquery('#cancel_verify_otp').trigger('click');
           closeVerifyPopup();
           scriptJquery('#submit_signup').trigger('click');
         } else {
@@ -123,15 +124,15 @@
   }
   
   function closeVerifyPopup() {
-    scriptJquery('#user_signup_email').modal('hide');;
+    scriptJquery('#user_signup_email').hide();
     scriptJquery('#send_signup_form').hide();
   }
   
-  scriptJquery(document).on('click', '#verify_otp', function(e){
+  AttachEventListerSE('click', '#verify_otp', function(e){
     validateTwoStepCode();
   });
   
-  scriptJquery(document).on('click', '#resend_otp', function(e){
+  AttachEventListerSE('click', '#resend_otp', function(e){
     resendOtpCode();
   });
   

@@ -58,38 +58,37 @@
     <li>
       <?php if($link->photo_id != 0 && empty($link->params['iframely']['html'])):?>
       <div class="profile_links_photo">
-        <?php echo $this->htmlLink($link->getHref(), $this->itemPhoto($link)) ?>
+        <?php echo $this->htmlLink($link->getHref(), $this->itemPhoto($link), array('target' => '_blank')) ?>
       </div>
       <?php endif;?>
       <div class="profile_links_info">
         <div class="profile_links_title">
-          <?php echo $this->htmlLink($link->getHref(), Engine_Api::_()->core()->DecodeEmoji($link->getTitle())) ?>
+          <?php echo $this->htmlLink($link->getHref(), Engine_Api::_()->core()->DecodeEmoji($link->getTitle()), array('class' => 'font_color','target' => '_blank')) ?>
         </div>
-        <div class="profile_links_description">
-          <?php echo $this->htmlLink($link->getHref(), Engine_Api::_()->core()->DecodeEmoji($link->getDescription())) ?>
+        <div class="profile_links_description font_size_small">
+          <?php echo $this->htmlLink($link->getHref(), Engine_Api::_()->core()->DecodeEmoji($link->getDescription()), array('class' => 'font_color_light','target' => '_blank')) ?>
         </div>
         <?php if( !$link->getOwner()->isSelf($link->getParent()) ): ?>
-        <div class="profile_links_author">
+        <div class="profile_links_author font_color_light font_size_small">
           <?php echo $this->translate('Posted by %s', $link->getOwner()->__toString()) ?>
           <?php echo $this->timestamp($link->creation_date) ?>
         </div>
         <?php endif; ?>
+        <?php if(!empty($link->params['iframely']['html'])):
+          echo $link->params['iframely']['html'];
+        endif;?>
       </div>
-      <?php if(!empty($link->params['iframely']['html'])):
-        echo $link->params['iframely']['html'];
-       endif;?>
-      <?php
-      if ($link->isDeletable()){
-        echo "<br/>".$this->htmlLink(array('route' => 'default', 'module' => 'core', 'controller' => 'link', 'action' => 'delete', 'link_id' => $link->link_id, 'format' => 'smoothbox'), $this->translate('Delete Link'), array(
-          'class' => 'buttonlink smoothbox icon_delete'
-        ));
-      }
-      ?>
+
+      <?php if ($link->isDeletable()){ ?>
+        <div class="profile_links_delete">
+          <?php echo $this->htmlLink(array('route' => 'default', 'module' => 'core', 'controller' => 'link', 'action' => 'delete', 'link_id' => $link->link_id, 'format' => 'smoothbox'), $this->translate(''), array('class' => 'btn btn-alt smoothbox fa-solid fa-xmark', 'data-bs-toggle' => 'tooltip', 'title' => $this->translate('Delete Link'))); ?>
+        </div>
+      <?php } ?>
+
     </li>
   <?php endforeach; ?>
 </ul>
-
-<div>
+<div class="profile_paginator">
   <div id="profile_links_previous" class="paginator_previous">
     <?php echo $this->htmlLink('javascript:void(0);', $this->translate('Previous'), array(
       'onclick' => '',

@@ -48,7 +48,11 @@
         <?php if( $this->gateway ): ?>
           <?php echo $this->translate($this->gateway->title) ?>
         <?php else: ?>
-          <i><?php echo $this->translate('Unknown Gateway') ?></i>
+          <?php if($this->transaction->gateway_id == 3000) { ?>
+            <?php echo $this->translate("Wallet") ?>
+          <?php } else { ?>
+            <i><?php echo $this->translate('Unknown Gateway') ?></i>
+          <?php } ?>
         <?php endif; ?>
       </td>
     </tr>
@@ -84,7 +88,7 @@
         <?php echo $this->translate('Gateway Transaction ID') ?>
       </td>
       <td>
-        <?php if(!in_array($this->transaction->gateway_id, array('3', '4', '5', '6')) && !empty($this->transaction->gateway_transaction_id) ): ?>
+        <?php if(!engine_in_array($this->transaction->gateway_id, array('3', '4', '5', '6', '3000')) && !empty($this->transaction->gateway_transaction_id) ): ?>
           <?php echo $this->htmlLink(array(
               'route' => 'admin_default',
               'module' => 'payment',
@@ -95,6 +99,8 @@
               //'class' => 'smoothbox',
               'target' => '_blank',
           )) ?>
+        <?php elseif(engine_in_array($this->transaction->gateway_id, array('3', '4', '5', '6', '3000')) && !empty($this->transaction->gateway_transaction_id)): ?>
+          <?php echo $this->transaction->gateway_transaction_id; ?>
         <?php else: ?>
           <?php echo $this->translate("N/A"); ?>
         <?php endif; ?>
@@ -154,8 +160,7 @@
         <?php echo $this->translate('Options') ?>
       </td>
       <td>
-        <?php if( $this->order && !empty($this->order->source_id) &&
-            $this->order->source_type == 'payment_subscription' ): ?>
+        <?php if( $this->order && !empty($this->order->source_id) && $this->order->source_type == 'payment_subscription' ): ?>
           <?php echo $this->htmlLink(array(
             'reset' => false,
             'controller' => 'subscription',
@@ -165,6 +170,8 @@
           ), $this->translate('Related Subscription'), array(
             'target' => '_parent'
           )) ?>
+        <?php else: ?>
+          <?php echo "---"; ?>
         <?php endif; ?>
       </td>
     </tr>

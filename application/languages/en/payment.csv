@@ -31,7 +31,7 @@
 # payment.admin-gateway
 "Manage Payment Gateways";"Manage Payment Gateways"
 "PAYMENT_VIEWS_ADMIN_GATEWAYS_INDEX_DESCRIPTION";"Browse and manage payment
-gateways. <br /> Note: After turning on a gateway here, make sure to also turn it on in the Manage Currency settings. Go to your currency preferences, where you can edit and activate the right gateways."
+gateways. <br /> Note: After turning on a gateway here, make sure to also turn it on in the Manage Currency settings. Go to your currency preferences, where you can edit and activate the right gateways. <br /> These payment gateways are just for recharge the wallet on your website."
 "%s gateway found";"%s gateway found";"%s gateways found"
 "PayPal";"PayPal"
 "Payment Gateway: PayPal";"Payment Gateway: PayPal"
@@ -621,6 +621,7 @@ Note: You may be promoted to enter your password to receive the secret key.<br /
 "PAGETITLE-PAYMENT-CHANGE-STYLES-ADMIN-PACKAGE";"Change Style of This Plan"
 "pagetitle-payment-finish-subscription";"Payment Complete"
 "pagetitle-payment-confirm-settings";"Confirm Subscription"
+"pagetitle-payment-choose-subscription";"Choose Subscription"
 
 "Publishable key";"Publishable key"
 "Secret key";"Secret key"
@@ -748,6 +749,82 @@ Note: You may be promoted to enter your password to receive the secret key.<br /
 "Choose the default currency to be enabled on your site. Note: All the currencies enabled from the Manage Currencies page will be shown in this dropdown.";"Choose the default currency to be enabled on your site. Note: All the currencies enabled from the Manage Currencies page will be shown in this dropdown."
 "This is the default currency, so before disabling it, please choose another default currency for your site.";"This is the default currency, so before disabling it, please choose another default currency for your site."
 
+"ACTIVITY_TYPE_PAYMENT_MANUAL_WALLET";"When members make payment for wallet recharge."
+
+# PAYMENT_WALLET_ACTIVE
+"_EMAIL_PAYMENT_WALLET_ACTIVE_TITLE";"Wallet Recharge"
+"_EMAIL_PAYMENT_WALLET_ACTIVE_DESCRIPTION";"This is the email that gets sent to a member when user recharge their wallet."
+"_EMAIL_PAYMENT_WALLET_ACTIVE_SUBJECT";"Congratulations, your wallet has been recharged successfully."
+"_EMAIL_PAYMENT_WALLET_ACTIVE_BODY";"[header]
+
+Your wallet has been recharged successfully.
+
+[wallet_terms]
+
+Please click the link below to view your wallet balance:
+
+[object_link]
+
+[footer]"
+
+
+# PAYMENT_WALLET_PENDING
+"_EMAIL_PAYMENT_WALLET_PENDING_TITLE";"Wallet Recharge Pending"
+"_EMAIL_PAYMENT_WALLET_PENDING_DESCRIPTION";"This is the email that gets sent to a member when user recharge their wallet."
+"_EMAIL_PAYMENT_WALLET_PENDING_SUBJECT";"Your wallet recharge is pending."
+"_EMAIL_PAYMENT_WALLET_PENDING_BODY";"[header]
+
+Your wallet recharge is pending until the transaction is completed. We'll notify you by email once it's recharge successfully.
+
+Thank you for your patience.
+
+[wallet_terms]
+
+[footer]"
+
+
+# PAYMENT_MANUAL_WALLET
+"_EMAIL_PAYMENT_MANUAL_WALLET_TITLE";"Wallet Recharge Payment Received"
+"_EMAIL_PAYMENT_MANUAL_WALLET_DESCRIPTION";"This email is sent to the admin when there is a new payment for wallet recharge and that might be pending or requiring admin action."
+"_EMAIL_PAYMENT_MANUAL_WALLET_SUBJECT";"New [payment_method] Payment Received"
+"_EMAIL_PAYMENT_MANUAL_WALLET_BODY";"[header]
+
+New [payment_method] payment has been received for the wallet recharge on your website. 
+
+[sender_name] has made the payment. Please click the following link to take the appropriate action if needed:
+
+[admin_link]
+
+[footer]"
+
+# PAYMENT_WALLET_CANCELLED
+"_EMAIL_PAYMENT_WALLET_CANCELLED_TITLE";"Wallet Recharge Payment Rejected"
+"_EMAIL_PAYMENT_WALLET_CANCELLED_DESCRIPTION";"This is the email that gets sent to a member when their wallet recharge payment is rejected."
+"_EMAIL_PAYMENT_WALLET_CANCELLED_SUBJECT";"Your wallet recharge payment has been rejected."
+"_EMAIL_PAYMENT_WALLET_CANCELLED_BODY";"[header]
+
+Your wallet recharge payment has been rejected.
+
+You may follow the link below:
+
+[object_link]
+
+[footer]"
+
+
+# payment_verification_transaction
+"_EMAIL_PAYMENT_VERIFICATION_TRANSACTION_TITLE";"Verification Payment Received"
+"_EMAIL_PAYMENT_VERIFICATION_TRANSACTION_DESCRIPTION";"This is the email that is received by admin when there will be any payment for verification will come or waiting for admin action."
+"_EMAIL_PAYMENT_VERIFICATION_TRANSACTION_SUBJECT";"New [gateway_type] Payment Received"
+"_EMAIL_PAYMENT_VERIFICATION_TRANSACTION_BODY";"
+
+[header]
+
+New [gateway_type] payment has been received for the subscription of verification on your website. Please click the following link to approve or reject the payment:
+
+[object_link]
+
+[footer]"
 "Your subscription plan {var:$planName} is going to expire soon on {var:$period}.";"Your subscription plan {var:$planName} is going to expire soon on {var:$period}."
 
 "Your subscription plan changed from {var:$currentPlan} to {var:$changedPlan}.";"Your subscription plan changed from {var:$currentPlan} to {var:$changedPlan}."
@@ -755,3 +832,40 @@ Note: You may be promoted to enter your password to receive the secret key.<br /
 "{item:$subject} has subscribe with payment method {var:$payment_method} on this {var:$adminsidelink}.";"{item:$subject} has subscribe with payment method {var:$payment_method} on this {var:$adminsidelink}."
 
 "{item:$subject} has made {var:$payment_method} payment for user verification. You can take appropriate action in {var:$adminsidelink}.";"{item:$subject} has made {var:$payment_method} payment for user verification. You can take appropriate action in {var:$adminsidelink}."
+
+"Your {var:$walletlink} has been successfully recharged using {var:$payment_method}.";"Your {var:$walletlink} has been successfully recharged using {var:$payment_method}."
+"ACTIVITY_TYPE_PAYMENT_WALLET_ACTIVE";"When your wallet is recharged successfully."
+"Enable Wallet";"Enable Wallet"
+"Do you want enable wallet feature for payments on your website?";"Do you want enable wallet feature for payments on your website?"
+"Wallet";"Wallet"
+"Current balance";"Current balance"
+"Add Funds";"Add Funds"
+"Add Fund";"Add Fund"
+"Wallet are not required for administrators and moderators.";"Wallet are not required for administrators and moderators."
+"You can use this wallet balance for Membership subscription, Verification subscription, and any other payment activities on the website.";"You can use this wallet balance for Membership subscription, Verification subscription, and any other payment activities on the website."
+"Recharge with %1$s";"Recharge with %1$s"
+"Enter the fund below to recharge your wallet.";"Enter the fund below to recharge your wallet."
+" wallet";" wallet"
+"You don't have enough balance to subscribe paid plans, please first recharge your  ";"You don't have enough balance to subscribe paid plans, please first recharge your  "
+"Payment Completed";"Payment Completed"
+"Thank you! Your payment has been completed successfully, and your wallet has been recharged.";"Thank you! Your payment has been completed successfully, and your wallet has been recharged."
+"Visit Wallet";"Visit Wallet"
+"Current balance: ";"Current balance: "
+"You don't have enough balance to subscribe this plan, please first recharge your  ";"You don't have enough balance to subscribe this plan, please first recharge your  "
+"Thank you for your payment! We will review it promptly. You’ll receive a notification once it’s approved, and your wallet will be recharged.";"Thank you for your payment! We will review it promptly. You’ll receive a notification once it’s approved, and your wallet will be recharged."
+"You don't have enough balance for verification subscription, please first recharge your ";"You don't have enough balance for verification subscription, please first recharge your "
+"Wallet Recharge";"Wallet Recharge"
+"Wallet recharge";"Wallet recharge"
+"Payment";"Payment"
+"Payment Verification";"Payment Verification"
+"View Attachment";"View Attachment"
+"Pay By Wallet";"Pay By Wallet"
+"Verification Subscription";"Verification Subscription"
+"At present, your membership on this site is not verified. To initiate the verification process for your profile, please make the payment by click on button below.";"At present, your membership on this site is not verified. To initiate the verification process for your profile, please make the payment by click on button below."
+"Verification Fees: %s";"Verification Fees: %s"
+"Are you sure that you want to pay using wallet for this verification subscription?";"Are you sure that you want to pay using wallet for this verification subscription?"
+"Pay";"Pay"
+"If you would like to cancel your verification subscription, please click on Cancel button below.";"If you would like to cancel your verification subscription, please click on Cancel button below."
+"Payment verification";"Payment verification"
+"Pending";"Pending"
+"{item:$subject} has made {var:$payment_method} payment for wallet recharge. You can take appropriate action in {var:$adminsidelink}.";"{item:$subject} has made {var:$payment_method} payment for wallet recharge. You can take appropriate action in {var:$adminsidelink}."

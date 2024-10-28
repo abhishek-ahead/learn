@@ -52,7 +52,7 @@ UPDATE `engine4_user_fields_meta` SET `icon` = 'fa fa-user' WHERE `engine4_user_
 UPDATE `engine4_user_fields_meta` SET `icon` = 'fa fa-venus-mars' WHERE `engine4_user_fields_meta`.`type` = 'gender';
 UPDATE `engine4_user_fields_meta` SET `icon` = 'fa fa-calendar-alt' WHERE `engine4_user_fields_meta`.`type` = 'birthdate';
 UPDATE `engine4_user_fields_meta` SET `icon` = 'fa fa-globe' WHERE `engine4_user_fields_meta`.`type` = 'website';
-UPDATE `engine4_user_fields_meta` SET `icon` = 'fab fa-twitter' WHERE `engine4_user_fields_meta`.`type` = 'twitter';
+UPDATE `engine4_user_fields_meta` SET `icon` = 'fa-brands fa-x-twitter' WHERE `engine4_user_fields_meta`.`type` = 'twitter';
 UPDATE `engine4_user_fields_meta` SET `icon` = 'fab fa-facebook-f' WHERE `engine4_user_fields_meta`.`type` = 'facebook';
 UPDATE `engine4_user_fields_meta` SET `icon` = 'fa fa-info-circle' WHERE `engine4_user_fields_meta`.`type` = 'about_me';
   

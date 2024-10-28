@@ -126,16 +126,16 @@
 </script>
 <?php if(!$this->isAjax) { ?>
   <div class='notifications_layout'>
-    <div class='notifications_leftside'>
+    <div class='layout_content'>
       <div class="notifications_layout_inner">
         <div class="notifications_layout_head d-flex justify-content-between align-items-center">  
           <h3 class="m-0 p-0"><?php echo $this->translate("Recent Updates") ?></h3>
           <?php if( $this->notifications->getTotalItemCount() > 0 ): ?>
             <div class="dropdown">
-              <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i></i>
+              <button class="btn btn-alt" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="icon_option_menu"></i>
               </button>
-              <ul class="dropdown-menu dropdown-menu-end">
+              <ul class="dropdown-menu dropdown-option-menu dropdown-menu-end">
                 <?php //if( $this->hasunread ): ?>
                   <li class="notifications_markread" id="notifications_markread_main">
                     <?php echo $this->htmlLink('javascript:void(0);', $this->translate('Mark All Read'), array('id' => 'notifications_markread_link_main', 'class' => 'dropdown-item notifications_markread_link')) ?>
@@ -195,7 +195,12 @@
             ob_end_flush(); ?>
             <?php endforeach; ?>
           <?php else: ?>
-            <li class="justify-content-center"><div class="tip m-0"><span class=" m-0"><?php echo $this->translate("You have no notifications.") ?></span></div></li>
+            <li>
+              <div class="no_result_tip w-100">
+                <i><img src="application/modules/Core/externals/images/no-results.png" height="100" width="100" alt="No Result"></i>
+                <p class=" m-0"><?php echo $this->translate("You have no notifications.") ?></p>
+              </div>
+            </li>
           <?php endif; ?>
 
       <?php if(!$this->isAjax) { ?>

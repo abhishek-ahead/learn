@@ -12,7 +12,7 @@
 
 ?>
 <?php if( $this->menuFromTheme ): ?>
-  <ul class="navigation">
+  <ul class="navigation" id="navigation_menu">
     <?php foreach( $this->navigation as $link ): ?>
       <li class="<?php echo $link->get('active') ? 'active' : '' ?>">
         <a href='<?php echo $link->getHref() ?>' class="<?php echo $link->getClass() ? ' ' . $link->getClass() : ''  ?>"
@@ -38,7 +38,7 @@
     </button>
    <div class="main_menu_navigation offcanvas offcanvas-end" id="offcanvasNavbar">
      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"><i class="fa fa-times"></i></button>
-     <ul class="navigation">
+     <ul class="navigation" id="navigation_menu">
       <?php foreach( $this->navigation as $link ): ?>
         <?php if( $countMenu < $this->menuCount ): ?>
           <?php 
@@ -166,7 +166,7 @@
         }
       }
     });
-    scriptJquery(document).on('click','.main_menu_focused',function(e){
+    AttachEventListerSE('click','.main_menu_focused',function(e){
       if(scriptJquery(this).parent().find('ul').children().length == 0)
         return true;
       e.preventDefault();
@@ -182,7 +182,17 @@
       }
       return false;
     });
-
+    AttachEventListerSE("click",'#navigation_menu li a',function(){
+      scriptJquery(this).closest("ul").find("li").removeClass('active');
+      scriptJquery(this).closest("li").addClass('active');
+      scriptJquery('.selected_sub_main_menu').removeClass("selected_sub_main_menu");
+    })
+    AttachEventListerSE("click",'.main_menu_submenu li a',function(){
+      scriptJquery('#navigation_menu').find("li").removeClass('active');
+      scriptJquery(this).closest("ul").parent().removeClass('active');
+      scriptJquery(this).closest("ul").parent().addClass('active');
+      scriptJquery('.selected_sub_main_menu').removeClass("selected_sub_main_menu");
+    })
     // function toggleFocus(element) {
     //   element.addEventListener('focus', (event) => {
     //     event.currentTarget.classList.add("main_menu_focused");
@@ -201,7 +211,7 @@
     // }
     // addToggleFocusToItems('.layout_core_menu_main');
 
-    // scriptJquery(document).on('click','.main_menu_focused',function(e){
+    // AttachEventListerSE('click','.main_menu_focused',function(e){
     //   if(scriptJquery(this).parent().hasClass('menu_active')){
     //     scriptJquery(this).parent().removeClass('menu_active');
     //   } else {
@@ -212,7 +222,7 @@
     // });
 
 
-    scriptJquery(document).on('click','.open_submenu',function(e){
+    AttachEventListerSE('click','.open_submenu',function(e){
       if(scriptJquery(this).parent().parent().find('ul').children().length == 0)
         return true;
       e.preventDefault();
@@ -227,8 +237,7 @@
       }
       return false;
     });
-
-    scriptJquery(document).ready(function(){
+    function updateMenuActiveClass(){
       var selectedMenu = scriptJquery('.main_menu_navigation').find(".selected_sub_main_menu");
       if(selectedMenu.length){
         var parentMenu = selectedMenu.closest(".main_menu_submenu").closest("li");
@@ -240,6 +249,13 @@
       if(selectedMenu.length){
         selectedMenu.closest(".more_tab").addClass("active");
       }
+    }
+    scriptJquery( document ).ajaxComplete(function() {
+      updateMenuActiveClass();
+    });
+
+    en4.core.runonce.add(function() {
+      updateMenuActiveClass();
     });
     if(typeof en4 != "undefined"){
       en4.core.layout.setLeftPannelMenu('<?php echo $this->menuType; ?>');

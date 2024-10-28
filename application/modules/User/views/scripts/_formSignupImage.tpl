@@ -10,12 +10,6 @@
  * @author     Jung
  */
 ?>
-  <?php
-    $this->headScript()
-      ->appendFile($this->layout()->staticBaseUrl . 'externals/cropper/cropper.js');
-    $this->headLink()
-      ->appendStylesheet($this->layout()->staticBaseUrl . 'externals/cropper/cropper.css');
-  ?>
 <div class="user_edit_photo_main">
   <?php 
     if (isset($_SESSION['TemporaryProfileImg'])){
@@ -79,7 +73,7 @@
     var uploadSignupPhoto =function(){
       scriptJquery('#uploadPhoto').val(true);
       scriptJquery('#thumbnail-controller').html("<div><img class='loading_icon' src='application/modules/Core/externals/images/loading.gif'/><?php echo $this->translate('Loading...');?></div>");
-      scriptJquery('#SignupForm').trigger("submit");
+      scriptJquery('.signup_account_form').trigger("submit");
       scriptJquery('#Filedata-wrapper').html("");
     }
     var lassoEnd = function(){

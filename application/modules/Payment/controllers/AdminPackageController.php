@@ -79,7 +79,7 @@ class Payment_AdminPackageController extends Core_Controller_Action_Admin {
 
     // Add filter values
     if( !empty($filterValues['query']) ) {
-      $select->where('title LIKE ?', '%' . $filterValues['package_id'] . '%');
+      $select->where('title LIKE ?', $filterValues['package_id'] . '%');
     }
     if( !empty($filterValues['level_id']) ) {
       $select->where('level_id = ?', $filterValues['level_id']);
@@ -281,22 +281,22 @@ class Payment_AdminPackageController extends Core_Controller_Action_Admin {
       $package->save();
 
       // Create package in gateways?
-      if( !$package->isFree() ) {
-        $gatewaysTable = Engine_Api::_()->getDbtable('gateways', 'payment');
-        foreach( $gatewaysTable->fetchAll(array('enabled = ?' => 1)) as $gateway ) {
-          $gatewayPlugin = $gateway->getGateway();
-          // Check billing cycle support
-          if( !$package->isOneTime() ) {
-            $sbc = $gateway->getGateway()->getSupportedBillingCycles();
-            if( !engine_in_array($package->recurrence_type, array_map('strtolower', $sbc)) ) {
-              continue;
-            }
-          }
-          if( method_exists($gatewayPlugin, 'createProduct') ) {
-            $gatewayPlugin->createProduct($package->getGatewayParams());
-          }
-        }
-      }
+//       if( !$package->isFree() ) {
+//         $gatewaysTable = Engine_Api::_()->getDbtable('gateways', 'payment');
+//         foreach( $gatewaysTable->fetchAll(array('enabled = ?' => 1)) as $gateway ) {
+//           $gatewayPlugin = $gateway->getGateway();
+//           // Check billing cycle support
+//           if( !$package->isOneTime() ) {
+//             $sbc = $gateway->getGateway()->getSupportedBillingCycles();
+//             if( !engine_in_array($package->recurrence_type, array_map('strtolower', $sbc)) ) {
+//               continue;
+//             }
+//           }
+//           if( method_exists($gatewayPlugin, 'createProduct') ) {
+//             $gatewayPlugin->createProduct($package->getGatewayParams());
+//           }
+//         }
+//       }
 
       $db->commit();
     } catch( Exception $e ) {
@@ -421,39 +421,39 @@ class Payment_AdminPackageController extends Core_Controller_Action_Admin {
       $package->setFromArray($values);
       $package->save();
 
-      // Create package in gateways?
-      if( !$package->isFree() ) {
-        $gatewaysTable = Engine_Api::_()->getDbtable('gateways', 'payment');
-        foreach( $gatewaysTable->fetchAll(array('enabled = ?' => 1)) as $gateway ) {
-          $gatewayPlugin = $gateway->getGateway();
-          // Check billing cycle support
-          if( !$package->isOneTime() ) {
-            $sbc = $gateway->getGateway()->getSupportedBillingCycles();
-            if( !engine_in_array($package->recurrence_type, array_map('strtolower', $sbc)) ) {
-              continue;
-            }
-          }
-          if( !method_exists($gatewayPlugin, 'createProduct') ||
-              !method_exists($gatewayPlugin, 'editProduct') ||
-              !method_exists($gatewayPlugin, 'detailVendorProduct') ) {
-            continue;
-          }
-          // If it throws an exception, or returns empty, assume it doesn't exist?
-          try {
-            $info = $gatewayPlugin->detailVendorProduct($package->getGatewayIdentity());
-          } catch( Exception $e ) {
-            $info = false;
-          }
-          // Create
-          if( !$info ) {
-            $gatewayPlugin->createProduct($package->getGatewayParams());
-          }
-          // Edit
-          else {
-            $gatewayPlugin->editProduct($package->getGatewayIdentity(), $package->getGatewayParams());
-          }
-        }
-      }
+//       // Create package in gateways?
+//       if( !$package->isFree() ) {
+//         $gatewaysTable = Engine_Api::_()->getDbtable('gateways', 'payment');
+//         foreach( $gatewaysTable->fetchAll(array('enabled = ?' => 1)) as $gateway ) {
+//           $gatewayPlugin = $gateway->getGateway();
+//           // Check billing cycle support
+//           if( !$package->isOneTime() ) {
+//             $sbc = $gateway->getGateway()->getSupportedBillingCycles();
+//             if( !engine_in_array($package->recurrence_type, array_map('strtolower', $sbc)) ) {
+//               continue;
+//             }
+//           }
+//           if( !method_exists($gatewayPlugin, 'createProduct') ||
+//               !method_exists($gatewayPlugin, 'editProduct') ||
+//               !method_exists($gatewayPlugin, 'detailVendorProduct') ) {
+//             continue;
+//           }
+//           // If it throws an exception, or returns empty, assume it doesn't exist?
+//           try {
+//             $info = $gatewayPlugin->detailVendorProduct($package->getGatewayIdentity());
+//           } catch( Exception $e ) {
+//             $info = false;
+//           }
+//           // Create
+//           if( !$info ) {
+//             $gatewayPlugin->createProduct($package->getGatewayParams());
+//           }
+//           // Edit
+//           else {
+//             $gatewayPlugin->editProduct($package->getGatewayIdentity(), $package->getGatewayParams());
+//           }
+//         }
+//       }
 
       $db->commit();
     } catch( Exception $e ) {
@@ -461,7 +461,9 @@ class Payment_AdminPackageController extends Core_Controller_Action_Admin {
       throw $e;
     }
 
-    $form->addNotice('Your changes have been saved.');
+    //$form->addNotice('Your changes have been saved.');
+    // Redirect
+    return $this->_helper->redirector->gotoRoute(array('action' => 'index'));
   }
 
   public function deleteAction()

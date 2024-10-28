@@ -19,4 +19,12 @@
 class Messages_Model_DbTable_Messages extends Engine_Db_Table
 {
   protected $_rowClass = 'Messages_Model_Message';
+  public function getMessageId($params = array()) {
+    return $this->select()
+              ->from($this->info('name'), 'message_id')
+              ->where('attachment_type =?', $params['resource_type'])
+              ->where('attachment_id =?', $params['resource_id'])
+              ->query()
+              ->fetchColumn();
+  }
 }

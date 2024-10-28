@@ -47,7 +47,7 @@ class Core_LinkController extends Core_Controller_Action_Standard
     $link->save();
 
     $this->_helper->viewRenderer->setNoRender(true);
-    $this->_helper->redirector->gotoUrl($link->uri);
+    $this->_helper->redirector->gotoUrl(strtolower($link->uri));
   }
 
   public function createAction()
@@ -136,40 +136,285 @@ class Core_LinkController extends Core_Controller_Action_Standard
         'messages' => Array(Zend_Registry::get('Zend_Translate')->_('Link has been deleted.'))
     ));
   }
-
+  
   public function previewAction()
   {
-    if( !$this->_helper->requireUser()->isValid() )
+
+    $this->_helper->contextSwitch
+      ->addActionContext('create', 'json')
+      ->addActionContext('preview', 'json')
+      ->initContext();
+    if (!$this->_helper->requireUser()->isValid())
       return;
-    if( !$this->_helper->requireAuth()->setAuthParams('core_link', null, 'create')->isValid() )
+    if (!$this->_helper->requireAuth()->setAuthParams('core_link', null, 'create')->isValid())
       return;
 
     // clean URL for html code
     $uri = trim(strip_tags($this->_getParam('uri')));
-    $displayUri = $uri;
-    $info = parse_url($displayUri);
-    if( !empty($info['path']) ) {
-      $displayUri = str_replace($info['path'], urldecode($info['path']), $displayUri);
-    }
-    $this->view->url = Engine_String::convertUtf8($displayUri);
-    $this->view->title = '';
-    $this->view->description = '';
-    $this->view->thumb = null;
-    $this->view->imageCount = 0;
-    $this->view->images = array();
+    //$uri = $this->_getParam('uri');
+    $info = parse_url($uri);
+    $this->view->url = $uri;
+
     try {
       $config = Engine_Api::_()->getApi('settings', 'core')->core_iframely;
-      if( !empty($config['host']) && $config['host'] != 'socialengine' ) {
-        $this->_getFromIframely($config, $uri);
-      } else {
-        $this->_getFromClientRequest($uri);
+      if (!empty($config['host']) && $config['host'] != 'none') {
+        if (strpos($uri, 'youtubevideo') !== false || strpos($uri, 'vimeovideo') !== false || strpos($uri, 'soundcloud') !== false || strpos($uri, 'https://youtu.be/') !== false || strpos($uri, 'youtube') !== false) {
+        } else {
+          $this->_getFromIframely($config, $uri);
+          $this->view->title = Engine_String::convertUtf8($this->view->title);
+          $this->view->description = Engine_String::convertUtf8($this->view->description);
+          //return;
+        }
       }
-    } catch( Exception $e ) {
-      throw $e;
+    } catch (Exception $e) {
     }
-    $this->view->title = Engine_String::convertUtf8($this->view->title);
-    $this->view->description = Engine_String::convertUtf8($this->view->description);
+
+    try {
+      $client = new Zend_Http_Client($uri, array(
+        'maxredirects' => 3,
+        'timeout' => 20,
+      )
+      );
+
+      // Try to mimic the requesting user's UA
+      $client->setHeaders(
+        array(
+          'User-Agent' => $_SERVER['HTTP_USER_AGENT'],
+          'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+          'X-Powered-By' => 'Zend Framework'
+        )
+      );
+
+      $response = $client->request();
+      // Get DOM
+
+
+      $this->view->isGif = false;
+      $this->view->isIframe = false;
+      $body = $response->getBody();
+      $body = trim($body);
+      if (
+        preg_match('/charset=([a-zA-Z0-9-_]+)/i', $response->getHeader('content-type'), $matches) ||
+        preg_match('/charset=([a-zA-Z0-9-_]+)/i', $response->getBody(), $matches)
+      ) {
+        $this->view->charset = $charset = trim($matches[1]);
+      } else {
+        $this->view->charset = $charset = 'UTF-8';
+      }
+      if (function_exists('mb_convert_encoding')) {
+        $body = mb_convert_encoding($body, 'HTML-ENTITIES', $charset);
+      }
+      if (class_exists('DOMDocument')) {
+        $dom = new Zend_Dom_Query($body);
+      } else {
+        $dom = null; // Maybe add b/c later
+      }
+
+      if ($dom && $gifImage = $dom->queryXpath("//meta[@property='og:url']")) {
+        if ($gifImage->current() && strpos($gifImage->current()->getAttribute('content'), '.gif') !== false) {
+          $this->view->isGif = true;
+          $gifImageUrl = $dom->queryXpath("//meta[@property='og:image']");
+          if (strpos($gifImageUrl->current()->getAttribute('content'), '.jpg') !== false)
+            $image = $gifImageUrl->current()->getAttribute('content');
+          else {
+            $image = $gifImageUrl->current()->getAttribute('content');
+          }
+
+          $this->view->gifImageUrl = $image;
+          $this->view->gifUrl = $gifImage->current()->getAttribute('content');
+          $this->view->title = '';
+          $this->view->description = '';
+          $this->view->images = array();
+          $this->view->imageCount = 0;
+        }
+      }
+      $uploadedFile = '';
+      if (strpos($uri, '.gif') !== false) {
+        $tmp_path = APPLICATION_PATH . '/temporary/link';
+
+        if (!is_dir($tmp_path) && !mkdir($tmp_path, 0777, true)) {
+          throw new Activity_Model_Exception('Unable to create tmp link folder : ' . $tmp_path);
+        }
+        $imgPath = $tmp_path . time() . '.gif';
+        $contentImage = imagepng(imagecreatefromstring(file_get_contents($uri)), $imgPath);
+        ;
+        //$contentImage = file_put_contents($imgPath, file_get_contents($uri));
+        $thumbnail = (string) @$imgPath;
+        $thumbnail_parsed = @parse_url($thumbnail);
+
+        $tmp_file = $tmp_path . '/' . md5($thumbnail);
+
+        $src_fh = fopen($thumbnail, 'r');
+        $tmp_fh = fopen($tmp_file, 'w');
+        stream_copy_to_stream($src_fh, $tmp_fh, 1024 * 1024 * 2);
+        fclose($src_fh);
+        fclose($tmp_fh);
+        if (($info = getimagesize($tmp_file)) && !empty($info[2])) {
+          $ext = Engine_Image::image_type_to_extension($info[2]);
+          $thumb_file = $tmp_path . '/thumb_' . md5($thumbnail) . '.' . $ext;
+
+          $image = Engine_Image::factory();
+          $image->open($tmp_file)
+            ->autoRotate()
+            ->resize(500, 500)
+            ->write($thumb_file)
+            ->destroy();
+
+          $thumbFileRow = Engine_Api::_()->storage()->create($thumb_file, array(
+            'parent_type' => 'core_link',
+            'parent_id' => '999999999999999'
+          )
+          );
+          $uploadedFile = $thumbFileRow->map();
+          @unlink($thumb_file);
+          @unlink($imgPath);
+        }
+        $this->view->isGif = true;
+        $this->view->gifImageUrl = $uploadedFile;
+        $this->view->gifUrl = $uri;
+        $this->view->title = '';
+        $this->view->description = '';
+        $this->view->images = array();
+        $this->view->imageCount = 0;
+      } else if (strpos($uri, 'youtubevideo') !== false || strpos($uri, 'vimeovideo') !== false || strpos($uri, 'soundcloud') !== false || strpos($uri, 'https://youtu.be/') !== false) {
+
+        $title = null;
+        if ($dom) {
+          $titleList = $dom->query('title');
+          if (engine_count($titleList) > 0) {
+            $title = trim($titleList->current()->textContent);
+            $title = substr($title, 0, 255);
+          }
+        }
+        $this->view->title = $title;
+
+        $description = null;
+        if ($dom) {
+          $descriptionList = $dom->queryXpath("//meta[@name='description']");
+          // Why are they using caps? -_-
+          if (engine_count($descriptionList) == 0) {
+            $descriptionList = $dom->queryXpath("//meta[@name='Description']");
+          }
+          // Try to get description which is set under og tag
+          if (engine_count($descriptionList) == 0) {
+            $descriptionList = $dom->queryXpath("//meta[@property='og:description']");
+          }
+          if (engine_count($descriptionList) > 0) {
+            $description = trim($descriptionList->current()->getAttribute('content'));
+            $description = substr($description, 0, 255);
+          }
+        }
+        $this->view->description = $description;
+        $this->view->isGif = false;
+        $this->view->gifUrl = '';
+        $parseUrl = parse_url($uri);
+        $array = array();
+        if (!empty($parseUrl['query']))
+          $url = @parse_str($parseUrl['query'], $array);
+        if (strpos($uri, 'https://youtu.be') !== false) {
+          $array['v'] = end(explode('/', $uri));
+          $uri = 'youtubevideo';
+        }
+
+
+        if (strpos($uri, 'youtubevideo') !== false) {
+          $this->view->thumb = '<iframe width="100%" height="320" src="https://www.youtube.com/embed/' . $array["v"] . '?' . (!empty($array['list']) ? 'list=' . $array['list'] : '') . '" frameborder="0" allowfullscreen></iframe>';
+        } else if (strpos($uri, 'soundcloud') !== false) {
+          $this->view->thumb = '<iframe frameborder="no" width="100%" height="400" src="https://w.soundcloud.com/player/?visual=true&url=' . $uri . '&show_artwork=true" scrolling="no"></iframe>';
+        } else
+          $this->view->thumb = '<iframe src="' . str_replace('vimeo.com', 'player.vimeo.com/video', $uri) . '" width="100%" height="320" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
+        $this->view->imageCount = 0;
+        $this->view->images = array();
+        //$this->view->isIframe = true;
+      }
+
+      if (!$this->view->isGif && !$this->view->isIframe) {
+        // Get content-type
+        list($contentType) = explode(';', $response->getHeader('content-type'));
+        $this->view->contentType = $contentType;
+
+        // Prepare
+        $this->view->isGif = false;
+        $this->view->gifUrl = '';
+        $this->view->title = null;
+        $this->view->description = null;
+        $this->view->thumb = null;
+        $this->view->imageCount = 0;
+        $this->view->images = array();
+
+        // Handling based on content-type
+        switch (strtolower($contentType)) {
+
+          // Images
+          case 'image/gif':
+          case 'image/jpeg':
+          case 'image/jpg':
+          case 'image/tif': // Might not work
+          case 'image/xbm':
+          case 'image/xpm':
+          case 'image/png':
+          case 'image/bmp': // Might not work
+            $this->_previewImage($uri, $response);
+            break;
+
+          // HTML
+          case '':
+          case 'text/html':
+            $this->_previewHtml($uri, $response);
+            break;
+
+          // Plain text
+          case 'text/plain':
+            $this->_previewText($uri, $response);
+            break;
+
+          // Unknown
+          default:
+            break;
+        }
+      }
+    } catch (Exception $e) {
+      throw $e;
+      //$this->view->title = $uri;
+      //$this->view->description = $uri;
+      //$this->view->images = array();
+      //$this->view->imageCount = 0;
+    }
   }
+
+//   public function previewAction()
+//   {
+//     if( !$this->_helper->requireUser()->isValid() )
+//       return;
+//     if( !$this->_helper->requireAuth()->setAuthParams('core_link', null, 'create')->isValid() )
+//       return;
+// 
+//     // clean URL for html code
+//     $uri = trim(strip_tags($this->_getParam('uri')));
+//     $displayUri = $uri;
+//     $info = parse_url($displayUri);
+//     if( !empty($info['path']) ) {
+//       $displayUri = str_replace($info['path'], urldecode($info['path']), $displayUri);
+//     }
+//     $this->view->url = Engine_String::convertUtf8($displayUri);
+//     $this->view->title = '';
+//     $this->view->description = '';
+//     $this->view->thumb = null;
+//     $this->view->imageCount = 0;
+//     $this->view->images = array();
+//     try {
+//       $config = Engine_Api::_()->getApi('settings', 'core')->core_iframely;
+//       if( !empty($config['host']) && $config['host'] != 'socialengine' ) {
+//         $this->_getFromIframely($config, $uri);
+//       } else {
+//         $this->_getFromClientRequest($uri);
+//       }
+//     } catch( Exception $e ) {
+//       throw $e;
+//     }
+//     $this->view->title = Engine_String::convertUtf8($this->view->title);
+//     $this->view->description = Engine_String::convertUtf8($this->view->description);
+//   }
 
   protected function _getFromIframely($config, $uri)
   {
@@ -222,6 +467,7 @@ class Core_LinkController extends Core_Controller_Action_Standard
       $this->view->richHtml = $iframely['html'];
     }
   }
+
   function url_get_contents($url, $useragent='cURL', $headers=false, $follow_redirects=true, $debug=false) {
 
     // initialise the CURL library

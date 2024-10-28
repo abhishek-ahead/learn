@@ -32,9 +32,9 @@ CREATE TABLE `engine4_users` (
   `status_date` datetime NULL,
   `password` char(255) NOT NULL,
   `salt` char(64) NOT NULL,
-  `locale` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL default 'auto',
-  `language` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL default 'en_US',
-  `timezone` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL default 'America/Los_Angeles',
+  `locale` varchar(16) NOT NULL default 'auto',
+  `language` varchar(8) NOT NULL default 'en_US',
+  `timezone` varchar(64) NOT NULL default 'America/Los_Angeles',
   `search` tinyint(1) NOT NULL default '1',
   `show_profileviewers` tinyint(1) NOT NULL default '1',
   `level_id` int(11) unsigned NOT NULL,
@@ -68,6 +68,7 @@ CREATE TABLE `engine4_users` (
   `referral_code` VARCHAR(256) NULL DEFAULT NULL,
   `referral_count` INT(11) NOT NULL DEFAULT '0',
   `avatar_id` INT(11) NOT NULL DEFAULT '0',
+  `location` VARCHAR(255) NULL DEFAULT NULL,
   PRIMARY KEY  (`user_id`),
   UNIQUE KEY `EMAIL` (`email`),
   UNIQUE KEY `USERNAME` (`username`),
@@ -120,7 +121,7 @@ CREATE TABLE IF NOT EXISTS `engine4_user_facebook` (
 DROP TABLE IF EXISTS `engine4_user_forgot`;
 CREATE TABLE IF NOT EXISTS `engine4_user_forgot` (
   `user_id` int(11) unsigned NOT NULL,
-  `code` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `code` varchar(64) NOT NULL,
   `creation_date` datetime NOT NULL,
   PRIMARY KEY  (`user_id`),
   KEY `code` (`code`)
@@ -229,7 +230,7 @@ CREATE TABLE IF NOT EXISTS `engine4_user_online` (
 DROP TABLE IF EXISTS `engine4_user_settings`;
 CREATE TABLE IF NOT EXISTS `engine4_user_settings` (
   `user_id` int(10) unsigned NOT NULL,
-  `name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(64) NOT NULL,
   `value` varchar(255) NOT NULL,
   PRIMARY KEY (`user_id`, `name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -244,7 +245,7 @@ CREATE TABLE IF NOT EXISTS `engine4_user_settings` (
 DROP TABLE IF EXISTS `engine4_user_signup`;
 CREATE TABLE IF NOT EXISTS `engine4_user_signup` (
   `signup_id` int(11) unsigned NOT NULL auto_increment,
-  `class` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `class` varchar(128) NOT NULL,
   `order` smallint(6) NOT NULL default '999',
   `enable` smallint(1) NOT NULL default '0',
   PRIMARY KEY  (`signup_id`)
@@ -286,7 +287,7 @@ CREATE TABLE IF NOT EXISTS `engine4_user_twitter` (
 DROP TABLE IF EXISTS `engine4_user_verify`;
 CREATE TABLE IF NOT EXISTS `engine4_user_verify` (
   `user_id` int(11) unsigned NOT NULL,
-  `code` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `code` varchar(64) NOT NULL,
   `date` datetime NOT NULL,
   PRIMARY KEY (`user_id`),
   KEY `code` (`code`)
@@ -427,7 +428,7 @@ INSERT IGNORE INTO `engine4_activity_actiontypes` (`type`, `module`, `body`, `en
 ('post', 'user', '{actors:$subject:$object}: {body:$body}', 1, 7, 1, 4, 1, 1, 0),
 ('post_self', 'user', '{item:$subject} {body:$body}', 1, 5, 1, 4, 1, 1, 0),
 
-('profile_photo_update', 'user', '{item:$subject} has added a new profile photo.', 1, 5, 1, 4, 1, 0, 1),
+('profile_photo_update', 'user', '{item:$subject} has added a new profile photo: {body:$body}', 1, 5, 1, 4, 1, 0, 1),
 ('friends', 'user', '{item:$subject} is now friends with {item:$object}.', 0, 3, 0, 1, 1, 0, 1),
 ('tagged', 'user', '{item:$subject} tagged {item:$object} in a {var:$label}:', 1, 7, 1, 1, 0, 0, 1),
 ('comment_user', 'user', '{item:$subject} commented on {item:$owner}''s profile: {body:$body}', 1, 7, 1, 3, 1, 0, 1),
@@ -708,10 +709,10 @@ INSERT IGNORE INTO `engine4_user_fields_maps` (`field_id`, `option_id`, `child_i
 DROP TABLE IF EXISTS `engine4_user_fields_meta`;
 CREATE TABLE `engine4_user_fields_meta` (
   `field_id` int(11) unsigned NOT NULL auto_increment,
-  `type` varchar(24) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` varchar(24) NOT NULL,
   `label` varchar(64) NOT NULL,
   `description` varchar(255) NULL DEFAULT NULL,
-  `alias` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL default '',
+  `alias` varchar(32) NOT NULL default '',
   `required` tinyint(1) NOT NULL default '0',
   `display` tinyint(1) unsigned NOT NULL,
   `publish` tinyint(1) unsigned NOT NULL default '0',
@@ -855,7 +856,7 @@ CREATE TABLE IF NOT EXISTS `engine4_user_fields_search` (
 DROP TABLE IF EXISTS `engine4_user_emailsettings`;
 CREATE TABLE IF NOT EXISTS `engine4_user_emailsettings` (
   `user_id` int(11) unsigned NOT NULL,
-  `type` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` varchar(128) NOT NULL,
   `email` tinyint(4) NOT NULL default '1',
   PRIMARY KEY  (`user_id`,`type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci ;
@@ -1092,8 +1093,8 @@ INSERT IGNORE INTO `engine4_authorization_permissions`
   FROM `engine4_authorization_levels` WHERE `type` IN('user');
 
 
-INSERT IGNORE INTO `engine4_core_menuitems` (`name`, `module`, `label`, `plugin`, `params`, `menu`, `submenu`, `order`) VALUES ('core_admin_main_manage_verification', 'user', 'Manage Verifications', '', '{"route":"core_admin_settings","action":"verification"}', 'core_admin_main_manage', '', 10),
-('core_admin_main_settings_verification', 'core', 'Verification Settings', '', '{"route":"core_admin_settings","action":"verification"}', 'core_admin_main_manage_verification', '', 1),
+INSERT IGNORE INTO `engine4_core_menuitems` (`name`, `module`, `label`, `plugin`, `params`, `menu`, `submenu`, `order`) VALUES ('core_admin_main_manage_verification', 'user', 'Manage Verifications', '', '{"route":"admin_default","module":"payment","controller":"verification","action":"index"}', 'core_admin_main_manage', '', 10),
+('core_admin_main_settings_verification', 'core', 'Verification Settings', '', '{"route":"admin_default","module":"payment","controller":"verification","action":"index"}', 'core_admin_main_manage_verification', '', 1),
 ('core_admin_main_manage_verificationrequests', 'user', 'Manage Verification Requests', '', '{"route":"admin_default","module":"user","controller":"manage","action":"verification-requests"}', 'core_admin_main_manage_verification', '', 2);
 
   
@@ -1299,3 +1300,48 @@ INSERT IGNORE INTO `engine4_core_mailtemplates` (`type`, `module`, `vars`) VALUE
 
 ALTER TABLE `engine4_users` ADD `follow_verification` TINYINT(1) NOT NULL DEFAULT '0';
 ALTER TABLE `engine4_users` ADD `import` TINYINT(1) NOT NULL DEFAULT '1';
+
+
+-- 7.0.0
+ALTER TABLE `engine4_users` ADD `wallet_amount` FLOAT(16,2) NOT NULL DEFAULT '0.00';
+
+INSERT IGNORE INTO `engine4_core_menuitems` (`name`, `module`, `label`, `plugin`, `params`, `menu`, `submenu`, `order`) VALUES
+('user_settings_wallet', 'user', 'Wallet', 'Payment_Plugin_Menus', '{"route":"default", "module":"payment", "controller":"settings", "action":"wallet", "icon":"fa-solid fa-wallet"}', 'user_settings', '', 16);
+
+INSERT IGNORE INTO `engine4_authorization_permissions`
+  SELECT
+    level_id as `level_id`,
+    'user' as `type`,
+    'viewtype' as `name`,
+    1 as `value`,
+    NULL as `params`
+  FROM `engine4_authorization_levels` WHERE `type` NOT IN('public');
+  
+INSERT IGNORE INTO `engine4_authorization_permissions`
+  SELECT
+    level_id as `level_id`,
+    'user' as `type`,
+    'is_fullwidth' as `name`,
+    0 as `value`,
+    NULL as `params`
+  FROM `engine4_authorization_levels` WHERE `type` NOT IN('public');
+  
+INSERT IGNORE INTO `engine4_authorization_permissions`
+  SELECT
+    level_id as `level_id`,
+    'user' as `type`,
+    'tab' as `name`,
+    3 as `value`,
+    'outside' as `params`
+  FROM `engine4_authorization_levels` WHERE `type` NOT IN('public');
+
+DROP TABLE IF EXISTS `engine4_user_recentsearch`;
+CREATE TABLE IF NOT EXISTS  `engine4_user_recentsearch` (
+  `recentsearch_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+  `user_id` INT NOT NULL ,
+  `query` VARCHAR(128) NOT NULL,
+  `id` INT(11) NOT NULL DEFAULT '0',
+  `type` VARCHAR(128) NULL DEFAULT NULL,
+  `creation_date` DATETIME NOT NULL,
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci AUTO_INCREMENT=1;

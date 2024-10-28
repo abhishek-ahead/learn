@@ -19,7 +19,7 @@
 <br />
 
 <script type="text/javascript">
-  scriptJquery(document).ready(function() {
+  en4.core.runonce.add(function() {
     var el = scriptJquery('.admin_logs')[0];
 //     if( el ) {
 //       el.scrollTo(0, el.getScrollSize().y);

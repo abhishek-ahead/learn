@@ -276,7 +276,7 @@ class User_Plugin_Signup_Account extends Core_Plugin_FormSequence_Abstract
             else if($settings->getSetting('user.signup.enabletwostep', 0)) 
               $description = $translate->translate('Please verify your email address.');
             else if(empty($settings->getSetting('user.signup.enabletwostep', 0)))  {
-              echo json_encode(array('status' => true));die;
+              //echo json_encode(array('status' => true));die;
             }
           } else {
             $label = $translate->translate('Email Address');
@@ -286,10 +286,10 @@ class User_Plugin_Signup_Account extends Core_Plugin_FormSequence_Abstract
           $errors[] = array('isRequired' => true, 'label' => $label, 'errorMessage' => $description);
           echo json_encode(array('status' => false, 'error_message' => $errors));die;
         } else {
-          echo json_encode(array('status' => true));die;
+          //echo json_encode(array('status' => true));die;
         }
       } else {
-        echo json_encode(array('status' => true));die;
+        //echo json_encode(array('status' => true));die;
       }
     }
     if(!empty($_SESSION['facebook_signup'])) {
@@ -354,6 +354,9 @@ class User_Plugin_Signup_Account extends Core_Plugin_FormSequence_Abstract
     //Set Display Name
     $user->setDisplayName(array('first_name' => $user->firstname, 'last_name' => $user->lastname));
     $user->save();
+    
+    //Location Work
+    Engine_Api::_()->getApi('location', 'core')->saveLocation($_POST, $user);
     
     //Username work
     // if(!Engine_Api::_()->getApi('settings', 'core')->getSetting('user.signup.username', 1) && isset($user->email) && '' !== trim($user->email)) {

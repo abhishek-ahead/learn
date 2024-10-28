@@ -19,7 +19,7 @@
 class Activity_AdminSettingsController extends Core_Controller_Action_Admin
 {
     public function indexAction()
-    {   
+    { 
         // Get navigation
         $this->view->navigation = Engine_Api::_()->getApi('menus', 'core')->getNavigation('core_admin_main_settings_activity', array(), 'core_admin_settings_activity');
     
@@ -50,11 +50,20 @@ class Activity_AdminSettingsController extends Core_Controller_Action_Admin
 
         // Save settings
         foreach ($values as $key => $value) {
-            if($settings->hasSetting('activity.' . $key)) {
-                $settings->removeSetting('activity.' . $key);
-            }
+          if($settings->hasSetting('activity.' . $key)) {
+            $settings->removeSetting('activity.' . $key);
+          }
         }
-        $settings->activity = $values;
+        
+        foreach ($values as $key => $value) {
+          if($key == 'composeroptions' &&  Engine_Api::_()->getApi('settings', 'core')->hasSetting($key) ){
+            Engine_Api::_()->getApi('settings', 'core')->removeSetting('activity.' . $key);
+          }
+          if($value != '')
+            Engine_Api::_()->getApi('settings', 'core')->setSetting('activity.' .$key, $value);
+        }
+      
+        //$settings->activity = $values;
 
         $form->addNotice('Your changes have been saved.');
     }
@@ -453,5 +462,121 @@ class Activity_AdminSettingsController extends Core_Controller_Action_Admin
         }
         return $found;
     }
+    
+    
+  public function filterContentAction() {
+    
+    $this->view->navigation = Engine_Api::_()->getApi('menus', 'core')->getNavigation('core_admin_main_settings_activity', array(), 'activity_admin_filter');
 
+    if(!empty($_POST['order'])){
+      $counter = 1;
+      foreach($_POST['order'] as $order){
+        $item = Engine_Api::_()->getItem('activity_filterlist',$order);
+        if(!$item)
+          continue;
+        $item->order = $counter;
+        $item->save();
+        $counter++;
+      }
+    }
+    $this->view->paginator = Engine_Api::_()->getDbTable('filterlists','activity')->fetchAll(Engine_Api::_()->getDbTable('filterlists','activity')->select()->order('order ASC'));
+  }
+
+  public function enabledAction() {
+    $id = $this->_getParam('id');
+    if (!empty($id)) {
+      $item = Engine_Api::_()->getItem('activity_filterlist', $id);
+      $item->active = !$item->active;
+      $item->save();
+    }
+
+    $this->_redirect('admin/activity/settings/filter-content');
+  }
+  
+
+  public function createAction() {
+  
+    $id = $this->_getParam('id',false);
+
+    $this->view->form = $form = new Activity_Form_Admin_Settings_Create();
+    if($id){
+      $item = Engine_Api::_()->getItem('activity_filterlist',$id);
+      $form->populate($item->toArray());
+      $form->setTitle('Edit This Filter');
+      $form->submit->setLabel('Edit');
+      if(!$item->is_delete){
+        $form->removeElement('filtertype');
+        $form->removeElement('module');
+      }
+    }
+    
+    // Check if post
+    if( !$this->getRequest()->isPost() ) {
+      $this->view->status = false;
+      $this->view->error = Zend_Registry::get('Zend_Translate')->_('Not post');
+      return;
+    }
+    
+    if( !$form->isValid($this->getRequest()->getPost()) ) {
+      $this->view->status = false;
+      $this->view->error =  Zend_Registry::get('Zend_Translate')->_('Invalid data');
+      return;
+    }
+
+    $filterlistsTable = Engine_Api::_()->getDbtable('filterlists', 'activity');
+
+    $values = $form->getValues();
+
+    if($values['filtertype'] && empty($id)) {
+        $isFilterExists = $filterlistsTable->isFilterExists(array('filtertype' => $values['filtertype']));
+        if($isFilterExists) {
+            return $form->addError('A filter is already created with this module name. Please choose another module name.');
+        }
+    }
+    
+    $db = $filterlistsTable->getAdapter();
+    $db->beginTransaction();
+    
+    // If we're here, we're done
+    $this->view->status = true;
+    try {
+      if(empty($id))
+        $item = $filterlistsTable->createRow();
+      $item->setFromArray($form->getValues());
+      $item->save();
+      $db->commit();
+    } catch(Exception $e) {
+      $db->rollBack();
+      throw $e;
+    }
+    
+    $this->_forward('success', 'utility', 'core', array(
+      'smoothboxClose' => 10,
+      'parentRefresh'=> 10,
+      'messages' => array('Filter Type Created Successfully.')
+    ));
+  }
+
+  public function deleteAction() {
+
+    // In smoothbox
+    $this->_helper->layout->setLayout('admin-simple');
+
+    $this->view->form = $form = new Core_Form_Admin_Delete();
+    $form->setTitle('Delete Filter?');
+    $form->setDescription('Are you sure that you want to delete this filter? It will not be recoverable after being deleted.');
+    $form->submit->setLabel('Delete');
+
+    $id = $this->_getParam('id');
+    $this->view->item_id = $id;
+    // Check post
+    if ($this->getRequest()->isPost()) {
+      $item = Engine_Api::_()->getItem('activity_filterlist', $id)->delete();
+      $this->_forward('success', 'utility', 'core', array(
+          'smoothboxClose' => true,
+          'parentRefresh' => true,
+          'messages' => array('Filter Deleted Successfully.')
+      ));
+    }
+  }
 }

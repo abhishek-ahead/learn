@@ -28,7 +28,7 @@
       </div>
       <script type="application/javascript">
         <?php if(!empty($this->user->disable_email)) { ?>
-          scriptJquery(document).ready(function() {
+          en4.core.runonce.add(function() {
           scriptJquery('.email_settings').attr('disabled', true);
           });
         <?php } ?>

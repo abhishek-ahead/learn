@@ -42,48 +42,53 @@ class User_VerificationController extends Core_Controller_Action_Standard {
   public function init() {
     
     // If there are no enabled gateways or packages, disable
-//     if( Engine_Api::_()->getDbtable('gateways', 'payment')->getEnabledGatewayCount() <= 0 ) {
-//       return $this->_helper->redirector->gotoRoute(array(), 'default', true);
-//     }
+    if(!Engine_Api::_()->getApi('settings', 'core')->getSetting("payment.enablewallet",1)) {
+      echo json_encode(array('status' => false, 'message' => $this->view->translate("Wallet is not enabled.")));die;
+    }
     
     // Get user and session
-    $this->_user = Engine_Api::_()->user()->getViewer();
+    $this->_user = $user = Engine_Api::_()->user()->getViewer();
     $this->_session = new Zend_Session_Namespace('Payment_Verification');
-    $this->_session->gateway_id = $this->_getParam('gateway_id', 0);
+    $this->_session->gateway_id = $this->_getParam('gateway_id', 3000);
     $this->_session->user_id = $user_id = $this->_getParam('user_id', 0);
     
     // Check viewer and user
-    if( !$this->_user || !$this->_user->getIdentity() ) {
+    if( !$user || !$user->getIdentity() ) {
       if( !empty($this->_session->user_id) ) {
-        $this->_user = Engine_Api::_()->getItem('user', $this->_session->user_id);
+        $this->_user = $user = Engine_Api::_()->getItem('user', $this->_session->user_id);
       }
       // If no user, redirect to home?
-      if( !$this->_user || !$this->_user->getIdentity() ) {
+      if( !$user || !$user->getIdentity() ) {
         $this->_session->unsetAll();
-        return $this->_helper->redirector->gotoRoute(array(), 'default', true);
+        echo json_encode(array('status' => false, 'message' => $this->view->translate("Invalid Member.")));die;
       }
     }
-    $this->_session->user_id = $this->_user->getIdentity();
+    $this->_session->user_id = $user->getIdentity();
   }
 
   public function indexAction() {
     return $this->_forward('gateway');
   }
-
-  public function processAction() {
+  
+  public function completeAction() {
   
     // Get gateway
+    $user = $this->_user;
     $gatewayId = $this->_getParam('gateway_id', $this->_session->gateway_id);
 		$user_id = $this->_getParam('user_id', $this->_session->user_id);
-
-    if (!$gatewayId || !($gateway = Engine_Api::_()->getDbtable('verificationgateways', 'payment')->find($gatewayId)->current()) || !($gateway->enabled)) {
-      return $this->_helper->redirector->gotoRoute(array('action' => 'gateway'));
+		
+    if (!$gatewayId) {
+      echo json_encode(array('status' => false, 'message' => $this->view->translate("Invalid Method.")));die;
     }
-    $this->view->gateway = $gateway;
-
+    
+    $verificationpackage = Engine_Api::_()->getDbTable('verificationpackages', 'payment')->getPackage(array('level_id' => $user->level_id));
+    if($verificationpackage->price > $user->wallet_amount) { 
+      $message = $this->view->translate("You don't have enough balance for verification subscription, please first recharge your ") . '<a target="_blank" href="'.$this->view->url(array("module" => 'payment', 'controller' => 'settings', 'action' => 'wallet'), 'default', true).'">'.$this->view->translate(" wallet").'.</a>';
+      echo json_encode(array('status' => false, 'message' => $message));die;
+    }
+		
     //Process
-    // Create order
-    $ordersTable = Engine_Api::_()->getDbtable('orders', 'payment');
+    $ordersTable = Engine_Api::_()->getDbTable('orders', 'payment');
     if (!empty($this->_session->order_id)) {
       $previousOrder = $ordersTable->find($this->_session->order_id)->current();
       if ($previousOrder && $previousOrder->state == 'pending') {
@@ -91,124 +96,82 @@ class User_VerificationController extends Core_Controller_Action_Standard {
         $previousOrder->save();
       }
     }
-    
-    $recurrence = Engine_Api::_()->authorization()->getPermission($this->_user, 'user', 'recurrence');
-    $price = Engine_Api::_()->authorization()->getPermission($this->_user, 'user', 'price_verified');
 
-    //Order table for verification
-    $verificationsTable = Engine_Api::_()->getDbTable('verifications', 'payment');
-    $db = $verificationsTable->getAdapter();
+    // Insert the new temporary subscription
+    $subscriptionsTable = Engine_Api::_()->getDbtable('subscriptions', 'payment');
+    $db = $subscriptionsTable->getAdapter();
     $db->beginTransaction();
-    try {
-      $verifications = $verificationsTable->createRow();
-      $verifications->user_id = $this->_user->getIdentity();
-      $verifications->params = json_encode(array('recurrence' => json_decode($recurrence), 'price' => $price));
-      $verifications->save();
-      // Commit
-      $db->commit();
-      $verificationsId = $verifications->getIdentity();
-    } catch (Exception $e) {
-      $db->rollBack();
-      throw $e;
-    }
 
+    try {
+      $subscription = $subscriptionsTable->createRow();
+      $subscription->setFromArray(array(
+        'package_id' => $verificationpackage->getIdentity(),
+        'user_id' => $user->getIdentity(),
+        'status' => 'initial',
+        'active' => false, // Will set to active on payment success
+        'creation_date' => new Zend_Db_Expr('NOW()'),
+        'gateway_id' => $gatewayId,
+        'resource_id' => $verificationpackage->getIdentity(),
+        'resource_type' => $verificationpackage->getType(),
+      ));
+      $subscription->save();
+      $subscription_id = $subscription->subscription_id;
+
+      $db->commit();
+    } catch( Exception $e ) {
+      //$db->rollBack();
+      //throw $e;
+      echo json_encode(array('status' => false, 'message' => $this->view->translate("Invalid Method.")));die;
+    }
+    $this->_session->subscription_id = $subscription_id;
+
+    // Create order
     $ordersTable->insert(array(
-			'user_id' => $this->_user->getIdentity(),
-			'gateway_id' => $gateway->gateway_id,
+			'user_id' => $user->getIdentity(),
+			'gateway_id' => $gatewayId, //$gateway->gateway_id,
 			'state' => 'pending',
 			'creation_date' => new Zend_Db_Expr('NOW()'),
-			'source_type' => 'payment_verification',
-			'source_id' => $verificationsId,
+			'source_type' => $verificationpackage->getType(),
+			'source_id' => $verificationpackage->getIdentity(),
     ));
     $this->_session->order_id = $order_id = $ordersTable->getAdapter()->lastInsertId();
     
     // Unset certain keys
     unset($this->_session->gateway_id);
-    
-    // Get gateway plugin
-    $this->view->gatewayPlugin = $gatewayPlugin = $gateway->getGateway();
-    $plugin = $gateway->getPlugin();
-
-    // Prepare host info
-    $schema = _ENGINE_SSL ? 'https://' : 'http://';
-    $host = $_SERVER['HTTP_HOST'];
 
     // Prepare transaction
     $params = array();
-    $params['language'] = $this->_user->language;
-    $localeParts = explode('_', $this->_user->language);
+    $params['language'] = $user->language;
+    $localeParts = explode('_', $user->language);
     if( engine_count($localeParts) > 1 ) {
       $params['region'] = $localeParts[1];
     }
     $params['vendor_order_id'] = $order_id;
-    $this->view->returnUrl = $params['return_url'] = $schema . $host
-      . $this->view->url(array('action' => 'return'))
-      . '?order_id=' . $order_id
-      //. '?gateway_id=' . $this->_gateway->gateway_id
-      //. '&subscription_id=' . $this->_subscription->subscription_id
-      . '&state=' . 'return';
-    $params['cancel_url'] = $schema . $host
-      . $this->view->url(array('action' => 'return'))
-      . '?order_id=' . $order_id
-      //. '?gateway_id=' . $this->_gateway->gateway_id
-      //. '&subscription_id=' . $this->_subscription->subscription_id
-      . '&state=' . 'cancel';
-    $params['ipn_url'] = $schema . $host
-      . $this->view->url(array('action' => 'index', 'controller' => 'ipn'))
-      . '?order_id=' . $order_id;
-      //. '?gateway_id=' . $this->_gateway->gateway_id
-      //. '&subscription_id=' . $this->_subscription->subscription_id;
-  
-    $params['price'] = $price;
-    $params['recurrence'] = $recurrence;
-    
-    // Process transaction
-    $transaction = $plugin->createVerificationTransaction($this->_user, $params);
+    $params['price'] = $verificationpackage->price;
+    $params['recurrence'] = $verificationpackage->recurrence;
+    $params['subscription_id'] = $subscription_id;
 
-    // Pull transaction params
-    $this->view->transactionUrl = $transactionUrl = $gatewayPlugin->getGatewayUrl();
-    $this->view->transactionMethod = $transactionMethod = $gatewayPlugin->getGatewayMethod();
-    $this->view->transactionData = $transactionData = $transaction->getData();
-
-    // Handle redirection
-    if( $transactionMethod == 'GET' ) {
-      $transactionUrl .= '?' . http_build_query($transactionData);
-      return $this->_helper->redirector->gotoUrl($transactionUrl, array('prependBase' => false));
-    }
-
-    // Post will be handled by the view script
-  }
-  
-  public function returnAction() {
-  
     // Get order
-    if( !$this->_user ||
+    if( !$user ||
         !($orderId = $this->_getParam('order_id', $this->_session->order_id)) ||
         !($order = Engine_Api::_()->getItem('payment_order', $orderId)) ||
-        $order->user_id != $this->_user->getIdentity() ||
-        $order->source_type != 'payment_verification' ||
-        !($verifications = $order->getSource()) ||
-        !($gateway = Engine_Api::_()->getItem('payment_verificationgateway', $order->gateway_id)) ) {
-      return $this->_helper->redirector->gotoRoute(array(), 'default', true);
+        $order->user_id != $user->getIdentity() ||
+        $order->source_type != 'payment_verificationpackage' ||
+        !($verificationpackage = $order->getSource()) ) {
+      echo json_encode(array('status' => false, 'message' => $this->view->translate("Invalid Method.")));die;
     }
-    
-    //$this->_subscription = $subscription;
-    // Get gateway plugin
-    $this->view->gatewayPlugin = $gatewayPlugin = $gateway->getGateway();
-    $plugin = $gateway->getPlugin();
 
     // Process return
     unset($this->_session->errorMessage);
     try {
-      $status = $plugin->onVerificationTransactionReturn($order, $this->_getAllParams());
-      
+      $status = $verificationpackage->onSubscriptionTransactionReturn($order, $params);
+
       if(($status == 'active' || $status == 'free')) {
         $admins = Engine_Api::_()->user()->getSuperAdmins();
         $user = Engine_Api::_()->getItem('user', $order->user_id);
-        
-        $translate = Zend_Registry::get('Zend_Translate');
+
         $adminLink = 'https://' . $_SERVER['HTTP_HOST'] . Zend_Controller_Front::getInstance()->getRouter()->assemble(array('module' => 'payment', 'controller' => 'index', 'action' => 'index'), 'admin_default', true);
-        
+
         foreach($admins as $admin){
           Engine_Api::_()->getApi('mail', 'core')->sendSystem($admin,'payment_manual_verification', array(
             'payment_method' => $gateway->title,
@@ -220,19 +183,18 @@ class User_VerificationController extends Core_Controller_Action_Standard {
     } catch( Payment_Model_Exception $e ) {
       $status = 'failure';
       $this->_session->errorMessage = $e->getMessage();
+      echo json_encode(array('status' => false, 'message' => $this->view->translate("Payment Failed.")));die;
     }
-
     return $this->_finishPayment($status);
   }
+
+  protected function _finishPayment($state = 'active') {
   
-  protected function _finishPayment($state = 'active')
-  {
-    $viewer = Engine_Api::_()->user()->getViewer();
     $user = $this->_user;
 
     // No user?
-    if( !$this->_user ) {
-      return $this->_helper->redirector->gotoRoute(array(), 'default', true);
+    if( !$user ) {
+      echo json_encode(array('status' => false, 'message' => $this->view->translate("Invalid Member.")));die;
     }
 
     // Clear session
@@ -244,9 +206,11 @@ class User_VerificationController extends Core_Controller_Action_Standard {
 
     // Redirect
     if( $state == 'free' ) {
-      return $this->_helper->redirector->gotoRoute(array(), 'default', true);
+      echo json_encode(array('status' => true, 'message' => $this->view->translate("Thank you! Your payment has completed successfully.")));die;
+      //return $this->_helper->redirector->gotoRoute(array(), 'default', true);
     } else {
-      return $this->_helper->redirector->gotoRoute(array('action' => 'finish', 'state' => $state, 'user_id' => $user->getIdentity()));
+      echo json_encode(array('status' => true, 'message' => $this->view->translate("Thank you! Your payment has completed successfully.")));die;
+      //return $this->_helper->redirector->gotoRoute(array('action' => 'finish', 'state' => $state, 'user_id' => $user->getIdentity()));
     }
   }
   
@@ -260,12 +224,12 @@ class User_VerificationController extends Core_Controller_Action_Standard {
   
   public function cancelAction() {
   
-		$transactionId = $this->_getParam('transaction_id', null);
-    $transaction = Engine_Api::_()->getItem('payment_transaction', $transactionId);
-    $order = Engine_Api::_()->getItem('payment_order', $transaction->order_id);
-    $subscription = $order->getSource();
+		$subscriptionId = $this->_getParam('subscription_id', null);
+    $subscription = Engine_Api::_()->getItem('payment_subscription', $subscriptionId);
+    $order = Engine_Api::_()->getItem('payment_order', $subscription->order_id);
+    $verificationsubscription = $order->getSource();
 
-		if(!$transactionId || !$transaction)
+		if(!$subscriptionId || !$subscription)
 			return $this->_forward('notfound', 'error', 'core');
 			
     // In smoothbox
@@ -282,22 +246,10 @@ class User_VerificationController extends Core_Controller_Action_Standard {
       $this->view->error = Zend_Registry::get('Zend_Translate')->_('Invalid request method');
       return;
     }
-    $gateway = Engine_Api::_()->getItem('payment_verificationgateway', $transaction->gateway_id);
+    $gateway = Engine_Api::_()->getItem('payment_verificationgateway', $subscription->gateway_id);
     try {
-      if( !empty($transaction->gateway_id) && !empty($transaction->gateway_order_id) ) {
-        if( $gateway ) {
-          $gatewayPlugin = $gateway->getPlugin();
-          if( method_exists($gatewayPlugin, 'cancelSubscription') ) {
-            $r = $gatewayPlugin->cancelSubscription($transaction->gateway_order_id, $note);
-            $subscription->onCancel();
-          }
-        }
-      }
-      
       //Cancel for Manual Payment gateway
-      if(engine_in_array($gateway->getIdentity(), array(3, 4, 5, 6))) {
-        $subscription->onCancel();
-      }
+      $verificationsubscription->onCancel($subscription);
       
       $this->view->status = true;
       $this->view->message = Zend_Registry::get('Zend_Translate')->_('Verification Subscription cancelled successfully.');

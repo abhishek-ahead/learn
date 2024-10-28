@@ -22,7 +22,7 @@
   <?php echo $this->form->render($this) ?>
 </div>
 <script>
-  scriptJquery(document).ready(function() {
+  en4.core.runonce.add(function() {
     showHide(<?php echo Engine_Api::_()->getApi('settings', 'core')->getSetting('core.socialshare.enable', 1); ?>);
   });
   

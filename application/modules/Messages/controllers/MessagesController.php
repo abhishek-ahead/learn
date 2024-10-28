@@ -129,6 +129,7 @@ class Messages_MessagesController extends Core_Controller_Action_User
           $composePartials[] = $config['script'];
         }
       }
+     
       $this->view->composePartials = $composePartials;
 
 
@@ -164,8 +165,34 @@ class Messages_MessagesController extends Core_Controller_Action_User
                   // Try attachment getting stuff
                   $attachment = null;
                   $attachmentData = $this->getRequest()->getParam('attachment');
+
+                  //Photo Video work
+                  if(isset($_POST['fancyalbumuploadfileidsvideo']) && !empty($_POST['fancyalbumuploadfileidsvideo'])) {
+                    $fancyalbumuploadfileidsvideo = explode('_', $_POST['fancyalbumuploadfileidsvideo']);
+                    $attachmentData['type'] = $fancyalbumuploadfileidsvideo[0];
+                    $attachmentData['video_id'] = $_POST['fancyalbumuploadfileidsvideo'];
+                    $attachmentData['multipleupload'] = 1;
+                  }
+
                   if (!empty($attachmentData) && !empty($attachmentData['type'])) {
                       $type = $attachmentData['type'];
+                      
+                      //Photo Video work
+                      if($attachmentData['video_id']) {
+                        $attachmentExplode = explode('_', $attachmentData['video_id']);
+                        if(!empty($attachmentData['multipleupload'])){
+                          $type = 'albumvideo';
+                        }
+                        if($attachmentExplode[0] == 'photo') {
+                          $attachmentData['photo_id'] = $attachmentExplode[1];
+                          $attachmentData['type'] = 'photo';
+                          unset($attachmentData['video_id']); 
+                        }
+                        if($attachmentExplode[0] == 'video') {
+                          $attachmentData['video_id'] = $attachmentExplode[1];
+                          $attachmentData['type'] = 'video'; 
+                        }
+                      }
                       $config = null;
                       foreach (Zend_Registry::get('Engine_Manifest') as $data) {
                           if (!empty($data['composer'][$type])) {
@@ -338,6 +365,7 @@ class Messages_MessagesController extends Core_Controller_Action_User
         }
       }
     }
+
     $this->view->composePartials = $composePartials;
     // $this->view->composePartials = $composePartials;
 
@@ -383,6 +411,22 @@ class Messages_MessagesController extends Core_Controller_Action_User
       $attachmentData = $this->getRequest()->getParam('attachment');
       if( !empty($attachmentData) && !empty($attachmentData['type']) ) {
         $type = $attachmentData['type'];
+        if($attachmentData['video_id']) {
+          $attachmentExplode = explode('_', $attachmentData['video_id']);
+          if(!empty($attachmentData['multipleupload'])){
+            $type = 'albumvideo';
+          }
+          if($attachmentExplode[0] == 'photo') {
+            $attachmentData['photo_id'] = $attachmentExplode[1];
+            $attachmentData['type'] = 'photo';
+            unset($attachmentData['video_id']); 
+          }
+          if($attachmentExplode[0] == 'video') {
+            $attachmentData['video_id'] = $attachmentExplode[1];
+            $attachmentData['type'] = 'video'; 
+          }
+        }
+        
         $config = null;
         foreach( Zend_Registry::get('Engine_Manifest') as $data )
         {
@@ -397,6 +441,7 @@ class Messages_MessagesController extends Core_Controller_Action_User
           if($type == 'photo') {
             $attachmentData['album_type'] = 'wall';
           }
+          
           $attachment = $plugin->$method($attachmentData);
           $parent = $attachment->getParent();
           if($parent->getType() === 'user'){
@@ -591,7 +636,7 @@ class Messages_MessagesController extends Core_Controller_Action_User
         ->joinRight('engine4_messages_recipients', 'engine4_messages_recipients.conversation_id = engine4_messages_messages.conversation_id', null)
         //->joinRight('engine4_messages_messages', 'engine4_messages_messages.conversation_id=engine4_messages_recipients.conversation_id', null)
         ->where('engine4_messages_recipients.user_id = ?', $viewer->user_id)
-        ->where('(engine4_messages_messages.title LIKE ? || engine4_messages_messages.body LIKE ?)', '%' . $queryStr . '%')
+        ->where('(engine4_messages_messages.title LIKE ? || engine4_messages_messages.body LIKE ?)', $queryStr . '%')
         ->order('engine4_messages_messages.message_id DESC')
         ;
 

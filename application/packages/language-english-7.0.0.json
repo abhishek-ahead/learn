@@ -1,0 +1,174 @@
+{
+  "type": "language",
+  "name": "english",
+  "version": "7.0.0",
+  "revision": null,
+  "path": "application\/languages\/en",
+  "repository": null,
+  "sku": null,
+  "date": "Fri, 25 Oct 2024 04:39:25 +0000",
+  "title": "English",
+  "description": null,
+  "thumb": null,
+  "developer": null,
+  "authors": [
+    "SocialEngine Core"
+  ],
+  "meta": {
+    "date": "Fri, 25 Oct 2024 04:39:25 +0000",
+    "title": "English",
+    "description": null,
+    "developer": null,
+    "authors": [
+      "SocialEngine Core"
+    ],
+    "changeLog": null
+  },
+  "actions": [
+    
+  ],
+  "callback": null,
+  "dependencies": null,
+  "tests": [
+    
+  ],
+  "permissions": [
+    
+  ],
+  "structure": {
+    "application\/languages\/en": {
+      "type": "directory",
+      "path": "application\/languages\/en",
+      "structure": [
+        {
+          "path": "user.csv",
+          "dir": false,
+          "file": true,
+          "perms": "0644",
+          "size": 91948,
+          "sha1": "082837e483f8c48511c1e242500ffdf9cb13b486"
+        },
+        {
+          "path": "hello-world.csv",
+          "dir": false,
+          "file": true,
+          "perms": "0755",
+          "size": 829,
+          "sha1": "69aa432f1f0564762b7185154dbe25d983e9b0df"
+        },
+        {
+          "path": "authorization.csv",
+          "dir": false,
+          "file": true,
+          "perms": "0755",
+          "size": 5057,
+          "sha1": "ce57317270a6c2f4634a5889b4c7aab02c81377a"
+        },
+        {
+          "path": "manifest.php",
+          "dir": false,
+          "file": true,
+          "perms": "0644",
+          "size": 430,
+          "sha1": "2723f99004c2fbb5823c91893a92f02b760e873c"
+        },
+        {
+          "path": "invite.csv",
+          "dir": false,
+          "file": true,
+          "perms": "0755",
+          "size": 10697,
+          "sha1": "cf786359ad2def428c49acec876693447ebf3575"
+        },
+        {
+          "path": "fields.csv",
+          "dir": false,
+          "file": true,
+          "perms": "0755",
+          "size": 6672,
+          "sha1": "b4a44b7d48aec644f0834277b5956d66b39351bd"
+        },
+        {
+          "path": "activity.csv",
+          "dir": false,
+          "file": true,
+          "perms": "0755",
+          "size": 49902,
+          "sha1": "1b540b0b2f6007fc56f9935620b48c9a2cad7d1c"
+        },
+        {
+          "path": "payment.csv",
+          "dir": false,
+          "file": true,
+          "perms": "0644",
+          "size": 55942,
+          "sha1": "5eafc1d46cbb97d0fb59ffddfe331258587227ff"
+        },
+        {
+          "path": "mobi.csv",
+          "dir": false,
+          "file": true,
+          "perms": "0755",
+          "size": 52,
+          "sha1": "651c126612f03850397c71285cbe1ca06b336f4e"
+        },
+        {
+          "path": "messages.csv",
+          "dir": false,
+          "file": true,
+          "perms": "0755",
+          "size": 3603,
+          "sha1": "938d9d65c2bd29e12ceb5cbac543d71ebd06975f"
+        },
+        {
+          "path": "comment.csv",
+          "dir": false,
+          "file": true,
+          "perms": "0644",
+          "size": 3316,
+          "sha1": "84c119555cf478f78829d9ffffd647508d1fbbcf"
+        },
+        {
+          "path": "storage.csv",
+          "dir": false,
+          "file": true,
+          "perms": "0755",
+          "size": 1367,
+          "sha1": "9601ecc15033138c28bde5730796101ad53d587a"
+        },
+        {
+          "path": "core.csv",
+          "dir": false,
+          "file": true,
+          "perms": "0644",
+          "size": 107587,
+          "sha1": "9816006439d8fe9c0b55dc9f00e8c4f6c5fb2d08"
+        },
+        {
+          "path": "announcement.csv",
+          "dir": false,
+          "file": true,
+          "perms": "0755",
+          "size": 1866,
+          "sha1": "1a701e6bee4b3bb106f28f78159b4cd23a814844"
+        },
+        {
+          "path": "network.csv",
+          "dir": false,
+          "file": true,
+          "perms": "0755",
+          "size": 3125,
+          "sha1": "8e9ad695552972fa4c3d02586c1649ea95e2f13d"
+        },
+        {
+          "path": "harmony.csv",
+          "dir": false,
+          "file": true,
+          "perms": "0644",
+          "size": 14797,
+          "sha1": "76796abf3690445d2c4114267c8ed97150245b8f"
+        }
+      ]
+    }
+  }
+}

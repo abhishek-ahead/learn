@@ -90,7 +90,7 @@ class Payment_AdminIndexController extends Core_Controller_Action_Admin
             'gateway_parent_transaction_id LIKE ? || ' .
             'gateway_order_id LIKE ? || ' .
             'displayname LIKE ? || username LIKE ? || ' .
-            'email LIKE ?)', '%' . $filterValues['query'] . '%');
+            'email LIKE ?)', $filterValues['query'] . '%');
         ;
     }
     if( ($user_id = $this->_getParam('user_id', @$filterValues['user_id'])) ) {
@@ -220,6 +220,7 @@ class Payment_AdminIndexController extends Core_Controller_Action_Admin
   {
     $transaction_id = $this->_getParam('transaction_id');
     $transaction = Engine_Api::_()->getItem('payment_transaction', $transaction_id);
+    $gateway = Engine_Api::_()->getItem('payment_gateway', $transaction->gateway_id);
     $order = Engine_Api::_()->getItem('payment_order', $transaction->order_id);
     if(!$this->getRequest()->isPost()) {
       $this->view->status = false;
@@ -248,6 +249,34 @@ class Payment_AdminIndexController extends Core_Controller_Action_Admin
       ));
     }
     
+    //Wallet Recharge work
+    if($order->source_type == 'payment_wallet' && $transaction->type == 'wallet recharge') {
+      $subscription->transaction_id = $transaction->transaction_id;
+      $subscription->save();
+      
+      //Save wallet amount in user wallet
+      $user->wallet_amount += $transaction->amount;
+      $user->save();
+
+      //Notification Work
+      $translate = Zend_Registry::get('Zend_Translate');
+      $walletlink = 'http://' . $_SERVER['HTTP_HOST'] . Zend_Controller_Front::getInstance()->getRouter()->assemble(array('module' => 'payment', 'controller' => 'settings', 'action' => 'wallet'), 'default', true);
+      $walletlink = '<a href="'.$walletlink.'" >'.$translate->translate("wallet").'</a>';
+
+      Engine_Api::_()->getDbTable('notifications', 'activity')->addNotification($user, $user, $user, 'payment_wallet_active', array('payment_method' => $gateway->title, 'walletlink' => $walletlink));
+      
+      Engine_Api::_()->getApi('mail', 'core')->sendSystem($user, 'payment_wallet_active', array(
+        'wallet_terms' => $desc,
+        'object_link' => 'https://' . $_SERVER['HTTP_HOST'] . Zend_Controller_Front::getInstance()->getRouter()->assemble(array("module" => 'payment', 'controller' => "settings", "action" => "wallet"), 'default', true),
+      ));
+    }
+
+    //Subscriptin work for first time signup using paid plan
+    if($user) {
+      Engine_Api::_()->payment()->firsttimeSignupSubscription($user);
+    }
+    //Subscriptin work for first time signup using paid plan
+    
     if($subscription->getType() == 'payment_subscription') {
       $package = $subscription->getPackage();
       Engine_Api::_()->getApi('mail', 'core')->sendSystem($user, 'payment_subscription_active', array(
@@ -259,9 +288,9 @@ class Payment_AdminIndexController extends Core_Controller_Action_Admin
       ));
     }
     return $this->_forward('success' ,'utility', 'core', array(
-          'smoothboxClose' => true,
-          'parentRefresh' => true,
-          'messages' => array('Member approved successfully')
+      'smoothboxClose' => true,
+      'parentRefresh' => true,
+      'messages' => array('Payment request approved successfully.')
     ));
   }
   public function cancelAction()
@@ -285,7 +314,11 @@ class Payment_AdminIndexController extends Core_Controller_Action_Admin
     //Member Verfication work
     if($order->source_type == 'payment_verification' && $transaction->type == 'payment verification') {
       Engine_Api::_()->getApi('mail', 'core')->sendSystem($user, 'payment_verification_cancelled', array('object_link' => 'https://' . $_SERVER['HTTP_HOST'] . Zend_Controller_Front::getInstance()->getRouter()->assemble(array("module" => "payment", "controller" => "settings", "action" => "verification"), 'default', true)));
-    } else {
+    } 
+    else if($order->source_type == 'payment_wallet' && $transaction->type == 'wallet recharge') {
+      Engine_Api::_()->getApi('mail', 'core')->sendSystem($user, 'payment_wallet_cancelled', array('object_link' => 'https://' . $_SERVER['HTTP_HOST'] . Zend_Controller_Front::getInstance()->getRouter()->assemble(array("module" => "payment", "controller" => "settings", "action" => "wallet"), 'default', true)));
+    } 
+    else {
       $package = $subscription->getPackage();
       Engine_Api::_()->getApi('mail', 'core')->sendSystem($user, 'payment_subscription_cancelled', array(
         'subscription_title' => $package->title,
@@ -297,9 +330,9 @@ class Payment_AdminIndexController extends Core_Controller_Action_Admin
     }
     
     return $this->_forward('success' ,'utility', 'core', array(
-          'smoothboxClose' => true,
-          'parentRefresh' => true,
-          'messages' => array($this->view->message)
+      'smoothboxClose' => true,
+      'parentRefresh' => true,
+      'messages' => array($this->view->message)
     ));
   }
   public function receiptAction()

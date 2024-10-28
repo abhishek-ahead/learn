@@ -62,7 +62,7 @@ class Payment_Model_DbTable_Transactions extends Engine_Db_Table
           ->where('user_id =?', $params['user_id'])
           ->where('expiration_date >= ?', date("Y-m-d H:i:s"))
           //->where('gateway_transaction_id !=?', '')
-          ->where('state = "complete" || state = "okay" || state = "active" ')
+          ->where('state = "complete" || state = "okay" || state = "active" || state = "pending" ')
           ->order('transaction_id DESC')
           ->limit(1);
     if(isset($params['type']) && !empty($params['type'])) {
@@ -88,5 +88,17 @@ class Payment_Model_DbTable_Transactions extends Engine_Db_Table
       'current_currency' => !empty($params['current_currency']) ? $params['current_currency'] : $params['currency'],
     ));
     return $this->getAdapter()->lastInsertId();
+  }
+  
+  public function getSubscriptionTransaction($params = array()) {
+    $tableName = $this->info('name');
+    $select = $this->select()
+          ->from($tableName)
+          ->where('user_id =?', $params['user_id'])
+          ->where('subscription_id = ?', $params['subscription_id'])
+          ->where('state = "complete" || state = "okay" || state = "active" ')
+          ->order('transaction_id DESC')
+          ->limit(1);
+    return $this->fetchRow($select);
   }
 }

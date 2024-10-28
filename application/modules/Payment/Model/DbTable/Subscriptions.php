@@ -90,15 +90,15 @@ class Payment_Model_DbTable_Subscriptions extends Engine_Db_Table
             $package = $subscription->getPackage();
             $currentPackage = $except->getPackage();
             $viewer = Engine_Api::_()->user()->getViewer();
-            Engine_Api::_()->getDbtable('notifications', 'activity')->addNotification($subscription->getUser(), $viewer, $subscription->getUser(), 'payment_subscription_changed',array('currentPlan'=>$currentPackage->title,'changedPlan'=>$package->title));
+            Engine_Api::_()->getDbtable('notifications', 'activity')->addNotification($subscription->getUser(), $viewer, $subscription->getUser(), 'payment_subscription_changed',array('currentPlan'=> $package->title,'changedPlan'=> $currentPackage->title));
             Engine_Api::_()->getApi('mail', 'core')->sendSystem($subscription->getUser(), 'payment_subscription_changed', array(
-                'subscription_title' => $currentPackage->title,
-                'current_plan'=> $package->title,
-                'changed_plan'=> $currentPackage->title,
-                'subscription_description' => $currentPackage->description,
-                 'subscription_terms' => $currentPackage->getPackageDescription(),
-                'object_link' => 'http://' . $_SERVER['HTTP_HOST'] .
-                Zend_Controller_Front::getInstance()->getRouter()->assemble(array(), 'user_login', true),
+              'subscription_title' => $currentPackage->title,
+              'current_plan'=> $package->title,
+              'changed_plan'=> $currentPackage->title,
+              'subscription_description' => $currentPackage->description,
+              'subscription_terms' => $currentPackage->getPackageDescription(),
+              'object_link' => 'http://' . $_SERVER['HTTP_HOST'] .
+              Zend_Controller_Front::getInstance()->getRouter()->assemble(array(), 'user_login', true),
             ));
         }
       } catch( Exception $e ) {
@@ -166,5 +166,26 @@ class Payment_Model_DbTable_Subscriptions extends Engine_Db_Table
     $table = Engine_Api::_()->getDbtable('signup', 'user');
     $step_row = $table->fetchRow($table->select()->where('class = ?', 'Payment_Plugin_Signup_Subscription'));
     return $step_row->enable;
+  }
+  
+  public function userCurrentSubscriptionPlan($params = array()) {
+    $tableName = $this->info('name');
+    $select = $this->select()
+                    ->where('user_id = ?', $params['user_id'])
+                    ->where('resource_type = ?', $params['resource_type'])
+                    ->where('resource_id = ?', $params['resource_id'])
+                    ->where('status = ?', 'active');
+    return $this->fetchRow($select);
+  }
+
+  public function currentSubscriptionFirstPlan($user) {
+
+    $select = $this->select()
+            ->where('user_id = ?', $user->getIdentity())
+            //->where('active = ?', false)
+            //->where('status = ?', 'initial')
+            ->order('subscription_id DESC')
+            ->limit(1);
+    return $this->fetchRow($select);
   }
 }

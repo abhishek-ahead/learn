@@ -88,7 +88,7 @@
           <?php if(!empty($path)) { ?>
             <img src="<?php echo $path; ?>" alt="img" class="admin_langauge_icon">
           <?php } ?>
-          <?php echo $translatedLanguageTitle ?>
+          <?php echo $translatedLanguageTitle . ' ('.$locale.')' ?>
         </td>
         <td class="admin_table_options">
           <a href="<?php echo $this->url(array('action' => 'edit', 'locale' => $locale)) ?>"><?php echo $this->translate("edit phrases") ?></a>

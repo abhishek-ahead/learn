@@ -33,8 +33,8 @@
       <?php echo $this->timestamp($notification->date); ?>
     </div>
     <div class="notification_item_buttons">
-      <a data-class="notifications_donotclose" href="javascript:void(0);" class="button" type="submit" onclick='userWidgetRequestSend("confirm", <?php echo $params ?>)'><?php echo $this->translate('Accept Request');?></a>
-      <a data-class="notifications_donotclose" href="javascript:void(0);" class="button" onclick='userWidgetRequestSend("ignore", <?php echo $params ?>)'><?php echo $this->translate('Ignore Request');?></a>
+      <a data-class="notifications_donotclose" href="javascript:void(0);" class="button btn btn-primary" type="submit" onclick='userWidgetRequestSend("confirm", <?php echo $params ?>)'><?php echo $this->translate('Accept Request');?></a>
+      <a data-class="notifications_donotclose" href="javascript:void(0);" class="button btn btn-alt" onclick='userWidgetRequestSend("ignore", <?php echo $params ?>)'><?php echo $this->translate('Ignore Request');?></a>
     </div>
   </div>
   <div class="notifications_item_delete">

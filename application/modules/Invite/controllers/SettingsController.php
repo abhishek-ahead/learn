@@ -105,7 +105,7 @@ class Invite_SettingsController extends Core_Controller_Action_User
           ->order($tableName.'.id DESC');
 
     if( !empty($filterValues['recipient']) ) {
-      $select->where($tableName.'.recipient LIKE ?', '%' . $filterValues['recipient'] . '%');
+      $select->where('recipient LIKE ?', $filterValues['recipient'] . '%');
     }
 
     if( !empty($filterValues['country_code']) ) {
@@ -125,7 +125,7 @@ class Invite_SettingsController extends Core_Controller_Action_User
     }
 
     if( isset($filterValues['import_method']) && $filterValues['import_method'] != -1 ) {
-      $select->where($tableName.'.import_method LIKE ?', '%' . $filterValues['import_method'] . '%');
+      $select->where('import_method LIKE ?', $filterValues['import_method'] . '%');
     }
 
     $date_from = !empty($filterValues['date']['date_from']) ? date("Y-m-d", strtotime($filterValues['date']['date_from'])) : '';

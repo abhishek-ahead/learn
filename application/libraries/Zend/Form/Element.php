@@ -371,6 +371,12 @@ class Zend_Form_Element implements Zend_Validate_Interface
         if($this->getType() == 'Engine_Form_Element_TinyMce') {
           $options['class'] = 'tinymce_editor';
         }
+        if($this->getType() == 'Engine_Form_Element_Select') {
+        //   $options['class'] = 'show_multi_select';
+        }
+        if($this->getType() == 'Engine_Form_Element_Multiselect') {
+        //   $options['class'] = 'show_multi_select';
+        }
         foreach ($options as $key => $value) {
             $method = 'set' . ucfirst($key);
 
@@ -613,8 +619,10 @@ class Zend_Form_Element implements Zend_Validate_Interface
             $this->_filterValue($valueFiltered, $valueFiltered);
         }
         
+        
         //SE Change
-        if(!defined('_ENGINE_ADMIN_PANEL') && ($this->getType() == 'Engine_Form_Element_Text' || $this->getType() == 'Engine_Form_Element_Textarea')) {
+        // allow for custom styling $this->getName() != "style"
+        if(!defined('_ENGINE_ADMIN_PANEL') && $this->getName() != "style" && ($this->getType() == 'Engine_Form_Element_Text' || $this->getType() == 'Engine_Form_Element_Textarea')) {
           $StripTags = new Zend_Filter_StripTags();
           $valueFiltered = $StripTags->filter($valueFiltered);
           

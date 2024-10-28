@@ -45,7 +45,7 @@
     return charset.charAt(randomIndex);
   }
   
-  scriptJquery(document).ready(function() {
+  en4.core.runonce.add(function() {
     scriptJquery('#password_settings_group-wrapper').hide();
     scriptJquery('#passwordroutine-wrapper').hide();
     scriptJquery('#generatePassword').click(function() {

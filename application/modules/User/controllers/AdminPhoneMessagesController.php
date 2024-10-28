@@ -66,7 +66,7 @@ class User_AdminPhoneMessagesController extends Core_Controller_Action_Admin
     }
 
     if (!empty($values['message'])) {
-      $select->where("message LIKE ?", '%' . trim($_GET['message']) . '%');
+      $select->where("message LIKE ?", trim($_GET['message']) . '%');
     }
 
     if (!empty($values['interval'])) {

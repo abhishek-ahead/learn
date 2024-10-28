@@ -100,6 +100,58 @@ abstract class Core_Model_Item_DbTable_Abstract extends Engine_Db_Table
     return $ret;
   }
 
+  public function getLocationItemsSelect($params, $select = null) {
+  
+    if( $select == null ) {
+      $select = $this->select();
+    }
+    $tableName = $this->info('name');
+    $primaryId = current($this->info("primary"));
+    
+    $tableLocationName = Engine_Api::_()->getDbtable('locations', 'core')->info('name');
+    
+    //Location Based search
+    if(Engine_Api::_()->getApi('settings', 'core')->getSetting('enableglocation', 0) && Engine_Api::_()->getApi('settings', 'core')->getSetting($params['modulename'].'.enable.location', 0)) {
+
+      if(Engine_Api::_()->getApi('settings', 'core')->getSetting('enableglocation', 0) == 2 && !empty($params['location'])) {
+        $select->where($tableName . '.location = ?', $params['location']);
+      } else if(Engine_Api::_()->getApi('settings', 'core')->getSetting('enableglocation', 0) == 1) {
+
+        if(empty($params['lat']) && empty($params['lng']) && !empty($_COOKIE['location_data'])) {
+          $params['location'] = $_COOKIE['location_data'];
+          $params['lat'] = $_COOKIE['location_lat'];
+          $params['lng'] = $_COOKIE['location_lng'];
+          $params['miles'] = 50;
+        }
+
+        if(!empty($params['lat']) && !empty($params['lng']) && !empty($params['location'])) {
+          //This is the maximum distance (in miles) away from $origLat, $origLon in which to search
+          $miles = !empty($params['miles']) ? $params['miles'] : 50;
+
+          $origLat = $params['lat'];
+          $origLon = $params['lng'];
+          if (Engine_Api::_()->getApi('settings', 'core')->getSetting('core.search.type', 1) == 1) {
+            $searchType = 3956 * 1.60934;
+            $dist = $miles * 1.60934;
+          } else {
+            $searchType = 6371;
+            $dist = $miles;
+          }
+          $asinSort = array('lat', 'lng', 'distance' => new Zend_Db_Expr(("
+          $searchType *
+          ACOS(
+              COS(RADIANS($origLat)) * COS(RADIANS(lat)) * COS(RADIANS(lng) - RADIANS($origLon)) + 
+              SIN(RADIANS($origLat)) * SIN(RADIANS(lat))
+          )")));
+          $select->joinLeft($tableLocationName, $tableLocationName . '.resource_id = ' . $tableName . '.'.$primaryId.' AND ' . $tableLocationName . '.resource_type = "'.$params['resource_type'].'" ', $asinSort);
+          $select->order('distance');
+          $select->having("distance < $dist");
+        }
+      }
+    }
+    return $select;
+  }
+
   public function getItemsSelect($params, $select = null)
   {
     if( $select == null ) {
