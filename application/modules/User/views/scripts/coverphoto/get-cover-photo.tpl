@@ -13,12 +13,12 @@
 
 <?php $levelId = $this->user->level_id;
   $userId = $this->user->user_id;
-  
+   
   $coverphoto = Engine_Api::_()->authorization()->getPermission($levelId, 'user', 'coverphoto');
-  $coverphoto = $coverphoto ? Engine_Api::_()->core()->getFileUrl($coverphoto) : '';
+  $coverphoto = $coverphoto ? Engine_Api::_()->core()->getFileUrl($coverphoto) : ''; 
   ?>
 <?php if (empty($this->uploadDefaultCover)) : ?>
-  <?php if ($this->photo) : ?>
+  <?php  if ($this->photo) : ?>
     <div class="profile_cover_photo cover_photo_wap b_dark">
       <?php echo $this->itemPhoto($this->photo, 'thumb.cover', '', array(
         'align' => 'left',
@@ -32,7 +32,7 @@
             <?php echo $this->translate("Drag to Reposition Cover Photo") ?>
           </div>
         </div>
-      <?php endif; ?>
+      <?php endif;  ?>
     </div>
   <?php elseif (!empty($coverphoto)) : ?>
     <div class="profile_cover_photo cover_photo_wap b_dark">
@@ -44,14 +44,14 @@
             <img src="<?php echo Engine_Api::_()->storage()->get($coverId, 'thumb.cover')->map()?>"
               align="left" class="cover_photo" style="top:<?php echo $this->topPosition?>px" />
           </div>
-  <?php else : ?>
+  <?php else :  ?>
     <div class="profile_cover_photo_empty"></div>
   <?php endif; ?>
 
   <?php if (!empty($this->can_edit)) : ?>
     <div id="cover_photo_options" class="profile_cover_options">
       <ul class="edit-button">
-        <li>
+        <li>  
           <?php if (!empty($this->user->coverphoto) && $this->photo) : ?>
             <span class="profile_cover_btn">
               <i class="fa fa-camera" aria-hidden="true"></i>

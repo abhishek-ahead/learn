@@ -25,7 +25,7 @@ $this->headTranslate(array(
 <script type="application/javascript">
 
   function sendOptsms(obj,objName) {
-  
+   
     var elem = scriptJquery(obj);
     var formObject = elem.closest('form');
     var parentElem = elem.closest('.form-elements');

@@ -16,13 +16,13 @@
 </h2> -->
 
 <script type="text/javascript">
-  function skipForm() {
+  function skipForm() {  
     document.getElementById("skip").value = "skipForm";
     document.getElementById('SignupForm').submit();
-  }
-  function finishForm() {
+  }  
+  function finishForm() {  
     document.getElementById("nextStep").value = "finish";
-  }
+  }  
 </script>
 <?php echo $this->partial($this->script[0], $this->script[1], array(
   'form' => $this->form
